@@ -45,7 +45,7 @@ export default function WelcomePage() {
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   return (
-    <View className="flex-1 bg-black p-6 justify-between">
+    <View className="flex-1 bg-dark p-6 justify-between">
       <Animated.View
         className="flex-1 justify-center items-center"
         style={{

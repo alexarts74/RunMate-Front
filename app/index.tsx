@@ -7,7 +7,7 @@ export default function HomeScreen() {
   const { user } = useAuth();
 
   return (
-    <View className="flex-1 justify-center items-center bg-black">
+    <View className="flex-1 justify-center items-center bg-dark">
       <WelcomePage />
     </View>
   );

@@ -4,7 +4,8 @@ interface User {
   name: string | null;
   bio: string | null;
   age: number | null;
-  image: string | null;
+  profile_image: string | null;
+  last_name: string | null;
   level: string | null;
   authentication_token: string | null;
   created_at: string;

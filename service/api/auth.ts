@@ -1,13 +1,12 @@
 import { apiClient } from "./client";
 
-
 export const authService = {
   async signUp(userData: {
     email: string;
     password: string;
     password_confirmation: string;
   }) {
-    console.log("Dans le service signUp");
+    console.log("userData", userData);
     return await apiClient.post("/users/sign_up", { user: userData });
   },
 

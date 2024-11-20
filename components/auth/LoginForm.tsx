@@ -88,6 +88,15 @@ export default function LoginForm() {
             </Text>
           )}
         </Pressable>
+
+        <Pressable
+          className="py-3 rounded-full items-center border border-orange-500"
+          onPress={() => router.push("/(auth)/signup")}
+        >
+          <Text className="text-sm font-semibold text-orange-500">
+            Créer un compte
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
