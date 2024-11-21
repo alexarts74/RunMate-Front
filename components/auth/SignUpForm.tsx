@@ -30,7 +30,6 @@ export default function SignUpForm() {
     gender: "",
     location: "",
     email: "",
-    level: "",
     bio: "",
     password: "",
     password_confirmation: "",
@@ -41,12 +40,6 @@ export default function SignUpForm() {
     { key: "male", value: "Homme" },
     { key: "female", value: "Femme" },
     { key: "other", value: "Autre" },
-  ];
-
-  const levelOptions = [
-    { key: "débutant", value: "Débutant" },
-    { key: "intermédiaire", value: "Intermédiaire" },
-    { key: "avancé", value: "Avancé" },
   ];
 
   const ageOptions = Array.from({ length: 83 }, (_, i) => i + 18);
@@ -83,7 +76,7 @@ export default function SignUpForm() {
       setLoading(true);
       const response = await authService.signUp(formData);
       await login(response);
-      router.replace("/(tabs)/homepage");
+      router.replace("/(tabs)/RunnerProfile");
     } catch (err) {
       console.error("Erreur inscription:", err);
       setError("Erreur lors de l'inscription. Veuillez réessayer.");
@@ -173,30 +166,6 @@ export default function SignUpForm() {
         data={genderOptions}
         save="key"
         placeholder="Sélectionnez votre genre"
-        boxStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          padding: 16,
-          marginBottom: 16,
-          backgroundColor: "#111827",
-        }}
-        dropdownStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          backgroundColor: "#111827",
-        }}
-        inputStyles={{ color: "#fff" }}
-        dropdownTextStyles={{ color: "#fff" }}
-        search={false}
-      />
-
-      <SelectList
-        setSelected={(val: string) => handleChange("level", val)}
-        data={levelOptions}
-        save="key"
-        placeholder="Sélectionnez votre niveau"
         boxStyles={{
           borderWidth: 1,
           borderColor: "#374151",

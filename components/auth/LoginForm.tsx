@@ -27,7 +27,7 @@ export default function LoginForm() {
         password,
       });
       setMessage("Connexion réussie !");
-      router.replace("/(tabs)/homepage");
+      router.replace("/(tabs)/Homepage");
     } catch (err) {
       console.error("Erreur connexion:", err);
       setError("Erreur lors de la connexion");

@@ -13,10 +13,18 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: '#000',
+          borderTopColor: '#374151',
+        }
       }}
     >
       <Tabs.Screen
-        name="homepage"
+        name="Homepage"
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
@@ -28,19 +36,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="new-session"
-        options={{
-          title: "New Session",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "add-circle" : "add-circle-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="messages"
+        name="Messages"
         options={{
           title: "Messages",
           tabBarIcon: ({ color, focused }) => (
@@ -52,7 +48,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="Profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, focused }) => (
@@ -61,6 +57,12 @@ export default function TabLayout() {
               color={color}
             />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="RunnerProfile"
+        options={{
+          tabBarButton: () => null,
         }}
       />
     </Tabs>

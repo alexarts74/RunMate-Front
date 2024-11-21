@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { AuthProvider } from "@/context/AuthContext";
 import React from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout() {
   return (
@@ -9,17 +9,18 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="(tabs)"
       >
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
         <Stack.Screen
-          name="(modals)"
-          options={{
-            presentation: "modal",
-            headerShown: true,
-            headerBackTitle: "Retour",
-          }}
+          name="(auth)"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(tabs)"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(app)"
+          options={{ headerShown: false }}
         />
       </Stack>
     </AuthProvider>
