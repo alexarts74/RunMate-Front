@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text } from "react-native";
 import { router } from "expo-router";
 import { PaceDistanceInputs } from "@/components/runner-profile/PaceDistanceInputs";
-import { ObjectiveSelect } from "@/components/runnner-profile/ObjectiveSelect";
+import { ObjectiveSelect } from "@/components/runner-profile/ObjectiveSelect";
 import { AvailabilitySelect } from "@/components/runner-profile/AvailabilitySelect";
 import { ActionButtons } from "@/components/runner-profile/ActionButtons";
 import { runnerProfileService } from "@/service/api/runnerProfile";
