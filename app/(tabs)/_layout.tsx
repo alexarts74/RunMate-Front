@@ -3,30 +3,29 @@ import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: "#FF8C00",
+        tabBarInactiveTintColor: "#808080",
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: '#000',
-          borderTopColor: '#374151',
+          backgroundColor: '#000000',
+          borderTopColor: '#333333',
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
         }
       }}
     >
       <Tabs.Screen
-        name="Homepage"
         options={{
-          title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
@@ -36,9 +35,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Messages"
         options={{
-          title: "Messages",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "chatbubble" : "chatbubble-outline"}
@@ -48,9 +45,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Profile"
         options={{
-          title: "Profile",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "person" : "person-outline"}

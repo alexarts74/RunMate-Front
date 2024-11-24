@@ -24,16 +24,16 @@ export default function SignUpForm() {
   const [showAgePicker, setShowAgePicker] = useState(false);
 
   const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    password_confirmation: "",
     name: "",
     last_name: "",
     age: "",
     gender: "",
     location: "",
-    email: "",
-    bio: "",
-    password: "",
-    password_confirmation: "",
     profile_image: "",
+    bio: "",
   });
 
   const genderOptions = [
@@ -69,7 +69,6 @@ export default function SignUpForm() {
     }
   };
 
-
   const handleSignUp = async () => {
     try {
       setError("");
@@ -90,6 +89,34 @@ export default function SignUpForm() {
       <Text className="text-2xl font-bold mb-6 text-center text-white">
         Inscription
       </Text>
+
+      <TextInput
+        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        placeholder="Email"
+        placeholderTextColor="#9CA3AF"
+        value={formData.email}
+        onChangeText={(value) => handleChange("email", value)}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        placeholder="Mot de passe"
+        placeholderTextColor="#9CA3AF"
+        value={formData.password}
+        onChangeText={(value) => handleChange("password", value)}
+        secureTextEntry
+      />
+
+      <TextInput
+        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        placeholder="Confirmation du mot de passe"
+        placeholderTextColor="#9CA3AF"
+        value={formData.password_confirmation}
+        onChangeText={(value) => handleChange("password_confirmation", value)}
+        secureTextEntry
+      />
 
       <TextInput
         className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
@@ -115,51 +142,6 @@ export default function SignUpForm() {
           {formData.age ? `${formData.age} ans` : "Sélectionnez votre âge"}
         </Text>
       </TouchableOpacity>
-
-      <Modal visible={showAgePicker} transparent={true} animationType="slide">
-        <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-gray-900 w-full p-4">
-            <View className="flex-row justify-between items-center mb-4">
-              <TouchableOpacity onPress={() => setShowAgePicker(false)}>
-                <Text className="text-orange-500">Annuler</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if (!formData.age) {
-                    handleChange("age", "18");
-                  }
-                  setShowAgePicker(false);
-                }}
-              >
-                <Text className="text-orange-500">Confirmer</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Picker
-              selectedValue={formData.age}
-              onValueChange={(value) => handleChange("age", value.toString())}
-              style={{ color: "#fff" }}
-            >
-              {ageOptions.map((age) => (
-                <Picker.Item
-                  key={age}
-                  label={`${age} ans`}
-                  value={age.toString()}
-                  style={{ color: "#fff" }}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-      </Modal>
-
-      <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Bio"
-        placeholderTextColor="#9CA3AF"
-        value={formData.bio}
-        onChangeText={(value) => handleChange("bio", value)}
-      />
 
       <SelectList
         setSelected={(val: string) => handleChange("gender", val)}
@@ -195,30 +177,11 @@ export default function SignUpForm() {
 
       <TextInput
         className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Email"
+        placeholder="Bio"
         placeholderTextColor="#9CA3AF"
-        value={formData.email}
-        onChangeText={(value) => handleChange("email", value)}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-      <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Mot de passe"
-        placeholderTextColor="#9CA3AF"
-        value={formData.password}
-        onChangeText={(value) => handleChange("password", value)}
-        secureTextEntry
-      />
-
-      <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Confirmation du mot de passe"
-        placeholderTextColor="#9CA3AF"
-        value={formData.password_confirmation}
-        onChangeText={(value) => handleChange("password_confirmation", value)}
-        secureTextEntry
+        value={formData.bio}
+        onChangeText={(value) => handleChange("bio", value)}
+        multiline
       />
 
       <Pressable
@@ -240,14 +203,51 @@ export default function SignUpForm() {
         )}
       </Pressable>
 
+      <Modal visible={showAgePicker} transparent={true} animationType="slide">
+        <View className="flex-1 justify-end bg-black/50">
+          <View className="bg-gray-900 w-full p-4">
+            <View className="flex-row justify-between items-center mb-4">
+              <TouchableOpacity onPress={() => setShowAgePicker(false)}>
+                <Text className="text-orange-500">Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (!formData.age) {
+                    handleChange("age", "18");
+                  }
+                  setShowAgePicker(false);
+                }}
+              >
+                <Text className="text-orange-500">Confirmer</Text>
+              </TouchableOpacity>
+            </View>
+            <Picker
+              selectedValue={formData.age}
+              onValueChange={(value) => handleChange("age", value.toString())}
+              style={{ color: "#fff" }}
+            >
+              {ageOptions.map((age) => (
+                <Picker.Item
+                  key={age}
+                  label={`${age} ans`}
+                  value={age.toString()}
+                  style={{ color: "#fff" }}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+      </Modal>
+
       {error ? (
         <Text className="text-red-500 text-center mb-4">{error}</Text>
       ) : null}
 
       <View className="space-y-3 px-8 mb-4">
         <Pressable
-          className={`bg-orange-500 py-3 rounded-full items-center
-            ${loading ? "opacity-70" : ""}`}
+          className={`bg-orange-500 py-3 rounded-full items-center ${
+            loading ? "opacity-70" : ""
+          }`}
           onPress={handleSignUp}
           disabled={loading}
         >
@@ -255,6 +255,21 @@ export default function SignUpForm() {
             <ActivityIndicator color="white" />
           ) : (
             <Text className="text-sm font-semibold text-white">S'inscrire</Text>
+          )}
+        </Pressable>
+        <Pressable
+          className={`bg-transparent border border-orange-500 py-3 rounded-full items-center ${
+            loading ? "opacity-70" : ""
+          }`}
+          onPress={() => router.replace("/(auth)/login")}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-sm font-semibold text-orange-500">
+              Se connecter
+            </Text>
           )}
         </Pressable>
       </View>

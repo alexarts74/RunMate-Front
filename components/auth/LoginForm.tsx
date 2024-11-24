@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
+import { matchesService } from "@/service/api/matching";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,7 @@ export default function LoginForm() {
         password,
       });
       setMessage("Connexion réussie !");
+      await matchesService.getMatches();
       router.replace("/(tabs)/Homepage");
     } catch (err) {
       console.error("Erreur connexion:", err);

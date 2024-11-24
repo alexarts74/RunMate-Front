@@ -1,44 +1,27 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Pressable,
-  Text,
-  ActivityIndicator,
-  ScrollView,
-} from "react-native";
+import { ScrollView, Text } from "react-native";
 import { router } from "expo-router";
-import { SelectList } from "react-native-dropdown-select-list";
+import { PaceDistanceInputs } from "@/components/runner-profile/PaceDistanceInputs";
+import { ObjectiveSelect } from "@/components/runnner-profile/ObjectiveSelect";
+import { AvailabilitySelect } from "@/components/runner-profile/AvailabilitySelect";
+import { ActionButtons } from "@/components/runner-profile/ActionButtons";
 import { runnerProfileService } from "@/service/api/runnerProfile";
+import { matchesService } from "@/service/api/matching";
+import { useMatches } from "@/context/MatchesContext";
 
 export default function RunnerProfileScreen() {
   const [formData, setFormData] = useState({
     actual_pace: "",
     usual_distance: "",
-    availability: "",
-    level: "",
+    availability: [] as string[],
+    objective: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { setMatches } = useMatches();
 
-  const levelOptions = [
-    { key: "beginner", value: "Débutant" },
-    { key: "intermediate", value: "Intermédiaire" },
-    { key: "advanced", value: "Avancé" },
-  ];
-
-  const availabilityOptions = [
-    { key: "monday", value: "Lundi" },
-    { key: "tuesday", value: "Mardi" },
-    { key: "wednesday", value: "Mercredi" },
-    { key: "thursday", value: "Jeudi" },
-    { key: "friday", value: "Vendredi" },
-    { key: "saturday", value: "Samedi" },
-    { key: "sunday", value: "Dimanche" },
-  ];
-
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -46,11 +29,29 @@ export default function RunnerProfileScreen() {
     try {
       setError("");
       setLoading(true);
+
+      // 1. Sauvegarder le profil
+      console.log("Données du formulaire:", formData);
       await runnerProfileService.save(formData);
+
+      // 2. Récupérer les matches
+      console.log("Récupération des matches...");
+      const matchesData = await matchesService.getMatches({
+        filter_pace: true,
+        filter_distance: true,
+        filter_availability: true,
+      });
+
+      console.log("Matches récupérés:", matchesData);
+
+      // 3. Stocker les matches dans le context
+      setMatches(matchesData);
+
+      // 4. Rediriger vers la homepage
       router.replace("/(tabs)/Homepage");
-    } catch (err) {
-      console.error("Erreur sauvegarde:", err);
-      setError("Erreur lors de la sauvegarde du profil");
+    } catch (err: any) {
+      console.error("Erreur détaillée:", err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -62,102 +63,24 @@ export default function RunnerProfileScreen() {
         Votre profil de coureur
       </Text>
 
-      <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Allure actuelle (min/km)"
-        placeholderTextColor="#9CA3AF"
-        value={formData.actual_pace}
-        onChangeText={(value) => handleChange("actual_pace", value)}
-        keyboardType="numeric"
+      <PaceDistanceInputs
+        actual_pace={formData.actual_pace}
+        usual_distance={formData.usual_distance}
+        handleChange={handleChange}
       />
 
-      <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
-        placeholder="Distance habituelle (km)"
-        placeholderTextColor="#9CA3AF"
-        value={formData.usual_distance}
-        onChangeText={(value) => handleChange("usual_distance", value)}
-        keyboardType="numeric"
-      />
+      <ObjectiveSelect handleChange={handleChange} />
 
-      <SelectList
-        setSelected={(val: string) => handleChange("level", val)}
-        data={levelOptions}
-        save="key"
-        placeholder="Sélectionnez votre niveau"
-        boxStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          padding: 16,
-          marginBottom: 16,
-          backgroundColor: "#111827",
-        }}
-        dropdownStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          backgroundColor: "#111827",
-        }}
-        inputStyles={{ color: "#fff" }}
-        dropdownTextStyles={{ color: "#fff" }}
-        search={false}
-      />
-
-      <SelectList
-        setSelected={(val: string) => handleChange("availability", val)}
-        data={availabilityOptions}
-        save="key"
-        placeholder="Disponibilités"
-        boxStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          padding: 16,
-          marginBottom: 16,
-          backgroundColor: "#111827",
-        }}
-        dropdownStyles={{
-          borderWidth: 1,
-          borderColor: "#374151",
-          borderRadius: 8,
-          backgroundColor: "#111827",
-        }}
-        inputStyles={{ color: "#fff" }}
-        dropdownTextStyles={{ color: "#fff" }}
-        search={false}
+      <AvailabilitySelect
+        availability={formData.availability}
+        handleChange={handleChange}
       />
 
       {error ? (
         <Text className="text-red-500 text-center mb-4">{error}</Text>
       ) : null}
 
-      <View className="space-y-3 px-8 mb-4">
-        <Pressable
-          className={`bg-orange-500 py-3 rounded-full items-center ${
-            loading ? "opacity-70" : ""
-          }`}
-          onPress={handleSubmit}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text className="text-sm font-semibold text-white">
-              Sauvegarder mon profil
-            </Text>
-          )}
-        </Pressable>
-
-        <Pressable
-          className="py-3 rounded-full items-center border border-orange-500"
-          onPress={() => router.push("/(tabs)/Homepage")}
-        >
-          <Text className="text-sm font-semibold text-orange-500">
-            Passer cette étape
-          </Text>
-        </Pressable>
-      </View>
+      <ActionButtons loading={loading} handleSubmit={handleSubmit} />
     </ScrollView>
   );
 }
