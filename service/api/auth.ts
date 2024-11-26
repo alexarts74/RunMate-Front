@@ -13,4 +13,18 @@ export const authService = {
   async login(credentials: { email: string; password: string }) {
     return await apiClient.post("/users/log_in", { user: credentials });
   },
+
+  async updateUser(userData: {
+    first_name: string;
+    last_name: string;
+    profile_image: string;
+    phone_number: string;
+    address: string;
+    city: string;
+    zip_code: string;
+    country: string;
+    description: string;
+  }) {
+    return await apiClient.put("/users/profile", { user: userData });
+  },
 };

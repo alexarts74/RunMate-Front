@@ -45,21 +45,15 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
-    console.log("Dans le client post");
-    console.log("Data:", data);
     try {
       const headers = await this.getHeaders();
-      console.log("Headers:", headers);
       const url = `${this.baseUrl}${endpoint}`;
-      console.log("URL:", url);
       const response = await this.fetchWithTimeout(url, {
         method: "POST",
         headers,
         body: JSON.stringify(data),
       });
-      console.log("Response:", response);
       const responseData = await response.json();
-      console.log("Response Data:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Une erreur est survenue");
@@ -86,6 +80,16 @@ class ApiClient {
     }
 
     return responseData;
+  }
+
+  async put(endpoint: string, data: any) {
+    const headers = await this.getHeaders();
+    const url = `${this.baseUrl}${endpoint}`;
+    await this.fetchWithTimeout(url, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(data),
+    });
   }
 }
 

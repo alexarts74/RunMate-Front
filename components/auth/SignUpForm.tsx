@@ -27,7 +27,7 @@ export default function SignUpForm() {
     email: "",
     password: "",
     password_confirmation: "",
-    name: "",
+    first_name: "",
     last_name: "",
     age: "",
     gender: "",
@@ -122,7 +122,7 @@ export default function SignUpForm() {
         className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
         placeholder="Prénom"
         placeholderTextColor="#9CA3AF"
-        value={formData.name}
+        value={formData.first_name}
         onChangeText={(value) => handleChange("name", value)}
       />
 
@@ -194,10 +194,10 @@ export default function SignUpForm() {
               source={{ uri: formData.profile_image }}
               className="w-20 h-20 rounded-full mb-2"
             />
-            <Text className="text-orange-500">Changer l'image</Text>
+            <Text className="text-white">Changer l'image</Text>
           </View>
         ) : (
-          <Text className="text-orange-500">
+          <Text className="text-white">
             Sélectionner une image de profil
           </Text>
         )}
@@ -208,7 +208,7 @@ export default function SignUpForm() {
           <View className="bg-gray-900 w-full p-4">
             <View className="flex-row justify-between items-center mb-4">
               <TouchableOpacity onPress={() => setShowAgePicker(false)}>
-                <Text className="text-orange-500">Annuler</Text>
+                <Text className="text-white">Annuler</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -218,7 +218,7 @@ export default function SignUpForm() {
                   setShowAgePicker(false);
                 }}
               >
-                <Text className="text-orange-500">Confirmer</Text>
+                <Text className="text-white">Confirmer</Text>
               </TouchableOpacity>
             </View>
             <Picker
@@ -245,7 +245,7 @@ export default function SignUpForm() {
 
       <View className="space-y-3 px-8 mb-4">
         <Pressable
-          className={`bg-orange-500 py-3 rounded-full items-center ${
+          className={`bg-white py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""
           }`}
           onPress={handleSignUp}
@@ -254,11 +254,11 @@ export default function SignUpForm() {
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-sm font-semibold text-white">S'inscrire</Text>
+            <Text className="text-sm font-semibold text-dark">S'inscrire</Text>
           )}
         </Pressable>
         <Pressable
-          className={`bg-transparent border border-orange-500 py-3 rounded-full items-center ${
+          className={`bg-transparent border border-white py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""
           }`}
           onPress={() => router.replace("/(auth)/login")}
@@ -267,7 +267,7 @@ export default function SignUpForm() {
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-sm font-semibold text-orange-500">
+            <Text className="text-sm font-semibold text-white">
               Se connecter
             </Text>
           )}

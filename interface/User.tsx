@@ -1,11 +1,13 @@
 interface User {
   id: number;
   email: string;
-  name: string | null;
+  first_name: string | null;
+  last_name: string | null;
   bio: string | null;
   age: number | null;
+  gender: string | null;
+  location: string | null;
   profile_image: string | null;
-  last_name: string | null;
   level: string | null;
   authentication_token: string | null;
   created_at: string;

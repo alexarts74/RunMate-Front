@@ -1,0 +1,181 @@
+import React, { useState } from "react";
+import { View, TextInput, Pressable, Text, ScrollView, ActivityIndicator } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
+import * as ImagePicker from "expo-image-picker";
+import { Image } from "react-native";
+
+type ProfileEditFormProps = {
+  formData: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    age: string;
+    gender: string;
+    location: string;
+    profile_image: string;
+    bio: string;
+  };
+  setFormData: (data: any) => void;
+  setIsEditing: (value: boolean) => void;
+  onUpdate: (data: any) => Promise<void>;
+};
+
+export function ProfileEditForm({ formData, setFormData, setIsEditing, onUpdate }: ProfileEditFormProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (name: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        handleChange("profile_image", result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sélection de l'image:", error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await onUpdate(formData);
+      setIsEditing(false);
+    } catch (err) {
+      setError("Erreur lors de la mise à jour du profil");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const genderOptions = [
+    { key: "male", value: "Homme" },
+    { key: "female", value: "Femme" },
+    { key: "other", value: "Autre" },
+  ];
+
+  return (
+    <ScrollView className="flex-1 bg-dark px-5 py-6">
+      <Text className="text-2xl font-bold mb-6 text-center text-white">
+        Modifier le profil
+      </Text>
+
+      <Pressable onPress={pickImage} className="items-center mb-6">
+        <Image
+          source={
+            formData.profile_image
+              ? { uri: formData.profile_image }
+              : require("@/assets/images/react-logo.png")
+          }
+          className="w-32 h-32 rounded-full"
+        />
+        <Text className="text-white mt-2">Changer la photo</Text>
+      </Pressable>
+
+      <View className="space-y-4">
+        <TextInput
+          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          placeholder="Prénom"
+          placeholderTextColor="#9CA3AF"
+          value={formData.first_name}
+          onChangeText={(value) => handleChange("name", value)}
+        />
+
+        <TextInput
+          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          placeholder="Nom"
+          placeholderTextColor="#9CA3AF"
+          value={formData.last_name}
+          onChangeText={(value) => handleChange("last_name", value)}
+        />
+
+        <TextInput
+          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          placeholder="Âge"
+          placeholderTextColor="#9CA3AF"
+          value={formData.age}
+          onChangeText={(value) => handleChange("age", value)}
+          keyboardType="numeric"
+        />
+
+        <SelectList
+          setSelected={(val: string) => handleChange("gender", val)}
+          data={genderOptions}
+          save="key"
+          defaultOption={{ key: formData.gender, value: formData.gender }}
+          placeholder="Sélectionnez votre genre"
+          boxStyles={{
+            borderWidth: 1,
+            borderColor: "#374151",
+            borderRadius: 8,
+            padding: 16,
+            backgroundColor: "#111827",
+          }}
+          dropdownStyles={{
+            borderWidth: 1,
+            borderColor: "#374151",
+            borderRadius: 8,
+            backgroundColor: "#111827",
+          }}
+          inputStyles={{ color: "#fff" }}
+          dropdownTextStyles={{ color: "#fff" }}
+          search={false}
+        />
+
+        <TextInput
+          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          placeholder="Localisation"
+          placeholderTextColor="#9CA3AF"
+          value={formData.location}
+          onChangeText={(value) => handleChange("location", value)}
+        />
+
+        <TextInput
+          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          placeholder="Bio"
+          placeholderTextColor="#9CA3AF"
+          value={formData.bio}
+          onChangeText={(value) => handleChange("bio", value)}
+          multiline
+          numberOfLines={4}
+        />
+      </View>
+
+      {error ? (
+        <Text className="text-red-500 text-center mt-4">{error}</Text>
+      ) : null}
+
+      <View className="space-y-3 px-8 mb-4 mt-6">
+        <Pressable
+          className="bg-orange-500 py-3 rounded-full items-center"
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white font-semibold">Enregistrer</Text>
+          )}
+        </Pressable>
+        <Pressable
+          className="bg-transparent border border-white py-3 rounded-full items-center"
+          onPress={() => setIsEditing(false)}
+        >
+          <Text className="text-white font-semibold">Annuler</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  );
+}

@@ -18,6 +18,7 @@ type MatchUser = {
     distance_match: number;
     availability_match: number;
   };
+  percentage: number;
 };
 
 type MatchesContextType = {

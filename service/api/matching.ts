@@ -56,35 +56,22 @@ export const matchesService = {
 
       if (!response || !response.matches) {
         console.error("Format de réponse invalide:", response);
-        throw new Error("Format de réponse invalide");
+        return [];
       }
 
-      const parsedMatches = response.matches.map((match: MatchUser) => {
-        try {
-          return {
-            ...match,
-            user: {
-              ...match.user,
-              runner_profile: {
-                ...match.user.runner_profile,
-                availability:
-                  typeof match.user.runner_profile.availability === "string"
-                    ? JSON.parse(match.user.runner_profile.availability)
-                    : match.user.runner_profile.availability,
-              },
-            },
-          };
-        } catch (e) {
-          console.error("Erreur parsing match:", e);
-          return match;
+      const matches = response.matches.map((match: MatchUser) => ({
+        ...match,
+        user: {
+          ...match.user,
+          runner_profile: match.user.runner_profile
         }
-      });
+      }));
 
-      console.log("Matches parsés:", parsedMatches);
-      return parsedMatches;
+      console.log("Matches transformés:", matches);
+      return matches;
     } catch (error) {
       console.error("Erreur getMatches:", error);
-      throw error;
+      return [];
     }
   },
 };

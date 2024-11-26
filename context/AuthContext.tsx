@@ -6,6 +6,7 @@ import User from "@/interface/User";
 
 type AuthContextType = {
   isAuthenticated: boolean;
+  updateUser: (userData: any) => Promise<void>;
   user: User | null;
   login: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
@@ -63,6 +64,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateUser = async (userData: any) => {
+    try {
+      setIsLoading(true);
+      await authService.updateUser(userData);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getUser = async () => {
+    const userData = await AsyncStorage.getItem("userData");
+    setUser(JSON.parse(userData || "{}"));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -71,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         signUp,
+        updateUser,
         isLoading,
       }}
     >

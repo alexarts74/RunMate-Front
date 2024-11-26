@@ -9,6 +9,7 @@ import {
 import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
 import { matchesService } from "@/service/api/matching";
+import { useMatches } from "@/context/MatchesContext";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setMatches } = useMatches();
 
   const handleLogin = async () => {
     try {
@@ -28,7 +30,15 @@ export default function LoginForm() {
         password,
       });
       setMessage("Connexion réussie !");
-      await matchesService.getMatches();
+
+      const matchesData = await matchesService.getMatches({
+        filter_pace: true,
+        filter_distance: true,
+        filter_availability: true,
+      });
+
+      setMatches(matchesData);
+
       router.replace("/(tabs)/Homepage");
     } catch (err) {
       console.error("Erreur connexion:", err);
@@ -41,7 +51,7 @@ export default function LoginForm() {
   return (
     <View className="flex-1 bg-black p-6 justify-between">
       <View className="flex-1 justify-center items-center">
-        <Text className="text-5xl font-bold text-orange-500 mb-2.5">
+        <Text className="text-5xl font-bold text-white mb-2.5">
           RunMate
         </Text>
         <Text className="text-lg text-gray-300 text-center px-5 mb-12">
@@ -76,7 +86,7 @@ export default function LoginForm() {
 
       <View className="space-y-3 mb-12 px-8">
         <Pressable
-          className={`bg-orange-500 py-3 rounded-full items-center ${
+          className={`bg-white py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""
           }`}
           onPress={handleLogin}
@@ -85,17 +95,17 @@ export default function LoginForm() {
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-sm font-semibold text-white">
+            <Text className="text-sm font-semibold text-dark">
               Se connecter
             </Text>
           )}
         </Pressable>
 
         <Pressable
-          className="py-3 rounded-full items-center border border-orange-500"
+          className="py-3 rounded-full items-center border border-white"
           onPress={() => router.push("/(auth)/signup")}
         >
-          <Text className="text-sm font-semibold text-orange-500">
+          <Text className="text-sm font-semibold text-white">
             Créer un compte
           </Text>
         </Pressable>

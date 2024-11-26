@@ -25,6 +25,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="Homepage"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
@@ -35,6 +36,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="Messages"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
@@ -45,6 +47,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="Profile"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon

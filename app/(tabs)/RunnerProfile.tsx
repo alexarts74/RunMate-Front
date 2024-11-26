@@ -43,10 +43,8 @@ export default function RunnerProfileScreen() {
       });
 
       console.log("Matches récupérés:", matchesData);
-
       // 3. Stocker les matches dans le context
       setMatches(matchesData);
-
       // 4. Rediriger vers la homepage
       router.replace("/(tabs)/Homepage");
     } catch (err: any) {

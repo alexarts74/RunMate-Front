@@ -60,7 +60,7 @@ export default function WelcomePage() {
           ],
         }}
       >
-        <Text className="text-5xl font-bold text-orange-500 mb-2.5">
+        <Text className="text-5xl font-bold text-white mb-2.5">
           RunMate
         </Text>
         <Text className="text-lg text-gray-300 text-center px-5">
@@ -73,7 +73,7 @@ export default function WelcomePage() {
         style={{ opacity: loaderOpacity }}
       >
         <ActivityIndicator size="large" color="#F97316" />
-        <Text className="text-orange-500 mt-4 text-base">Chargement...</Text>
+        <Text className="text-white mt-4 text-base">Chargement...</Text>
       </Animated.View>
 
       <Animated.View
@@ -83,17 +83,17 @@ export default function WelcomePage() {
         }}
       >
         <AnimatedPressable
-          className="bg-orange-500 py-3 rounded-full items-center"
+          className="bg-white py-3 rounded-full items-center"
           onPress={() => router.push("/(auth)/login")}
         >
-          <Text className="text-sm font-semibold text-white">Se connecter</Text>
+          <Text className="text-sm font-semibold text-dark">Se connecter</Text>
         </AnimatedPressable>
 
         <AnimatedPressable
-          className="bg-black py-3 rounded-full items-center border border-orange-500"
+          className="bg-black py-3 rounded-full items-center border border-white"
           onPress={() => router.push("/(auth)/signup")}
         >
-          <Text className="text-sm font-semibold text-orange-500">
+          <Text className="text-sm font-semibold text-white">
             Créer un compte
           </Text>
         </AnimatedPressable>
