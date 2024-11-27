@@ -83,13 +83,38 @@ class ApiClient {
   }
 
   async put(endpoint: string, data: any) {
+    console.log("Début PUT request vers:", endpoint);
+    console.log("Données envoyées:", data);
+
     const headers = await this.getHeaders();
+    console.log("Headers:", headers);
+
     const url = `${this.baseUrl}${endpoint}`;
-    await this.fetchWithTimeout(url, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify(data),
-    });
+    console.log("URL complète:", url);
+
+    try {
+      const response = await this.fetchWithTimeout(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(data),
+      });
+
+      console.log("Réponse brute:", response);
+
+      if (!response.ok) {
+        console.error("Erreur HTTP:", response.status);
+        console.error("Message d'erreur:", await response.text());
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("Données reçues:", responseData);
+
+      return responseData;
+    } catch (error) {
+      console.error("Erreur détaillée dans PUT:", error);
+      throw error;
+    }
   }
 }
 

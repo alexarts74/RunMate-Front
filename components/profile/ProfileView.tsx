@@ -1,40 +1,45 @@
+import { useAuth } from "@/context/AuthContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
 
 type ProfileViewProps = {
-  formData: {
-    profile_image: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    age: string;
-    gender: string;
-    location: string;
-    bio: string;
-  };
   setIsEditing: (value: boolean) => void;
 };
 
+export function ProfileView({ setIsEditing }: ProfileViewProps) {
 
-export function ProfileView({ formData, setIsEditing }: ProfileViewProps) {
-  console.log("formData", formData);
+  const { user } = useAuth();
+
+  if (!user) {
+    console.log("Pas de données utilisateur");
+    return (
+      <View className="flex-1 bg-dark px-5 py-6 justify-center items-center">
+        <Text className="text-white">Chargement...</Text>
+      </View>
+    );
+  }
+  console.log("DANS LA PROFILE VIEW", user);
+
+
   return (
-    <ScrollView className="flex-1 bg-dark px-5 py-6">
+
+    <ScrollView className="flex-1 bg-dark px-5 py-6 pt-12">
       <View className="flex-row justify-between items-center mb-6">
         <Text className="text-2xl font-bold text-white">Mon Profil</Text>
         <Pressable
           onPress={() => setIsEditing(true)}
-          className="bg-orange-500 px-4 py-2 rounded-lg"
+          className="flex-row items-center bg-orange-500 px-6 py-3 rounded-full shadow-lg"
         >
-          <Text className="text-white">Modifier</Text>
+          <Ionicons name="pencil" size={20} color="white" className="mr-2" />
         </Pressable>
       </View>
 
       <View className="items-center mb-6">
         <Image
           source={
-            formData.profile_image
-              ? { uri: formData.profile_image }
+            user?.profile_image
+              ? { uri: user.profile_image }
               : require("@/assets/images/react-logo.png")
           }
           className="w-32 h-32 rounded-full"
@@ -45,33 +50,33 @@ export function ProfileView({ formData, setIsEditing }: ProfileViewProps) {
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Nom complet</Text>
           <Text className="text-white text-lg">
-            {formData.first_name} {formData.last_name}
+            {user?.name} {user?.last_name}
           </Text>
         </View>
 
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Email</Text>
-          <Text className="text-white text-lg">{formData.email}</Text>
+          <Text className="text-white text-lg">{user?.email}</Text>
         </View>
 
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Âge</Text>
-          <Text className="text-white text-lg">{formData.age} ans</Text>
+          <Text className="text-white text-lg">{user?.age} ans</Text>
         </View>
 
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Genre</Text>
-          <Text className="text-white text-lg">{formData.gender}</Text>
+          <Text className="text-white text-lg">{user?.gender}</Text>
         </View>
 
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Localisation</Text>
-          <Text className="text-white text-lg">{formData.location}</Text>
+          <Text className="text-white text-lg">{user?.location}</Text>
         </View>
 
         <View className="bg-gray-900 p-4 rounded-lg">
           <Text className="text-gray-400">Bio</Text>
-          <Text className="text-white text-lg">{formData.bio}</Text>
+          <Text className="text-white text-lg">{user?.bio}</Text>
         </View>
       </View>
     </ScrollView>

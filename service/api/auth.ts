@@ -14,8 +14,8 @@ export const authService = {
     return await apiClient.post("/users/log_in", { user: credentials });
   },
 
-  async updateUser(userData: {
-    first_name: string;
+  async updateUserProfile(userData: {
+    name: string;
     last_name: string;
     profile_image: string;
     phone_number: string;
@@ -24,7 +24,32 @@ export const authService = {
     zip_code: string;
     country: string;
     description: string;
+    current_password: string;
+    password: string;
+    password_confirmation: string;
   }) {
-    return await apiClient.put("/users/profile", { user: userData });
+    try {
+      console.log("Données avant transformation:", userData);
+
+      const updateData = {
+        user: {
+          ...userData,
+          // Ne pas inclure le mot de passe dans la mise à jour si non fourni
+          current_password: userData.current_password || undefined,
+          password: userData.password || undefined,
+          password_confirmation: userData.password_confirmation || undefined,
+        },
+      };
+
+      console.log("Données envoyées à l'API:", updateData);
+
+      const response = await apiClient.put("/users/profile", updateData);
+      console.log("Réponse de l'API:", response);
+
+      return response;
+    } catch (error) {
+      console.error("Erreur dans updateUserProfile:", error);
+      throw error;
+    }
   },
 };

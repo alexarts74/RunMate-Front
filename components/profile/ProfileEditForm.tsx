@@ -3,26 +3,28 @@ import { View, TextInput, Pressable, Text, ScrollView, ActivityIndicator } from 
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "react-native";
+import { useAuth } from "@/context/AuthContext";
 
 type ProfileEditFormProps = {
-  formData: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    age: string;
-    gender: string;
-    location: string;
-    profile_image: string;
-    bio: string;
-  };
-  setFormData: (data: any) => void;
   setIsEditing: (value: boolean) => void;
-  onUpdate: (data: any) => Promise<void>;
 };
 
-export function ProfileEditForm({ formData, setFormData, setIsEditing, onUpdate }: ProfileEditFormProps) {
+export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
+
+  const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+
+    email: user?.email || "",
+    name: user?.name || "",
+    last_name: user?.last_name || "",
+    age: user?.age?.toString() || "",
+    gender: user?.gender || "",
+    location: user?.location || "",
+    profile_image: user?.profile_image || "",
+    bio: user?.bio || "",
+  });
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev: any) => ({
@@ -50,15 +52,14 @@ export function ProfileEditForm({ formData, setFormData, setIsEditing, onUpdate 
 
   const handleSubmit = async () => {
     try {
-      setLoading(true);
-      await onUpdate(formData);
+      await updateUser(formData);
       setIsEditing(false);
-    } catch (err) {
-      setError("Erreur lors de la mise à jour du profil");
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour:", error);
     }
   };
+
+  console.log("formData", formData);
 
   const genderOptions = [
     { key: "male", value: "Homme" },
@@ -67,9 +68,9 @@ export function ProfileEditForm({ formData, setFormData, setIsEditing, onUpdate 
   ];
 
   return (
-    <ScrollView className="flex-1 bg-dark px-5 py-6">
+    <ScrollView className="flex-1 bg-dark px-5 py-6 pt-12">
       <Text className="text-2xl font-bold mb-6 text-center text-white">
-        Modifier le profil
+        Modifier mon profil
       </Text>
 
       <Pressable onPress={pickImage} className="items-center mb-6">
@@ -89,7 +90,7 @@ export function ProfileEditForm({ formData, setFormData, setIsEditing, onUpdate 
           className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
           placeholder="Prénom"
           placeholderTextColor="#9CA3AF"
-          value={formData.first_name}
+          value={formData.name}
           onChangeText={(value) => handleChange("name", value)}
         />
 

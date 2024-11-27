@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
@@ -36,8 +36,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (userData: any) => {
     try {
       setIsLoading(true);
+      console.log("Données reçues au login:", userData);
+
       await AsyncStorage.setItem("authToken", userData.authentication_token);
+      console.log("Token stocké:", userData.authentication_token);
+
       await AsyncStorage.setItem("userData", JSON.stringify(userData.user));
+      console.log("Données utilisateur stockées:", userData.user);
+
+      const storedToken = await AsyncStorage.getItem("authToken");
+      const storedUser = await AsyncStorage.getItem("userData");
+      console.log("Vérification - Token stocké:", storedToken);
+      console.log("Vérification - User stocké:", JSON.parse(storedUser || "{}"));
+
       setUser(userData.user);
       setIsAuthenticated(true);
       router.replace("/(tabs)");
@@ -65,21 +76,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateUser = async (userData: any) => {
+    console.log("Début de updateUser avec les données:", userData);
     try {
       setIsLoading(true);
-      await authService.updateUser(userData);
+
+      // Appel à l'API
+      const updatedUserData = await authService.updateUserProfile(userData);
+      console.log("Réponse de l'API:", updatedUserData);
+
+      // Mise à jour du stockage local
+      await AsyncStorage.setItem("userData", JSON.stringify(updatedUserData));
+      console.log("Données mises à jour dans AsyncStorage");
+
+      // Vérification du stockage
+      const storedData = await AsyncStorage.getItem("userData");
+      console.log("Vérification des données stockées:", JSON.parse(storedData || "{}"));
+
+      // Mise à jour du state
+      setUser(updatedUserData);
+      console.log("State user mis à jour");
+
+      // Retourner les données pour confirmation
+      return updatedUserData;
     } catch (error) {
-      console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
+      console.error("Erreur détaillée:", error);
       throw error;
     } finally {
       setIsLoading(false);
+      console.log("Fin de updateUser");
     }
   };
 
   const getUser = async () => {
-    const userData = await AsyncStorage.getItem("userData");
-    setUser(JSON.parse(userData || "{}"));
+    try {
+      const userData = await AsyncStorage.getItem("userData");
+      setUser(JSON.parse(userData || "{}"));
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+      throw error;
+    }
   };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <AuthContext.Provider
