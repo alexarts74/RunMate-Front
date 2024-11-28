@@ -51,9 +51,12 @@ const HomepageScreen = () => {
                         </Text>
                       </View>
 
-                      <Text className="text-orange font-semibold">
-                        {match.percentage}% compatible
-                      </Text>
+                      {/* <View className="bg-orange-500/20 rounded-full px-3 py-1 self-start">
+                        <Text className="text-orange font-semibold">
+                          {console.log(match.percentage)}
+                          {match.percentage}% compatible
+                        </Text>
+                      </View> */}
                     </View>
                   </View>
 
