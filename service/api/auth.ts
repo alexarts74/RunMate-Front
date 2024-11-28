@@ -34,13 +34,11 @@ export const authService = {
       const updateData = {
         user: {
           ...userData,
-          // Ne pas inclure le mot de passe dans la mise à jour si non fourni
           current_password: userData.current_password || undefined,
           password: userData.password || undefined,
           password_confirmation: userData.password_confirmation || undefined,
         },
       };
-
       console.log("Données envoyées à l'API:", updateData);
 
       const response = await apiClient.put("/users/profile", updateData);

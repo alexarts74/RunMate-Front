@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
 import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ export default function LoginForm() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { setMatches } = useMatches();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -25,11 +27,13 @@ export default function LoginForm() {
       setMessage("");
       setLoading(true);
 
-      await authService.login({
+      const userData = await authService.login({
         email,
         password,
       });
       setMessage("Connexion réussie !");
+
+      await login(userData);
 
       const matchesData = await matchesService.getMatches({
         filter_pace: true,

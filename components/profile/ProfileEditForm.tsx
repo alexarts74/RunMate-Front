@@ -51,6 +51,8 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   };
 
   const handleSubmit = async () => {
+    console.log("Début de handleSubmit");
+    console.log("formData", formData);
     try {
       await updateUser(formData);
       setIsEditing(false);

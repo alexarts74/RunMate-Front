@@ -39,7 +39,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
         <Image
           source={
             user?.profile_image
-              ? { uri: user.profile_image }
+              ? { uri: user?.profile_image }
               : require("@/assets/images/react-logo.png")
           }
           className="w-32 h-32 rounded-full"

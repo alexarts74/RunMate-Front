@@ -37,21 +37,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       console.log("Données reçues au login:", userData);
-
       await AsyncStorage.setItem("authToken", userData.authentication_token);
-      console.log("Token stocké:", userData.authentication_token);
-
       await AsyncStorage.setItem("userData", JSON.stringify(userData.user));
-      console.log("Données utilisateur stockées:", userData.user);
-
-      const storedToken = await AsyncStorage.getItem("authToken");
-      const storedUser = await AsyncStorage.getItem("userData");
-      console.log("Vérification - Token stocké:", storedToken);
-      console.log("Vérification - User stocké:", JSON.parse(storedUser || "{}"));
-
       setUser(userData.user);
       setIsAuthenticated(true);
-      router.replace("/(tabs)");
+      console.log("User stocké:", userData.user);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde des données:", error);
       throw error;
@@ -63,7 +53,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       setIsLoading(true);
-      await AsyncStorage.multiRemove(["authToken", "userData"]);
+      await AsyncStorage.removeItem("authToken");
+      await AsyncStorage.removeItem("userData");
+      console.log("Données supprimées");
       setUser(null);
       setIsAuthenticated(false);
       router.replace("/(auth)/login");
@@ -76,41 +68,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateUser = async (userData: any) => {
-    console.log("Début de updateUser avec les données:", userData);
     try {
       setIsLoading(true);
+      const response = await authService.updateUserProfile(userData);
+      console.log("Réponse de l'API dans updateUser:", response);
 
-      // Appel à l'API
-      const updatedUserData = await authService.updateUserProfile(userData);
-      console.log("Réponse de l'API:", updatedUserData);
+      if (response.user) {
+        await AsyncStorage.setItem("userData", JSON.stringify(response.user));
+        setUser(response.user);
+        console.log("State user mis à jour avec:", response.user);
+      }
 
-      // Mise à jour du stockage local
-      await AsyncStorage.setItem("userData", JSON.stringify(updatedUserData));
-      console.log("Données mises à jour dans AsyncStorage");
-
-      // Vérification du stockage
-      const storedData = await AsyncStorage.getItem("userData");
-      console.log("Vérification des données stockées:", JSON.parse(storedData || "{}"));
-
-      // Mise à jour du state
-      setUser(updatedUserData);
-      console.log("State user mis à jour");
-
-      // Retourner les données pour confirmation
-      return updatedUserData;
+      return response;
     } catch (error) {
-      console.error("Erreur détaillée:", error);
+      console.error("Erreur dans updateUser:", error);
       throw error;
     } finally {
       setIsLoading(false);
-      console.log("Fin de updateUser");
     }
   };
 
   const getUser = async () => {
     try {
       const userData = await AsyncStorage.getItem("userData");
-      setUser(JSON.parse(userData || "{}"));
+      if (userData) {
+        console.log("Données récupérées:", JSON.parse(userData));
+        setUser(JSON.parse(userData));
+      }
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
       throw error;
