@@ -162,7 +162,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
 
       <View className="space-y-3 px-8 mb-4 mt-6">
         <Pressable
-          className="bg-orange-500 py-3 rounded-full items-center"
+          className="border border-orange py-3 rounded-full items-center"
           onPress={handleSubmit}
           disabled={loading}
         >

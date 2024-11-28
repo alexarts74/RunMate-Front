@@ -11,7 +11,7 @@ export function ActionButtons({ loading, handleSubmit }: Props) {
   return (
     <View className="space-y-3 px-8 mb-4">
       <Pressable
-        className={`bg-orange-500 py-3 rounded-full items-center ${
+        className={`bg-orange py-3 rounded-full items-center ${
           loading ? "opacity-70" : ""
         }`}
         onPress={handleSubmit}
@@ -27,10 +27,10 @@ export function ActionButtons({ loading, handleSubmit }: Props) {
       </Pressable>
 
       <Pressable
-        className="py-3 rounded-full items-center border border-orange-500"
+        className="py-3 rounded-full items-center border border-orange"
         onPress={() => router.replace("/(tabs)/Homepage")}
       >
-        <Text className="text-sm font-semibold text-orange-500">
+        <Text className="text-sm font-semibold text-orange">
           Passer cette étape
         </Text>
       </Pressable>

@@ -34,7 +34,7 @@ export function AvailabilitySelect({ availability, handleChange }: Props) {
             onPress={() => toggleDay(option.key)}
             className={`px-4 py-2 rounded-full border ${
               availability.includes(option.key)
-                ? "bg-orange-500 border-orange-500"
+                ? "bg-orange border-orange"
                 : "border-gray-700 bg-gray-900"
             }`}
           >
