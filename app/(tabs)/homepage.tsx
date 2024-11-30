@@ -5,10 +5,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const HomepageScreen = () => {
   const { matches } = useMatches();
-  console.log(matches, "matches");
 
   return (
-    <ScrollView className="flex-1 bg-dark pt-12">
+    <ScrollView className="flex-1 bg-[#12171b] pt-12">
       <Text className="text-2xl font-bold text-white px-5 mb-6">
         Vos matches
       </Text>
@@ -25,7 +24,7 @@ const HomepageScreen = () => {
             matches.map((match) => (
               <View
                 key={match.user.id}
-                className="bg-gray-800 rounded-2xl p-6 shadow-lg"
+                className="bg-gray rounded-2xl p-6 shadow-lg"
               >
                 {/* En-tête avec photo et infos principales */}
                 <View className="flex-row justify-between items-start">
@@ -36,7 +35,7 @@ const HomepageScreen = () => {
                           ? { uri: match.user.profile_image }
                           : require("@/assets/images/react-logo.png")
                       }
-                      className="w-20 h-20 rounded-full border-2 border-orange"
+                      className="w-20 h-20 rounded-full border-2 border-green"
                     />
 
                     <View className="ml-4 flex-1">
@@ -50,13 +49,6 @@ const HomepageScreen = () => {
                           {match.user.location}
                         </Text>
                       </View>
-
-                      {/* <View className="bg-orange-500/20 rounded-full px-3 py-1 self-start">
-                        <Text className="text-orange font-semibold">
-                          {console.log(match.percentage)}
-                          {match.percentage}% compatible
-                        </Text>
-                      </View> */}
                     </View>
                   </View>
 
@@ -65,42 +57,42 @@ const HomepageScreen = () => {
                     onPress={() => {
                       /* Gérer l'envoi de message */
                     }}
-                    className="bg-orange p-3 rounded-full"
+                    className="bg-green p-3 rounded-full"
                   >
                     <Ionicons name="mail-outline" size={24} color="white" />
                   </Pressable>
                 </View>
 
                 {/* Section Profil Runner */}
-                <View className="mt-4 bg-gray-700/50 p-4 rounded-xl">
-                  <Text className="text-gray-300 font-medium mb-3">
+                <View className="mt-4 bg-[#12171b] p-4 rounded-xl">
+                  <Text className="text-white font-medium mb-3">
                     Profil Runner
                   </Text>
 
                   <View className="flex-row justify-between">
-                    <View className="items-center bg-gray-600/30 p-3 rounded-xl flex-1 mx-1">
-                      <Ionicons name="walk-outline" size={24} color="#F97316" />
+                    <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
+                      <Ionicons name="walk-outline" size={24} color="#b9f144" />
                       <Text className="text-white text-center mt-2">
                         {match.user.runner_profile.actual_pace} min/km
                       </Text>
                     </View>
 
-                    <View className="items-center bg-gray-600/30 p-3 rounded-xl flex-1 mx-1">
+                    <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
                       <Ionicons
                         name="resize-outline"
                         size={24}
-                        color="#F97316"
+                        color="#b9f144"
                       />
                       <Text className="text-white text-center mt-2">
                         {match.user.runner_profile.usual_distance} km
                       </Text>
                     </View>
 
-                    <View className="items-center bg-gray-600/30 p-3 rounded-xl flex-1 mx-1">
+                    <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
                       <Ionicons
                         name="trophy-outline"
                         size={24}
-                        color="#F97316"
+                        color="#b9f144"
                       />
                       <Text className="text-white text-center mt-2">
                         {match.user.runner_profile.objective}

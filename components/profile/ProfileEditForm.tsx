@@ -70,8 +70,11 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   ];
 
   return (
-    <ScrollView className="flex-1 bg-dark px-5 py-6 pt-12">
-      <Text className="text-2xl font-bold mb-6 text-center text-white">
+    <ScrollView
+      className="flex-1 bg-[#12171b] px-5 py-6 pt-12"
+      contentContainerStyle={{ paddingBottom: 150 }}
+    >
+      <Text className="text-2xl font-bold mb-6 mt-6 text-white">
         Modifier mon profil
       </Text>
 
@@ -82,14 +85,14 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
               ? { uri: formData.profile_image }
               : require("@/assets/images/react-logo.png")
           }
-          className="w-32 h-32 rounded-full"
+          className="w-32 h-32 rounded-full border-2 border-green"
         />
         <Text className="text-white mt-2">Changer la photo</Text>
       </Pressable>
 
       <View className="space-y-4">
         <TextInput
-          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Prénom"
           placeholderTextColor="#9CA3AF"
           value={formData.name}
@@ -97,7 +100,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         />
 
         <TextInput
-          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Nom"
           placeholderTextColor="#9CA3AF"
           value={formData.last_name}
@@ -105,7 +108,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         />
 
         <TextInput
-          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Âge"
           placeholderTextColor="#9CA3AF"
           value={formData.age}
@@ -121,16 +124,16 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           placeholder="Sélectionnez votre genre"
           boxStyles={{
             borderWidth: 1,
-            borderColor: "#374151",
+            borderColor: "#394047",
             borderRadius: 8,
             padding: 16,
-            backgroundColor: "#111827",
+            backgroundColor: "#394047",
           }}
           dropdownStyles={{
             borderWidth: 1,
-            borderColor: "#374151",
+            borderColor: "#394047",
             borderRadius: 8,
-            backgroundColor: "#111827",
+            backgroundColor: "#394047",
           }}
           inputStyles={{ color: "#fff" }}
           dropdownTextStyles={{ color: "#fff" }}
@@ -138,7 +141,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         />
 
         <TextInput
-          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Localisation"
           placeholderTextColor="#9CA3AF"
           value={formData.location}
@@ -146,7 +149,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         />
 
         <TextInput
-          className="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white"
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Bio"
           placeholderTextColor="#9CA3AF"
           value={formData.bio}
@@ -162,21 +165,21 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
 
       <View className="space-y-3 px-8 mb-4 mt-6">
         <Pressable
-          className="border border-orange py-3 rounded-full items-center"
+          className="bg-green py-3 rounded-full items-center"
           onPress={handleSubmit}
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="white" />
+            <ActivityIndicator color="#12171b" />
           ) : (
-            <Text className="text-white font-semibold">Enregistrer</Text>
+            <Text className="text-dark font-semibold">Enregistrer</Text>
           )}
         </Pressable>
         <Pressable
-          className="bg-transparent border border-white py-3 rounded-full items-center"
+          className="bg-transparent border border-green py-3 rounded-full items-center"
           onPress={() => setIsEditing(false)}
         >
-          <Text className="text-white font-semibold">Annuler</Text>
+          <Text className="text-green font-semibold">Annuler</Text>
         </Pressable>
       </View>
     </ScrollView>

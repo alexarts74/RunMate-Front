@@ -2,26 +2,25 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#FF8C00",
-        tabBarInactiveTintColor: "#808080",
+        tabBarActiveTintColor: "#b9f144",
+        tabBarInactiveTintColor: "#394047",
         headerShown: false,
         tabBarStyle: {
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: '#000000',
-          borderTopColor: '#333333',
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
-        }
+          backgroundColor: "#12171b",
+          borderTopColor: "#394047",
+          height: 80,
+          paddingBottom: 28,
+          paddingTop: 0,
+        },
       }}
     >
       <Tabs.Screen
