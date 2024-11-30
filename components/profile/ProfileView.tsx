@@ -46,34 +46,34 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
       </View>
 
       <View className="space-y-4">
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Nom complet</Text>
           <Text className="text-white text-lg">
             {user?.name} {user?.last_name}
           </Text>
         </View>
 
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Email</Text>
           <Text className="text-white text-lg">{user?.email}</Text>
         </View>
 
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Âge</Text>
           <Text className="text-white text-lg">{user?.age} ans</Text>
         </View>
 
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Genre</Text>
           <Text className="text-white text-lg">{user?.gender}</Text>
         </View>
 
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Localisation</Text>
           <Text className="text-white text-lg">{user?.location}</Text>
         </View>
 
-        <View className="bg-gray p-4 rounded-lg">
+        <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Bio</Text>
           <Text className="text-white text-lg">{user?.bio}</Text>
         </View>

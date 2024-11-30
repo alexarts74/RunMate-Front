@@ -12,7 +12,7 @@ export type MatchUser = {
     name: string;
     location: string;
     profile_image: string;
-    bio: string;
+    bio?: string;
     runner_profile: {
       actual_pace: string;
       usual_distance: number;
@@ -20,7 +20,7 @@ export type MatchUser = {
       objective: string;
     };
   };
-  score: number;
+  score?: number;
   compatibility_details: {
     pace_match: number;
     distance_match: number;

@@ -56,12 +56,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="RunnerProfile"
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
     </Tabs>
   );
 }
