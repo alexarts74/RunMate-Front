@@ -18,6 +18,8 @@ export default function RunnerProfileScreen() {
 
   if (!runner) return null;
 
+  console.log(runner);
+
   return (
     <StyledScrollView className="flex-1 bg-[#12171b]">
       {/* En-tête avec photo de profil */}
@@ -42,8 +44,8 @@ export default function RunnerProfileScreen() {
       <StyledView className="mt-8 px-5">
         <StyledText className="text-white text-xl font-bold mb-4">Profil Runner</StyledText>
 
-        <StyledView className="flex-row justify-between mb-6">
-          <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1 mx-1">
+        <StyledView className="flex-row justify-between mb-6 gap-x-2">
+          <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1">
             <Ionicons name="walk-outline" size={24} color="#b9f144" />
             <StyledText className="text-white text-center mt-2">Allure</StyledText>
             <StyledText className="text-green text-lg font-bold">
@@ -51,7 +53,7 @@ export default function RunnerProfileScreen() {
             </StyledText>
           </StyledView>
 
-          <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1 mx-1">
+          <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1 ">
             <Ionicons name="resize-outline" size={24} color="#b9f144" />
             <StyledText className="text-white text-center mt-2">Distance</StyledText>
             <StyledText className="text-green text-lg font-bold">
@@ -78,14 +80,14 @@ export default function RunnerProfileScreen() {
             <StyledText className="text-white ml-2 text-lg">Disponibilités</StyledText>
           </StyledView>
           <StyledView className="flex-row flex-wrap">
-            {runner.runner_profile.availability.map((day, index) => (
+            {/* {runner.runner_profile.availability.map((day, index) => (
               <StyledView
                 key={index}
                 className="bg-[#12171b] px-3 py-1 rounded-full mr-2 mb-2"
               >
                 <StyledText className="text-green">{day}</StyledText>
               </StyledView>
-            ))}
+            ))} */}
           </StyledView>
         </StyledView>
       </StyledView>
