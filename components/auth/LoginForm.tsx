@@ -5,12 +5,15 @@ import {
   Pressable,
   Text,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
 import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
 import { useAuth } from "@/context/AuthContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -53,65 +56,60 @@ export default function LoginForm() {
   };
 
   return (
-    <View className="flex-1 bg-black p-6 justify-between">
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-5xl font-bold text-white mb-2.5">
-          RunMate
+    <View className="flex-1 bg-[#12171b] p-6 justify-between">
+      <View className="flex-row items-center mb-6 mt-12 relative">
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          className="absolute left-0 z-10"
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+
+        <Text className="text-2xl font-bold text-white w-full text-center">
+          Connexion
         </Text>
-        <Text className="text-lg text-gray-300 text-center px-5 mb-12">
-          Connectez-vous à votre compte
-        </Text>
+      </View>
 
-        <View className="w-full space-y-4">
-          <TextInput
-            className="w-full border border-gray-700 rounded-full p-4 bg-gray-900 text-white"
-            placeholder="Email"
-            placeholderTextColor="#9CA3AF"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+      <View className="w-full space-y-4">
+        <TextInput
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
+          placeholder="Email"
+          placeholderTextColor="#9CA3AF"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-          <TextInput
-            className="w-full border border-gray-700 rounded-full p-4 bg-gray-900 text-white"
-            placeholder="Mot de passe"
-            placeholderTextColor="#9CA3AF"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+        <TextInput
+          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
+          placeholder="Mot de passe"
+          placeholderTextColor="#9CA3AF"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-          {error ? (
-            <Text className="text-red-500 text-center">{error}</Text>
-          ) : null}
-        </View>
+        {error ? (
+          <Text className="text-red-500 text-center">{error}</Text>
+        ) : null}
       </View>
 
       <View className="space-y-3 mb-12 px-8">
         <Pressable
-          className={`bg-white py-3 rounded-full items-center ${
+          className={`bg-green py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""
           }`}
           onPress={handleLogin}
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="white" />
+            <ActivityIndicator color="#1a2126" />
           ) : (
             <Text className="text-sm font-semibold text-dark">
               Se connecter
             </Text>
           )}
-        </Pressable>
-
-        <Pressable
-          className="py-3 rounded-full items-center border border-white"
-          onPress={() => router.push("/(auth)/signup")}
-        >
-          <Text className="text-sm font-semibold text-white">
-            Créer un compte
-          </Text>
         </Pressable>
       </View>
     </View>

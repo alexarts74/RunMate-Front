@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { authService } from "@/service/api/auth";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function SignUpForm() {
   const { login } = useAuth();
@@ -85,13 +86,21 @@ export default function SignUpForm() {
   };
 
   return (
-    <ScrollView className="flex-1 mt-12 bg-dark px-5 py-6">
-      <Text className="text-2xl font-bold mb-6 text-center text-white">
-        Inscription
-      </Text>
+    <ScrollView className="flex-1 mt-12 bg-[#12171b] px-5 py-6">
+      <View className="flex-row justify-between items-center mb-6">
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+
+        <Text className="text-2xl font-bold text-white flex-1 text-center">
+          Inscription
+        </Text>
+      </View>
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Email"
         placeholderTextColor="#9CA3AF"
         value={formData.email}
@@ -101,7 +110,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Mot de passe"
         placeholderTextColor="#9CA3AF"
         value={formData.password}
@@ -110,7 +119,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Confirmation du mot de passe"
         placeholderTextColor="#9CA3AF"
         value={formData.password_confirmation}
@@ -119,7 +128,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Prénom"
         placeholderTextColor="#9CA3AF"
         value={formData.first_name}
@@ -127,7 +136,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Nom"
         placeholderTextColor="#9CA3AF"
         value={formData.last_name}
@@ -136,7 +145,7 @@ export default function SignUpForm() {
 
       <TouchableOpacity
         onPress={() => setShowAgePicker(true)}
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray"
       >
         <Text className="text-white">
           {formData.age ? `${formData.age} ans` : "Sélectionnez votre âge"}
@@ -150,17 +159,17 @@ export default function SignUpForm() {
         placeholder="Sélectionnez votre genre"
         boxStyles={{
           borderWidth: 1,
-          borderColor: "#374151",
+          borderColor: "#394047",
           borderRadius: 8,
           padding: 16,
           marginBottom: 16,
-          backgroundColor: "#111827",
+          backgroundColor: "#394047",
         }}
         dropdownStyles={{
           borderWidth: 1,
-          borderColor: "#374151",
+          borderColor: "#394047",
           borderRadius: 8,
-          backgroundColor: "#111827",
+          backgroundColor: "#394047",
         }}
         inputStyles={{ color: "#fff" }}
         dropdownTextStyles={{ color: "#fff" }}
@@ -168,7 +177,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Localisation"
         placeholderTextColor="#9CA3AF"
         value={formData.location}
@@ -176,7 +185,7 @@ export default function SignUpForm() {
       />
 
       <TextInput
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 bg-gray-900 text-white"
+        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
         placeholder="Bio"
         placeholderTextColor="#9CA3AF"
         value={formData.bio}
@@ -186,7 +195,7 @@ export default function SignUpForm() {
 
       <Pressable
         onPress={pickImage}
-        className="w-full border border-gray-700 rounded-lg p-4 mb-4 items-center justify-center bg-gray-900"
+        className="w-full border border-gray rounded-lg p-4 mb-4 items-center justify-center bg-gray"
       >
         {formData.profile_image ? (
           <View className="items-center">
@@ -205,7 +214,7 @@ export default function SignUpForm() {
 
       <Modal visible={showAgePicker} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-gray-900 w-full p-4">
+          <View className="bg-gray w-full p-4">
             <View className="flex-row justify-between items-center mb-4">
               <TouchableOpacity onPress={() => setShowAgePicker(false)}>
                 <Text className="text-white">Annuler</Text>
@@ -245,31 +254,16 @@ export default function SignUpForm() {
 
       <View className="space-y-3 px-8 mb-4">
         <Pressable
-          className={`bg-white py-3 rounded-full items-center ${
+          className={`bg-green py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""
           }`}
           onPress={handleSignUp}
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="white" />
+            <ActivityIndicator color="#1a2126" />
           ) : (
             <Text className="text-sm font-semibold text-dark">S'inscrire</Text>
-          )}
-        </Pressable>
-        <Pressable
-          className={`bg-transparent border border-white py-3 rounded-full items-center ${
-            loading ? "opacity-70" : ""
-          }`}
-          onPress={() => router.replace("/(auth)/login")}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text className="text-sm font-semibold text-white">
-              Se connecter
-            </Text>
           )}
         </Pressable>
       </View>

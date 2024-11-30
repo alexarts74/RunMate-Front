@@ -4,7 +4,7 @@ import SignUpForm from "@/components/auth/SignUpForm";
 
 export default function SignUpScreen() {
   return (
-    <View className="bg-black flex-1">
+    <View className="bg-[#12171b] flex-1">
       <SignUpForm />
     </View>
   );

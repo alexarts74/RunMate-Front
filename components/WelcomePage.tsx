@@ -8,6 +8,9 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 
+// Variable globale pour suivre l'état de l'animation à travers toute l'app
+let hasAnimatedGlobal = false;
+
 export default function WelcomePage() {
   const titleScale = useRef(new Animated.Value(1)).current;
   const titlePosition = useRef(new Animated.Value(0)).current;
@@ -15,6 +18,22 @@ export default function WelcomePage() {
   const loaderOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
+    if (!hasAnimatedGlobal) {
+      startAnimations();
+      hasAnimatedGlobal = true;
+    } else {
+      skipAnimations();
+    }
+  }, []);
+
+  const skipAnimations = () => {
+    loaderOpacity.setValue(0);
+    titleScale.setValue(0.8);
+    titlePosition.setValue(1);
+    contentOpacity.setValue(1);
+  };
+
+  const startAnimations = () => {
     setTimeout(() => {
       Animated.timing(loaderOpacity, {
         toValue: 0,
@@ -40,12 +59,12 @@ export default function WelcomePage() {
         }),
       ]).start();
     }, 3000);
-  }, []);
+  };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   return (
-    <View className="flex-1 bg-dark p-6 justify-between">
+    <View className="flex-1 bg-[#12171b] p-6 justify-between">
       <Animated.View
         className="flex-1 justify-center items-center"
         style={{
@@ -60,10 +79,8 @@ export default function WelcomePage() {
           ],
         }}
       >
-        <Text className="text-5xl font-bold text-white mb-2.5">
-          RunMate
-        </Text>
-        <Text className="text-lg text-gray-300 text-center px-5">
+        <Text className="text-5xl font-bold text-green mb-2.5">RunMate</Text>
+        <Text className="text-lg text-white text-center px-5">
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
@@ -72,8 +89,8 @@ export default function WelcomePage() {
         className="absolute left-0 right-0 bottom-32 items-center"
         style={{ opacity: loaderOpacity }}
       >
-        <ActivityIndicator size="large" color="#F97316" />
-        <Text className="text-white mt-4 text-base">Chargement...</Text>
+        <ActivityIndicator size="large" color="#b9f144" />
+        <Text className="text-green mt-4 text-base">Chargement...</Text>
       </Animated.View>
 
       <Animated.View
@@ -83,14 +100,14 @@ export default function WelcomePage() {
         }}
       >
         <AnimatedPressable
-          className="bg-white py-3 rounded-full items-center"
+          className="bg-green py-3 rounded-full items-center"
           onPress={() => router.push("/(auth)/login")}
         >
           <Text className="text-sm font-semibold text-dark">Se connecter</Text>
         </AnimatedPressable>
 
         <AnimatedPressable
-          className="bg-black py-3 rounded-full items-center border border-white"
+          className="bg-gray py-3 rounded-full items-center border border-white"
           onPress={() => router.push("/(auth)/signup")}
         >
           <Text className="text-sm font-semibold text-white">

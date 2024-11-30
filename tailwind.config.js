@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        dark: "#141B1B",
-        orange: "#FF8500",
+        green: "#b9f144",
+        gray: "#394047",
       },
     },
   },
