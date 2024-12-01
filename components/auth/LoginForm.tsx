@@ -13,7 +13,7 @@ import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+import { authStorage } from "@/service/auth/storage";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -36,6 +36,15 @@ export default function LoginForm() {
       });
       setMessage("Connexion réussie !");
 
+      console.log("Données de connexion reçues:", userData);
+
+      if (!userData.authentication_token) {
+        throw new Error("Token d'authentification manquant dans la réponse");
+      }
+
+      await authStorage.storeToken(userData.authentication_token);
+      await authStorage.storeUser(userData);
+
       await login(userData);
 
       const matchesData = await matchesService.getMatches({
@@ -45,7 +54,6 @@ export default function LoginForm() {
       });
 
       setMatches(matchesData);
-
       router.replace("/(tabs)/Homepage");
     } catch (err) {
       console.error("Erreur connexion:", err);

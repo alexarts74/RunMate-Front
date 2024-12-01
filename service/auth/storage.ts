@@ -1,0 +1,49 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const TOKEN_KEY = '@auth_token';
+const USER_KEY = '@user_data';
+
+export const authStorage = {
+  async storeToken(token: string) {
+    try {
+      await AsyncStorage.setItem(TOKEN_KEY, token);
+    } catch (error) {
+      console.error('Erreur lors du stockage du token:', error);
+    }
+  },
+
+  async getToken() {
+    try {
+      return await AsyncStorage.getItem(TOKEN_KEY);
+    } catch (error) {
+      console.error('Erreur lors de la récupération du token:', error);
+      return null;
+    }
+  },
+
+  async storeUser(userData: any) {
+    try {
+      await AsyncStorage.setItem(USER_KEY, JSON.stringify(userData));
+    } catch (error) {
+      console.error('Erreur lors du stockage des données utilisateur:', error);
+    }
+  },
+
+  async getUser() {
+    try {
+      const userData = await AsyncStorage.getItem(USER_KEY);
+      return userData ? JSON.parse(userData) : null;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données utilisateur:', error);
+      return null;
+    }
+  },
+
+  async removeAuth() {
+    try {
+      await AsyncStorage.multiRemove([TOKEN_KEY, USER_KEY]);
+    } catch (error) {
+      console.error('Erreur lors de la suppression des données auth:', error);
+    }
+  }
+};

@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
 import User from "@/interface/User";
+import { authStorage } from "@/service/auth/storage";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -36,14 +37,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (userData: any) => {
     try {
       setIsLoading(true);
-      console.log("Données reçues au login:", userData);
+      console.log("1. Début du login avec:", userData);
+
+      if (!userData.authentication_token) {
+        throw new Error("Token manquant");
+      }
+
       await AsyncStorage.setItem("authToken", userData.authentication_token);
-      await AsyncStorage.setItem("userData", JSON.stringify(userData.user));
-      setUser(userData.user);
+      await AsyncStorage.setItem("userData", JSON.stringify(userData));
+      console.log("2. Données stockées dans AsyncStorage");
+
+      await authStorage.storeToken(userData.authentication_token);
+      await authStorage.storeUser(userData);
+      console.log("3. Données stockées dans authStorage");
+
+      setUser(userData);
       setIsAuthenticated(true);
-      console.log("User stocké:", userData.user);
+      console.log("4. État d'authentification mis à jour");
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde des données:", error);
+      console.error("❌ Erreur login:", error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -52,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      await authStorage.removeAuth();
       setIsLoading(true);
       await AsyncStorage.removeItem("authToken");
       await AsyncStorage.removeItem("userData");
