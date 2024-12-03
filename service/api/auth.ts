@@ -1,3 +1,4 @@
+import { authStorage } from "../auth/storage";
 import { apiClient } from "./client";
 
 export const authService = {
@@ -29,8 +30,6 @@ export const authService = {
     password_confirmation: string;
   }) {
     try {
-      console.log("Données avant transformation:", userData);
-
       const updateData = {
         user: {
           ...userData,
@@ -39,14 +38,20 @@ export const authService = {
           password_confirmation: userData.password_confirmation || undefined,
         },
       };
-      console.log("Données envoyées à l'API:", updateData);
-
       const response = await apiClient.put("/users/profile", updateData);
-      console.log("Réponse de l'API:", response);
-
       return response;
     } catch (error) {
       console.error("Erreur dans updateUserProfile:", error);
+      throw error;
+    }
+  },
+
+  async logout() {
+    try {
+      console.log("Déconnexion dans le service");
+      await apiClient.delete("/users/log_out");
+    } catch (error) {
+      console.error('Erreur logout:', error);
       throw error;
     }
   },

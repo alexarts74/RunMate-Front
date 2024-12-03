@@ -22,6 +22,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const cleanStorage = async () => {
+    try {
+      await AsyncStorage.removeItem("authToken");
+      await AsyncStorage.removeItem("userData");
+      await authStorage.removeAuth();
+      setUser(null);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Erreur lors du nettoyage du storage:", error);
+    }
+  };
+
   const signUp = async (userData: any) => {
     try {
       setIsLoading(true);
@@ -43,15 +55,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Token manquant");
       }
 
-      await AsyncStorage.setItem("authToken", userData.authentication_token);
-      await AsyncStorage.setItem("userData", JSON.stringify(userData));
+      const userToStore = userData.user || userData;
+      const tokenToStore = userData.authentication_token;
+
+      await AsyncStorage.setItem("authToken", tokenToStore);
+      await AsyncStorage.setItem("userData", JSON.stringify(userToStore));
       console.log("2. Données stockées dans AsyncStorage");
 
-      await authStorage.storeToken(userData.authentication_token);
-      await authStorage.storeUser(userData);
+      await authStorage.storeToken(tokenToStore);
+      await authStorage.storeUser(userToStore);
       console.log("3. Données stockées dans authStorage");
 
-      setUser(userData);
+      setUser(userToStore);
       setIsAuthenticated(true);
       console.log("4. État d'authentification mis à jour");
     } catch (error) {
@@ -64,10 +79,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await authStorage.removeAuth();
       setIsLoading(true);
-      await AsyncStorage.removeItem("authToken");
-      await AsyncStorage.removeItem("userData");
+      await authService.logout();
+      await authStorage.removeAuth();
       console.log("Données supprimées");
       setUser(null);
       setIsAuthenticated(false);
@@ -103,20 +117,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const getUser = async () => {
     try {
+      const token = await AsyncStorage.getItem("authToken");
       const userData = await AsyncStorage.getItem("userData");
-      if (userData) {
-        console.log("Données récupérées:", JSON.parse(userData));
-        setUser(JSON.parse(userData));
+
+      console.log("Token:", token);
+      console.log("UserData:", userData);
+
+      if (!token || !userData) {
+        console.log("❌ Pas de données d'auth trouvées");
+        await cleanStorage();
+        return;
       }
+
+      const parsedData = JSON.parse(userData);
+      console.log("Données parsées:", parsedData);
+
+      setUser(parsedData);
+      setIsAuthenticated(true);
+      console.log("User set to:", parsedData);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
-      throw error;
+      await cleanStorage();
     }
   };
 
   useEffect(() => {
     getUser();
   }, []);
+
+  /// si jamais je veux nettoyer le storage au démarrage
+
+  // useEffect(() => {
+  //   const initAuth = async () => {
+  //     try {
+  //       // Force le nettoyage du storage au démarrage
+  //       await cleanStorage();
+  //       console.log("Storage nettoyé au démarrage");
+
+  //       // Redirige vers la page de login
+  //       router.replace("/(auth)/login");
+  //     } catch (error) {
+  //       console.error("Erreur lors de l'initialisation:", error);
+  //     }
+  //   };
+
+  //   initAuth();
+  // }, []);
 
   return (
     <AuthContext.Provider

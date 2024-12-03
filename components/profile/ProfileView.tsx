@@ -1,23 +1,34 @@
 import { useAuth } from "@/context/AuthContext";
+import { authService } from "@/service/api/auth";
+import { authStorage } from "@/service/auth/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
-
+import { useRouter } from "expo-router";
 type ProfileViewProps = {
   setIsEditing: (value: boolean) => void;
 };
 
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
   const { user } = useAuth();
+  const router = useRouter();
+  console.log("User dans ProfileView:", user?.name);
 
-  if (!user) {
-    console.log("Pas de données utilisateur");
+  const handleLogout = async () => {
+    await authService.logout();
+    await authStorage.removeAuth();
+    router.replace("/(auth)/login");
+  };
+
+  if (!user?.id) {
     return (
       <View className="flex-1 bg-[#12171b] px-5 py-6 justify-center items-center">
         <Text className="text-white">Chargement...</Text>
       </View>
     );
   }
+
+  console.log("User dans ProfileView:", user.name);
 
   return (
     <ScrollView
@@ -73,10 +84,14 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-lg">{user?.location}</Text>
         </View>
 
-        <View className="bg-gray p-2 rounded-lg">
+        <View className="bg-gray p-2 mb-4 rounded-lg">
           <Text className="text-gray-400">Bio</Text>
           <Text className="text-white text-lg">{user?.bio}</Text>
         </View>
+
+        <Pressable className="bg-transparent border border-green py-3 rounded-full w-4/5 mx-auto items-center" onPress={handleLogout}>
+          <Text className="text-green font-semibold">Se déconnecter</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
