@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { MatchUser } from "@/service/api/matching";
+import { MatchUser } from "@/interface/Matches";
 import { router } from "expo-router";
 
 type MatchCardProps = {
@@ -9,6 +9,7 @@ type MatchCardProps = {
 };
 
 export function MatchCard({ match }: MatchCardProps) {
+  console.log("Match:", match);
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}

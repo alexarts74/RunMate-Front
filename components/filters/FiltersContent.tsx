@@ -29,8 +29,6 @@ export function FiltersContent() {
 
   return (
     <>
-      <Text className="text-2xl font-bold text-white mb-8">Filtres</Text>
-
       {/* Filtres d'âge */}
       <View className="mb-8">
         <Text className="text-white text-lg mb-4">Âge</Text>

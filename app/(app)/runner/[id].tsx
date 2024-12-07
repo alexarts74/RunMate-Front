@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { styled } from "nativewind";
+import { router } from "expo-router";
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -22,28 +23,34 @@ export default function RunnerProfileScreen() {
 
   return (
     <StyledScrollView className="flex-1 bg-[#12171b]">
-      {/* En-tête avec photo de profil */}
-      <StyledView className="items-center pt-12 px-5">
-        <StyledImage
-          source={
-            runner.profile_image
-              ? { uri: runner.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-32 h-32 rounded-full"
-        />
-        <StyledText className="text-2xl font-bold text-white mt-4">{runner.name}</StyledText>
+      <StyledView className="pt-12 px-5">
+        <StyledView className="flex-row items-center mb-6">
+          <StyledPressable onPress={() => router.back()} className="p-2">
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </StyledPressable>
+          <StyledText className="text-xl font-bold text-white ml-2">Profil Runner</StyledText>
+        </StyledView>
 
-        <StyledView className="flex-row items-center mt-2">
-          <Ionicons name="location" size={16} color="#9CA3AF" />
-          <StyledText className="text-green ml-1">{runner.location}</StyledText>
+        <StyledView className="items-center">
+          <StyledImage
+            source={
+              runner.profile_image
+                ? { uri: runner.profile_image }
+                : require("@/assets/images/react-logo.png")
+            }
+            className="w-32 h-32 rounded-full"
+          />
+          <StyledText className="text-2xl font-bold text-white mt-4">{runner.name}</StyledText>
+
+          <StyledView className="flex-row items-center mt-2">
+            <Ionicons name="location" size={16} color="#9CA3AF" />
+            <StyledText className="text-green ml-1">{runner.location}</StyledText>
+          </StyledView>
         </StyledView>
       </StyledView>
 
       {/* Statistiques de course */}
       <StyledView className="mt-8 px-5">
-        <StyledText className="text-white text-xl font-bold mb-4">Profil Runner</StyledText>
-
         <StyledView className="flex-row justify-between mb-6 gap-x-2">
           <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1">
             <Ionicons name="walk-outline" size={24} color="#b9f144" />
