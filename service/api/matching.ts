@@ -1,40 +1,11 @@
+import { MatchFilters, MatchUser } from "@/interface/Matches";
 import { apiClient } from "./client";
 
-type MatchFilters = {
-  filter_pace?: boolean;
-  filter_distance?: boolean;
-  filter_availability?: boolean;
-};
-
-export type MatchUser = {
-  user: {
-    id: number;
-    name: string;
-    location: string;
-    profile_image: string;
-    bio?: string;
-    runner_profile: {
-      actual_pace: string;
-      usual_distance: number;
-      availability: string[];
-      objective: string;
-    };
-  };
-  score?: number;
-  compatibility_details: {
-    pace_match: number;
-    distance_match: number;
-    availability_match: number;
-  };
-};
-
-type MatchResponse = {
-  matches: MatchUser[];
-  total: number;
-};
 
 export const matchesService = {
+
   getMatches: async (filters?: MatchFilters) => {
+    console.log("Filters:", filters);
     try {
       const formattedFilters = filters
         ? Object.entries(filters).reduce(
@@ -74,4 +45,8 @@ export const matchesService = {
       return [];
     }
   },
+
+  async applyFilters(filters: MatchFilters) {
+    return await apiClient.post("/matches/apply_filters", { filters });
+  }
 };

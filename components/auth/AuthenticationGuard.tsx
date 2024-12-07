@@ -40,7 +40,7 @@ export default function AuthenticationGuard({ children }: { children: React.Reac
   useEffect(() => {
     if (!isLoading) {
       const inAuthGroup = segments[0] === '(auth)';
-      const isIndex = segments.length === 0 || segments[0] === '';
+      const isIndex = segments.length === 0 || (segments[0] as string) === '';
 
       if (isAuthenticated) {
         setTimeout(() => {

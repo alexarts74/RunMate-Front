@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
-import User from "@/interface/User";
 import { authStorage } from "@/service/auth/storage";
+import User from "@/interface/User";
 
 type AuthContextType = {
   isAuthenticated: boolean;

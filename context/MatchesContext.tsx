@@ -1,25 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-
-type MatchUser = {
-  user: {
-    id: number;
-    name: string;
-    location: string;
-    profile_image: string;
-    runner_profile: {
-      actual_pace: string;
-      usual_distance: number;
-      availability: string[];
-      objective: string;
-    };
-  };
-  compatibility_details: {
-    pace_match: number;
-    distance_match: number;
-    availability_match: number;
-  };
-  percentage: number;
-};
+import { MatchUser } from "@/interface/Matches";
 
 type MatchesContextType = {
   matches: MatchUser[];

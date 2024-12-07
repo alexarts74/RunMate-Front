@@ -1,6 +1,4 @@
 import { useAuth } from "@/context/AuthContext";
-import { authService } from "@/service/api/auth";
-import { authStorage } from "@/service/auth/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
@@ -26,8 +24,6 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
       </View>
     );
   }
-
-  console.log("User dans ProfileView:", user.name);
 
   return (
     <ScrollView

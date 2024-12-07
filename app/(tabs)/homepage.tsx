@@ -1,18 +1,22 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Pressable } from "react-native";
 import React from "react";
 import { useMatches } from "@/context/MatchesContext";
 import { MatchCard } from "@/components/matches/MatchCard";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 
 const HomepageScreen = () => {
   const { matches } = useMatches();
 
   return (
     <ScrollView className="flex-1 bg-[#12171b] pt-12">
-      <Text className="text-2xl font-bold text-white px-5 my-6">
-        Vos matches
-      </Text>
+      <View className="flex-row justify-between items-center px-5 my-6">
+        <Text className="text-2xl font-bold text-white">Vos matches</Text>
+        <Pressable onPress={() => router.push("/runner/filters")}>
+          <Ionicons name="filter" size={24} color="white" />
+        </Pressable>
+      </View>
 
       {matches?.length === 0 ? (
         <View className="px-5">
@@ -21,9 +25,11 @@ const HomepageScreen = () => {
           </Text>
         </View>
       ) : (
-        <View className="px-5 space-y-4">
+        <View className="px-5 space-y-4 pb-36">
           {matches?.map((match) => (
-            <MatchCard key={match.user.id} match={match} />
+            <View key={match.user.id} className="p-2">
+              <MatchCard match={match} />
+            </View>
           ))}
         </View>
       )}
