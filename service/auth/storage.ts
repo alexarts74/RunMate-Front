@@ -44,12 +44,10 @@ export const authStorage = {
 
   async removeAuth() {
     try {
-      await AsyncStorage.multiRemove([
-        TOKEN_KEY,
-        USER_KEY,
-        "@authToken",
-        "@userData",
-      ]);
+      await AsyncStorage.removeItem("authToken");
+      await AsyncStorage.removeItem("userData");
+      await AsyncStorage.removeItem(TOKEN_KEY);
+      await AsyncStorage.removeItem(USER_KEY);
       console.log("Toutes les clés de stockage supprimées");
     } catch (error) {
       console.error("Erreur lors de la suppression des données auth:", error);

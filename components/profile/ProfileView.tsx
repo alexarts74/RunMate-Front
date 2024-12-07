@@ -10,14 +10,13 @@ type ProfileViewProps = {
 };
 
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
-  const { user } = useAuth();
+  const { user, logout} = useAuth();
   const router = useRouter();
   console.log("User dans ProfileView:", user?.name);
 
   const handleLogout = async () => {
-    await authService.logout();
-    await authStorage.removeAuth();
-    router.replace("/(auth)/login");
+    await logout();
+    router.replace("/");
   };
 
   if (!user?.id) {

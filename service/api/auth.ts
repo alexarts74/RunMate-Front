@@ -1,4 +1,3 @@
-import { authStorage } from "../auth/storage";
 import { apiClient } from "./client";
 
 export const authService = {

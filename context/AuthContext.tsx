@@ -82,10 +82,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       await authService.logout();
       await authStorage.removeAuth();
-      console.log("Données supprimées");
+      const token = await AsyncStorage.getItem("authToken");
+      const userData = await AsyncStorage.getItem("userData");
+      console.log("Vérification après suppression - Token:", token);
+      console.log("Vérification après suppression - UserData:", userData);
       setUser(null);
       setIsAuthenticated(false);
-      router.replace("/(auth)/login");
+      console.log("OLALALALALALALALA LOGOUT");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
       throw error;
@@ -126,6 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!token || !userData) {
         console.log("❌ Pas de données d'auth trouvées");
         await cleanStorage();
+        console.log("OLALALALALALALALA");
+        router.replace("/");
         return;
       }
 

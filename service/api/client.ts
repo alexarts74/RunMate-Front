@@ -108,9 +108,7 @@ class ApiClient {
 
   async delete(endpoint: string) {
     const headers = await this.getHeaders();
-    console.log("Headers:", headers);
     const url = `${this.baseUrl}${endpoint}`;
-    console.log("URL:", url);
     const response = await this.fetchWithTimeout(url, {
       headers,
       method: "DELETE",

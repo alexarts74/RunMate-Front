@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -8,30 +8,27 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 
-// Variable globale pour suivre l'état de l'animation à travers toute l'app
-let hasAnimatedGlobal = false;
-
 export default function WelcomePage() {
+  const [isReady, setIsReady] = useState(false);
   const titleScale = useRef(new Animated.Value(1)).current;
   const titlePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
   const loaderOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    if (!hasAnimatedGlobal) {
-      startAnimations();
-      hasAnimatedGlobal = true;
-    } else {
-      skipAnimations();
-    }
+    // Attendre que l'AuthenticationGuard soit prêt
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const skipAnimations = () => {
-    loaderOpacity.setValue(0);
-    titleScale.setValue(0.8);
-    titlePosition.setValue(1);
-    contentOpacity.setValue(1);
-  };
+  useEffect(() => {
+    if (isReady) {
+      startAnimations();
+    }
+  }, [isReady]);
 
   const startAnimations = () => {
     setTimeout(() => {
@@ -58,10 +55,14 @@ export default function WelcomePage() {
           useNativeDriver: true,
         }),
       ]).start();
-    }, 3000);
+    }, 2000);
   };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <View className="flex-1 bg-[#12171b] p-6 justify-between">
