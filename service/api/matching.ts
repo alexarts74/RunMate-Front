@@ -37,8 +37,6 @@ export const matchesService = {
           runner_profile: match.user.runner_profile
         }
       }));
-
-      console.log("Matches transformés:", matches);
       return matches;
     } catch (error) {
       console.error("Erreur getMatches:", error);
@@ -47,6 +45,8 @@ export const matchesService = {
   },
 
   async applyFilters(filters: MatchFilters) {
+    console.log("applyFilters");
+    console.log("Filters:", filters);
     return await apiClient.post("/matches/apply_filters", { filters });
   }
 };

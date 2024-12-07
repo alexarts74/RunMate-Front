@@ -49,7 +49,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (userData: any) => {
     try {
       setIsLoading(true);
-      console.log("1. Début du login avec:", userData);
 
       if (!userData.authentication_token) {
         throw new Error("Token manquant");
@@ -60,15 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await AsyncStorage.setItem("authToken", tokenToStore);
       await AsyncStorage.setItem("userData", JSON.stringify(userToStore));
-      console.log("2. Données stockées dans AsyncStorage");
 
       await authStorage.storeToken(tokenToStore);
       await authStorage.storeUser(userToStore);
-      console.log("3. Données stockées dans authStorage");
 
       setUser(userToStore);
       setIsAuthenticated(true);
-      console.log("4. État d'authentification mis à jour");
     } catch (error) {
       console.error("❌ Erreur login:", error);
       throw error;
@@ -82,13 +78,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       await authService.logout();
       await authStorage.removeAuth();
-      const token = await AsyncStorage.getItem("authToken");
-      const userData = await AsyncStorage.getItem("userData");
-      console.log("Vérification après suppression - Token:", token);
-      console.log("Vérification après suppression - UserData:", userData);
       setUser(null);
       setIsAuthenticated(false);
-      console.log("OLALALALALALALALA LOGOUT");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
       throw error;
@@ -101,14 +92,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const response = await authService.updateUserProfile(userData);
-      console.log("Réponse de l'API dans updateUser:", response);
-
       if (response.user) {
         await AsyncStorage.setItem("userData", JSON.stringify(response.user));
         setUser(response.user);
-        console.log("State user mis à jour avec:", response.user);
       }
-
       return response;
     } catch (error) {
       console.error("Erreur dans updateUser:", error);
@@ -123,23 +110,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const token = await AsyncStorage.getItem("authToken");
       const userData = await AsyncStorage.getItem("userData");
 
-      console.log("Token:", token);
-      console.log("UserData:", userData);
-
       if (!token || !userData) {
-        console.log("❌ Pas de données d'auth trouvées");
         await cleanStorage();
-        console.log("OLALALALALALALALA");
         router.replace("/");
         return;
       }
 
       const parsedData = JSON.parse(userData);
-      console.log("Données parsées:", parsedData);
-
       setUser(parsedData);
       setIsAuthenticated(true);
-      console.log("User set to:", parsedData);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
       await cleanStorage();

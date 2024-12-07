@@ -6,7 +6,6 @@ export const authService = {
     password: string;
     password_confirmation: string;
   }) {
-    console.log("userData", userData);
     return await apiClient.post("/users/sign_up", { user: userData });
   },
 

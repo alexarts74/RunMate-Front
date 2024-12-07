@@ -9,7 +9,6 @@ type MatchCardProps = {
 };
 
 export function MatchCard({ match }: MatchCardProps) {
-  console.log("Match:", match);
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
