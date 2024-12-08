@@ -76,7 +76,7 @@ export default function SignUpForm() {
       setLoading(true);
       const response = await authService.signUp(formData);
       await login(response);
-      router.replace("/(tabs)/RunnerProfile");
+      router.replace("/(tabs)/profile");
     } catch (err) {
       console.error("Erreur inscription:", err);
       setError("Erreur lors de l'inscription. Veuillez réessayer.");

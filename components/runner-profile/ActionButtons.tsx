@@ -28,7 +28,7 @@ export function ActionButtons({ loading, handleSubmit }: Props) {
 
       <Pressable
         className="py-3 rounded-full items-center border border-orange"
-        onPress={() => router.replace("/(tabs)/Homepage")}
+        onPress={() => router.replace("/(tabs)/matches")}
       >
         <Text className="text-sm font-semibold text-orange">
           Passer cette étape

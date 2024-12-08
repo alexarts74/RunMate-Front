@@ -9,6 +9,11 @@ type MatchCardProps = {
 };
 
 export function MatchCard({ match }: MatchCardProps) {
+
+  const handleSendMessage = () => {
+    router.push(`/chat/${match.user.id}`);
+  };
+
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
@@ -39,17 +44,17 @@ export function MatchCard({ match }: MatchCardProps) {
         </View>
 
         <Pressable
-          onPress={() => {
-            /* Gérer l'envoi de message */
-          }}
-          className="p-3 rounded-full"
+          onPress={handleSendMessage}
+          className="p-3 mt-3 rounded-full"
         >
           <Ionicons name="mail-outline" size={24} color="white" />
         </Pressable>
-        <View className="items-center bg-[#12171b] p-3 rounded-xl mx-1">
+
+        {/* TODO: Ajouter la note de compatibilité mais pas pour le moment revoir avec le filtrage des matchs dans le backend */}
+        {/* <View className="items-center bg-[#12171b] p-3 rounded-xl mx-1">
           <Ionicons name="heart-outline" size={24} color="#b9f144" />
           <Text className="text-white text-center mt-2">{match.score} %</Text>
-        </View>
+        </View> */}
       </View>
 
       {/* Section Profil Runner */}

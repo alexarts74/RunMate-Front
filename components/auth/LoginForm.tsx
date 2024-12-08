@@ -47,14 +47,10 @@ export default function LoginForm() {
 
       await login(userData);
 
-      const matchesData = await matchesService.getMatches({
-        filter_pace: true,
-        filter_distance: true,
-        filter_availability: true,
-      });
+      const matchesData = await matchesService.getMatches();
 
       setMatches(matchesData);
-      router.replace("/(tabs)/Homepage");
+      router.replace("/(tabs)/matches");
     } catch (err) {
       console.error("Erreur connexion:", err);
       setError("Erreur lors de la connexion");

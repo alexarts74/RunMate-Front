@@ -20,7 +20,6 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const refreshMatches = async () => {
     try {
       setIsLoading(true);
-      console.log("currentFilters", currentFilters);
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)
         : await matchesService.getMatches();
@@ -34,7 +33,6 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   };
 
   const applyFilters = async (filters: MatchFilters) => {
-    console.log("applyFilters", filters);
     try {
       setIsLoading(true);
       setCurrentFilters(filters);

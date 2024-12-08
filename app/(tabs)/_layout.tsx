@@ -24,8 +24,9 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Homepage"
+        name="matches/index"
         options={{
+          title: "Matches",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
@@ -35,8 +36,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Messages"
+        name="messages/index"
         options={{
+          title: "Messages",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "chatbubble" : "chatbubble-outline"}
@@ -46,8 +48,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="profile/index"
         options={{
+          title: "Profile",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "person" : "person-outline"}

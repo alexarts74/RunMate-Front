@@ -37,7 +37,7 @@ export default function AuthenticationGuard({ children }: { children: React.Reac
       if (isAuthenticated) {
         setTimeout(() => {
           if (inAuthGroup || isIndex) {
-            router.replace('/(tabs)/Homepage');
+            router.replace('/(tabs)/matches');
           }
         }, 100);
       }

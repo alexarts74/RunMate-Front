@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import React, { useState } from "react";
 import { useMatches } from "@/context/MatchesContext";
 import { MatchCard } from "@/components/matches/MatchCard";
