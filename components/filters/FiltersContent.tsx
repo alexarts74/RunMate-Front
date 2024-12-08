@@ -3,12 +3,14 @@ import { View, Text, Pressable, Modal, TouchableOpacity } from "react-native";
 import Slider from "@react-native-community/slider";
 import { Switch } from "react-native";
 import { useRouter } from "expo-router";
-import { matchesService } from "@/service/api/matching";
+import { useMatches } from "@/context/MatchesContext";
 
 export function FiltersContent() {
   const router = useRouter();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const { applyFilters } = useMatches();
+  
   const [filters, setFilters] = useState({
     age_min: 18,
     age_max: 70,
@@ -34,8 +36,9 @@ export function FiltersContent() {
   ];
 
   const handleApplyFilters = async () => {
+    console.log("Filters:", filters);
     try {
-      await matchesService.applyFilters(filters);
+      await applyFilters(filters);
       router.back();
     } catch (error) {
       console.error("Erreur lors de l'application des filtres:", error);

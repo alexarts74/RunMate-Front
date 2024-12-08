@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Pressable } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useMatches } from "@/context/MatchesContext";
 import { MatchCard } from "@/components/matches/MatchCard";
 import { router, useFocusEffect } from "expo-router";
@@ -9,11 +9,15 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const HomepageScreen = () => {
 
   const { matches, refreshMatches, isLoading } = useMatches();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
-      refreshMatches();
-    }, [])
+      if (isInitialLoad) {
+        refreshMatches();
+        setIsInitialLoad(false);
+      }
+    }, [isInitialLoad])
   );
 
   return (

@@ -2,6 +2,10 @@ export interface MatchFilters {
   filter_pace?: boolean;
   filter_distance?: boolean;
   filter_availability?: boolean;
+  age_min?: number;
+  age_max?: number;
+  gender?: string;
+  location?: string;
 };
 
 export interface MatchUser {

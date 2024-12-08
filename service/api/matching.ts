@@ -1,43 +1,22 @@
 import { MatchFilters, MatchUser } from "@/interface/Matches";
 import { apiClient } from "./client";
 
-
 export const matchesService = {
-
-  getMatches: async (filters?: MatchFilters) => {
-    console.log("Filters:", filters);
+  async getMatches() {
     try {
-      const formattedFilters = filters
-        ? Object.entries(filters).reduce(
-            (acc, [key, value]) => ({
-              ...acc,
-              [key]: value.toString(),
-            }),
-            {}
-          )
-        : {};
-
-      const url = `/matches${
-        filters ? `?${new URLSearchParams(formattedFilters)}` : ""
-      }`;
-      console.log("Requête matches URL:", url);
-
-      const response = await apiClient.get(url);
-      console.log("Réponse matches brute:", response);
+      const response = await apiClient.get('/matches');
 
       if (!response || !response.matches) {
-        console.error("Format de réponse invalide:", response);
         return [];
       }
 
-      const matches = response.matches.map((match: MatchUser) => ({
+      return response.matches.map((match: MatchUser) => ({
         ...match,
         user: {
           ...match.user,
           runner_profile: match.user.runner_profile
         }
       }));
-      return matches;
     } catch (error) {
       console.error("Erreur getMatches:", error);
       return [];
@@ -45,8 +24,23 @@ export const matchesService = {
   },
 
   async applyFilters(filters: MatchFilters) {
-    console.log("applyFilters");
-    console.log("Filters:", filters);
-    return await apiClient.post("/matches/apply_filters", { filters });
+    try {
+      const response = await apiClient.post("/matches/apply_filters", { filters });
+
+      if (!response || !response.matches) {
+        return [];
+      }
+
+      return response.matches.map((match: MatchUser) => ({
+        ...match,
+        user: {
+          ...match.user,
+          runner_profile: match.user.runner_profile
+        }
+      }));
+    } catch (error) {
+      console.error("Erreur applyFilters:", error);
+      return [];
+    }
   }
 };
