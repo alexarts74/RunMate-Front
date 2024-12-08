@@ -39,21 +39,24 @@ const ChatPage = () => {
 
   useEffect(() => {
     loadMessages();
-    console.log(messages, "messages");
   }, []);
 
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (newMessage.trim()) {
-      // Ici vous ajouterez la logique pour envoyer le message
-      console.log("Message envoyé:", newMessage);
-      setNewMessage("");
+      try {
+        await messageService.sendMessage(id.toString(), newMessage);
+        setNewMessage("");
+        loadMessages();
+      } catch (error) {
+        console.error("Erreur lors de l'envoi du message:", error);
+      }
     }
   };
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View
-      className={`p-3 rounded-xl max-w-[80%] mb-2 ${
+      className={`p-3 rounded-xl max-w-[85%] mb-2 ${
         item.sender_id === user?.id
           ? "bg-green self-end"
           : "bg-[#1e2429] self-start"
@@ -101,7 +104,7 @@ const ChatPage = () => {
           {match?.user.name}
         </Text>
       </View>
-      <View className="flex-1 pt-12">
+      <View className="flex-1 pt-4">
         <FlatList
           data={messages}
           renderItem={renderMessage}
