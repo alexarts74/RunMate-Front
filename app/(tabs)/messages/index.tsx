@@ -1,65 +1,53 @@
-import { View, Text, FlatList, Image, Pressable } from "react-native";
-import React from "react";
+import { View, Text, FlatList, Pressable } from "react-native";
+import React, { useState, useEffect } from "react";
+import messageService from "@/service/api/message";
+import { Conversation } from "@/interface/Conversation";
+import { ConversationItem } from "@/components/messages/ConversationItem";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-// Type pour une conversation
-type Conversation = {
-  id: string;
-  user: {
-    id: string;
-    name: string;
-    profile_image: string;
-  };
-  last_message: string;
-  timestamp: string;
-};
-
-// Données de test
-const mockConversations: Conversation[] = [
-  {
-    id: "1",
-    user: {
-      id: "1",
-      name: "John Doe",
-      profile_image: "",
-    },
-    last_message: "Salut, on court ensemble demain ?",
-    timestamp: "10:30",
-  },
-  // Ajoutez d'autres conversations de test...
-];
-
 const MessagesScreen = () => {
-  const renderConversation = ({ item }: { item: Conversation }) => (
-    <Pressable
-      onPress={() => router.push(`/chat/${item.id}`)}
-      className="flex-row items-center p-4 border-b border-[#394047]"
-    >
-      <Image
-        source={
-          item.user.profile_image
-            ? { uri: item.user.profile_image }
-            : require("@/assets/images/react-logo.png")
-        }
-        className="w-12 h-12 rounded-full"
-      />
-      <View className="flex-1 ml-4">
-        <Text className="text-white font-bold">{item.user.name}</Text>
-        <Text className="text-gray-400">{item.last_message}</Text>
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadConversations();
+  }, []);
+
+  const loadConversations = async () => {
+    try {
+      const data = await messageService.getAllConversations();
+      setConversations(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des conversations:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 bg-[#12171b] justify-center items-center">
+        <Text className="text-white">Chargement...</Text>
       </View>
-      <Text className="text-gray-400 text-xs">{item.timestamp}</Text>
-    </Pressable>
-  );
+    );
+  }
 
   return (
     <View className="flex-1 bg-[#12171b] pt-12">
-      <View className="px-4 py-4 border-b border-[#394047]">
+      <View className="px-4 py-4 border-b border-[#394047] flex-row items-center gap-x-4">
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </Pressable>
         <Text className="text-white text-2xl font-bold">Messages</Text>
       </View>
+
       <FlatList
-        data={mockConversations}
-        renderItem={renderConversation}
-        keyExtractor={(item) => item.id}
+        data={conversations}
+        renderItem={({ item }) => <ConversationItem conversation={item} />}
+        keyExtractor={(item) => item.user.id.toString()}
+        onRefresh={loadConversations}
+        refreshing={isLoading}
       />
     </View>
   );

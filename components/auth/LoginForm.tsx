@@ -44,11 +44,8 @@ export default function LoginForm() {
 
       await authStorage.storeToken(userData.authentication_token);
       await authStorage.storeUser(userData);
-
       await login(userData);
-
       const matchesData = await matchesService.getMatches();
-
       setMatches(matchesData);
       router.replace("/(tabs)/matches");
     } catch (err) {

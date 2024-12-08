@@ -19,7 +19,9 @@ export default function RunnerProfileScreen() {
 
   if (!runner) return null;
 
-  console.log(runner);
+  const handleSendMessage = () => {
+    router.push(`/chat/${id}`);
+  };
 
   return (
     <StyledScrollView className="flex-1 bg-[#12171b]">
@@ -103,7 +105,7 @@ export default function RunnerProfileScreen() {
       <StyledView className="px-5 mb-8">
         <StyledPressable
           className="bg-green py-4 rounded-xl flex-row justify-center items-center"
-          onPress={() => {/* Implémenter la logique de message */}}
+          onPress={handleSendMessage}
         >
           <Ionicons name="chatbubble-outline" size={24} color="#12171b" />
           <StyledText className="text-[#12171b] font-bold ml-2">Envoyer un message</StyledText>

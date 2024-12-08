@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,45 +12,36 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import { useAuth } from "@/context/AuthContext";
 import { useMatches } from "@/context/MatchesContext";
+import messageService from "@/service/api/message";
+import { useAuth } from "@/context/AuthContext";
+import { Message } from "@/interface/Conversation";
 
-type Message = {
-  id: string;
-  text: string;
-  sender_id: string;
-  timestamp: string;
-};
 
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
   const [newMessage, setNewMessage] = useState("");
-  const { user } = useAuth();
+  const [messages, setMessages] = useState<Message[]>([]);
   const { matches } = useMatches();
+  const { user } = useAuth();
 
   const match = matches?.find((match) => match.user.id === Number(id));
 
-  // Messages de test
-  const [messages] = useState<Message[]>([
-    {
-      id: "1",
-      text: "Salut, on court ensemble demain ?",
-      sender_id: "other",
-      timestamp: "10:30",
-    },
-    {
-      id: "2",
-      text: "Oui, avec plaisir !",
-      sender_id: "me",
-      timestamp: "10:31",
-    },
-  ]);
 
-  // Mock user data - à remplacer par vos données réelles
-  const chatUser = {
-    name: match?.user?.name,
-    profile_image: match?.user?.profile_image,
+  const loadMessages = async () => {
+    try {
+      const response = await messageService.getConversation(id.toString());
+      setMessages(response);
+    } catch (error) {
+      console.error("Erreur lors du chargement des messages:", error);
+    }
   };
+
+  useEffect(() => {
+    loadMessages();
+    console.log(messages, "messages");
+  }, []);
+
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -63,22 +54,22 @@ const ChatPage = () => {
   const renderMessage = ({ item }: { item: Message }) => (
     <View
       className={`p-3 rounded-xl max-w-[80%] mb-2 ${
-        item.sender_id === "me"
+        item.sender_id === user?.id
           ? "bg-green self-end"
           : "bg-[#1e2429] self-start"
       }`}
     >
       <Text
-        className={`${item.sender_id === "me" ? "text-dark" : "text-white"}`}
+        className={`mb-2 ${item.sender_id === user?.id ? "text-dark" : "text-white"}`}
       >
-        {item.text}
+        {item.content}
       </Text>
       <Text
         className={`text-xs ${
-          item.sender_id === "me" ? "text-dark" : "text-gray-400"
+          item.sender_id === user?.id ? "text-dark" : "text-gray"
         }`}
       >
-        {item.timestamp}
+        {new Date(item.created_at).toLocaleTimeString()}
       </Text>
     </View>
   );
@@ -99,23 +90,23 @@ const ChatPage = () => {
 
         <Image
           source={
-            chatUser.profile_image
-              ? { uri: chatUser.profile_image }
+            match?.user.profile_image
+              ? { uri: match.user.profile_image }
               : require("@/assets/images/react-logo.png")
           }
           className="w-10 h-10 rounded-full mr-3"
         />
 
         <Text className="text-white text-lg font-bold flex-1">
-          {chatUser.name}
+          {match?.user.name}
         </Text>
       </View>
       <View className="flex-1 pt-12">
         <FlatList
           data={messages}
           renderItem={renderMessage}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ padding: 16 }}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ padding: 12 }}
         />
         <View className="p-4 border-t border-[#394047] flex-row items-center">
           <TextInput

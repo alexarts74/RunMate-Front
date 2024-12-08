@@ -113,7 +113,6 @@ class ApiClient {
       headers,
       method: "DELETE",
     });
-    console.log("Réponse du DELETE request:", response);
     return await response.json();
   }
 }
