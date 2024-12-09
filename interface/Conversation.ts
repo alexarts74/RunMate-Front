@@ -15,7 +15,16 @@ export interface ConversationUser {
 }
 
 export interface Conversation {
-  user: ConversationUser;
+  id: number;
+  user: {
+    id: number;
+    name: string;
+    profile_image: string;
+  };
   unread_messages: number;
-  last_message: Message;
+  last_message: {
+    id: number;
+    content: string;
+    created_at: string;
+  };
 }

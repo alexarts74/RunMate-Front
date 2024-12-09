@@ -25,6 +25,17 @@ const MessagesScreen = () => {
     }
   };
 
+  const handleMessageRead = (messageId: string) => {
+    setConversations(prevConversations =>
+      prevConversations.map(conv => {
+        if (conv.last_message.id.toString() === messageId) {
+          return { ...conv, unread_messages: 0 };
+        }
+        return conv;
+      })
+    );
+  };
+
   if (isLoading) {
     return (
       <View className="flex-1 bg-[#12171b] justify-center items-center">
@@ -44,7 +55,12 @@ const MessagesScreen = () => {
 
       <FlatList
         data={conversations}
-        renderItem={({ item }) => <ConversationItem conversation={item} />}
+        renderItem={({ item }) => (
+          <ConversationItem
+            conversation={item}
+            onMessageRead={() => handleMessageRead(item.last_message.id.toString())}
+          />
+        )}
         keyExtractor={(item) => item.user.id.toString()}
         onRefresh={loadConversations}
         refreshing={isLoading}

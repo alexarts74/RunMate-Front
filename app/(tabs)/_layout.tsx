@@ -2,8 +2,13 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 export default function TabLayout() {
+  const { unreadCount } = useUnreadMessages();
+
+  console.log("unreadCount", unreadCount);
+
   return (
     <Tabs
       screenOptions={{
@@ -45,6 +50,11 @@ export default function TabLayout() {
               color={color}
             />
           ),
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: "#b9f144",
+            color: "#12171b",
+          }
         }}
       />
       <Tabs.Screen

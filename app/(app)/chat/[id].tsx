@@ -16,6 +16,7 @@ import { useMatches } from "@/context/MatchesContext";
 import messageService from "@/service/api/message";
 import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
+import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 
 const ChatPage = () => {
@@ -24,6 +25,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { matches } = useMatches();
   const { user } = useAuth();
+  const { decrementUnreadCount } = useUnreadMessages();
 
   const match = matches?.find((match) => match.user.id === Number(id));
 
@@ -38,8 +40,31 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    loadMessages();
-  }, []);
+    const initChat = async () => {
+      try {
+        const response = await messageService.getConversation(id.toString());
+        setMessages(response);
+
+        const unreadMessages = response.filter(
+          (msg: Message) => !msg.read && msg.sender_id !== user?.id
+        );
+
+        if (unreadMessages.length > 0) {
+          await Promise.all(
+            unreadMessages.map((msg: Message) =>
+              messageService.markAsRead(msg.id.toString())
+            )
+          );
+          // Décrémenter le compteur global
+          decrementUnreadCount(unreadMessages.length);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des messages:", error);
+      }
+    };
+
+    initChat();
+  }, [id]);
 
 
   const sendMessage = async () => {

@@ -4,15 +4,37 @@ import { router } from "expo-router";
 import { Conversation } from "@/interface/Conversation";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import messageService from "@/service/api/message";
+import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 type ConversationItemProps = {
   conversation: Conversation;
+  onMessageRead: (id: string) => void;
 };
 
-export function ConversationItem({ conversation }: ConversationItemProps) {
+export function ConversationItem({
+  conversation,
+  onMessageRead,
+}: ConversationItemProps) {
+  const { decrementUnreadCount } = useUnreadMessages();
+
+  const handlePress = async () => {
+    console.log("dans le handlePress");
+    try {
+      router.push(`/chat/${conversation.user.id}`);
+      if (conversation.unread_messages > 0 && conversation.last_message.id) {
+        await messageService.markAsRead(conversation.last_message.id.toString());
+        onMessageRead?.(conversation.last_message.id.toString());
+        decrementUnreadCount(conversation.unread_messages);
+      }
+    } catch (error) {
+      console.error("Erreur lors du marquage comme lu:", error);
+    }
+  };
+
   return (
     <Pressable
-      onPress={() => router.push(`/chat/${conversation.user.id}`)}
+      onPress={handlePress}
       className="flex-row items-center p-4 border-b border-[#394047]"
     >
       <Image
