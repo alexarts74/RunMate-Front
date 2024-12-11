@@ -23,6 +23,7 @@ export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showAgePicker, setShowAgePicker] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -74,11 +75,20 @@ export default function SignUpForm() {
     try {
       setError("");
       setLoading(true);
-      await authService.signUp(formData);
-      // await login(response);
+      const response = await authService.signUp(formData);
+      console.log("Réponse signup:", response);
+
+      if (!response.authentication_token) {
+        console.error("Pas de token dans la réponse");
+        setError("Erreur d'authentification");
+        return;
+      }
+
+      await login(response);
+      console.log("Login effectué, redirection...");
       router.replace("/(app)/runner/runner-profile");
     } catch (err) {
-      console.error("Erreur inscription:", err);
+      console.error("Erreur inscription détaillée:", err);
       setError("Erreur lors de l'inscription. Veuillez réessayer.");
     } finally {
       setLoading(false);
@@ -103,52 +113,74 @@ export default function SignUpForm() {
       </View>
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'email' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Email"
         placeholderTextColor="#9CA3AF"
         value={formData.email}
         onChangeText={(value) => handleChange("email", value)}
+        onFocus={() => setFocusedInput('email')}
+        onBlur={() => setFocusedInput(null)}
         keyboardType="email-address"
         autoCapitalize="none"
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'password' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Mot de passe"
         placeholderTextColor="#9CA3AF"
         value={formData.password}
         onChangeText={(value) => handleChange("password", value)}
+        onFocus={() => setFocusedInput('password')}
+        onBlur={() => setFocusedInput(null)}
         secureTextEntry
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'password_confirmation' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Confirmation du mot de passe"
         placeholderTextColor="#9CA3AF"
         value={formData.password_confirmation}
         onChangeText={(value) => handleChange("password_confirmation", value)}
+        onFocus={() => setFocusedInput('password_confirmation')}
+        onBlur={() => setFocusedInput(null)}
         secureTextEntry
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'first_name' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Prénom"
         placeholderTextColor="#9CA3AF"
         value={formData.first_name}
         onChangeText={(value) => handleChange("first_name", value)}
+        onFocus={() => setFocusedInput('first_name')}
+        onBlur={() => setFocusedInput(null)}
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'last_name' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Nom"
         placeholderTextColor="#9CA3AF"
         value={formData.last_name}
         onChangeText={(value) => handleChange("last_name", value)}
+        onFocus={() => setFocusedInput('last_name')}
+        onBlur={() => setFocusedInput(null)}
       />
 
       <TouchableOpacity
         onPress={() => setShowAgePicker(true)}
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray ${
+          focusedInput === 'age' ? 'border-green' : 'border-gray'
+        }`}
       >
         <Text className="text-white">
           {formData.age ? `${formData.age} ans` : "Sélectionnez votre âge"}
@@ -162,7 +194,7 @@ export default function SignUpForm() {
         placeholder="Sélectionnez votre genre"
         boxStyles={{
           borderWidth: 1,
-          borderColor: "#394047",
+          borderColor: focusedInput === 'gender' ? "#b9f144" : "#394047",
           borderRadius: 8,
           padding: 16,
           marginBottom: 16,
@@ -177,28 +209,40 @@ export default function SignUpForm() {
         inputStyles={{ color: "#fff" }}
         dropdownTextStyles={{ color: "#fff" }}
         search={false}
+        onFocus={() => setFocusedInput('gender')}
+        onBlur={() => setFocusedInput(null)}
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'location' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Localisation"
         placeholderTextColor="#9CA3AF"
         value={formData.location}
         onChangeText={(value) => handleChange("location", value)}
+        onFocus={() => setFocusedInput('location')}
+        onBlur={() => setFocusedInput(null)}
       />
 
       <TextInput
-        className="w-full border border-gray rounded-lg p-4 mb-4 bg-gray text-white"
+        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+          focusedInput === 'bio' ? 'border-green' : 'border-gray'
+        }`}
         placeholder="Bio"
         placeholderTextColor="#9CA3AF"
         value={formData.bio}
         onChangeText={(value) => handleChange("bio", value)}
+        onFocus={() => setFocusedInput('bio')}
+        onBlur={() => setFocusedInput(null)}
         multiline
       />
 
       <Pressable
         onPress={pickImage}
-        className="w-full border border-gray rounded-lg p-4 mb-4 items-center justify-center bg-gray"
+        className={`w-full border rounded-lg p-4 mb-4 items-center justify-center bg-gray ${
+          focusedInput === 'profile_image' ? 'border-green' : 'border-gray'
+        }`}
       >
         {formData.profile_image ? (
           <View className="items-center">

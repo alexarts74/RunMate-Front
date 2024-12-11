@@ -34,15 +34,15 @@ export function AvailabilitySelect({ availability, handleChange }: Props) {
             onPress={() => toggleDay(option.key)}
             className={`px-4 py-2 rounded-full border ${
               availability.includes(option.key)
-                ? "bg-orange border-orange"
-                : "border-gray-700 bg-gray-900"
+                ? "bg-green border-green"
+                : "border-gray bg-[#12171b]"
             }`}
           >
             <Text
               className={`${
                 availability.includes(option.key)
-                  ? "text-white"
-                  : "text-gray-300"
+                  ? "text-[#12171b]"
+                  : "text-white"
               }`}
             >
               {option.value}

@@ -6,7 +6,7 @@ import { useSegments, useRouter } from 'expo-router';
 
 export default function AuthenticationGuard({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
@@ -35,14 +35,19 @@ export default function AuthenticationGuard({ children }: { children: React.Reac
       const isIndex = segments.length === 0 || (segments[0] as string) === '';
 
       if (isAuthenticated) {
-        setTimeout(() => {
-          if (inAuthGroup || isIndex) {
+        console.log("JE SUIS DANS LE IF");
+        if (inAuthGroup || isIndex) {
+          console.log("JE SUIS DANS LE INTER", user?.runner_profile);
+          if (user?.runner_profile) {
+            console.log("JE SUIS DANS LE IF 2");
             router.replace('/(tabs)/matches');
+          } else {
+            router.replace("/(app)/runner/runner-profile");
           }
-        }, 100);
+        }
       }
     }
-  }, [isAuthenticated, segments, isLoading]);
+  }, [isAuthenticated, segments, isLoading, user]);
 
   if (isLoading) {
     return null;

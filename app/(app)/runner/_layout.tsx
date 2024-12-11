@@ -12,6 +12,10 @@ export default function RunnerLayout() {
         name="filters"
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="runner-profile/index"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

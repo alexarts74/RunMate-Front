@@ -8,6 +8,7 @@ import { ActionButtons } from "@/components/runner-profile/ActionButtons";
 import { runnerProfileService } from "@/service/api/runnerProfile";
 import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
+import { View } from "react-native";
 
 export default function RunnerProfileScreen() {
   const [formData, setFormData] = useState({
@@ -50,23 +51,29 @@ export default function RunnerProfileScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 mt-12 bg-dark px-5 py-6">
+    <ScrollView className="flex-1 bg-[#12171b] px-5 py-6 pt-20">
       <Text className="text-2xl font-bold mb-6 text-center text-white">
         Votre profil de coureur
       </Text>
 
-      <PaceDistanceInputs
-        actual_pace={formData.actual_pace}
-        usual_distance={formData.usual_distance}
-        handleChange={handleChange}
-      />
+      <View className="flex-1 mt-8">
+        <PaceDistanceInputs
+          actual_pace={formData.actual_pace}
+          usual_distance={formData.usual_distance}
+          handleChange={handleChange}
+        />
+      </View>
 
-      <ObjectiveSelect handleChange={handleChange} />
+      <View className="flex-1">
+        <ObjectiveSelect handleChange={handleChange} />
+      </View>
 
-      <AvailabilitySelect
+      <View className="flex-1 mt-6 mb-12">
+        <AvailabilitySelect
         availability={formData.availability}
         handleChange={handleChange}
       />
+      </View>
 
       {error ? (
         <Text className="text-red-500 text-center mb-4">{error}</Text>

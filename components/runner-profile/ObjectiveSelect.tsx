@@ -57,11 +57,9 @@ export function ObjectiveSelect({ handleChange }: Props) {
   return (
     <SelectList
       setSelected={(selectedValue: string) => {
-        // Trouve l'option correspondante
         const selectedOption = objectiveOptions.find(
           (opt) => opt.label === selectedValue
         );
-        // Envoie la value au backend
         handleChange("objective", selectedOption?.value || selectedValue);
       }}
       data={formattedData}
@@ -69,17 +67,17 @@ export function ObjectiveSelect({ handleChange }: Props) {
       placeholder="Votre objectif"
       boxStyles={{
         borderWidth: 1,
-        borderColor: "#374151",
+        borderColor: "#394047",
         borderRadius: 8,
         padding: 16,
         marginBottom: 16,
-        backgroundColor: "#111827",
+        backgroundColor: "#12171b",
       }}
       dropdownStyles={{
         borderWidth: 1,
-        borderColor: "#374151",
+        borderColor: "#394047",
         borderRadius: 8,
-        backgroundColor: "#111827",
+        backgroundColor: "#12171b",
       }}
       inputStyles={{ color: "#fff" }}
       dropdownTextStyles={{ color: "#fff" }}

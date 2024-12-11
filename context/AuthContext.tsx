@@ -3,12 +3,12 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
 import { authStorage } from "@/service/auth/storage";
-import User from "@/interface/User";
+import User, { UserWithRunnerProfile } from "@/interface/User";
 
 type AuthContextType = {
   isAuthenticated: boolean;
   updateUser: (userData: any) => Promise<void>;
-  user: User | null;
+  user: UserWithRunnerProfile | null;
   login: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserWithRunnerProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const cleanStorage = async () => {

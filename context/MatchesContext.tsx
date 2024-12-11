@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { MatchFilters, MatchUser } from "@/interface/Matches";
 import { matchesService } from "@/service/api/matching";
+import { useAuth } from "./AuthContext";
 
 type MatchesContextType = {
   matches: MatchUser[];
@@ -16,9 +17,15 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const [matches, setMatches] = useState<MatchUser[]>([]);
   const [currentFilters, setCurrentFilters] = useState<MatchFilters | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
 
   const refreshMatches = async () => {
     try {
+      if (!user?.runner_profile) {
+        setMatches([]);
+        return;
+      }
+
       setIsLoading(true);
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)

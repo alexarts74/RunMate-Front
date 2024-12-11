@@ -14,4 +14,15 @@ interface User {
   updated_at: string;
 }
 
+export interface UserWithRunnerProfile extends User {
+  runner_profile: RunnerProfile;
+}
+
+export interface RunnerProfile {
+  actual_pace: string;
+  usual_distance: string;
+  availability: string[];
+  objective: string;
+}
+
 export default User;

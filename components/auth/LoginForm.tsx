@@ -21,6 +21,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const { setMatches } = useMatches();
   const { login } = useAuth();
 
@@ -35,8 +36,6 @@ export default function LoginForm() {
         password,
       });
       setMessage("Connexion réussie !");
-
-      console.log("Données de connexion reçues:", userData);
 
       if (!userData.authentication_token) {
         throw new Error("Token d'authentification manquant dans la réponse");
@@ -73,21 +72,29 @@ export default function LoginForm() {
 
       <View className="w-full space-y-4">
         <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
+          className={`w-full border rounded-lg p-4 bg-gray text-white ${
+            focusedInput === 'email' ? 'border-green' : 'border-gray'
+          }`}
           placeholder="Email"
           placeholderTextColor="#9CA3AF"
           value={email}
           onChangeText={setEmail}
+          onFocus={() => setFocusedInput('email')}
+          onBlur={() => setFocusedInput(null)}
           keyboardType="email-address"
           autoCapitalize="none"
         />
 
         <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
+          className={`w-full border rounded-lg p-4 bg-gray text-white ${
+            focusedInput === 'password' ? 'border-green' : 'border-gray'
+          }`}
           placeholder="Mot de passe"
           placeholderTextColor="#9CA3AF"
           value={password}
           onChangeText={setPassword}
+          onFocus={() => setFocusedInput('password')}
+          onBlur={() => setFocusedInput(null)}
           secureTextEntry
         />
 
