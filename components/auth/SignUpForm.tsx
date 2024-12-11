@@ -74,9 +74,9 @@ export default function SignUpForm() {
     try {
       setError("");
       setLoading(true);
-      const response = await authService.signUp(formData);
-      await login(response);
-      router.replace("/(tabs)/profile");
+      await authService.signUp(formData);
+      // await login(response);
+      router.replace("/(app)/runner/runner-profile");
     } catch (err) {
       console.error("Erreur inscription:", err);
       setError("Erreur lors de l'inscription. Veuillez réessayer.");
@@ -86,7 +86,10 @@ export default function SignUpForm() {
   };
 
   return (
-    <ScrollView className="flex-1 mt-12 bg-[#12171b] px-5 py-6">
+    <ScrollView
+      className="flex-1 mt-12 bg-[#12171b] px-5 py-6"
+      contentContainerStyle={{ paddingBottom: 50 }}
+    >
       <View className="flex-row justify-between items-center mb-6">
         <TouchableOpacity
           onPress={() => router.replace("/")}
@@ -132,7 +135,7 @@ export default function SignUpForm() {
         placeholder="Prénom"
         placeholderTextColor="#9CA3AF"
         value={formData.first_name}
-        onChangeText={(value) => handleChange("name", value)}
+        onChangeText={(value) => handleChange("first_name", value)}
       />
 
       <TextInput

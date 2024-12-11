@@ -14,7 +14,7 @@ export const authService = {
   },
 
   async updateUserProfile(userData: {
-    name: string;
+    first_name: string;
     last_name: string;
     profile_image: string;
     phone_number: string;
