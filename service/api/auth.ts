@@ -46,10 +46,19 @@ export const authService = {
 
   async logout() {
     try {
-      console.log("Déconnexion dans le service");
       await apiClient.delete("/users/log_out");
     } catch (error) {
       console.error("Erreur logout:", error);
+      throw error;
+    }
+  },
+
+  async getCurrentUser() {
+    try {
+      const response = await apiClient.get("/users/current");
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de la récupération du user courant:", error);
       throw error;
     }
   },

@@ -1,7 +1,7 @@
 interface User {
   id: number;
   email: string;
-  name: string | null;
+  first_name: string | null;
   last_name: string | null;
   bio: string | null;
   age: number | null;

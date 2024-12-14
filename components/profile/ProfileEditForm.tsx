@@ -22,7 +22,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: user?.email || "",
-    name: user?.name || "",
+    first_name: user?.first_name || "",
     last_name: user?.last_name || "",
     age: user?.age?.toString() || "",
     gender: user?.gender || "",
@@ -96,8 +96,8 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
           placeholder="Prénom"
           placeholderTextColor="#9CA3AF"
-          value={formData.name}
-          onChangeText={(value) => handleChange("name", value)}
+          value={formData.first_name}
+          onChangeText={(value) => handleChange("first_name", value)}
         />
 
         <TextInput
