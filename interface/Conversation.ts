@@ -18,7 +18,8 @@ export interface Conversation {
   id: number;
   user: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     profile_image: string;
   };
   unread_messages: number;

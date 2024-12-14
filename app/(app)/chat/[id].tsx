@@ -18,7 +18,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
-
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
   const [newMessage, setNewMessage] = useState("");
@@ -28,7 +27,6 @@ const ChatPage = () => {
   const { decrementUnreadCount } = useUnreadMessages();
 
   const match = matches?.find((match) => match.user.id === Number(id));
-
 
   const loadMessages = async () => {
     try {
@@ -66,7 +64,6 @@ const ChatPage = () => {
     initChat();
   }, [id]);
 
-
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
@@ -88,7 +85,9 @@ const ChatPage = () => {
       }`}
     >
       <Text
-        className={`mb-2 ${item.sender_id === user?.id ? "text-dark" : "text-white"}`}
+        className={`mb-2 ${
+          item.sender_id === user?.id ? "text-dark" : "text-white"
+        }`}
       >
         {item.content}
       </Text>
@@ -102,6 +101,8 @@ const ChatPage = () => {
     </View>
   );
 
+  console.log("match", match?.user.first_name);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -109,10 +110,7 @@ const ChatPage = () => {
     >
       {/* Header */}
       <View className="flex-row items-center px-4 pt-14 pb-4 bg-[#12171b] border-b border-[#394047]">
-        <Pressable
-          onPress={() => router.back()}
-          className="p-2 mr-3"
-        >
+        <Pressable onPress={() => router.back()} className="p-2 mr-3">
           <Ionicons name="arrow-back" size={24} color="#b9f144" />
         </Pressable>
 
@@ -126,7 +124,7 @@ const ChatPage = () => {
         />
 
         <Text className="text-white text-lg font-bold flex-1">
-          {match?.user.name}
+          {match?.user.first_name} {match?.user.last_name}
         </Text>
       </View>
       <View className="flex-1 pt-4">

@@ -9,7 +9,6 @@ type MatchCardProps = {
 };
 
 export function MatchCard({ match }: MatchCardProps) {
-
   const handleSendMessage = () => {
     router.push(`/chat/${match.user.id}`);
   };
@@ -33,7 +32,7 @@ export function MatchCard({ match }: MatchCardProps) {
 
           <View className="ml-4 flex-1">
             <Text className="text-white text-xl font-bold mb-1">
-              {match.user.name}
+              {match.user.first_name} {match.user.last_name}
             </Text>
 
             <View className="flex-row items-center mb-2">

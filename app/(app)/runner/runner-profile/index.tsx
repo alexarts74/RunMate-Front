@@ -9,8 +9,11 @@ import { runnerProfileService } from "@/service/api/runnerProfile";
 import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
 import { View } from "react-native";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RunnerProfileScreen() {
+  const { user, updateUser } = useAuth();
+
   const [formData, setFormData] = useState({
     actual_pace: "",
     usual_distance: "",
@@ -32,15 +35,34 @@ export default function RunnerProfileScreen() {
       setLoading(true);
 
       // 1. Sauvegarder le profil
-      await runnerProfileService.save(formData);
+      const savedProfile = await runnerProfileService.save(formData);
+      console.log("Profil sauvegardé:", savedProfile);
 
-      // 2. Récupérer les matches
+      // 2. Mettre à jour le user avec le runner_profile
+      const updatedUser = {
+        ...user,
+        runner_profile: {
+          id: savedProfile.profile.id,
+          actual_pace: savedProfile.profile.actual_pace,
+          availability: savedProfile.profile.availability,
+          objective: savedProfile.profile.objective,
+          usual_distance: savedProfile.profile.usual_distance,
+          user_id: savedProfile.profile.user_id,
+          created_at: savedProfile.profile.created_at,
+          updated_at: savedProfile.profile.updated_at,
+        },
+      };
+      console.log("Updated user avant updateUser:", updatedUser); // Debug
+
+      await updateUser(updatedUser);
+
+      // 3. Récupérer les matches
       const matchesData = await matchesService.getMatches();
 
-      // 3. Stocker les matches dans le context
+      // 4. Stocker les matches dans le context
       setMatches(matchesData);
 
-      // 4. Rediriger vers la homepage
+      // 6. Rediriger vers la homepage
       router.replace("/(tabs)/matches");
     } catch (err: any) {
       console.error("Erreur détaillée:", err);
@@ -70,9 +92,9 @@ export default function RunnerProfileScreen() {
 
       <View className="flex-1 mt-6 mb-12">
         <AvailabilitySelect
-        availability={formData.availability}
-        handleChange={handleChange}
-      />
+          availability={formData.availability}
+          handleChange={handleChange}
+        />
       </View>
 
       {error ? (

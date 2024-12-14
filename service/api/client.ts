@@ -45,6 +45,8 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
+    console.log("data", data);
+    console.log("endpoint", endpoint);
     try {
       const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
@@ -53,8 +55,8 @@ class ApiClient {
         headers,
         body: JSON.stringify(data),
       });
-      const responseData = await response.json();
 
+      const responseData = await response.json();
       if (!response.ok) {
         throw new Error(responseData.message || "Une erreur est survenue");
       }

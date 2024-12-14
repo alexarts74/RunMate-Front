@@ -6,12 +6,13 @@ export interface MatchFilters {
   age_max?: number;
   gender?: string;
   location?: string;
-};
+}
 
 export interface MatchUser {
   user: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     location: string;
     profile_image: string;
     bio?: string;
@@ -28,12 +29,12 @@ export interface MatchUser {
     distance_match: number;
     availability_match: number;
   };
-};
+}
 
 export interface MatchResponse {
   matches: MatchUser[];
   total: number;
-};
+}
 
 export type MatchesContextType = {
   matches: MatchUser[];

@@ -23,7 +23,9 @@ export function ConversationItem({
     try {
       router.push(`/chat/${conversation.user.id}`);
       if (conversation.unread_messages > 0 && conversation.last_message.id) {
-        await messageService.markAsRead(conversation.last_message.id.toString());
+        await messageService.markAsRead(
+          conversation.last_message.id.toString()
+        );
         onMessageRead?.(conversation.last_message.id.toString());
         decrementUnreadCount(conversation.unread_messages);
       }
@@ -47,7 +49,9 @@ export function ConversationItem({
       />
       <View className="flex-1 ml-4 gap-y-3">
         <View className="flex-row justify-between">
-          <Text className="text-white font-bold">{conversation.user.name}</Text>
+          <Text className="text-white font-bold">
+            {conversation.user.first_name} {conversation.user.last_name}
+          </Text>
           <Text className="text-white text-xs">
             {formatDistanceToNow(
               new Date(conversation.last_message.created_at),

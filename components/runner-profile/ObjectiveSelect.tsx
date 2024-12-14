@@ -3,44 +3,36 @@ import { SelectList } from "react-native-dropdown-select-list";
 
 const objectiveOptions = [
   {
-    key: "premier_marathon",
-    value: "premier_marathon",
-    label: "Premier marathon",
-  },
-  {
-    key: "premier_semi_marathon",
-    value: "premier_semi_marathon",
-    label: "Premier semi-marathon",
+    key: "5km_sous_25min",
+    value: "5km sous 25min",
   },
   {
     key: "10km_sous_50min",
-    value: "10km_sous_50min",
-    label: "10km sous 50min",
+    value: "10km sous 50min",
   },
   {
-    key: "5km_sous_25min",
-    value: "5km_sous_25min",
-    label: "5km sous 25min",
+    key: "premier_semi_marathon",
+    value: "Premier semi-marathon",
   },
   {
-    key: "ameliorer_endurance",
-    value: "ameliorer_endurance",
-    label: "Améliorer son endurance",
-  },
-  {
-    key: "perdre_du_poids",
-    value: "perdre_du_poids",
-    label: "Perdre du poids",
+    key: "premier_marathon",
+    value: "Premier marathon",
   },
   {
     key: "preparation_trail",
-    value: "preparation_trail",
-    label: "Préparation trail",
+    value: "Préparation trail",
+  },
+  {
+    key: "ameliorer_endurance",
+    value: "Améliorer son endurance",
+  },
+  {
+    key: "perdre_du_poids",
+    value: "Perdre du poids",
   },
   {
     key: "course_reguliere",
-    value: "course_reguliere",
-    label: "Course régulière",
+    value: "Course régulière",
   },
 ];
 
@@ -49,20 +41,13 @@ type Props = {
 };
 
 export function ObjectiveSelect({ handleChange }: Props) {
-  const formattedData = objectiveOptions.map((option) => ({
-    key: option.value, // Utilise value comme key pour le backend
-    value: option.label, // Affiche le label pour l'utilisateur
-  }));
-
   return (
     <SelectList
       setSelected={(selectedValue: string) => {
-        const selectedOption = objectiveOptions.find(
-          (opt) => opt.label === selectedValue
-        );
-        handleChange("objective", selectedOption?.value || selectedValue);
+        // selectedValue sera la clé (key) car save="key"
+        handleChange("objective", selectedValue);
       }}
-      data={formattedData}
+      data={objectiveOptions}
       save="key"
       placeholder="Votre objectif"
       boxStyles={{

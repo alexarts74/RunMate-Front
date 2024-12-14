@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Pressable, Text, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  TextInput,
+  Pressable,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "react-native";
@@ -10,12 +17,10 @@ type ProfileEditFormProps = {
 };
 
 export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
-
   const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-
     email: user?.email || "",
     name: user?.name || "",
     last_name: user?.last_name || "",
@@ -51,8 +56,6 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   };
 
   const handleSubmit = async () => {
-    console.log("Début de handleSubmit");
-    console.log("formData", formData);
     try {
       await updateUser(formData);
       setIsEditing(false);
@@ -60,8 +63,6 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
       console.error("Erreur lors de la mise à jour:", error);
     }
   };
-
-  console.log("formData", formData);
 
   const genderOptions = [
     { key: "male", value: "Homme" },

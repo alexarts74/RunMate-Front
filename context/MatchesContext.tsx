@@ -15,7 +15,9 @@ const MatchesContext = createContext<MatchesContextType | undefined>(undefined);
 
 export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const [matches, setMatches] = useState<MatchUser[]>([]);
-  const [currentFilters, setCurrentFilters] = useState<MatchFilters | null>(null);
+  const [currentFilters, setCurrentFilters] = useState<MatchFilters | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
@@ -30,6 +32,7 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)
         : await matchesService.getMatches();
+
       setMatches(matchesData);
     } catch (error) {
       console.error("Erreur lors de la récupération des matches:", error);
@@ -52,16 +55,25 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
     }
   };
-;
+
+  // Rafraîchir les matches quand le profil runner change
+  useEffect(() => {
+    console.log("Profil runner changé:", user?.runner_profile);
+    if (user?.runner_profile) {
+      refreshMatches();
+    }
+  }, [user?.runner_profile]);
 
   return (
     <MatchesContext.Provider
       value={{
         matches,
-        setMatches,
+        setMatches: (newMatches: MatchUser[]) => {
+          setMatches(newMatches);
+        },
         refreshMatches,
         applyFilters,
-        isLoading
+        isLoading,
       }}
     >
       {children}

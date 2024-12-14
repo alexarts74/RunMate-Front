@@ -92,10 +92,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const response = await authService.updateUserProfile(userData);
-      if (response.user) {
-        await AsyncStorage.setItem("userData", JSON.stringify(response.user));
-        setUser(response.user);
-      }
+
+      // Utiliser directement userData qui contient déjà le runner_profile
+      console.log("userData à stocker:", userData); // Debug
+      await AsyncStorage.setItem("userData", JSON.stringify(userData));
+      setUser(userData);
+
+      // Vérifier ce qui est stocké
+      const storedData = await AsyncStorage.getItem("userData");
+      console.log(
+        "Données stockées dans AsyncStorage:",
+        JSON.parse(storedData || "{}")
+      ); // Debug
+
       return response;
     } catch (error) {
       console.error("Erreur dans updateUser:", error);
@@ -116,9 +125,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
+      // 1. D'abord, on set les données du storage pour une réponse rapide
       const parsedData = JSON.parse(userData);
       setUser(parsedData);
       setIsAuthenticated(true);
+
+      // 2. Ensuite, on fait un appel API pour avoir les données à jour
+      try {
+        const freshUserData = await authService.getCurrentUser();
+        if (freshUserData) {
+          await AsyncStorage.setItem("userData", JSON.stringify(freshUserData));
+          setUser(freshUserData);
+        }
+      } catch (apiError) {
+        console.error(
+          "Erreur lors de la récupération des données fraîches:",
+          apiError
+        );
+      }
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
       await cleanStorage();

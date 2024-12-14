@@ -49,7 +49,7 @@ export const authService = {
       console.log("Déconnexion dans le service");
       await apiClient.delete("/users/log_out");
     } catch (error) {
-      console.error('Erreur logout:', error);
+      console.error("Erreur logout:", error);
       throw error;
     }
   },

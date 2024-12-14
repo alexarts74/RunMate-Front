@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
-import { authStorage } from '@/service/auth/storage';
-import { useAuth } from '@/context/AuthContext';
-import React from 'react';
-import { useSegments, useRouter } from 'expo-router';
+import { useEffect, useState } from "react";
+import { authStorage } from "@/service/auth/storage";
+import { useAuth } from "@/context/AuthContext";
+import React from "react";
+import { useSegments, useRouter } from "expo-router";
 
-export default function AuthenticationGuard({ children }: { children: React.ReactNode }) {
+export default function AuthenticationGuard({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isLoading, setIsLoading] = useState(true);
   const { login, isAuthenticated, user } = useAuth();
   const segments = useSegments();
@@ -31,16 +35,20 @@ export default function AuthenticationGuard({ children }: { children: React.Reac
 
   useEffect(() => {
     if (!isLoading) {
-      const inAuthGroup = segments[0] === '(auth)';
-      const isIndex = segments.length === 0 || (segments[0] as string) === '';
+      const inAuthGroup = segments[0] === "(auth)";
+      const isIndex = segments.length === 0 || (segments[0] as string) === "";
 
       if (isAuthenticated) {
-        console.log("JE SUIS DANS LE IF");
+        console.log("État de l'authentification:", {
+          inAuthGroup,
+          isIndex,
+          hasProfile: !!user?.runner_profile,
+          currentSegment: segments[0],
+        });
+
         if (inAuthGroup || isIndex) {
-          console.log("JE SUIS DANS LE INTER", user?.runner_profile);
           if (user?.runner_profile) {
-            console.log("JE SUIS DANS LE IF 2");
-            router.replace('/(tabs)/matches');
+            router.replace("/(tabs)/matches");
           } else {
             router.replace("/(app)/runner/runner-profile");
           }
