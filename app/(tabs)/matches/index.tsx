@@ -8,7 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const HomepageScreen = () => {
   const { matches, refreshMatches, isLoading } = useMatches();
 
-  // console.log("matches", matches);
+  console.log("matches dans matches", matches);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useFocusEffect(

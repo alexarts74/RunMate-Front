@@ -1,4 +1,6 @@
+import { authStorage } from "../auth/storage";
 import { apiClient } from "./client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const authService = {
   async signUp(userData: {
@@ -55,10 +57,32 @@ export const authService = {
 
   async getCurrentUser() {
     try {
-      const response = await apiClient.get("/users/current");
-      return response.data;
+      const token = await authStorage.getToken();
+      console.log("Token envoyé:", token);
+
+      if (!token) {
+        throw new Error("Token non disponible");
+      }
+
+      const response = await apiClient.get("/users/current", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Response complète:", response);
+
+      return response;
     } catch (error) {
-      console.error("Erreur lors de la récupération du user courant:", error);
+      if (error.response) {
+        console.error("Erreur response:", error.response);
+        console.error("Status:", error.response.status);
+      } else if (error.request) {
+        console.error("Erreur request:", error.request);
+      } else {
+        console.error("Erreur:", error.message);
+      }
       throw error;
     }
   },

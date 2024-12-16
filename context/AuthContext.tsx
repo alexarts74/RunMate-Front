@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (userData: any) => {
+    console.log("DANS LE CONTEXT DANS LE LOGIN");
     try {
       setIsLoading(true);
 
@@ -54,19 +55,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Token manquant");
       }
 
-      const userToStore = userData.user || userData;
-      const tokenToStore = userData.authentication_token;
+      // D'abord stocker le token et les données utilisateur initiales
+      await authStorage.storeToken(userData.authentication_token);
+      await authStorage.storeUser(userData.user);
 
-      await AsyncStorage.setItem("authToken", tokenToStore);
-      await AsyncStorage.setItem("userData", JSON.stringify(userToStore));
+      // Vérifier le stockage
+      const storedToken = await authStorage.getToken();
+      console.log("Token stocké:", storedToken);
 
-      await authStorage.storeToken(tokenToStore);
-      await authStorage.storeUser(userToStore);
-
-      setUser(userToStore);
+      // Mettre à jour l'état avec les données initiales
+      setUser(userData.user);
       setIsAuthenticated(true);
+
+      // Ensuite seulement essayer d'obtenir les données complètes
+      try {
+        const completeUserData = await authService.getCurrentUser();
+        console.log("Données complètes reçues:", completeUserData);
+
+        if (completeUserData) {
+          await authStorage.storeUser(completeUserData);
+          setUser(completeUserData);
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des données complètes:",
+          error
+        );
+        // Ne pas throw l'erreur ici, continuer avec les données de base
+      }
     } catch (error) {
       console.error("❌ Erreur login:", error);
+      await cleanStorage();
       throw error;
     } finally {
       setIsLoading(false);
@@ -133,6 +152,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 2. Ensuite, on fait un appel API pour avoir les données à jour
       try {
         const freshUserData = await authService.getCurrentUser();
+        console.log("freshUserData", freshUserData);
+        console.log(
+          "freshUserData runner profile",
+          freshUserData?.runner_profile
+        );
         if (freshUserData) {
           await AsyncStorage.setItem("userData", JSON.stringify(freshUserData));
           setUser(freshUserData);

@@ -69,8 +69,8 @@ class ApiClient {
     }
   }
 
-  async get(endpoint: string) {
-    const headers = await this.getHeaders();
+  async get(endpoint: string, config?: { headers?: any }) {
+    const headers = config?.headers || { "Content-Type": "application/json" };
     const url = `${this.baseUrl}${endpoint}`;
     const response = await this.fetchWithTimeout(url, { headers });
     const responseData = await response.json();

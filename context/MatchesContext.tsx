@@ -21,13 +21,18 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
+  console.log("matches dans matches context", matches);
+
   const refreshMatches = async () => {
     try {
+      console.log("user dans matches context", user);
+      console.log("user runner profile", user?.runner_profile);
       if (!user?.runner_profile) {
         setMatches([]);
         return;
       }
 
+      console.log("currentFilters", currentFilters);
       setIsLoading(true);
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)
@@ -58,7 +63,6 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
 
   // Rafraîchir les matches quand le profil runner change
   useEffect(() => {
-    console.log("Profil runner changé:", user?.runner_profile);
     if (user?.runner_profile) {
       refreshMatches();
     }

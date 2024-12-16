@@ -35,18 +35,20 @@ export default function LoginForm() {
         email,
         password,
       });
+
       setMessage("Connexion réussie !");
 
       if (!userData.authentication_token) {
         throw new Error("Token d'authentification manquant dans la réponse");
       }
 
-      await authStorage.storeToken(userData.authentication_token);
-      await authStorage.storeUser(userData);
       await login(userData);
-      const matchesData = await matchesService.getMatches();
-      setMatches(matchesData);
-      router.replace("/(tabs)/matches");
+      const completeUserData = await authService.getCurrentUser();
+      console.log("completeUserData", completeUserData);
+
+      // const matchesData = await matchesService.getMatches();
+      // setMatches(matchesData);
+      // router.replace("/(tabs)/matches");
     } catch (err) {
       console.error("Erreur connexion:", err);
       setError("Erreur lors de la connexion");
@@ -73,13 +75,13 @@ export default function LoginForm() {
       <View className="w-full space-y-4">
         <TextInput
           className={`w-full border rounded-lg p-4 bg-gray text-white ${
-            focusedInput === 'email' ? 'border-green' : 'border-gray'
+            focusedInput === "email" ? "border-green" : "border-gray"
           }`}
           placeholder="Email"
           placeholderTextColor="#9CA3AF"
           value={email}
           onChangeText={setEmail}
-          onFocus={() => setFocusedInput('email')}
+          onFocus={() => setFocusedInput("email")}
           onBlur={() => setFocusedInput(null)}
           keyboardType="email-address"
           autoCapitalize="none"
@@ -87,13 +89,13 @@ export default function LoginForm() {
 
         <TextInput
           className={`w-full border rounded-lg p-4 bg-gray text-white ${
-            focusedInput === 'password' ? 'border-green' : 'border-gray'
+            focusedInput === "password" ? "border-green" : "border-gray"
           }`}
           placeholder="Mot de passe"
           placeholderTextColor="#9CA3AF"
           value={password}
           onChangeText={setPassword}
-          onFocus={() => setFocusedInput('password')}
+          onFocus={() => setFocusedInput("password")}
           onBlur={() => setFocusedInput(null)}
           secureTextEntry
         />
