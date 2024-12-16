@@ -45,8 +45,6 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
-    console.log("data", data);
-    console.log("endpoint", endpoint);
     try {
       const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
