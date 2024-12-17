@@ -52,7 +52,7 @@ export default function RunnerProfileScreen() {
           updated_at: savedProfile.profile.updated_at,
         },
       };
-      console.log("Updated user avant updateUser:", updatedUser); // Debug
+      // console.log("Updated user avant updateUser:", updatedUser); // Debug
 
       await updateUser(updatedUser);
 

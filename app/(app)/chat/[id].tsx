@@ -101,8 +101,6 @@ const ChatPage = () => {
     </View>
   );
 
-  console.log("match", match?.user.first_name);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}

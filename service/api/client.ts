@@ -1,5 +1,5 @@
 import { API_CONFIG } from "@/config/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { authStorage } from "../auth/storage";
 
 class ApiClient {
   private baseUrl: string;
@@ -11,7 +11,7 @@ class ApiClient {
   }
 
   private async getHeaders() {
-    const token = await AsyncStorage.getItem("authToken");
+    const token = await authStorage.getToken();
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -70,16 +70,43 @@ class ApiClient {
   }
 
   async get(endpoint: string, config?: { headers?: any }) {
-    const headers = config?.headers || { "Content-Type": "application/json" };
-    const url = `${this.baseUrl}${endpoint}`;
-    const response = await this.fetchWithTimeout(url, { headers });
-    const responseData = await response.json();
+    try {
+      const defaultHeaders = await this.getHeaders();
+      const headers = {
+        ...defaultHeaders,
+        ...(config?.headers || {}),
+      };
 
-    if (!response.ok) {
-      throw new Error(responseData.message || "Une erreur est survenue");
+      const url = `${this.baseUrl}${endpoint}`;
+
+      const response = await this.fetchWithTimeout(url, {
+        method: "GET",
+        headers,
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error("Réponse non OK:", {
+          status: response.status,
+          statusText: response.statusText,
+          data: responseData,
+        });
+        throw new Error(
+          responseData.message || `Erreur HTTP: ${response.status}`
+        );
+      }
+
+      return responseData;
+    } catch (error: any) {
+      console.error("Erreur détaillée dans GET:", {
+        endpoint,
+        message: error.message,
+        response: error.response,
+        stack: error.stack,
+      });
+      throw error;
     }
-
-    return responseData;
   }
 
   async put(endpoint: string, data: any) {

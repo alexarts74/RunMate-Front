@@ -43,12 +43,10 @@ export default function LoginForm() {
       }
 
       await login(userData);
-      const completeUserData = await authService.getCurrentUser();
-      console.log("completeUserData", completeUserData);
-
-      // const matchesData = await matchesService.getMatches();
-      // setMatches(matchesData);
-      // router.replace("/(tabs)/matches");
+      await authService.getCurrentUser();
+      const matchesData = await matchesService.getMatches();
+      setMatches(matchesData);
+      router.replace("/(tabs)/matches");
     } catch (err) {
       console.error("Erreur connexion:", err);
       setError("Erreur lors de la connexion");

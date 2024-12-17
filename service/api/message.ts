@@ -32,25 +32,22 @@ const messageService = {
     const response = await apiClient.post(`/messages`, {
       message: {
         content,
-        recipient_id: recipientId
-      }
+        recipient_id: recipientId,
+      },
     });
     return response;
   },
 
   async markAsRead(conversationId: string) {
-    console.log("dans le markAsRead du service message");
-    console.log("conversationId", conversationId);
-    const response = await apiClient.put(
-      `/messages/${conversationId}`,
-      {
-        message: {
-          read: true
-        }
-      }
-    );
+    // console.log("dans le markAsRead du service message");
+    // console.log("conversationId", conversationId);
+    const response = await apiClient.put(`/messages/${conversationId}`, {
+      message: {
+        read: true,
+      },
+    });
     return response;
-  }
+  },
 };
 
 export default messageService;

@@ -19,7 +19,7 @@ export function ConversationItem({
   const { decrementUnreadCount } = useUnreadMessages();
 
   const handlePress = async () => {
-    console.log("dans le handlePress");
+    // console.log("dans le handlePress");
     try {
       router.push(`/chat/${conversation.user.id}`);
       if (conversation.unread_messages > 0 && conversation.last_message.id) {

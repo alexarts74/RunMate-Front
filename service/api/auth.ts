@@ -58,7 +58,6 @@ export const authService = {
   async getCurrentUser() {
     try {
       const token = await authStorage.getToken();
-      console.log("Token envoyé:", token);
 
       if (!token) {
         throw new Error("Token non disponible");
@@ -70,8 +69,6 @@ export const authService = {
           "Content-Type": "application/json",
         },
       });
-
-      console.log("Response complète:", response);
 
       return response;
     } catch (error) {

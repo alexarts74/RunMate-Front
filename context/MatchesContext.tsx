@@ -19,20 +19,22 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-
-  console.log("matches dans matches context", matches);
+  const { user, isAuthenticated } = useAuth();
 
   const refreshMatches = async () => {
     try {
-      console.log("user dans matches context", user);
-      console.log("user runner profile", user?.runner_profile);
-      if (!user?.runner_profile) {
+      if (!isAuthenticated) {
+        console.log("Utilisateur non authentifié, skip refreshMatches");
         setMatches([]);
         return;
       }
 
-      console.log("currentFilters", currentFilters);
+      if (!user?.runner_profile) {
+        console.log("Pas de profil runner, skip refreshMatches");
+        setMatches([]);
+        return;
+      }
+
       setIsLoading(true);
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)
@@ -61,12 +63,26 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Rafraîchir les matches quand le profil runner change
+  // Rafraîchir les matches quand l'authentification ou le profil runner change
   useEffect(() => {
-    if (user?.runner_profile) {
-      refreshMatches();
+    if (!isAuthenticated) {
+      console.log("En attente de l'authentification...");
+      return;
     }
-  }, [user?.runner_profile]);
+
+    if (!user) {
+      console.log("En attente des données utilisateur...");
+      return;
+    }
+
+    if (!user.runner_profile) {
+      console.log("Pas de profil runner, matches vides");
+      setMatches([]);
+      return;
+    }
+
+    refreshMatches();
+  }, [isAuthenticated, user?.runner_profile]);
 
   return (
     <MatchesContext.Provider

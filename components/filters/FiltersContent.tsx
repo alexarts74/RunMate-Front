@@ -10,7 +10,7 @@ export function FiltersContent() {
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const { applyFilters } = useMatches();
-  
+
   const [filters, setFilters] = useState({
     age_min: 18,
     age_max: 70,
@@ -36,7 +36,7 @@ export function FiltersContent() {
   ];
 
   const handleApplyFilters = async () => {
-    console.log("Filters:", filters);
+    // console.log("Filters:", filters);
     try {
       await applyFilters(filters);
       router.back();

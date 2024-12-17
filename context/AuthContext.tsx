@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
 import { authStorage } from "@/service/auth/storage";
-import User, { UserWithRunnerProfile } from "@/interface/User";
+import { UserWithRunnerProfile } from "@/interface/User";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -24,8 +24,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const cleanStorage = async () => {
     try {
-      await AsyncStorage.removeItem("authToken");
-      await AsyncStorage.removeItem("userData");
       await authStorage.removeAuth();
       setUser(null);
       setIsAuthenticated(false);
@@ -47,7 +45,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (userData: any) => {
-    console.log("DANS LE CONTEXT DANS LE LOGIN");
     try {
       setIsLoading(true);
 
@@ -60,8 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await authStorage.storeUser(userData.user);
 
       // Vérifier le stockage
-      const storedToken = await authStorage.getToken();
-      console.log("Token stocké:", storedToken);
+      await authStorage.getToken();
 
       // Mettre à jour l'état avec les données initiales
       setUser(userData.user);
@@ -70,7 +66,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Ensuite seulement essayer d'obtenir les données complètes
       try {
         const completeUserData = await authService.getCurrentUser();
-        console.log("Données complètes reçues:", completeUserData);
 
         if (completeUserData) {
           await authStorage.storeUser(completeUserData);
@@ -113,16 +108,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await authService.updateUserProfile(userData);
 
       // Utiliser directement userData qui contient déjà le runner_profile
-      console.log("userData à stocker:", userData); // Debug
-      await AsyncStorage.setItem("userData", JSON.stringify(userData));
+      await authStorage.storeUser(userData);
       setUser(userData);
 
       // Vérifier ce qui est stocké
-      const storedData = await AsyncStorage.getItem("userData");
-      console.log(
-        "Données stockées dans AsyncStorage:",
-        JSON.parse(storedData || "{}")
-      ); // Debug
+      await authStorage.getUser();
 
       return response;
     } catch (error) {
@@ -135,30 +125,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const getUser = async () => {
     try {
-      const token = await AsyncStorage.getItem("authToken");
-      const userData = await AsyncStorage.getItem("userData");
+      const token = await authStorage.getToken();
+      const userData = await authStorage.getUser();
 
+      // Si aucune donnée n'est présente
       if (!token || !userData) {
-        await cleanStorage();
-        router.replace("/");
+        setUser(null);
+        setIsAuthenticated(false);
         return;
       }
 
-      // 1. D'abord, on set les données du storage pour une réponse rapide
-      const parsedData = JSON.parse(userData);
-      setUser(parsedData);
+      // 1. Set les données du storage
+      setUser(userData); // userData est déjà parsé par authStorage.getUser()
       setIsAuthenticated(true);
 
-      // 2. Ensuite, on fait un appel API pour avoir les données à jour
+      // 2. Mise à jour avec l'API
       try {
         const freshUserData = await authService.getCurrentUser();
-        console.log("freshUserData", freshUserData);
-        console.log(
-          "freshUserData runner profile",
-          freshUserData?.runner_profile
-        );
         if (freshUserData) {
-          await AsyncStorage.setItem("userData", JSON.stringify(freshUserData));
+          await authStorage.storeUser(freshUserData);
           setUser(freshUserData);
         }
       } catch (apiError) {
@@ -166,10 +151,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           "Erreur lors de la récupération des données fraîches:",
           apiError
         );
+        // On garde les données du storage si l'API échoue
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des données:", error);
-      await cleanStorage();
+      console.error("Erreur dans getUser:", error);
+      await authStorage.removeAuth(); // Nettoyer proprement
+      setUser(null);
+      setIsAuthenticated(false);
     }
   };
 

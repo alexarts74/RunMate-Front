@@ -7,7 +7,7 @@ import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
 
-  console.log("unreadCount", unreadCount);
+  // console.log("unreadCount", unreadCount);
 
   return (
     <Tabs
@@ -54,7 +54,7 @@ export default function TabLayout() {
           tabBarBadgeStyle: {
             backgroundColor: "#b9f144",
             color: "#12171b",
-          }
+          },
         }}
       />
       <Tabs.Screen

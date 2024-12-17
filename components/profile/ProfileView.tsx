@@ -8,9 +8,8 @@ type ProfileViewProps = {
 };
 
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
-  const { user, logout} = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
-  console.log("User dans ProfileView:", user?.name);
 
   const handleLogout = async () => {
     await logout();
@@ -55,7 +54,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
         <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Nom complet</Text>
           <Text className="text-white text-lg">
-            {user?.name} {user?.last_name}
+            {user?.first_name} {user?.last_name}
           </Text>
         </View>
 
@@ -84,7 +83,10 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-lg">{user?.bio}</Text>
         </View>
 
-        <Pressable className="bg-transparent border border-green py-3 rounded-full w-4/5 mx-auto items-center" onPress={handleLogout}>
+        <Pressable
+          className="bg-transparent border border-green py-3 rounded-full w-4/5 mx-auto items-center"
+          onPress={handleLogout}
+        >
           <Text className="text-green font-semibold">Se déconnecter</Text>
         </Pressable>
       </View>
