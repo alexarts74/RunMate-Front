@@ -90,7 +90,7 @@ export default function WelcomePage() {
         className="absolute left-0 right-0 bottom-32 items-center"
         style={{ opacity: loaderOpacity }}
       >
-        <ActivityIndicator size="large" color="#b9f144" />
+        <ActivityIndicator color="#b9f144" />
         <Text className="text-green mt-4 text-base">Chargement...</Text>
       </Animated.View>
 

@@ -7,7 +7,7 @@ type MatchesContextType = {
   matches: MatchUser[];
   setMatches: (matches: MatchUser[]) => void;
   refreshMatches: () => Promise<void>;
-  applyFilters: (filters: any) => Promise<void>;
+  applyFilters: (filters: MatchFilters) => Promise<void>;
   isLoading: boolean;
 };
 

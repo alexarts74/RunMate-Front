@@ -4,5 +4,8 @@ import { Text } from "react-native";
 
 export default function LoadingScreen() {
   const { isLoading } = useAuth();
-  return <Text>Loading...</Text>;
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+  return null;
 }
