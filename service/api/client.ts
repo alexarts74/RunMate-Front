@@ -110,25 +110,40 @@ class ApiClient {
   }
 
   async put(endpoint: string, data: any) {
-    const headers = await this.getHeaders();
-    const url = `${this.baseUrl}${endpoint}`;
-
     try {
+      const token = await authStorage.getToken();
+      console.log("Token disponible:", !!token);
+
+      const headers = await this.getHeaders();
+      console.log("Headers de la requête:", headers);
+
+      const url = `${this.baseUrl}${endpoint}`;
+      console.log("URL de la requête:", url);
+      console.log("Données envoyées:", data);
+
       const response = await this.fetchWithTimeout(url, {
         method: "PUT",
         headers,
         body: JSON.stringify(data),
       });
 
+      console.log("Status de la réponse:", response.status);
+      const responseText = await response.text();
+      console.log("Réponse brute:", responseText);
+
       if (!response.ok) {
         console.error("Erreur HTTP:", response.status);
-        console.error("Message d'erreur:", await response.text());
+        console.error("Message d'erreur:", responseText);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const responseData = await response.json();
+
+      const responseData = responseText ? JSON.parse(responseText) : {};
       return responseData;
     } catch (error) {
-      console.error("Erreur détaillée dans PUT:", error);
+      console.error("Erreur détaillée dans PUT:", {
+        message: error instanceof Error ? error.message : "Erreur inconnue",
+        error,
+      });
       throw error;
     }
   }

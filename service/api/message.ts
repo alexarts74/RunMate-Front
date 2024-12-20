@@ -39,8 +39,6 @@ const messageService = {
   },
 
   async markAsRead(conversationId: string) {
-    // console.log("dans le markAsRead du service message");
-    // console.log("conversationId", conversationId);
     const response = await apiClient.put(`/messages/${conversationId}`, {
       message: {
         read: true,
