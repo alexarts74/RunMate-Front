@@ -36,7 +36,6 @@ export default function RunnerProfileScreen() {
 
       // 1. Sauvegarder le profil
       const savedProfile = await runnerProfileService.save(formData);
-      console.log("Profil sauvegardé:", savedProfile);
 
       // 2. Mettre à jour le user avec le runner_profile
       const updatedUser = {

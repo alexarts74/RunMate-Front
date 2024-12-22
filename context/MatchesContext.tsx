@@ -66,17 +66,16 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   // Rafraîchir les matches quand l'authentification ou le profil runner change
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log("En attente de l'authentification...");
+      console.error("Utilisateur non authentifié, skip useEffect");
       return;
     }
 
     if (!user) {
-      console.log("En attente des données utilisateur...");
+      console.error("En attente des données utilisateur...");
       return;
     }
 
     if (!user.runner_profile) {
-      console.log("Pas de profil runner, matches vides");
       setMatches([]);
       return;
     }

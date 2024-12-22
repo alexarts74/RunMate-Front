@@ -78,6 +78,7 @@ export function MatchCard({ match }: MatchCardProps) {
           <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
             <Ionicons name="trophy-outline" size={24} color="#b9f144" />
             <Text className="text-white text-center mt-2">
+              {/* Probleme affichage pour l'objectif */}
               {match.user.runner_profile.objective}
             </Text>
           </View>

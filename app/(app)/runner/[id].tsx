@@ -5,7 +5,6 @@ import { useMatches } from "@/context/MatchesContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { styled } from "nativewind";
 import { router } from "expo-router";
-import SettingsScreen from "@/screens/SettingsScreen";
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -46,7 +45,7 @@ export default function RunnerProfileScreen() {
             className="w-32 h-32 rounded-full"
           />
           <StyledText className="text-2xl font-bold text-white mt-4">
-            {runner.name}
+            {runner.first_name} {runner.last_name}
           </StyledText>
 
           <StyledView className="flex-row items-center mt-2">
@@ -128,8 +127,6 @@ export default function RunnerProfileScreen() {
           </StyledText>
         </StyledPressable>
       </StyledView>
-
-      <SettingsScreen />
     </StyledScrollView>
   );
 }

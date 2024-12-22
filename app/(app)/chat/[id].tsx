@@ -17,6 +17,7 @@ import messageService from "@/service/api/message";
 import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
+import { pushNotificationService } from "@/service/api/pushNotification";
 
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
@@ -68,6 +69,7 @@ const ChatPage = () => {
     if (newMessage.trim()) {
       try {
         await messageService.sendMessage(id.toString(), newMessage);
+        // await pushNotificationService.registerForPushNotifications();
         setNewMessage("");
         loadMessages();
       } catch (error) {

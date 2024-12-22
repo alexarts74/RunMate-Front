@@ -7,7 +7,7 @@ class ApiClient {
 
   constructor() {
     this.baseUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.API_VERSION}`;
-    this.timeout = 20000; // 10 secondes de timeout
+    this.timeout = 10000; // 10 secondes de timeout
   }
 
   private async getHeaders() {

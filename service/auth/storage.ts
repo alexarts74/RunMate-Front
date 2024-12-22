@@ -30,7 +30,6 @@ export const authStorage = {
   async storeUser(userData: any) {
     try {
       if (!userData) {
-        console.log("Pas de données utilisateur à stocker");
         return;
       }
       const userDataString = JSON.stringify(userData);
@@ -45,7 +44,6 @@ export const authStorage = {
     try {
       const userData = await AsyncStorage.getItem(USER_KEY);
       if (!userData) {
-        console.log("Pas de données utilisateur en storage");
         return null;
       }
       return JSON.parse(userData);
@@ -62,7 +60,6 @@ export const authStorage = {
     try {
       await AsyncStorage.removeItem(TOKEN_KEY);
       await AsyncStorage.removeItem(USER_KEY);
-      console.log("Données d'authentification supprimées");
     } catch (error) {
       console.error("Erreur lors de la suppression des données auth:", error);
       throw error;
@@ -74,7 +71,6 @@ export const authStorage = {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const values = await AsyncStorage.multiGet(keys);
-      console.log("=== STORAGE DEBUG ===");
       values.forEach(([key, value]) => {
         console.log(`${key}:`, value);
       });
