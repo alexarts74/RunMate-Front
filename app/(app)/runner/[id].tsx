@@ -51,7 +51,7 @@ export default function RunnerProfileScreen() {
           <StyledView className="flex-row items-center mt-2">
             <Ionicons name="location" size={16} color="#9CA3AF" />
             <StyledText className="text-green ml-1">
-              {runner.location}
+              {runner.city}, {runner.department}
             </StyledText>
           </StyledView>
         </StyledView>
@@ -63,7 +63,7 @@ export default function RunnerProfileScreen() {
           <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1">
             <Ionicons name="walk-outline" size={24} color="#b9f144" />
             <StyledText className="text-white text-center mt-2">
-              Allure
+              Pace
             </StyledText>
             <StyledText className="text-green text-lg font-bold">
               {runner.runner_profile.actual_pace} min/km
@@ -73,7 +73,7 @@ export default function RunnerProfileScreen() {
           <StyledView className="items-center bg-[#1e2429] p-4 rounded-xl flex-1 ">
             <Ionicons name="resize-outline" size={24} color="#b9f144" />
             <StyledText className="text-white text-center mt-2">
-              Distance
+              Distance courue
             </StyledText>
             <StyledText className="text-green text-lg font-bold">
               {runner.runner_profile.usual_distance} km
@@ -103,14 +103,38 @@ export default function RunnerProfileScreen() {
             </StyledText>
           </StyledView>
           <StyledView className="flex-row flex-wrap">
-            {/* {runner.runner_profile.availability.map((day, index) => (
-              <StyledView
-                key={index}
-                className="bg-[#12171b] px-3 py-1 rounded-full mr-2 mb-2"
-              >
-                <StyledText className="text-green">{day}</StyledText>
-              </StyledView>
-            ))} */}
+            {runner?.runner_profile?.availability ? (
+              typeof runner.runner_profile.availability === "string" ? (
+                JSON.parse(runner.runner_profile.availability).map(
+                  (day: string, index: number) => (
+                    <StyledView
+                      key={index}
+                      className="bg-[#12171b] px-2 py-1 rounded-full mr-2 "
+                    >
+                      <StyledText className="text-green">
+                        {day.charAt(0).toUpperCase() + day.slice(1)}
+                      </StyledText>
+                    </StyledView>
+                  )
+                )
+              ) : (
+                // Si c'est déjà un tableau
+                runner.runner_profile.availability.map((day, index) => (
+                  <StyledView
+                    key={index}
+                    className="bg-[#12171b] px-3 py-1 rounded-full mr-2 mb-2"
+                  >
+                    <StyledText className="text-green">
+                      {day.charAt(0).toUpperCase() + day.slice(1)}
+                    </StyledText>
+                  </StyledView>
+                ))
+              )
+            ) : (
+              <StyledText className="text-gray-400">
+                Aucune disponibilité renseignée
+              </StyledText>
+            )}
           </StyledView>
         </StyledView>
       </StyledView>

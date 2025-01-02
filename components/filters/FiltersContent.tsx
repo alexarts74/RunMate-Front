@@ -4,6 +4,7 @@ import Slider from "@react-native-community/slider";
 import { Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 
 export function FiltersContent() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export function FiltersContent() {
     age_max: 70,
     gender: "",
     location: "",
+    distance: 50,
     filter_pace: false,
     filter_distance: false,
     filter_availability: false,
@@ -28,6 +30,8 @@ export function FiltersContent() {
     { label: "Autre", value: "other" },
   ];
 
+  // ici faire un systeme de distance km avec une range avec la geolocalisation
+
   const locationOptions = [
     { label: "Toutes les villes", value: "" },
     { label: "Paris", value: "Paris" },
@@ -36,7 +40,6 @@ export function FiltersContent() {
   ];
 
   const handleApplyFilters = async () => {
-    // console.log("Filters:", filters);
     try {
       await applyFilters(filters);
       router.back();
@@ -50,40 +53,45 @@ export function FiltersContent() {
       {/* Filtres d'âge */}
       <View className="mb-8">
         <Text className="text-white text-lg mb-4">Âge</Text>
-        <View className="space-y-6">
-          <View>
-            <Text className="text-green mb-2">
-              Minimum: {filters.age_min} ans
-            </Text>
-            <Slider
-              value={filters.age_min}
-              onValueChange={(value: number) =>
-                setFilters((prev) => ({ ...prev, age_min: value }))
-              }
-              minimumValue={18}
-              maximumValue={70}
-              step={1}
-              minimumTrackTintColor="#b9f144"
-              maximumTrackTintColor="#767577"
-              thumbTintColor="#b9f144"
-            />
-          </View>
-          <View>
-            <Text className="text-green mb-2">
-              Maximum: {filters.age_max} ans
-            </Text>
-            <Slider
-              value={filters.age_max}
-              onValueChange={(value: number) =>
-                setFilters((prev) => ({ ...prev, age_max: value }))
-              }
-              minimumValue={18}
-              maximumValue={70}
-              step={1}
-              minimumTrackTintColor="#b9f144"
-              maximumTrackTintColor="#767577"
-              thumbTintColor="#b9f144"
-            />
+        <View>
+          <Text className="text-green mb-2">
+            Entre {filters.age_min} et {filters.age_max} ans
+          </Text>
+          <MultiSlider
+            values={[filters.age_min, filters.age_max]}
+            onValuesChange={(values) =>
+              setFilters((prev) => ({
+                ...prev,
+                age_min: values[0],
+                age_max: values[1],
+              }))
+            }
+            min={18}
+            max={80}
+            step={1}
+            sliderLength={350}
+            selectedStyle={{
+              backgroundColor: "#b9f144",
+            }}
+            unselectedStyle={{
+              backgroundColor: "#767577",
+            }}
+            containerStyle={{
+              height: 40,
+              alignItems: "center",
+            }}
+            markerStyle={{
+              backgroundColor: "#b9f144",
+              height: 20,
+              width: 20,
+            }}
+            trackStyle={{
+              height: 4,
+            }}
+          />
+          <View className="flex-row justify-between">
+            <Text className="text-white">18 ans</Text>
+            <Text className="text-white">70 ans</Text>
           </View>
         </View>
       </View>
@@ -103,7 +111,7 @@ export function FiltersContent() {
       </View>
 
       {/* Filtre de localisation */}
-      <View className="mb-8">
+      {/* <View className="mb-8">
         <Text className="text-white text-lg mb-4">Ville</Text>
         <Pressable
           onPress={() => setShowLocationModal(true)}
@@ -114,6 +122,30 @@ export function FiltersContent() {
               ?.label || "Sélectionner"}
           </Text>
         </Pressable>
+      </View> */}
+
+      {/* Filtre de distance */}
+      <View className="mb-8">
+        <Text className="text-white text-lg mb-4">Distance maximale</Text>
+        <View>
+          <Text className="text-green mb-2">{filters.distance} km</Text>
+          <Slider
+            value={filters.distance}
+            onValueChange={(value: number) =>
+              setFilters((prev) => ({ ...prev, distance: Math.round(value) }))
+            }
+            minimumValue={1}
+            maximumValue={100}
+            step={1}
+            minimumTrackTintColor="#b9f144"
+            maximumTrackTintColor="#767577"
+            thumbTintColor="#b9f144"
+          />
+          <View className="flex-row justify-between">
+            <Text className="text-white">1 km</Text>
+            <Text className="text-white">100 km</Text>
+          </View>
+        </View>
       </View>
 
       {/* Filtres de compatibilité */}

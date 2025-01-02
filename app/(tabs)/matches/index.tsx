@@ -7,9 +7,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const HomepageScreen = () => {
   const { matches, refreshMatches, isLoading } = useMatches();
-
-  console.log("🔥 matches", matches);
-
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useFocusEffect(
@@ -20,6 +17,10 @@ const HomepageScreen = () => {
       }
     }, [isInitialLoad])
   );
+
+  const removeDistanceFilter = () => {
+    router.push("/runner/filters");
+  };
 
   return (
     <View className="flex-1 bg-[#12171b]">
@@ -41,11 +42,18 @@ const HomepageScreen = () => {
             <Text className="text-white text-center">Chargement...</Text>
           </View>
         ) : matches?.length === 0 ? (
-          <View className="px-5">
-            <Text className="text-white text-center">
-              Aucun match trouvé pour le moment
-            </Text>
-          </View>
+          <>
+            <View className="px-5">
+              <Text className="text-white text-center">
+                Aucun match trouvé pour le moment
+              </Text>
+            </View>
+            <Pressable onPress={removeDistanceFilter}>
+              <Text className="text-white text-center">
+                Elargir la recherche
+              </Text>
+            </Pressable>
+          </>
         ) : (
           <View className="px-5 space-y-4 pb-36">
             {matches?.map((match) => (
