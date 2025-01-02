@@ -7,7 +7,7 @@ class ApiClient {
 
   constructor() {
     this.baseUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.API_VERSION}`;
-    this.timeout = 10000; // 10 secondes de timeout
+    this.timeout = 10000;
   }
 
   private async getHeaders() {
@@ -23,10 +23,13 @@ class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
+      console.log("Fetching with timeout:", url);
       const response = await fetch(url, {
         ...options,
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
+
+      console.log("Response:", response);
 
       if (!response) {
         throw new Error("Pas de réponse du serveur");

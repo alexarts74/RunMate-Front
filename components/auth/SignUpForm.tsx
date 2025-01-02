@@ -17,10 +17,12 @@ import { useAuth } from "@/context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { authService } from "@/service/api/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Location from "expo-location";
 
 export default function SignUpForm() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [loadingLocation, setLoadingLocation] = useState(false);
   const [error, setError] = useState("");
   const [showAgePicker, setShowAgePicker] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -33,9 +35,13 @@ export default function SignUpForm() {
     last_name: "",
     age: "",
     gender: "",
-    location: "",
     profile_image: "",
     bio: "",
+    city: "",
+    department: "",
+    postcode: "",
+    latitude: "",
+    longitude: "",
   });
 
   const genderOptions = [
@@ -71,25 +77,74 @@ export default function SignUpForm() {
     }
   };
 
+  const handleLocationUpdate = async () => {
+    try {
+      setLoadingLocation(true);
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        throw new Error("Permission de localisation refusée");
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const [result] = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+
+      if (!result) {
+        throw new Error("Impossible de déterminer votre localisation");
+      }
+
+      // Retourner les données de localisation
+      return {
+        city: result.city || "",
+        department: result.region || "",
+        postcode: result.postalCode || "",
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        location: `${result.city}, ${result.region}`,
+      };
+    } catch (err) {
+      console.error("Erreur de localisation:", err);
+      throw new Error("Erreur lors de la récupération de la position");
+    } finally {
+      setLoadingLocation(false);
+    }
+  };
+
   const handleSignUp = async () => {
     try {
       setError("");
       setLoading(true);
-      const response = await authService.signUp(formData);
-      // console.log("Réponse signup:", response);
+
+      // 1. Obtenir la localisation
+      const locationData = await handleLocationUpdate();
+
+      // 2. Mettre à jour formData avec la localisation
+      const updatedFormData = {
+        ...formData,
+        ...locationData,
+      };
+
+      console.log("Updated form data:", updatedFormData);
+
+      // 3. Envoyer l'inscription
+      const response = await authService.signUp(updatedFormData);
 
       if (!response.authentication_token) {
-        console.error("Pas de token dans la réponse");
-        setError("Erreur d'authentification");
-        return;
+        throw new Error("Pas de token dans la réponse");
       }
 
+      // 4. Connecter l'utilisateur et rediriger
       await login(response);
-      // console.log("Login effectué, redirection...");
       router.replace("/(app)/runner/runner-profile");
     } catch (err) {
       console.error("Erreur inscription détaillée:", err);
-      setError("Erreur lors de l'inscription. Veuillez réessayer.");
+      setError(
+        (err as Error).message ||
+          "Erreur lors de l'inscription. Veuillez réessayer."
+      );
     } finally {
       setLoading(false);
     }
@@ -115,7 +170,7 @@ export default function SignUpForm() {
           focusedInput === "email" ? "border-green" : "border-gray"
         }`}
         placeholder="Email"
-        placeholderTextColor="#9CA3AF"
+        // placeholderTextColor="#9CA3AF"
         value={formData.email}
         onChangeText={(value) => handleChange("email", value)}
         onFocus={() => setFocusedInput("email")}
@@ -129,12 +184,11 @@ export default function SignUpForm() {
           focusedInput === "password" ? "border-green" : "border-gray"
         }`}
         placeholder="Mot de passe"
-        placeholderTextColor="#9CA3AF"
+        // placeholderTextColor="#9CA3AF"
         value={formData.password}
         onChangeText={(value) => handleChange("password", value)}
         onFocus={() => setFocusedInput("password")}
         onBlur={() => setFocusedInput(null)}
-        secureTextEntry
       />
 
       <TextInput
@@ -144,12 +198,11 @@ export default function SignUpForm() {
             : "border-gray"
         }`}
         placeholder="Confirmation du mot de passe"
-        placeholderTextColor="#9CA3AF"
+        // placeholderTextColor="#9CA3AF"
         value={formData.password_confirmation}
         onChangeText={(value) => handleChange("password_confirmation", value)}
         onFocus={() => setFocusedInput("password_confirmation")}
         onBlur={() => setFocusedInput(null)}
-        secureTextEntry
       />
 
       <TextInput
@@ -157,7 +210,7 @@ export default function SignUpForm() {
           focusedInput === "first_name" ? "border-green" : "border-gray"
         }`}
         placeholder="Prénom"
-        placeholderTextColor="#9CA3AF"
+        // placeholderTextColor="#9CA3AF"
         value={formData.first_name}
         onChangeText={(value) => handleChange("first_name", value)}
         onFocus={() => setFocusedInput("first_name")}
@@ -213,17 +266,37 @@ export default function SignUpForm() {
         onBlur={() => setFocusedInput(null)}
       />
 
-      <TextInput
-        className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
+      {/* <TouchableOpacity
+        onPress={getCurrentLocation}
+        className={`w-full border rounded-lg p-4 mb-4 items-center justify-center bg-gray ${
           focusedInput === "location" ? "border-green" : "border-gray"
         }`}
-        placeholder="Localisation"
-        placeholderTextColor="#9CA3AF"
-        value={formData.location}
-        onChangeText={(value) => handleChange("location", value)}
-        onFocus={() => setFocusedInput("location")}
-        onBlur={() => setFocusedInput(null)}
-      />
+      >
+        {loadingLocation ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <>
+            <View className="flex-row items-center">
+              <Ionicons
+                name="location"
+                size={24}
+                color="white"
+                className="mr-2"
+              />
+              <Text className="text-white ml-2">
+                {formData.city
+                  ? `${formData.city}, ${formData.department}`
+                  : "Utiliser ma position actuelle"}
+              </Text>
+            </View>
+            {formData.city && (
+              <Text className="text-gray-400 text-sm mt-1">
+                {formData.postcode}
+              </Text>
+            )}
+          </>
+        )}
+      </TouchableOpacity> */}
 
       <TextInput
         className={`w-full border rounded-lg p-4 mb-4 bg-gray text-white ${
@@ -298,6 +371,10 @@ export default function SignUpForm() {
       ) : null}
 
       <View className="space-y-3 px-8 mb-4">
+        <Text className="text-center mb-2 text-white">
+          En vous inscrivant, votre position sera utilisée pour trouver des
+          runners près de chez vous
+        </Text>
         <Pressable
           className={`bg-green py-3 rounded-full items-center ${
             loading ? "opacity-70" : ""

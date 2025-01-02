@@ -6,7 +6,8 @@ interface User {
   bio: string | null;
   age: number | null;
   gender: string | null;
-  location: string | null;
+  city: string | null;
+  department: string | null;
   profile_image: string | null;
   level: string | null;
   authentication_token: string | null;

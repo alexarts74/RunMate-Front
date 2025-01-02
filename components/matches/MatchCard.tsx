@@ -37,7 +37,9 @@ export function MatchCard({ match }: MatchCardProps) {
 
             <View className="flex-row items-center mb-2">
               <Ionicons name="location" size={16} color="#9CA3AF" />
-              <Text className="text-green ml-1">{match.user.location}</Text>
+              <Text className="text-green ml-1">
+                {match.user.city} / {match.distance_km} km
+              </Text>
             </View>
           </View>
         </View>

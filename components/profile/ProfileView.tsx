@@ -75,7 +75,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
 
         <View className="bg-gray p-2 rounded-lg">
           <Text className="text-gray-400">Localisation</Text>
-          <Text className="text-white text-lg">{user?.location}</Text>
+          <Text className="text-white text-lg">{user?.city}</Text>
         </View>
 
         <View className="bg-gray p-2 mb-4 rounded-lg">

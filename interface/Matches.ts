@@ -13,9 +13,11 @@ export interface MatchUser {
     id: number;
     first_name: string;
     last_name: string;
-    location: string;
+    city: string;
+    department: string;
     profile_image: string;
     bio?: string;
+    expo_push_token?: string;
     runner_profile: {
       actual_pace: string;
       usual_distance: number;
@@ -24,6 +26,7 @@ export interface MatchUser {
     };
   };
   score?: number;
+  distance_km?: number;
   compatibility_details: {
     pace_match: number;
     distance_match: number;
