@@ -26,7 +26,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
     last_name: user?.last_name || "",
     age: user?.age?.toString() || "",
     gender: user?.gender || "",
-    location: user?.location || "",
+    location: user?.city || "",
     profile_image: user?.profile_image || "",
     bio: user?.bio || "",
   });
@@ -59,8 +59,11 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
     try {
       await updateUser(formData);
       setIsEditing(false);
+      setLoading(true);
     } catch (error) {
       console.error("Erreur lors de la mise à jour:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

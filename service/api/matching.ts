@@ -1,6 +1,5 @@
 import { MatchFilters, MatchUser } from "@/interface/Matches";
 import { apiClient } from "./client";
-import { authStorage } from "../auth/storage";
 
 const formatMatches = (matches: MatchUser[]) => {
   return matches.map((match: MatchUser) => ({
@@ -31,10 +30,6 @@ export const matchesService = {
         filters,
       });
       if (!response || !response.matches) return [];
-      console.log(
-        "🔍 Matches après application des filtres:",
-        response.matches
-      );
       return formatMatches(response.matches);
     } catch (error) {
       console.error("Erreur applyFilters:", error);

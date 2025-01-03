@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 type ProfileViewProps = {
@@ -16,10 +16,10 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
     router.replace("/");
   };
 
-  if (!user?.id) {
+  if (!user) {
     return (
       <View className="flex-1 bg-[#12171b] px-5 py-6 justify-center items-center">
-        <Text className="text-white">Chargement...</Text>
+        <Text className="text-white">Impossible de charger le profil</Text>
       </View>
     );
   }
