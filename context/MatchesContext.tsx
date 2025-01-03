@@ -51,6 +51,7 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
 
   const applyFilters = async (filters: MatchFilters) => {
     try {
+      console.log("🔍 Filtres appliqués:", filters);
       setIsLoading(true);
       setCurrentFilters(filters);
       const filteredMatches = await matchesService.applyFilters(filters);

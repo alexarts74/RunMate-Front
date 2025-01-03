@@ -29,8 +29,6 @@ class ApiClient {
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
 
-      console.log("Response:", response);
-
       if (!response) {
         throw new Error("Pas de réponse du serveur");
       }

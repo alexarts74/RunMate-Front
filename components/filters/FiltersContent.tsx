@@ -9,7 +9,6 @@ import MultiSlider from "@ptomasroos/react-native-multi-slider";
 export function FiltersContent() {
   const router = useRouter();
   const [showGenderModal, setShowGenderModal] = useState(false);
-  const [showLocationModal, setShowLocationModal] = useState(false);
   const { applyFilters } = useMatches();
 
   const [filters, setFilters] = useState({
@@ -30,15 +29,6 @@ export function FiltersContent() {
     { label: "Autre", value: "other" },
   ];
 
-  // ici faire un systeme de distance km avec une range avec la geolocalisation
-
-  const locationOptions = [
-    { label: "Toutes les villes", value: "" },
-    { label: "Paris", value: "Paris" },
-    { label: "Lyon", value: "Lyon" },
-    { label: "Marseille", value: "Marseille" },
-  ];
-
   const handleApplyFilters = async () => {
     try {
       await applyFilters(filters);
@@ -47,6 +37,8 @@ export function FiltersContent() {
       console.error("Erreur lors de l'application des filtres:", error);
     }
   };
+
+  console.log(filters.distance);
 
   return (
     <>
@@ -109,20 +101,6 @@ export function FiltersContent() {
           </Text>
         </Pressable>
       </View>
-
-      {/* Filtre de localisation */}
-      {/* <View className="mb-8">
-        <Text className="text-white text-lg mb-4">Ville</Text>
-        <Pressable
-          onPress={() => setShowLocationModal(true)}
-          className="bg-[#1e2429] p-4 rounded-xl border border-[#394047]"
-        >
-          <Text className="text-white">
-            {locationOptions.find((opt) => opt.value === filters.location)
-              ?.label || "Sélectionner"}
-          </Text>
-        </Pressable>
-      </View> */}
 
       {/* Filtre de distance */}
       <View className="mb-8">
@@ -216,48 +194,6 @@ export function FiltersContent() {
             ))}
             <TouchableOpacity
               onPress={() => setShowGenderModal(false)}
-              className="mt-4 p-4 bg-[#1e2429] rounded-xl"
-            >
-              <Text className="text-white text-center">Fermer</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        visible={showLocationModal}
-        transparent={true}
-        animationType="slide"
-      >
-        <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-[#12171b] rounded-t-3xl p-6">
-            <Text className="text-white text-xl mb-4">
-              Sélectionner la ville
-            </Text>
-            {locationOptions.map((option) => (
-              <TouchableOpacity
-                key={option.value}
-                onPress={() => {
-                  setFilters((prev) => ({ ...prev, location: option.value }));
-                  setShowLocationModal(false);
-                }}
-                className={`p-4 border-b border-[#394047] ${
-                  filters.location === option.value ? "bg-[#1e2429]" : ""
-                }`}
-              >
-                <Text
-                  className={`${
-                    filters.location === option.value
-                      ? "text-green"
-                      : "text-white"
-                  }`}
-                >
-                  {option.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-            <TouchableOpacity
-              onPress={() => setShowLocationModal(false)}
               className="mt-4 p-4 bg-[#1e2429] rounded-xl"
             >
               <Text className="text-white text-center">Fermer</Text>

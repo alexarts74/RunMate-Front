@@ -31,6 +31,10 @@ export const matchesService = {
         filters,
       });
       if (!response || !response.matches) return [];
+      console.log(
+        "🔍 Matches après application des filtres:",
+        response.matches
+      );
       return formatMatches(response.matches);
     } catch (error) {
       console.error("Erreur applyFilters:", error);
