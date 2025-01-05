@@ -5,6 +5,7 @@ import {
   Dimensions,
   FlatList,
   ViewToken,
+  Animated,
 } from "react-native";
 import React, { useState, useCallback } from "react";
 import { useMatches } from "@/context/MatchesContext";
@@ -20,7 +21,7 @@ export function MatchesCarousel() {
 
   // Configuration du carrousel
   const { width: screenWidth } = Dimensions.get("window");
-  const ITEM_WIDTH = screenWidth * 0.75;
+  const ITEM_WIDTH = screenWidth * 0.8;
   const SPACING = screenWidth * 0.05;
 
   // Rafraîchir les matches au focus initial
@@ -97,7 +98,7 @@ export function MatchesCarousel() {
             </Pressable>
           </View>
         ) : (
-          <View className="flex-1">
+          <View className="">
             <FlatList
               data={matches}
               renderItem={renderItem}
@@ -114,7 +115,7 @@ export function MatchesCarousel() {
             />
 
             {/* Indicateurs de pagination */}
-            <View className="flex-row justify-center mt-4 space-x-2 pb-4">
+            <View className="flex-row justify-center pt-4 space-x-2 pb-4">
               {matches.map((_, index) => (
                 <View
                   key={index}

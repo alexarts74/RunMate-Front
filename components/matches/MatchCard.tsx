@@ -16,7 +16,7 @@ export function MatchCard({ match }: MatchCardProps) {
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
-      className="bg-[#12171b] border border-green rounded-2xl px-6 py-3 shadow-lg"
+      className="bg-[#1f272e] border border-green rounded-2xl px-6 py-3 shadow-lg"
     >
       {/* En-tête avec photo et infos principales */}
       <View className="flex-row justify-between items-start">
@@ -63,21 +63,21 @@ export function MatchCard({ match }: MatchCardProps) {
         <Text className="text-white font-bold mb-1">Profil Runner</Text>
 
         <View className="flex-row justify-between">
-          <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
+          <View className="items-center bg-[#1f272e] p-3 rounded-xl flex-1 mx-1">
             <Ionicons name="walk-outline" size={24} color="#b9f144" />
             <Text className="text-white text-center mt-2">
               {match.user.runner_profile.actual_pace} min/km
             </Text>
           </View>
 
-          <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
+          <View className="items-center bg-[#1f272e] p-3 rounded-xl flex-1 mx-1">
             <Ionicons name="resize-outline" size={24} color="#b9f144" />
             <Text className="text-white text-center mt-2">
               {match.user.runner_profile.usual_distance} km
             </Text>
           </View>
 
-          <View className="items-center bg-[#12171b] p-3 rounded-xl flex-1 mx-1">
+          <View className="items-center bg-[#1f272e] p-3 rounded-xl flex-1 mx-1">
             <Ionicons name="trophy-outline" size={24} color="#b9f144" />
             <Text className="text-white text-center mt-2">
               {/* Probleme affichage pour l'objectif */}
