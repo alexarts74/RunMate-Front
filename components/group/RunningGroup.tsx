@@ -1,53 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { groupService } from "@/service/api/group";
 
 type RunningGroupType = {
   id: string;
   name: string;
-  members: number;
+  members_count: number;
   location: string;
-  nextRun: string;
-  image: string;
-  level: "Débutant" | "Intermédiaire" | "Avancé";
+  upcoming_events: any[];
+  level: string;
+  cover_image: string | null;
 };
 
-const mockGroups: RunningGroupType[] = [
-  {
-    id: "1",
-    name: "Les Coureurs de Paris",
-    members: 24,
-    location: "Paris 12e",
-    nextRun: "Demain, 18h30",
-    image: "https://picsum.photos/400/200",
-    level: "Débutant",
-  },
-  {
-    id: "2",
-    name: "Running Night Club",
-    members: 42,
-    location: "Bois de Vincennes",
-    nextRun: "Jeudi, 19h00",
-    image: "https://picsum.photos/400/201",
-    level: "Intermédiaire",
-  },
-  {
-    id: "3",
-    name: "Marathon Training",
-    members: 18,
-    location: "Bois de Boulogne",
-    nextRun: "Samedi, 9h00",
-    image: "https://picsum.photos/400/202",
-    level: "Avancé",
-  },
-];
-
 const RunningGroup = () => {
+  const [groups, setGroups] = useState<RunningGroupType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      setIsLoading(true);
+      try {
+        const groupsData = await groupService.getGroups();
+        setGroups(groupsData);
+      } catch (error) {
+        console.error("Erreur lors du chargement des groupes:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchGroups();
+  }, []);
+
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable className="bg-[#1e2429] rounded-xl overflow-hidden mb-3">
       <View className="flex-row h-20">
         <Image
-          source={{ uri: item.image }}
+          source={
+            item.cover_image
+              ? { uri: item.cover_image }
+              : require("@/assets/images/favicon.png")
+          }
           className="w-20 h-full"
           style={{ resizeMode: "cover" }}
         />
@@ -63,12 +56,12 @@ const RunningGroup = () => {
             <View className="flex-row items-center">
               <Ionicons name="people" size={14} color="#6B7280" />
               <Text className="text-green text-sm ml-1">
-                {item.members} membres
+                {item.members_count} membres
               </Text>
             </View>
             <View className="flex-row items-center">
-              <Ionicons name="time" size={14} color="#6B7280" />
-              <Text className="text-green text-sm ml-1">{item.nextRun}</Text>
+              <Ionicons name="fitness" size={14} color="#6B7280" />
+              <Text className="text-green text-sm ml-1">{item.level}</Text>
             </View>
           </View>
         </View>
@@ -77,17 +70,24 @@ const RunningGroup = () => {
   );
 
   return (
-    <View className="mt-2">
+    <View className="bg-[#12171b]">
       <Text className="text-xl font-bold text-white px-5 mb-4">
         Groupes de running
       </Text>
-      <FlatList
-        data={mockGroups}
-        renderItem={renderGroup}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <View className="px-5">
+          <Text className="text-white text-center">Chargement...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={groups}
+          renderItem={renderGroup}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          showsVerticalScrollIndicator={false}
+          style={{ height: 500 }}
+        />
+      )}
     </View>
   );
 };

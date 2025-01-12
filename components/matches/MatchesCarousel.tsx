@@ -66,9 +66,9 @@ export function MatchesCarousel() {
   };
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="bg-[#12171b]">
       {/* Header */}
-      <View className="absolute top-0 left-0 right-0 z-10 bg-[#12171b] pt-12">
+      <View className="bg-[#12171b] pt-12">
         <View className="flex-row justify-between items-center px-5 my-6">
           <Text className="text-2xl font-bold text-white">Vos matches</Text>
           <Pressable onPress={() => router.push("/runner/filters")}>
@@ -78,7 +78,7 @@ export function MatchesCarousel() {
       </View>
 
       {/* Contenu principal */}
-      <View className="flex-1 pt-32">
+      <View className="pt-4">
         {isLoading ? (
           <View className="px-5">
             <Text className="text-white text-center">Chargement...</Text>

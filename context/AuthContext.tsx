@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authService } from "@/service/api/auth";
 import { authStorage } from "@/service/auth/storage";
 import { UserWithRunnerProfile } from "@/interface/User";
@@ -21,6 +20,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<UserWithRunnerProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const checkAuth = async () => {
+    try {
+      const token = await authStorage.getToken();
+      const user = await authStorage.getUser();
+
+      if (!token || !user) {
+        console.log("❌ Pas de token ou user dans le storage");
+        await cleanStorage();
+        return false;
+      }
+
+      console.log("✅ Token et user trouvés dans le storage");
+      return true;
+    } catch (error) {
+      console.error("Erreur checkAuth:", error);
+      return false;
+    }
+  };
 
   const cleanStorage = async () => {
     try {
@@ -126,63 +144,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const getUser = async () => {
     try {
       const token = await authStorage.getToken();
-      const userData = await authStorage.getUser();
-
-      // Si aucune donnée n'est présente
-      if (!token || !userData) {
-        setUser(null);
-        setIsAuthenticated(false);
+      if (!token) {
+        console.log("❌ Pas de token pour getUser");
         return;
       }
 
-      // 1. Set les données du storage
-      setUser(userData); // userData est déjà parsé par authStorage.getUser()
-      setIsAuthenticated(true);
-
-      // 2. Mise à jour avec l'API
-      try {
-        const freshUserData = await authService.getCurrentUser();
-        if (freshUserData) {
-          await authStorage.storeUser(freshUserData);
-          setUser(freshUserData);
-        }
-      } catch (apiError) {
-        console.error(
-          "Erreur lors de la récupération des données fraîches:",
-          apiError
-        );
-        // On garde les données du storage si l'API échoue
+      const storedUser = await authStorage.getUser();
+      if (storedUser) {
+        setUser(storedUser);
+        setIsAuthenticated(true);
       }
-    } catch (error) {
-      console.error("Erreur dans getUser:", error);
-      await authStorage.removeAuth(); // Nettoyer proprement
-      setUser(null);
-      setIsAuthenticated(false);
+
+      // Mise à jour avec l'API
+      const freshUserData = await authService.getCurrentUser();
+      if (freshUserData) {
+        await authStorage.storeUser(freshUserData);
+        setUser(freshUserData);
+        setIsAuthenticated(true);
+        console.log("✅ Données utilisateur mises à jour depuis l'API");
+      }
+    } catch (error: any) {
+      if (error?.status === 401) {
+        console.log("❌ Token expiré ou invalide");
+        await cleanStorage();
+        router.replace("/login");
+        return;
+      }
+      console.error("Erreur getUser:", error);
     }
   };
 
+  // Initialisation de l'auth
   useEffect(() => {
-    getUser();
+    const initAuth = async () => {
+      try {
+        const isAuth = await checkAuth();
+        if (isAuth) {
+          await getUser();
+        }
+      } catch (error) {
+        console.error("Erreur initAuth:", error);
+        await cleanStorage();
+        router.replace("/login");
+      }
+    };
+
+    initAuth();
   }, []);
-
-  /// si jamais je veux nettoyer le storage au démarrage
-
-  // useEffect(() => {
-  //   const initAuth = async () => {
-  //     try {
-  //       // Force le nettoyage du storage au démarrage
-  //       await cleanStorage();
-  //       console.log("Storage nettoyé au démarrage");
-
-  //       // Redirige vers la page de login
-  //       router.replace("/(auth)/login");
-  //     } catch (error) {
-  //       console.error("Erreur lors de l'initialisation:", error);
-  //     }
-  //   };
-
-  //   initAuth();
-  // }, []);
 
   return (
     <AuthContext.Provider

@@ -12,6 +12,7 @@ class ApiClient {
 
   private async getHeaders() {
     const token = await authStorage.getToken();
+    console.log("Token pour headers:", token);
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -23,24 +24,30 @@ class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      console.log("Fetching with timeout:", url);
+      const headers = await this.getHeaders();
+      console.log("Headers de la requête:", headers);
+
       const response = await fetch(url, {
         ...options,
+        headers: {
+          ...options.headers,
+          ...headers,
+        },
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
 
-      if (!response) {
-        throw new Error("Pas de réponse du serveur");
+      if (!response.ok) {
+        const data = await response.json();
+        if (response.status === 401) {
+          await authStorage.removeAuth();
+          throw new Error("Session expirée, veuillez vous reconnecter");
+        }
+        throw new Error(data.message || `Erreur HTTP: ${response.status}`);
       }
 
       return response;
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name === "AbortError") {
-        console.error(`Timeout - L'API n'a pas répondu à ${url}`);
-        throw new Error(
-          `La requête a expiré après ${this.timeout / 1000} secondes`
-        );
-      }
+    } catch (error) {
+      console.error("Erreur fetchWithTimeout:", error);
       throw error;
     }
   }

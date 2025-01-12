@@ -170,7 +170,7 @@ export default function SignUpForm() {
           focusedInput === "email" ? "border-green" : "border-gray"
         }`}
         placeholder="Email"
-        // placeholderTextColor="#9CA3AF"
+        placeholderTextColor="#9CA3AF"
         value={formData.email}
         onChangeText={(value) => handleChange("email", value)}
         onFocus={() => setFocusedInput("email")}
@@ -184,7 +184,7 @@ export default function SignUpForm() {
           focusedInput === "password" ? "border-green" : "border-gray"
         }`}
         placeholder="Mot de passe"
-        // placeholderTextColor="#9CA3AF"
+        placeholderTextColor="#9CA3AF"
         value={formData.password}
         onChangeText={(value) => handleChange("password", value)}
         onFocus={() => setFocusedInput("password")}
@@ -198,7 +198,7 @@ export default function SignUpForm() {
             : "border-gray"
         }`}
         placeholder="Confirmation du mot de passe"
-        // placeholderTextColor="#9CA3AF"
+        placeholderTextColor="#9CA3AF"
         value={formData.password_confirmation}
         onChangeText={(value) => handleChange("password_confirmation", value)}
         onFocus={() => setFocusedInput("password_confirmation")}
@@ -210,7 +210,7 @@ export default function SignUpForm() {
           focusedInput === "first_name" ? "border-green" : "border-gray"
         }`}
         placeholder="Prénom"
-        // placeholderTextColor="#9CA3AF"
+        placeholderTextColor="#9CA3AF"
         value={formData.first_name}
         onChangeText={(value) => handleChange("first_name", value)}
         onFocus={() => setFocusedInput("first_name")}
