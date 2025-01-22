@@ -13,7 +13,7 @@ import { useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
-import messageService from "@/service/api/message";
+import { directMessageService } from "@/service/api/message";
 import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
@@ -31,7 +31,9 @@ const ChatPage = () => {
 
   const loadMessages = async () => {
     try {
-      const response = await messageService.getConversation(id.toString());
+      const response = await directMessageService.getConversation(
+        id.toString()
+      );
       setMessages(response);
     } catch (error) {
       console.error("Erreur lors du chargement des messages:", error);
@@ -41,7 +43,10 @@ const ChatPage = () => {
   useEffect(() => {
     const initChat = async () => {
       try {
-        const response = await messageService.getConversation(id.toString());
+        console.log("id:", id);
+        const response = await directMessageService.getConversation(
+          id.toString()
+        );
         setMessages(response);
 
         const unreadMessages = response.filter(
@@ -51,7 +56,7 @@ const ChatPage = () => {
         if (unreadMessages.length > 0) {
           await Promise.all(
             unreadMessages.map((msg: Message) =>
-              messageService.markAsRead(msg.id.toString())
+              directMessageService.markAsRead(msg.id.toString())
             )
           );
           // Décrémenter le compteur global
@@ -68,8 +73,8 @@ const ChatPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        await messageService.sendMessage(id.toString(), newMessage);
-        // await pushNotificationService.registerForPushNotifications();
+        await directMessageService.sendMessage(id.toString(), newMessage);
+        await pushNotificationService.registerForPushNotifications();
         setNewMessage("");
         loadMessages();
       } catch (error) {

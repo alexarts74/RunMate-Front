@@ -4,7 +4,10 @@ import { router } from "expo-router";
 import { Conversation } from "@/interface/Conversation";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
-import messageService from "@/service/api/message";
+import {
+  directMessageService,
+  groupMessageService,
+} from "@/service/api/message";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 type ConversationItemProps = {
@@ -19,15 +22,26 @@ export function ConversationItem({
   const { decrementUnreadCount } = useUnreadMessages();
 
   const handlePress = async () => {
-    // console.log("dans le handlePress");
     try {
-      router.push(`/chat/${conversation.user.id}`);
-      if (conversation.unread_messages > 0 && conversation.last_message.id) {
-        await messageService.markAsRead(
-          conversation.last_message.id.toString()
-        );
-        onMessageRead?.(conversation.last_message.id.toString());
-        decrementUnreadCount(conversation.unread_messages);
+      if (conversation.type === "group") {
+        console.log("Conversation:", conversation);
+        router.push(`/chat/group/${conversation.group?.id}`);
+        if (conversation.unread_messages > 0 && conversation.last_message.id) {
+          await groupMessageService.markAsRead(
+            conversation?.last_message?.id?.toString()
+          );
+          onMessageRead?.(conversation?.last_message?.id?.toString());
+          decrementUnreadCount(conversation?.unread_messages);
+        }
+      } else {
+        router.push(`/chat/${conversation.user.id}`);
+        if (conversation.unread_messages > 0 && conversation.last_message.id) {
+          await directMessageService.markAsRead(
+            conversation?.last_message?.id?.toString()
+          );
+          onMessageRead?.(conversation?.last_message?.id?.toString());
+          decrementUnreadCount(conversation?.unread_messages);
+        }
       }
     } catch (error) {
       console.error("Erreur lors du marquage comme lu:", error);
@@ -41,7 +55,11 @@ export function ConversationItem({
     >
       <Image
         source={
-          conversation.user.profile_image
+          conversation.type === "group"
+            ? conversation.group?.cover_image
+              ? { uri: conversation.group.cover_image }
+              : require("@/assets/images/react-logo.png")
+            : conversation.user?.profile_image
             ? { uri: conversation.user.profile_image }
             : require("@/assets/images/react-logo.png")
         }
@@ -50,16 +68,21 @@ export function ConversationItem({
       <View className="flex-1 ml-4 gap-y-3">
         <View className="flex-row justify-between">
           <Text className="text-white font-bold">
-            {conversation.user.first_name} {conversation.user.last_name}
+            {conversation.type === "group"
+              ? conversation.group?.name
+              : `${conversation.user?.first_name} ${conversation.user?.last_name}`}
           </Text>
           <Text className="text-white text-xs">
-            {formatDistanceToNow(
-              new Date(conversation.last_message.created_at),
-              {
-                addSuffix: true,
-                locale: fr,
-              }
-            )}
+            {conversation?.last_message?.created_at
+              ? formatDistanceToNow(
+                  new Date(conversation.last_message.created_at),
+                  {
+                    addSuffix: true,
+                    locale: fr,
+                    includeSeconds: true,
+                  }
+                )
+              : ""}
           </Text>
         </View>
         <View className="flex-row justify-between items-center">
@@ -69,7 +92,9 @@ export function ConversationItem({
             }`}
             numberOfLines={1}
           >
-            {conversation.last_message.content}
+            {conversation.type === "group" && conversation.last_message?.sender
+              ? `${conversation.last_message.sender.first_name}: ${conversation.last_message.content}`
+              : conversation.last_message?.content}
           </Text>
           {conversation.unread_messages > 0 && (
             <View className="bg-green rounded-full w-6 h-6 items-center justify-center ml-2">

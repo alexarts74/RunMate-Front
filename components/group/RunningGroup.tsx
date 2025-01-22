@@ -18,8 +18,6 @@ type RunningGroupType = {
 const RunningGroup = () => {
   const [groups, setGroups] = useState<RunningGroupType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [group, setGroup] = useState<RunningGroupType | null>(null);
-  const [isJoining, setIsJoining] = useState(false);
   const router = useRouter();
 
   useEffect(() => {

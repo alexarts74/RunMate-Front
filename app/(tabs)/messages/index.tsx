@@ -1,23 +1,39 @@
 import { View, Text, FlatList, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
-import messageService from "@/service/api/message";
 import { Conversation } from "@/interface/Conversation";
 import { ConversationItem } from "@/components/messages/ConversationItem";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+import {
+  directMessageService,
+  groupMessageService,
+} from "@/service/api/message";
 
 const MessagesScreen = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadConversations();
-  }, []);
-
   const loadConversations = async () => {
     try {
-      const data = await messageService.getAllConversations();
-      setConversations(data);
+      const individualConversations =
+        await directMessageService.getAllConversations();
+      const groupConversations =
+        await groupMessageService.getAllGroupConversations();
+
+      const allConversations = [
+        ...individualConversations,
+        ...groupConversations,
+      ].sort((a, b) => {
+        const dateA = a.last_message?.created_at
+          ? new Date(a.last_message.created_at)
+          : new Date(0);
+        const dateB = b.last_message?.created_at
+          ? new Date(b.last_message.created_at)
+          : new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setConversations(allConversations);
     } catch (error) {
       console.error("Erreur lors du chargement des conversations:", error);
     } finally {
@@ -25,15 +41,32 @@ const MessagesScreen = () => {
     }
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      loadConversations();
+    }, [])
+  );
+
   const handleMessageRead = (messageId: string) => {
-    setConversations(prevConversations =>
-      prevConversations.map(conv => {
+    setConversations((prevConversations) =>
+      prevConversations.map((conv) => {
         if (conv.last_message.id.toString() === messageId) {
           return { ...conv, unread_messages: 0 };
         }
         return conv;
       })
     );
+  };
+
+  const renderConversation = ({ item }: { item: Conversation }) => (
+    <ConversationItem
+      conversation={item}
+      onMessageRead={() => handleMessageRead(item.last_message.id.toString())}
+    />
+  );
+
+  const keyExtractor = (item: Conversation) => {
+    return `${item.type || "individual"}-${item.id || item.user?.id}`;
   };
 
   if (isLoading) {
@@ -55,13 +88,8 @@ const MessagesScreen = () => {
 
       <FlatList
         data={conversations}
-        renderItem={({ item }) => (
-          <ConversationItem
-            conversation={item}
-            onMessageRead={() => handleMessageRead(item.last_message.id.toString())}
-          />
-        )}
-        keyExtractor={(item) => item.user.id.toString()}
+        renderItem={renderConversation}
+        keyExtractor={keyExtractor}
         onRefresh={loadConversations}
         refreshing={isLoading}
       />

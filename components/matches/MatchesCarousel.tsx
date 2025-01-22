@@ -68,12 +68,21 @@ export function MatchesCarousel() {
   return (
     <View className="bg-[#12171b]">
       {/* Header */}
-      <View className="bg-[#12171b] pt-12">
-        <View className="flex-row justify-between items-center px-5 my-6">
-          <Text className="text-2xl font-bold text-white">Vos matches</Text>
-          <Pressable onPress={() => router.push("/runner/filters")}>
-            <Ionicons name="filter" size={24} color="white" />
-          </Pressable>
+      <View className="bg-[#12171b]">
+        <View className="px-5 my-6">
+          <View className="flex-row justify-between items-center">
+            <View className="flex-row items-center">
+              <View className="w-1 h-6 bg-green rounded-full mr-3" />
+              <Text className="text-2xl font-bold text-white">Vos matches</Text>
+            </View>
+
+            <Pressable
+              onPress={() => router.push("/runner/filters")}
+              className="bg-[#1e2429] p-2 rounded-xl flex-row items-center border border-green/20"
+            >
+              <Ionicons name="filter" size={20} color="#b9f144" />
+            </Pressable>
+          </View>
         </View>
       </View>
 

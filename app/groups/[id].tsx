@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { groupService } from "@/service/api/group";
 import { GroupEvent } from "@/components/group/GroupEvent";
 import { CreateEventForm } from "@/components/group/CreateEventForm";
+import { GroupChat } from "@/components/group/GroupChat";
 
 type GroupDetails = {
   id: string;
@@ -30,7 +31,8 @@ type GroupDetails = {
   }>;
   members?: Array<{
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     profile_image: string;
   }>;
 };
@@ -138,6 +140,13 @@ export default function GroupDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
+          {/* Bouton de retour */}
+          <Pressable
+            onPress={() => router.back()}
+            className="absolute top-12 left-4 bg-black/30 p-2 rounded-full"
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </Pressable>
         </View>
 
         {/* Contenu principal */}
@@ -213,12 +222,54 @@ export default function GroupDetailsScreen() {
                     className="w-12 h-12 rounded-full"
                   />
                   <Text className="text-white text-center text-xs mt-1">
-                    {member.name}
+                    {member.first_name}
                   </Text>
                 </View>
               ))}
             </View>
           </View>
+          {group.is_member && (
+            <View className="px-5 py-4">
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: "/messages",
+                    params: {
+                      id: id,
+                      type: "group",
+                      name: group.name,
+                      image:
+                        group.cover_image || "https://via.placeholder.com/32",
+                    },
+                  });
+                }}
+                className="flex-row items-center bg-[#1e2429] p-4 rounded-xl"
+              >
+                <Image
+                  source={{
+                    uri: group.cover_image || "https://via.placeholder.com/32",
+                  }}
+                  className="w-12 h-12 rounded-full mr-3"
+                />
+                <View className="flex-1">
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-white font-semibold text-base">
+                      {group.name}
+                    </Text>
+                    <Text className="text-gray-400 text-xs">
+                      Groupe • {group.members_count} membres
+                    </Text>
+                  </View>
+                  <Text
+                    className="text-gray-400 text-sm mt-1"
+                    numberOfLines={1}
+                  >
+                    Rejoignez la conversation du groupe
+                  </Text>
+                </View>
+              </Pressable>
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -237,25 +288,25 @@ export default function GroupDetailsScreen() {
       )}
 
       {/* Bouton Rejoindre/Quitter */}
-      <View className="p-5 border-t border-[#2a3238]">
+      <View className="px-5 py-3 mb-2 border-t border-[#2a3238]">
         {group.is_member ? (
           <Pressable
             onPress={handleLeaveGroup}
             disabled={isLeaving}
-            className={`bg-red-500 py-4 rounded-xl ${
+            className={`bg-red-500 py-3 rounded-full w-48 self-center ${
               isLeaving ? "opacity-50" : ""
             }`}
           >
-            <Text className="text-center text-white font-bold text-lg">
+            <Text className="text-center text-white font-semibold text-sm">
               {isLeaving ? "En cours..." : "Quitter le groupe"}
             </Text>
           </Pressable>
         ) : (
           <Pressable
             onPress={handleJoinGroup}
-            className="bg-green py-4 rounded-xl"
+            className="bg-green py-3 rounded-full w-48 self-center"
           >
-            <Text className="text-center text-[#12171b] font-bold text-lg">
+            <Text className="text-center text-[#12171b] font-semibold text-sm">
               Rejoindre le groupe
             </Text>
           </Pressable>

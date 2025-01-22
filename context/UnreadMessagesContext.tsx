@@ -4,8 +4,10 @@ import { useAuth } from "@/context/AuthContext";
 
 type UnreadMessagesContextType = {
   unreadCount: number;
+  lastMessages: { [key: string]: any };
   decrementUnreadCount: (amount: number) => void;
   refreshUnreadCount: () => Promise<void>;
+  updateLastMessage: (userId: string, message: any) => void;
 };
 
 const UnreadMessagesContext = createContext<
@@ -18,7 +20,15 @@ export function UnreadMessagesProvider({
   children: React.ReactNode;
 }) {
   const [unreadCount, setUnreadCount] = useState(0);
+  const [lastMessages, setLastMessages] = useState<{ [key: string]: any }>({});
   const { isAuthenticated, user } = useAuth();
+
+  const updateLastMessage = (userId: string, message: any) => {
+    setLastMessages((prev) => ({
+      ...prev,
+      [userId]: message,
+    }));
+  };
 
   const refreshUnreadCount = async () => {
     try {
@@ -33,6 +43,16 @@ export function UnreadMessagesProvider({
         0
       );
       setUnreadCount(totalUnread);
+
+      // Mettre à jour les derniers messages
+      const messagesMap = conversations.reduce(
+        (acc, conv) => ({
+          ...acc,
+          [conv.user.id]: conv.last_message,
+        }),
+        {}
+      );
+      setLastMessages(messagesMap);
     } catch (error) {
       console.error("Erreur chargement messages non lus:", error);
       setUnreadCount(0);
@@ -55,8 +75,10 @@ export function UnreadMessagesProvider({
     <UnreadMessagesContext.Provider
       value={{
         unreadCount,
+        lastMessages,
         decrementUnreadCount,
         refreshUnreadCount,
+        updateLastMessage,
       }}
     >
       {children}

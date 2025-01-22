@@ -16,6 +16,7 @@ export interface ConversationUser {
 
 export interface Conversation {
   id: number;
+  type: string;
   user: {
     id: number;
     first_name: string;
@@ -27,5 +28,10 @@ export interface Conversation {
     id: number;
     content: string;
     created_at: string;
+  };
+  group?: {
+    id: number;
+    name: string;
+    cover_image: string;
   };
 }
