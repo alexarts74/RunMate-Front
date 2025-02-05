@@ -4,10 +4,8 @@ import { router } from "expo-router";
 import { Conversation } from "@/interface/Conversation";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
-import {
-  directMessageService,
-  groupMessageService,
-} from "@/service/api/message";
+import { directMessageService } from "@/service/api/message";
+import { groupMessageService } from "@/service/api/groupMessage";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 type ConversationItemProps = {
@@ -24,7 +22,6 @@ export function ConversationItem({
   const handlePress = async () => {
     try {
       if (conversation.type === "group") {
-        console.log("Conversation:", conversation);
         router.push(`/chat/group/${conversation.group?.id}`);
         if (conversation.unread_messages > 0 && conversation.last_message.id) {
           await groupMessageService.markAsRead(
@@ -51,7 +48,7 @@ export function ConversationItem({
   return (
     <Pressable
       onPress={handlePress}
-      className="flex-row items-center p-4 border-b border-[#394047]"
+      className="flex-row items-center p-4 border-b border-[#394047] "
     >
       <Image
         source={
@@ -70,7 +67,7 @@ export function ConversationItem({
           <Text className="text-white font-bold">
             {conversation.type === "group"
               ? conversation.group?.name
-              : `${conversation.user?.first_name} ${conversation.user?.last_name}`}
+              : `${conversation.user?.first_name} `}
           </Text>
           <Text className="text-white text-xs">
             {conversation?.last_message?.created_at

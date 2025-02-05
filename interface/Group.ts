@@ -1,13 +1,13 @@
 export interface GroupMember {
   id: number;
-  first_name: string;
+  name: string;
   profile_image: string;
   is_admin: boolean;
 }
 
 export interface GroupInfo {
   id: number;
-  name: string;
+  first_name: string;
   members: GroupMember[];
   total_members: number;
   cover_image: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -26,21 +26,34 @@ const GroupChatPage = () => {
   const { user } = useAuth();
   const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
   const [showMembersModal, setShowMembersModal] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
 
   const loadMessages = async () => {
     try {
-      const response: GroupChatData | undefined =
-        await groupMessageService.getGroupMessages(id.toString());
+      console.log("=== Début loadMessages ===");
+      console.log("ID du groupe:", id);
 
-      if (response) {
-        setMessages(response.messages || []);
+      const response = await groupMessageService.getGroupMessages(
+        id.toString()
+      );
+      console.log("Response complète:", response);
+
+      if (response && Array.isArray(response.messages)) {
+        console.log("Nombre de messages reçus:", response.messages.length);
+        const sortedMessages = [...response.messages].sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+        setMessages(sortedMessages);
         setGroupMessages(response.group);
       } else {
+        console.log("Format de réponse invalide:", response);
         setMessages([]);
         setGroupMessages(null);
       }
     } catch (error) {
-      console.error("Erreur lors du chargement des messages:", error);
+      console.error("=== Erreur dans loadMessages ===");
+      console.error("Message d'erreur:", error?.message);
       setMessages([]);
       setGroupMessages(null);
     }
@@ -50,13 +63,13 @@ const GroupChatPage = () => {
     try {
       const response = await groupService.getGroupById(id.toString());
       setGroupInfo(response);
-      console.log("GroupInfo:", response);
     } catch (error) {
       console.error("Erreur lors du chargement des infos du groupe:", error);
     }
   };
 
   useEffect(() => {
+    console.log("useEffect déclenché avec id:", id);
     loadMessages();
     loadGroupInfo();
   }, [id]);
@@ -64,50 +77,98 @@ const GroupChatPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        await groupMessageService.sendGroupMessage(id.toString(), newMessage);
+        console.log("Envoi du message:", newMessage);
+        console.log("User actuel:", user);
+
+        const tempMessage: GroupMessage = {
+          id: Date.now(),
+          content: newMessage,
+          created_at: new Date().toISOString(),
+          sender: {
+            id: user?.id || 0,
+            first_name: user?.first_name || "",
+            profile_image: user?.profile_image || "",
+          },
+        };
+
+        console.log("Message temporaire créé:", tempMessage);
+        setMessages((prevMessages) => {
+          console.log("Messages précédents:", prevMessages);
+          return [...prevMessages, tempMessage];
+        });
+
         setNewMessage("");
-        loadMessages();
+
+        console.log("Envoi au serveur...");
+        const response = await groupMessageService.sendGroupMessage(
+          id.toString(),
+          newMessage
+        );
+        console.log("Réponse du serveur après envoi:", response);
+
+        await loadMessages();
       } catch (error) {
-        console.error("Erreur lors de l'envoi du message:", error);
+        console.error("Erreur détaillée lors de l'envoi:", error);
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.id !== Date.now())
+        );
       }
     }
   };
 
   const renderMessage = ({ item }: { item: GroupMessage }) => (
-    <View
-      className={`p-3 rounded-xl max-w-[85%] mb-2 ${
-        item.sender.id === user?.id
-          ? "bg-green self-end"
-          : "bg-[#1e2429] self-start"
-      }`}
-    >
+    <View className="flex-row items-end mb-2">
       {item.sender.id !== user?.id && (
-        <View className="flex-row items-center mb-1">
-          <Image
-            source={
-              item.sender.profile_image
-                ? { uri: item.sender.profile_image }
-                : require("@/assets/images/react-logo.png")
-            }
-            className="w-5 h-5 rounded-full mr-2"
-          />
-          <Text className="text-gray text-xs">{item.sender.first_name}</Text>
-        </View>
+        <Image
+          source={
+            item.sender.profile_image
+              ? { uri: item.sender.profile_image }
+              : require("@/assets/images/react-logo.png")
+          }
+          className="w-8 h-8 rounded-full mr-2"
+        />
       )}
-      <Text
-        className={`mb-2 ${
-          item.sender.id === user?.id ? "text-dark" : "text-white"
+
+      <View
+        className={`rounded-xl max-w-[75%] ${
+          item.sender.id === user?.id
+            ? "self-end bg-green ml-auto"
+            : "bg-[#1e2429]"
         }`}
       >
-        {item.content}
-      </Text>
-      <Text
-        className={`text-xs ${
-          item.sender.id === user?.id ? "text-dark" : "text-gray"
-        }`}
-      >
-        {new Date(item.created_at).toLocaleTimeString()}
-      </Text>
+        {item.sender.id !== user?.id && (
+          <Text className="text-gray text-xs ml-3 mt-1">
+            {item.sender.first_name}
+          </Text>
+        )}
+        <View className="p-3">
+          <Text
+            className={`${
+              item.sender.id === user?.id ? "text-dark" : "text-white"
+            }`}
+          >
+            {item.content}
+          </Text>
+          <Text
+            className={`text-xs mt-1 ${
+              item.sender.id === user?.id ? "text-dark" : "text-gray"
+            }`}
+          >
+            {new Date(item.created_at).toLocaleTimeString()}
+          </Text>
+        </View>
+      </View>
+
+      {item.sender.id === user?.id && (
+        <Image
+          source={
+            item.sender.profile_image
+              ? { uri: item.sender.profile_image }
+              : require("@/assets/images/react-logo.png")
+          }
+          className="w-8 h-8 rounded-full ml-2"
+        />
+      )}
     </View>
   );
 
@@ -128,7 +189,6 @@ const GroupChatPage = () => {
               <Ionicons name="close" size={24} color="#b9f144" />
             </Pressable>
           </View>
-
           <FlatList
             data={groupInfo?.members}
             keyExtractor={(item) => item.id.toString()}
@@ -143,9 +203,7 @@ const GroupChatPage = () => {
                   className="w-12 h-12 rounded-full mr-3"
                 />
                 <View className="flex-1">
-                  <Text className="text-white font-bold">
-                    {item.first_name}
-                  </Text>
+                  <Text className="text-white font-bold">{item.name}</Text>
                   {item.is_admin && (
                     <Text className="text-green text-sm">Admin</Text>
                   )}
@@ -157,6 +215,8 @@ const GroupChatPage = () => {
       </View>
     </Modal>
   );
+
+  console.log("Messages dans le rendu:", messages);
 
   return (
     <KeyboardAvoidingView
@@ -195,8 +255,26 @@ const GroupChatPage = () => {
           data={messages}
           renderItem={renderMessage}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ padding: 12 }}
-          inverted
+          contentContainerStyle={{
+            padding: 12,
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
+          inverted={false}
+          onRefresh={loadMessages}
+          refreshing={false}
+          showsVerticalScrollIndicator={true}
+          ref={flatListRef}
+          onContentSizeChange={() => {
+            if (flatListRef.current) {
+              flatListRef.current.scrollToEnd({ animated: false });
+            }
+          }}
+          onLayout={() => {
+            if (flatListRef.current) {
+              flatListRef.current.scrollToEnd({ animated: false });
+            }
+          }}
         />
         <View className="p-4 border-t border-[#394047] flex-row items-center">
           <TextInput

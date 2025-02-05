@@ -22,12 +22,19 @@ export interface Conversation {
     first_name: string;
     last_name: string;
     profile_image: string;
+    cover_image: string;
   };
   unread_messages: number;
   last_message: {
     id: number;
     content: string;
     created_at: string;
+    sender: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      profile_image: string;
+    };
   };
   group?: {
     id: number;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, Pressable, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { groupService } from "@/service/api/group";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 
 type RunningGroupType = {
   id: string;
@@ -20,20 +20,23 @@ const RunningGroup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      setIsLoading(true);
-      try {
-        const groupsData = await groupService.getGroups();
-        setGroups(groupsData);
-      } catch (error) {
-        console.error("Erreur lors du chargement des groupes:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchGroups();
-  }, []);
+  const fetchGroups = async () => {
+    setIsLoading(true);
+    try {
+      const groupsData = await groupService.getGroups();
+      setGroups(groupsData);
+    } catch (error) {
+      console.error("Erreur lors du chargement des groupes:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchGroups();
+    }, [])
+  );
 
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable

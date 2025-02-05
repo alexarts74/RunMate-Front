@@ -4,10 +4,8 @@ import { Conversation } from "@/interface/Conversation";
 import { ConversationItem } from "@/components/messages/ConversationItem";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
-import {
-  directMessageService,
-  groupMessageService,
-} from "@/service/api/message";
+import { directMessageService } from "@/service/api/message";
+import { groupMessageService } from "@/service/api/groupMessage";
 
 const MessagesScreen = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);

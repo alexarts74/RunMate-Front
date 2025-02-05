@@ -4,7 +4,17 @@ class GroupService {
   async getGroups() {
     try {
       const response = await apiClient.get("/running_groups");
-      return response.groups;
+      // Si response est directement le tableau de groupes
+      if (Array.isArray(response)) {
+        return response;
+      }
+
+      // Si les données sont dans response.data
+      if (response.data) {
+        return response.data;
+      }
+
+      return []; // Retourne un tableau vide si pas de données
     } catch (error) {
       console.error("Erreur lors de la récupération des groupes:", error);
       throw error;
@@ -30,7 +40,6 @@ class GroupService {
   async getGroupById(id: string) {
     try {
       const response = await apiClient.get(`/running_groups/${id}`);
-      console.log("getGroupById response:", response);
       return response;
     } catch (error) {
       console.error("Erreur détaillée:", error);
@@ -62,32 +71,6 @@ class GroupService {
     } catch (error) {
       console.error("Erreur détaillée:", error);
       return [];
-    }
-  }
-
-  async getGroupEvents(groupId: string) {
-    try {
-      const response = await apiClient.get(
-        `/running_groups/${groupId}/group_events`
-      );
-      console.log("Events response:", response);
-      return response?.group_events || [];
-    } catch (error) {
-      console.error("Erreur lors de la récupération des événements:", error);
-      return [];
-    }
-  }
-
-  async createGroupEvent(groupId: string, eventData: any) {
-    try {
-      const response = await apiClient.post(
-        `/running_groups/${groupId}/group_events`,
-        { group_event: eventData }
-      );
-      return response;
-    } catch (error) {
-      console.error("Erreur lors de la création de l'événement:", error);
-      throw error;
     }
   }
 

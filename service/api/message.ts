@@ -1,6 +1,5 @@
 import { Conversation } from "@/interface/Conversation";
 import { apiClient } from "./client";
-import { GroupConversation } from "@/interface/Group";
 
 // Service de base avec les méthodes communes
 const baseMessageService = {
@@ -12,7 +11,7 @@ const baseMessageService = {
   },
 };
 
-// Service pour les messages directs
+// Service pour les messages directs uniquement
 export const directMessageService = {
   ...baseMessageService,
 
@@ -31,101 +30,39 @@ export const directMessageService = {
     return response;
   },
 
-  async getAllConversations() {
+  async getAllConversations(lastMessages?: {
+    [key: string]: any;
+  }): Promise<Conversation[]> {
     try {
       const response = await apiClient.get("/messages");
+      console.log("Response brute messages:", response);
 
-      // Récupérer les messages pour chaque conversation
-      const conversationsWithMessages = await Promise.all(
-        response.map(async (conv: any) => {
-          try {
-            const messages = await directMessageService.getConversation(
-              conv.user.id
-            );
-            const lastMessage =
-              messages && messages.length > 0
-                ? {
-                    id: messages[messages.length - 1].id,
-                    content: messages[messages.length - 1].content,
-                    created_at: messages[messages.length - 1].created_at,
-                  }
-                : {
-                    id: 0,
-                    content: "Démarrer une conversation",
-                    created_at: new Date().toISOString(),
-                  };
+      if (!response || !Array.isArray(response)) {
+        return [];
+      }
 
-            return {
-              ...conv,
-              last_message: lastMessage,
-            };
-          } catch (error) {
-            console.error(
-              `Erreur lors de la récupération des messages pour ${conv.user.id}:`,
-              error
-            );
-            return conv;
-          }
-        })
-      );
+      return response
+        .filter((conv: any) => conv && conv.user)
+        .map((conv: any) => {
+          const lastMessage = lastMessages?.[conv.user.id] || {
+            id: "0",
+            content: "Démarrer une conversation",
+            created_at: new Date().toISOString(),
+            sender: conv.user,
+          };
 
-      return conversationsWithMessages;
+          return {
+            id: conv.user.id,
+            type: "individual",
+            name: conv.user.first_name,
+            image: conv.user.profile_image,
+            last_message: lastMessage,
+            unread_messages: conv.unread_messages || 0,
+            user: conv.user,
+          };
+        });
     } catch (error) {
       console.error("Erreur dans getAllConversations:", error);
-      return [];
-    }
-  },
-};
-
-// Service pour les messages de groupe
-export const groupMessageService = {
-  ...baseMessageService,
-
-  async getConversation(groupId: string) {
-    const response = await apiClient.get(
-      `/running_groups/${groupId}/messages/group_index`
-    );
-    console.log("Response group messages avec id:", response);
-    return response.data;
-  },
-
-  async sendMessage(groupId: string, content: string) {
-    const response = await apiClient.post(
-      `/running_groups/${groupId}/messages/create_group_message`,
-      { message: { content } }
-    );
-    return response.data;
-  },
-
-  async getAllGroupConversations() {
-    try {
-      const response = await apiClient.get("/running_groups");
-
-      const memberGroupConversations = response.groups.filter(
-        (group: GroupConversation) => group.is_member
-      );
-
-      const formattedGroups = memberGroupConversations.map((group: any) => ({
-        id: group.id,
-        type: "group",
-        group: {
-          id: group.id,
-          name: group.name,
-          profile_image: group.profile_image,
-          description: group.description,
-        },
-        last_message: {
-          id: group.last_message?.id || 0,
-          content: group.last_message?.content || "Aucun message",
-          created_at:
-            group.last_message?.created_at || new Date().toISOString(),
-        },
-        unread_messages: group.unread_messages || 0,
-      }));
-
-      return formattedGroups;
-    } catch (error) {
-      console.error("Erreur dans getAllGroupConversations:", error);
       return [];
     }
   },
