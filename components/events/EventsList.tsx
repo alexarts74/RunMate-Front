@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, RefreshControl } from "react-native";
 import { eventService } from "@/service/api/event";
 import { EventCard } from "./EventCard";
+import { Event } from "@/interface/Event";
 
 export const EventsList = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
 

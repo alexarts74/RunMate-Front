@@ -51,6 +51,10 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
+    console.log("=== Début requête POST ===");
+    console.log("Endpoint:", endpoint);
+    console.log("Data envoyée:", data);
+
     try {
       const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
@@ -60,17 +64,19 @@ class ApiClient {
         body: JSON.stringify(data),
       });
 
+      console.log("Status de la réponse:", response.status);
       const responseData = await response.json();
+      console.log("Données reçues:", responseData);
+
       if (!response.ok) {
-        throw new Error(responseData.message || "Une erreur est survenue");
+        console.error("Erreur HTTP:", response.status);
+        console.error("Détails de l'erreur:", responseData);
+        throw new Error(`Erreur HTTP: ${response.status}`);
       }
 
       return responseData;
-    } catch (error: any) {
-      console.error("Erreur détaillée:", {
-        message: error.message,
-        stack: error.stack,
-      });
+    } catch (error) {
+      console.error("Erreur dans apiClient.post:", error);
       throw error;
     }
   }

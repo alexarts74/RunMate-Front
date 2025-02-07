@@ -1,53 +1,5 @@
+import { CreateEventData, Event } from "@/interface/Event";
 import { apiClient } from "./client";
-
-interface Creator {
-  id: number;
-  name: string;
-  profile_image: string;
-}
-
-interface Event {
-  id: number;
-  name: string;
-  description: string;
-  start_date: string;
-  location: string;
-  distance: number;
-  pace: string;
-  level: "beginner" | "intermediate" | "advanced";
-  status: string;
-  latitude: number;
-  longitude: number;
-  participants_count: number;
-  max_participants: number;
-  spots_left: number;
-  creator: Creator;
-  is_creator: boolean;
-  is_participant: boolean;
-  can_join: boolean;
-  can_leave: boolean;
-}
-
-interface EventsResponse {
-  events: Event[];
-  total: number;
-  debug?: {
-    total_events: number;
-    upcoming_events: number;
-    filtered_events: number;
-  };
-}
-
-interface CreateEventData {
-  name: string;
-  description: string;
-  start_date: string;
-  location: string;
-  distance: number;
-  pace: string;
-  level: "beginner" | "intermediate" | "advanced";
-  max_participants: number;
-}
 
 class EventService {
   async getAllEvents(): Promise<Event[]> {
@@ -60,20 +12,45 @@ class EventService {
     }
   }
 
-  async joinEvent(eventId: number): Promise<Event> {
+  async joinEvent(eventId: string): Promise<Event> {
     try {
+      console.log("=== Début joinEvent ===");
+      console.log("EventId reçu:", eventId);
+
       const response = await apiClient.post(`/events/${eventId}/join`, {});
+      console.log("Réponse du serveur:", response);
+
       return response;
     } catch (error: any) {
+      console.error("=== Erreur dans joinEvent ===");
+      console.error("Type d'erreur:", error?.constructor?.name);
+      console.error("Status:", error.response?.status);
+      console.error("Response data:", error.response?.data);
+      console.error("Message d'erreur:", error.message);
+      console.error("Stack trace:", error.stack);
+
+      // Gestion plus précise des erreurs
+      if (error.response?.status === 422) {
+        console.log("Détection erreur 422");
+        const errorMessage =
+          error.response?.data?.error ||
+          "Impossible de rejoindre l'événement (vous participez peut-être déjà ou l'événement est complet)";
+        console.log("Message d'erreur formaté:", errorMessage);
+        throw new Error(errorMessage);
+      }
+
       const errorMessage =
-        error.message || "Impossible de rejoindre l'événement";
+        error.response?.data?.error ||
+        error.message ||
+        "Impossible de rejoindre l'événement";
+      console.error("Message d'erreur final:", errorMessage);
       throw new Error(errorMessage);
     }
   }
 
-  async leaveEvent(eventId: number): Promise<{ message: string }> {
+  async leaveEvent(eventId: string): Promise<{ message: string }> {
     try {
-      const response = await apiClient.post(`/events/${eventId}/leave`, {});
+      const response = await apiClient.delete(`/events/${eventId}/leave`);
       return response;
     } catch (error: any) {
       const errorMessage = error.message || "Impossible de quitter l'événement";
@@ -101,6 +78,16 @@ class EventService {
       };
     } catch (error) {
       console.error("Erreur lors de la récupération de mes événements:", error);
+      throw error;
+    }
+  }
+
+  async getEventById(eventId: string): Promise<Event> {
+    try {
+      const response = await apiClient.get(`/events/${eventId}`);
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'événement:", error);
       throw error;
     }
   }

@@ -3,9 +3,6 @@ import { View, Text, ScrollView, Image, Pressable, Alert } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { groupService } from "@/service/api/group";
-import { GroupEvent } from "@/components/group/GroupEvent";
-import { CreateEventForm } from "@/components/group/CreateEventForm";
-import { GroupChat } from "@/components/group/GroupChat";
 
 type GroupDetails = {
   id: string;

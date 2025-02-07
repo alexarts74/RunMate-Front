@@ -6,6 +6,12 @@ export interface Message {
   read: boolean;
   sender_id: string | number;
   recipient_id: string | number;
+  sender: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    profile_image: string;
+  };
 }
 
 export interface ConversationUser {

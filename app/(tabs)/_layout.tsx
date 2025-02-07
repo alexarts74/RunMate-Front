@@ -1,8 +1,19 @@
 import { Tabs } from "expo-router";
 import React from "react";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
+import { router } from "expo-router";
+import { View } from "react-native";
+
+function CreateActionButton({ focused }: { focused: boolean }) {
+  return (
+    <TabBarIcon
+      name="add-outline"
+      color={focused ? "#b9f144" : "#394047"}
+      size={28}
+    />
+  );
+}
 
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
@@ -55,6 +66,19 @@ export default function TabLayout() {
             backgroundColor: "#b9f144",
             color: "#12171b",
           },
+        }}
+      />
+      <Tabs.Screen
+        name="create/index"
+        options={{
+          title: "",
+          tabBarIcon: ({ focused }) => (
+            <View
+              className={`p-3 rounded-full ${focused ? "bg-[#1e2429]" : ""}`}
+            >
+              <CreateActionButton focused={focused} />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen

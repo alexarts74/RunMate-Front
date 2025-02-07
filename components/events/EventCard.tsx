@@ -1,53 +1,64 @@
 import React from "react";
-import { View, Text, Pressable, Alert } from "react-native";
+import { View, Text, Pressable, Alert, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { eventService } from "@/service/api/event";
+import { router } from "expo-router";
+import { Event } from "@/interface/Event";
 
-export const EventCard = ({ event, onEventUpdate }) => {
-  const handleJoinEvent = async () => {
-    try {
-      await eventService.joinEvent(event.id);
-      Alert.alert("Succès", "Vous participez maintenant à cet événement !");
-      onEventUpdate();
-    } catch (error: any) {
-      Alert.alert("Erreur", error.message);
-    }
-  };
-
+export const EventCard = ({ event }: { event: Event }) => {
   return (
-    <View className="bg-[#1e2429] p-4 rounded-xl mb-3">
-      <Text className="text-white font-bold text-lg mb-2">{event.title}</Text>
+    <Pressable
+      onPress={() => router.push(`/events/${event.id}`)}
+      className="bg-[#1e2429] rounded-xl mb-8 overflow-hidden"
+      android_ripple={{ color: "rgba(255, 255, 255, 0.1)" }} // Effet de ripple sur Android
+    >
+      {/* Cover Image */}
+      <Image
+        source={{
+          uri: event.cover_image || "https://via.placeholder.com/400x200",
+        }}
+        className="w-full h-40"
+        style={{ resizeMode: "cover" }}
+      />
 
-      <View className="flex-row items-center mb-2">
-        <Ionicons name="calendar" size={16} color="#b9f144" />
-        <Text className="text-white ml-2">
-          {new Date(event.date).toLocaleDateString()}
+      {/* Content Container */}
+      <View className="p-4">
+        <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
+
+        <View className="flex-row items-center mb-2">
+          <Ionicons name="calendar" size={16} color="#b9f144" />
+          <Text className="text-white ml-2">
+            {new Date(event.start_date).toLocaleDateString()}
+          </Text>
+        </View>
+
+        <Text className="text-white mb-3">
+          {event.description.slice(0, 100)}...
         </Text>
-      </View>
 
-      <Text className="text-white mb-3">{event.description}</Text>
-
-      <View className="flex-row justify-between items-center mb-3">
-        <View className="flex-row items-center">
-          <Ionicons name="location" size={16} color="#b9f144" />
-          <Text className="text-white ml-2">{event.meeting_point}</Text>
+        <View className="flex-row justify-between items-center mb-3">
+          <View className="flex-row items-center">
+            <Ionicons name="location" size={16} color="#b9f144" />
+            <Text className="text-white ml-2">{event.location}</Text>
+          </View>
         </View>
-      </View>
 
-      <View className="flex-row justify-between items-center mb-4">
-        <View className="flex-row items-center">
-          <Ionicons name="speedometer" size={16} color="#b9f144" />
-          <Text className="text-white ml-2">{event.pace} min/km</Text>
+        <View className="flex-row justify-between items-center mb-4">
+          <View className="flex-row items-center">
+            <Ionicons name="trending-up" size={16} color="#b9f144" />
+            <Text className="text-white ml-2">{event.distance} km</Text>
+          </View>
         </View>
-        <View className="flex-row items-center">
-          <Ionicons name="trending-up" size={16} color="#b9f144" />
-          <Text className="text-white ml-2">{event.distance} km</Text>
-        </View>
-      </View>
 
-      <Pressable onPress={handleJoinEvent} className="bg-green py-2 rounded-lg">
-        <Text className="text-center text-[#12171b] font-bold">Participer</Text>
-      </Pressable>
-    </View>
+        <Pressable
+          onPress={() => router.push(`/events/${event.id}`)}
+          className="bg-green py-2 rounded-lg"
+          android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }} // Effet de ripple sur Android
+        >
+          <Text className="text-center text-[#12171b] font-bold">
+            Voir l'événement
+          </Text>
+        </Pressable>
+      </View>
+    </Pressable>
   );
 };

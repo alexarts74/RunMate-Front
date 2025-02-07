@@ -10,6 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { groupMessageService } from "@/service/api/groupMessage";
+import { Message } from "@/interface/Conversation";
 
 interface GroupChatProps {
   groupId: string | number;
@@ -54,7 +55,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
     }
   }, [groupId]);
 
-  const renderMessage = ({ item: message }) => (
+  const renderMessage = ({ item: message }: { item: Message }) => (
     <View className="mb-4">
       <View className="flex-row items-center mb-1">
         <Image
