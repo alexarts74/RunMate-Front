@@ -12,7 +12,6 @@ class ApiClient {
 
   private async getHeaders() {
     const token = await authStorage.getToken();
-    console.log("Token pour headers:", token);
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -25,7 +24,6 @@ class ApiClient {
 
     try {
       const headers = await this.getHeaders();
-      console.log("Headers de la requête:", headers);
 
       const response = await fetch(url, {
         ...options,
@@ -119,15 +117,8 @@ class ApiClient {
 
   async put(endpoint: string, data: any) {
     try {
-      const token = await authStorage.getToken();
-      console.log("Token disponible:", !!token);
-
       const headers = await this.getHeaders();
-      console.log("Headers de la requête:", headers);
-
       const url = `${this.baseUrl}${endpoint}`;
-      console.log("URL de la requête:", url);
-      console.log("Données envoyées:", data);
 
       const response = await this.fetchWithTimeout(url, {
         method: "PUT",
@@ -135,9 +126,7 @@ class ApiClient {
         body: JSON.stringify(data),
       });
 
-      console.log("Status de la réponse:", response.status);
       const responseText = await response.text();
-      console.log("Réponse brute:", responseText);
 
       if (!response.ok) {
         console.error("Erreur HTTP:", response.status);

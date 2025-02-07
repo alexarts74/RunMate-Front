@@ -98,7 +98,7 @@ const RunningGroup = () => {
   );
 
   return (
-    <View className="bg-[#12171b]">
+    <View className="bg-[#12171b] flex-1">
       {isLoading ? (
         <View className="px-5">
           <Text className="text-white text-center">Chargement...</Text>
@@ -109,7 +109,14 @@ const RunningGroup = () => {
           renderItem={renderGroup}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          style={{ height: 500 }}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          ListEmptyComponent={() => (
+            <View className="px-5">
+              <Text className="text-white text-center">
+                Aucun groupe trouvé
+              </Text>
+            </View>
+          )}
         />
       )}
     </View>

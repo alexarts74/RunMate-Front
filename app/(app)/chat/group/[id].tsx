@@ -30,13 +30,9 @@ const GroupChatPage = () => {
 
   const loadMessages = async () => {
     try {
-      console.log("=== Début loadMessages ===");
-      console.log("ID du groupe:", id);
-
       const response = await groupMessageService.getGroupMessages(
         id.toString()
       );
-      console.log("Response complète:", response);
 
       if (response && Array.isArray(response.messages)) {
         console.log("Nombre de messages reçus:", response.messages.length);
@@ -47,7 +43,6 @@ const GroupChatPage = () => {
         setMessages(sortedMessages);
         setGroupMessages(response.group);
       } else {
-        console.log("Format de réponse invalide:", response);
         setMessages([]);
         setGroupMessages(null);
       }
@@ -215,8 +210,6 @@ const GroupChatPage = () => {
       </View>
     </Modal>
   );
-
-  console.log("Messages dans le rendu:", messages);
 
   return (
     <KeyboardAvoidingView

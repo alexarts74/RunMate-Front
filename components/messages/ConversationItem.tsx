@@ -48,7 +48,7 @@ export function ConversationItem({
   return (
     <Pressable
       onPress={handlePress}
-      className="flex-row items-center p-4 border-b border-[#394047] "
+      className="flex-row items-center p-4 border-b border-[#394047]"
     >
       <Image
         source={
@@ -62,36 +62,41 @@ export function ConversationItem({
         }
         className="w-12 h-12 rounded-full"
       />
-      <View className="flex-1 ml-4 gap-y-3">
-        <View className="flex-row justify-between">
-          <Text className="text-white font-bold">
+      <View className="flex-1 ml-4">
+        <View className="flex-row justify-between items-center">
+          <Text className="text-white font-bold flex-1 mr-2" numberOfLines={1}>
             {conversation.type === "group"
               ? conversation.group?.name
               : `${conversation.user?.first_name} `}
           </Text>
-          <Text className="text-white text-xs">
-            {conversation?.last_message?.created_at
-              ? formatDistanceToNow(
-                  new Date(conversation.last_message.created_at),
-                  {
-                    addSuffix: true,
-                    locale: fr,
-                    includeSeconds: true,
-                  }
-                )
-              : ""}
-          </Text>
+          {conversation?.last_message?.created_at && (
+            <Text className="text-white text-xs shrink-0">
+              {formatDistanceToNow(
+                new Date(conversation.last_message.created_at),
+                {
+                  addSuffix: true,
+                  locale: fr,
+                  includeSeconds: true,
+                }
+              )}
+            </Text>
+          )}
         </View>
-        <View className="flex-row justify-between items-center">
+        <View className="flex-row justify-between items-center mt-1">
           <Text
-            className={`flex-1 text-white ${
-              conversation.unread_messages > 0 ? "font-bold" : ""
+            className={`flex-1 ${
+              conversation.unread_messages > 0
+                ? "text-white font-bold"
+                : "text-white"
             }`}
             numberOfLines={1}
           >
-            {conversation.type === "group" && conversation.last_message?.sender
-              ? `${conversation.last_message.sender.first_name}: ${conversation.last_message.content}`
-              : conversation.last_message?.content}
+            {conversation.type === "group" &&
+            conversation.last_message?.sender?.first_name
+              ? `${conversation.last_message.sender.first_name}: ${
+                  conversation.last_message.content || "Message vide"
+                }`
+              : conversation.last_message?.content || "Aucun message"}
           </Text>
           {conversation.unread_messages > 0 && (
             <View className="bg-green rounded-full w-6 h-6 items-center justify-center ml-2">

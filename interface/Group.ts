@@ -8,6 +8,7 @@ export interface GroupMember {
 export interface GroupInfo {
   id: number;
   first_name: string;
+  name?: string;
   members: GroupMember[];
   total_members: number;
   cover_image: string;

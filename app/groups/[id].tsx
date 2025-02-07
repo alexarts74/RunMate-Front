@@ -183,7 +183,7 @@ export default function GroupDetailsScreen() {
               <Pressable
                 onPress={() => {
                   router.push({
-                    pathname: "/messages",
+                    pathname: `/chat/group/${id}`,
                     params: {
                       id: id,
                       type: "group",
@@ -193,28 +193,32 @@ export default function GroupDetailsScreen() {
                     },
                   });
                 }}
-                className="flex-row items-center bg-[#1e2429] p-4 rounded-xl"
+                className="flex-row items-center bg-[#1e2429] p-4 rounded-2xl border border-[#2a3238]"
               >
-                <Image
-                  source={{
-                    uri: group.cover_image || "https://via.placeholder.com/32",
-                  }}
-                  className="w-12 h-12 rounded-full mr-3"
-                />
-                <View className="flex-1">
-                  <View className="flex-row justify-between items-center">
-                    <Text className="text-white font-semibold text-base">
-                      {group.name}
+                <View className="relative">
+                  <Image
+                    source={{
+                      uri:
+                        group.cover_image || "https://via.placeholder.com/32",
+                    }}
+                    className="w-12 h-12 rounded-xl"
+                  />
+                  <View className="absolute -bottom-1 -right-1 bg-green w-4 h-4 rounded-full border-2 border-[#12171b]" />
+                </View>
+
+                <View className="flex-1 ml-4">
+                  <View className="flex-row items-center space-x-2">
+                    <Text className="text-white font-semibold text-base flex-1">
+                      Conversation du groupe
                     </Text>
-                    <Text className="text-gray-400 text-xs">
-                      Groupe • {group.members_count} membres
-                    </Text>
+                    <Ionicons
+                      name="chatbubble-ellipses"
+                      size={20}
+                      color="#b9f144"
+                    />
                   </View>
-                  <Text
-                    className="text-gray-400 text-sm mt-1"
-                    numberOfLines={1}
-                  >
-                    Rejoignez la conversation du groupe
+                  <Text className="text-gray-400 text-sm mt-1">
+                    {group.members_count} membres actifs
                   </Text>
                 </View>
               </Pressable>
@@ -222,8 +226,6 @@ export default function GroupDetailsScreen() {
           )}
         </View>
       </ScrollView>
-
-      {/* Modal de création d'événement */}
 
       {/* Bouton Rejoindre/Quitter */}
 

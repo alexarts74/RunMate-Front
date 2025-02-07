@@ -72,11 +72,8 @@ class GroupMessageService {
 
   // Récupérer tous les groupes
   async getAllGroupConversations() {
-    console.log("Début getAllGroupConversations");
     try {
-      console.log("Tentative d'appel à /running_groups");
       const response = await apiClient.get("/running_groups");
-      console.log("Response brute des groupes:", response);
 
       if (!response) {
         console.log("Réponse vide de l'API");
@@ -88,9 +85,7 @@ class GroupMessageService {
         return [];
       }
 
-      console.log("Début du mapping des groupes");
       const formattedGroups = response.map((group: any) => {
-        console.log("Traitement du groupe:", group);
         return {
           id: group.id,
           type: "group",
@@ -129,12 +124,13 @@ class GroupMessageService {
         };
       });
 
-      console.log("Groupes formatés:", formattedGroups);
-
-      const filteredGroups = formattedGroups.filter(
-        (group: GroupConversation) => group.is_member === true
-      );
-      console.log("Groupes filtrés (membres uniquement):", filteredGroups);
+      const filteredGroups = formattedGroups
+        .filter((group: GroupConversation) => group.is_member === true)
+        .sort((a, b) => {
+          const dateA = new Date(a.last_message?.created_at || 0).getTime();
+          const dateB = new Date(b.last_message?.created_at || 0).getTime();
+          return dateB - dateA;
+        });
 
       return filteredGroups;
     } catch (error) {
