@@ -4,11 +4,12 @@ import { MatchesCarousel } from "@/components/matches/MatchesCarousel";
 import RunningGroup from "@/components/group/RunningGroup";
 import GetPremiumVersion from "@/components/GetPremiumVersion";
 import { Ionicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { EventsList } from "@/components/events/EventsList";
 
 const HomepageScreen = () => {
-  const [activeTab, setActiveTab] = useState<"matches" | "groups">("matches");
-  const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
+    "matches"
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-[#12171b]">
@@ -53,7 +54,29 @@ const HomepageScreen = () => {
                   activeTab === "groups" ? "text-green" : "text-white"
                 }`}
               >
-                Groupes
+                Groups
+              </Text>
+            </View>
+          </Pressable>
+
+          <Pressable
+            onPress={() => setActiveTab("events")}
+            className={`flex-1 py-4 ${
+              activeTab === "events" ? "border-b-2 border-green" : ""
+            }`}
+          >
+            <View className="flex-row items-center justify-center">
+              <Ionicons
+                name="calendar-outline"
+                size={20}
+                color={activeTab === "events" ? "#b9f144" : "#fff"}
+              />
+              <Text
+                className={`ml-2 font-semibold ${
+                  activeTab === "events" ? "text-green" : "text-white"
+                }`}
+              >
+                Events
               </Text>
             </View>
           </Pressable>
@@ -67,7 +90,7 @@ const HomepageScreen = () => {
               </View>
               <GetPremiumVersion />
             </>
-          ) : (
+          ) : activeTab === "groups" ? (
             <>
               <ScrollView>
                 <View className="my-8 h-fit">
@@ -78,6 +101,8 @@ const HomepageScreen = () => {
                 </View>
               </ScrollView>
             </>
+          ) : (
+            <EventsList />
           )}
         </View>
       </View>
