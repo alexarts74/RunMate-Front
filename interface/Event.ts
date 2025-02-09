@@ -11,21 +11,27 @@ export interface Participant {
   is_creator: boolean;
 }
 
-export interface Event {
+export enum EventLevel {
+  BEGINNER = 0,
+  INTERMEDIATE = 1,
+  ADVANCED = 2,
+  EXPERT = 3,
+}
+
+export enum EventStatus {
+  PENDING = 0,
+  ACTIVE = 1,
+  CANCELLED = 2,
+  COMPLETED = 3,
+}
+
+export interface Event extends CreateEventData {
   id: string;
-  name: string;
-  cover_image: string;
-  description: string;
-  start_date: string;
-  location: string;
-  distance: number;
-  level: "beginner" | "intermediate" | "advanced";
-  status: string;
-  latitude: number;
-  longitude: number;
+  creator_id: number;
+  created_at: string;
+  updated_at: string;
   participants: Participant[];
   participants_count: number;
-  max_participants: number;
   spots_left: number;
   creator: Creator;
   is_creator: boolean;
@@ -47,9 +53,13 @@ export interface EventsResponse {
 export interface CreateEventData {
   name: string;
   description: string;
-  start_date: string;
+  start_date: string | Date;
   location: string;
   distance: number;
-  level: "beginner" | "intermediate" | "advanced";
+  level: EventLevel;
   max_participants: number;
+  cover_image: string;
+  latitude: number | null;
+  longitude: number | null;
+  status?: EventStatus; // Optionnel car généralement défini par défaut côté serveur
 }

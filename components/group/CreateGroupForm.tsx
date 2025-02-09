@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Pressable, Alert } from "react-native";
 import { router } from "expo-router";
 import { groupService } from "@/service/api/group";
+import { UserSearch } from "@/components/UserSearch";
+import User from "@/interface/User";
 
-type CreateGroupForm = {
+interface CreateGroupForm {
   name: string;
   description: string;
   location: string;
   max_members: string;
-  level: "beginner" | "intermediate" | "advanced";
-};
+  level: string;
+}
 
 export function CreateGroupForm() {
   const [form, setForm] = useState<CreateGroupForm>({
@@ -20,7 +22,16 @@ export function CreateGroupForm() {
     level: "intermediate",
   });
 
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleUserSelect = (user: User) => {
+    if (selectedUsers.some((u) => u.id === user.id)) {
+      setSelectedUsers(selectedUsers.filter((u) => u.id !== user.id));
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
 
   const handleSubmit = async () => {
     if (
@@ -38,6 +49,7 @@ export function CreateGroupForm() {
       await groupService.createGroup({
         ...form,
         max_members: parseInt(form.max_members),
+        invited_members: selectedUsers.map((user) => user.id),
       });
       Alert.alert("Succès", "Groupe créé avec succès");
       router.back();
@@ -50,94 +62,72 @@ export function CreateGroupForm() {
 
   return (
     <View className="space-y-4">
-      {/* Nom du groupe */}
       <View>
-        <Text className="text-white mb-2">Nom du groupe</Text>
+        <Text className="text-white text-lg mb-2 bg-red-500">
+          Nom du groupe
+        </Text>
         <TextInput
           className="bg-[#1e2429] text-white p-4 rounded-xl"
-          placeholder="Ex: Runners de Sallanches"
-          placeholderTextColor="#6B7280"
+          placeholder="Ex: Coureurs du dimanche"
+          placeholderTextColor="#394047"
           value={form.name}
           onChangeText={(text) => setForm({ ...form, name: text })}
         />
       </View>
 
-      {/* Description */}
       <View>
-        <Text className="text-white mb-2">Description</Text>
+        <Text className="text-white text-lg mb-2">Description</Text>
         <TextInput
           className="bg-[#1e2429] text-white p-4 rounded-xl"
           placeholder="Décrivez votre groupe"
-          placeholderTextColor="#6B7280"
+          placeholderTextColor="#394047"
           multiline
           numberOfLines={4}
+          textAlignVertical="top"
           value={form.description}
           onChangeText={(text) => setForm({ ...form, description: text })}
         />
       </View>
 
-      {/* Localisation */}
       <View>
-        <Text className="text-white mb-2">Localisation</Text>
+        <Text className="text-white text-lg mb-2">Lieu</Text>
         <TextInput
           className="bg-[#1e2429] text-white p-4 rounded-xl"
-          placeholder="Ex: Sallanches, Haute-Savoie"
-          placeholderTextColor="#6B7280"
+          placeholder="Ex: Paris"
+          placeholderTextColor="#394047"
           value={form.location}
           onChangeText={(text) => setForm({ ...form, location: text })}
         />
       </View>
 
-      {/* Nombre max de membres */}
       <View>
-        <Text className="text-white mb-2">Nombre maximum de membres</Text>
+        <Text className="text-white text-lg mb-2">
+          Nombre maximum de membres
+        </Text>
         <TextInput
           className="bg-[#1e2429] text-white p-4 rounded-xl"
           placeholder="Ex: 20"
-          placeholderTextColor="#6B7280"
+          placeholderTextColor="#394047"
           keyboardType="numeric"
           value={form.max_members}
           onChangeText={(text) => setForm({ ...form, max_members: text })}
         />
       </View>
 
-      {/* Niveau */}
       <View>
-        <Text className="text-white mb-2">Niveau</Text>
-        <View className="flex-row justify-between">
-          {["beginner", "intermediate", "advanced"].map((level) => (
-            <Pressable
-              key={level}
-              onPress={() => setForm({ ...form, level: level as any })}
-              className={`flex-1 mx-1 p-3 rounded-xl ${
-                form.level === level ? "bg-green" : "bg-[#1e2429]"
-              }`}
-            >
-              <Text
-                className={`text-center ${
-                  form.level === level ? "text-[#12171b]" : "text-white"
-                }`}
-              >
-                {level === "beginner"
-                  ? "Débutant"
-                  : level === "intermediate"
-                  ? "Intermédiaire"
-                  : "Avancé"}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <Text className="text-white text-lg mb-2">Inviter des membres</Text>
+        <UserSearch
+          onSelectUser={handleUserSelect}
+          selectedUsers={selectedUsers}
+        />
       </View>
 
-      {/* Bouton de création */}
       <Pressable
         onPress={handleSubmit}
         disabled={isLoading}
-        className={`mt-8 p-4 rounded-xl ${
-          isLoading ? "bg-gray-500" : "bg-green"
-        }`}
+        className="bg-green py-3 px-6 rounded-xl active:opacity-90 mx-auto mt-6"
       >
-        <Text className="text-center text-[#12171b] font-bold text-lg">
+        <Text className="text-[#12171b] text-center font-bold text-base">
           {isLoading ? "Création..." : "Créer le groupe"}
         </Text>
       </Pressable>

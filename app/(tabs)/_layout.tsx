@@ -1,24 +1,30 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
-import { router } from "expo-router";
-import { View } from "react-native";
+import { CreateModal } from "@/components/modals/CreateModal";
 
 function CreateActionButton({ focused }: { focused: boolean }) {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <TabBarIcon
-      name="add-outline"
-      color={focused ? "#b9f144" : "#394047"}
-      size={28}
-    />
+    <>
+      <TabBarIcon
+        name="add-outline"
+        color={focused ? "#b9f144" : "#394047"}
+        size={28}
+        onPress={() => setModalVisible(true)}
+      />
+      <CreateModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
+    </>
   );
 }
 
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
-
-  // console.log("unreadCount", unreadCount);
 
   return (
     <Tabs
@@ -71,14 +77,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="create/index"
         options={{
-          title: "",
-          tabBarIcon: ({ focused }) => (
-            <View
-              className={`p-3 rounded-full ${focused ? "bg-[#1e2429]" : ""}`}
-            >
-              <CreateActionButton focused={focused} />
-            </View>
-          ),
+          title: "Create",
+          tabBarIcon: ({ focused }) => <CreateActionButton focused={focused} />,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Empêcher la navigation
+            e.preventDefault();
+          },
         }}
       />
       <Tabs.Screen

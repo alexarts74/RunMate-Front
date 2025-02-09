@@ -22,6 +22,11 @@ export const EventCard = ({ event }: { event: Event }) => {
 
       {/* Content Container */}
       <View className="p-4">
+        <View className="flex-row justify-between items-center mb-2">
+          {event.is_creator && (
+            <Text className="text-green font-bold text-lg mb-2">Créateur</Text>
+          )}
+        </View>
         <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
 
         <View className="flex-row items-center mb-2">

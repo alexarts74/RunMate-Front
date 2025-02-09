@@ -150,8 +150,54 @@ class GroupMessageService {
     });
     return response;
   }
+
+  // Récupérer le nombre total de messages non lus pour tous les groupes
+  async getUnreadCount() {
+    try {
+      const conversations = await this.getAllGroupConversations();
+      const totalUnread = conversations.reduce(
+        (sum, conv) => sum + (conv.unread_messages || 0),
+        0
+      );
+      return totalUnread;
+    } catch (error) {
+      console.error("Erreur lors du comptage des messages non lus:", error);
+      return 0;
+    }
+  }
+
+  // Marquer tous les messages d'un groupe comme lus
+  async markGroupMessagesAsRead(groupId: string | number) {
+    try {
+      const response = await apiClient.post(
+        `/running_groups/${groupId}/messages/mark_as_read`,
+        {
+          message: {
+            read: true,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Erreur lors du marquage des messages comme lus:", error);
+      throw error;
+    }
+  }
+
+  // Mettre à jour le compteur de messages non lus
+  async refreshUnreadCount() {
+    try {
+      const conversations = await this.getAllGroupConversations();
+      const unreadCount = conversations.reduce(
+        (sum, conv) => sum + (conv.unread_messages || 0),
+        0
+      );
+      return unreadCount;
+    } catch (error) {
+      console.error("Erreur lors du rafraîchissement du compteur:", error);
+      return 0;
+    }
+  }
 }
 
-console.log("Création de l'instance groupMessageService");
 export const groupMessageService = new GroupMessageService();
-console.log("Instance groupMessageService créée:", groupMessageService);

@@ -9,7 +9,6 @@ export default function CreateGroupScreen() {
     <View className="flex-1 bg-[#12171b] pt-14">
       <ScrollView>
         <View className="p-5">
-          {/* Header avec bouton retour */}
           <View className="flex-row items-center mb-6">
             <Pressable
               onPress={() => router.back()}

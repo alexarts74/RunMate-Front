@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import messageService from "@/service/api/message";
+
 import { useAuth } from "@/context/AuthContext";
+import { directMessageService } from "@/service/api/message";
 
 type UnreadMessagesContextType = {
   unreadCount: number;
@@ -37,16 +38,16 @@ export function UnreadMessagesProvider({
         return;
       }
 
-      const conversations = await messageService.getAllConversations();
+      const conversations = await directMessageService.getAllConversations();
       const totalUnread = conversations.reduce(
-        (sum, conv) => sum + conv.unread_messages,
+        (sum: number, conv: any) => sum + conv.unread_messages,
         0
       );
       setUnreadCount(totalUnread);
 
       // Mettre à jour les derniers messages
       const messagesMap = conversations.reduce(
-        (acc, conv) => ({
+        (acc: { [key: string]: any }, conv: any) => ({
           ...acc,
           [conv.user.id]: conv.last_message,
         }),
