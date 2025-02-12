@@ -2,10 +2,6 @@ import { GroupConversation } from "@/interface/Group";
 import { apiClient } from "./client";
 
 class GroupMessageService {
-  constructor() {
-    console.log("GroupMessageService instancié");
-  }
-
   // Récupérer tous les messages d'un groupe
   async getGroupMessages(groupId: number | string) {
     try {
@@ -18,7 +14,6 @@ class GroupMessageService {
 
       // Si response est undefined ou null, retourner une structure par défaut
       if (!response) {
-        console.log("Response est null/undefined");
         return {
           group: null,
           messages: [],
@@ -59,7 +54,6 @@ class GroupMessageService {
         }
       );
 
-      console.log("Réponse brute du serveur:", response);
       return response.data;
     } catch (error) {
       console.error(
@@ -76,12 +70,10 @@ class GroupMessageService {
       const response = await apiClient.get("/running_groups");
 
       if (!response) {
-        console.log("Réponse vide de l'API");
         return [];
       }
 
       if (!Array.isArray(response)) {
-        console.log("La réponse n'est pas un tableau:", response);
         return [];
       }
 

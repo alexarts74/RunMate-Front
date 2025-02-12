@@ -32,7 +32,7 @@ export const EventCard = ({
           {event.is_creator ? (
             <Text className="text-green font-bold text-lg mb-2">Créateur</Text>
           ) : event.is_participant ? (
-            <Text className="text-blue-400 font-bold text-lg mb-2">
+            <Text className="text-orange-400 font-bold text-lg mb-2">
               Participant
             </Text>
           ) : null}

@@ -75,13 +75,10 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
 
   const DistanceFilter = () => (
     <View className="bg-[#12171b] py-3">
-      <Text className="text-white text-center text-lg mb-2">
-        Filtrer par distance
-      </Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        className="px-4"
+        className="px-4 mt-4"
       >
         <View className="flex-row gap-2">
           {distances.map((item) => (
