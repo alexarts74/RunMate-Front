@@ -23,28 +23,22 @@ export function NotificationsProvider({
   const router = useRouter();
 
   const registerForPushNotifications = async () => {
-    console.log("🚀 Démarrage enregistrement notifications dans le Context");
     const token = await pushNotificationService.registerForPushNotifications();
-    console.log("✅ Token reçu dans le Context:", token);
     setHasPermission(!!token);
   };
 
   useEffect(() => {
     registerForPushNotifications();
-    console.log("👂 Mise en place des écouteurs de notifications");
-
     // Écouteur pour les notifications reçues quand l'app est ouverte
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        const data = notification.request.content.data;
-        console.log("📬 Notification reçue (app ouverte):", data);
+        notification.request.content.data;
       });
 
     // Écouteur pour les clics sur les notifications
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const data = response.notification.request.content.data;
-        console.log("👆 Clic sur notification:", data);
 
         if (data.message_id) {
           router.push(`/(app)/chat/${data.sender_id}`);
@@ -52,7 +46,6 @@ export function NotificationsProvider({
       });
 
     return () => {
-      console.log("🧹 Nettoyage des écouteurs de notifications");
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );

@@ -25,7 +25,7 @@ export enum EventStatus {
   COMPLETED = 3,
 }
 
-export interface Event extends CreateEventData {
+export interface Event extends CreateEventData, EventsResponse {
   id: string;
   creator_id: number;
   created_at: string;

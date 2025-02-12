@@ -34,30 +34,21 @@ export const directMessageService = {
     [key: string]: any;
   }): Promise<Conversation[]> {
     try {
-      console.log("=== Début getAllConversations ===");
       const response = await apiClient.get("/messages");
-      console.log("Response brute messages:", response);
 
       if (!response || !Array.isArray(response)) {
-        console.log("Response invalide ou vide");
         return [];
       }
 
       const conversations = response
         .filter((conv: any) => {
-          console.log("Conversation brute:", conv);
           const isValid = conv && conv.user;
           if (!isValid) {
-            console.log("Conversation invalide ignorée:", conv);
+            return false;
           }
           return isValid;
         })
         .map((conv: any) => {
-          console.log("=== Traitement conversation ===");
-          console.log("User:", conv.user);
-          console.log("Last message from API:", conv.last_message);
-          console.log("Unread messages:", conv.unread_messages);
-
           const lastMessage = conv.last_message ||
             lastMessages?.[conv.user.id] || {
               id: "0",
@@ -65,8 +56,6 @@ export const directMessageService = {
               created_at: new Date().toISOString(),
               sender: conv.user,
             };
-
-          console.log("Last message final:", lastMessage);
 
           return {
             id: conv.user.id,
@@ -84,13 +73,9 @@ export const directMessageService = {
           return dateB - dateA;
         });
 
-      console.log("Conversations triées:", conversations);
       return conversations;
     } catch (error) {
-      console.error("=== Erreur dans getAllConversations ===");
-      console.error("Type d'erreur:", error?.constructor?.name);
-      console.error("Message d'erreur:", error?.message);
-      console.error("Stack trace:", error?.stack);
+      console.error("Erreur lors de la récupération des conversations:", error);
       return [];
     }
   },

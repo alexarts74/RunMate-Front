@@ -39,8 +39,6 @@ export default function AuthenticationGuard({
       const isIndex = segments.length === 0 || (segments[0] as string) === "";
 
       if (isAuthenticated) {
-        // console.log("isAuthenticated", isAuthenticated);
-        // console.log("user", user?.runner_profile);
         if (segments[0] === "(auth)/signup" && !user?.runner_profile) {
           router.replace("/(app)/runner/runner-profile");
         } else if (inAuthGroup || isIndex) {

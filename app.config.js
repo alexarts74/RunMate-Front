@@ -24,7 +24,7 @@ export default {
       output: "static",
       favicon: "./assets/images/favicon.png",
     },
-    plugins: ["expo-router", "expo-image-picker"],
+    plugins: ["expo-router", "expo-image-picker", "expo-location"],
     experiments: {
       typedRoutes: true,
     },

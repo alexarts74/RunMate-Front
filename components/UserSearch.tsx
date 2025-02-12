@@ -6,17 +6,12 @@ import {
   Pressable,
   FlatList,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { userService } from "@/service/api/user";
 import { debounce } from "lodash";
-
-interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  profile_image: string;
-}
+import User from "@/interface/User";
 
 interface UserSearchProps {
   onSelectUser: (user: User) => void;
@@ -29,7 +24,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
   const [isSearching, setIsSearching] = useState(false);
 
   const searchUsers = debounce(async (query: string) => {
-    if (query.length < 2) {
+    if (query.length < 0) {
       setSearchResults([]);
       return;
     }
@@ -37,13 +32,17 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
     try {
       setIsSearching(true);
       const results = await userService.searchUsers(query);
-      // Filtrer les utilisateurs déjà sélectionnés
-      const filteredResults = results.filter(
-        (user) => !selectedUsers.some((selected) => selected.id === user.id)
-      );
-      setSearchResults(filteredResults);
+      if (Array.isArray(results)) {
+        const filteredResults = results.filter(
+          (user) => !selectedUsers.some((selected) => selected.id === user.id)
+        );
+        setSearchResults(filteredResults);
+      } else {
+        setSearchResults([]);
+      }
     } catch (error) {
       console.error("Erreur recherche utilisateurs:", error);
+      setSearchResults([]);
     } finally {
       setIsSearching(false);
     }
@@ -65,35 +64,43 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
         />
       </View>
 
-      {/* Résultats de recherche */}
-      {searchResults.length > 0 && (
-        <View className="bg-[#1e2429] rounded-xl mt-2 max-h-40">
-          <FlatList
-            data={searchResults}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => {
-                  onSelectUser(item);
-                  setSearchQuery("");
-                  setSearchResults([]);
-                }}
-                className="flex-row items-center p-3 border-b border-[#394047]"
-              >
-                <Image
-                  source={{ uri: item.profile_image }}
-                  className="w-8 h-8 rounded-full"
-                />
-                <Text className="text-white ml-3">
-                  {item.first_name} {item.last_name}
-                </Text>
-              </Pressable>
-            )}
-          />
+      {isSearching ? (
+        <View className="bg-[#1e2429] rounded-xl mt-2 p-4">
+          <ActivityIndicator color="#394047" />
         </View>
+      ) : (
+        searchResults.length > 0 && (
+          <View
+            className="bg-[#1e2429] rounded-xl mt-2"
+            style={{ maxHeight: 200 }}
+          >
+            <FlatList
+              data={searchResults}
+              keyExtractor={(item) => item.id.toString()}
+              nestedScrollEnabled={true}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => {
+                    onSelectUser(item);
+                    setSearchQuery("");
+                    setSearchResults([]);
+                  }}
+                  className="flex-row items-center p-3 border-b border-[#394047]"
+                >
+                  <Image
+                    source={{ uri: item.profile_image }}
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <Text className="text-white ml-3">
+                    {item.first_name} {item.last_name}
+                  </Text>
+                </Pressable>
+              )}
+            />
+          </View>
+        )
       )}
 
-      {/* Utilisateurs sélectionnés */}
       {selectedUsers.length > 0 && (
         <View className="mt-4">
           <Text className="text-white text-lg mb-2">Participants invités</Text>
@@ -108,14 +115,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                   className="w-6 h-6 rounded-full"
                 />
                 <Text className="text-white mx-2">{user.first_name}</Text>
-                <Pressable
-                  onPress={() => {
-                    const newSelectedUsers = selectedUsers.filter(
-                      (u) => u.id !== user.id
-                    );
-                    onSelectUser(user);
-                  }}
-                >
+                <Pressable onPress={() => onSelectUser(user)}>
                   <Ionicons name="close-circle" size={20} color="#394047" />
                 </Pressable>
               </View>

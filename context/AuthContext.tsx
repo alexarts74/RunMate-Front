@@ -27,12 +27,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const user = await authStorage.getUser();
 
       if (!token || !user) {
-        console.log("❌ Pas de token ou user dans le storage");
         await cleanStorage();
         return false;
       }
-
-      console.log("✅ Token et user trouvés dans le storage");
       return true;
     } catch (error) {
       console.error("Erreur checkAuth:", error);
@@ -145,7 +142,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = await authStorage.getToken();
       if (!token) {
-        console.log("❌ Pas de token pour getUser");
         return;
       }
 
@@ -161,11 +157,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await authStorage.storeUser(freshUserData);
         setUser(freshUserData);
         setIsAuthenticated(true);
-        console.log("✅ Données utilisateur mises à jour depuis l'API");
       }
     } catch (error: any) {
       if (error?.status === 401) {
-        console.log("❌ Token expiré ou invalide");
         await cleanStorage();
         router.replace("/login");
         return;

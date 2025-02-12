@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import { eventService } from "@/service/api/event";
 import { CreateEventData } from "@/interface/Event";
 import { UserSearch } from "@/components/UserSearch";
 import User from "@/interface/User";
+import { debounce } from "lodash";
+import * as Location from "expo-location";
 
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
@@ -22,6 +24,14 @@ enum EventLevel {
   INTERMEDIATE = 1,
   ADVANCED = 2,
   EXPERT = 3,
+}
+
+interface LocationSuggestion {
+  city: string;
+  postcode: string;
+  coordinates: [number, number];
+  full_name: string;
+  street?: string;
 }
 
 export default function CreateEventScreen() {
@@ -41,6 +51,7 @@ export default function CreateEventScreen() {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
 
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -55,12 +66,133 @@ export default function CreateEventScreen() {
     }
   };
 
+  const geocodeLocation = useCallback(
+    debounce(async (address: string) => {
+      try {
+        const result = await Location.geocodeAsync(address);
+        if (result.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            latitude: result[0].latitude,
+            longitude: result[0].longitude,
+          }));
+        }
+      } catch (error) {
+        console.error("Erreur de géocodage:", error);
+      }
+    }, 1000),
+    []
+  );
+
+  const searchLocation = useCallback(
+    debounce(async (text: string) => {
+      if (text.length < 3) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(
+          text
+        )}&limit=15`;
+        const response = await fetch(url);
+
+        // Vérifier si la réponse est ok
+        if (!response.ok) {
+          console.error("Erreur API:", response.status, response.statusText);
+          const text = await response.text();
+          console.error("Réponse brute:", text);
+          setSuggestions([]);
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.features || data.features.length === 0) {
+          setSuggestions([]);
+          return;
+        }
+
+        const formattedSuggestions = data.features
+          .filter((feature: any) => {
+            const props = feature.properties;
+            return props && props.city;
+          })
+          .map((feature: any) => {
+            const props = feature.properties;
+            return {
+              city: props.city,
+              postcode: props.postcode,
+              street: props.name,
+              coordinates: feature.geometry.coordinates.reverse(), // [lat, lng]
+              full_name: formatAddress(props),
+            };
+          });
+
+        setSuggestions(formattedSuggestions);
+      } catch (error) {
+        console.error("Erreur lors de la recherche:", error);
+        if (error instanceof Error) {
+          console.error("Message d'erreur:", error.message);
+          console.error("Stack:", error.stack);
+        }
+        setSuggestions([]);
+      }
+    }, 300),
+    []
+  );
+
+  const formatAddress = (properties: any) => {
+    const parts = [];
+
+    if (properties.name) {
+      parts.push(properties.name);
+    }
+
+    if (
+      properties.housenumber &&
+      !properties.name?.includes(properties.housenumber)
+    ) {
+      parts.push(properties.housenumber);
+    }
+
+    if (properties.street && !properties.name?.includes(properties.street)) {
+      parts.push(properties.street);
+    }
+
+    if (properties.city) {
+      if (properties.postcode) {
+        if (!properties.name?.includes(properties.city)) {
+          parts.push(`${properties.city} (${properties.postcode})`);
+        } else {
+          parts.push(`(${properties.postcode})`);
+        }
+      } else {
+        if (!properties.name?.includes(properties.city)) {
+          parts.push(properties.city);
+        }
+      }
+    }
+
+    return parts.filter(Boolean).join(", ");
+  };
+
   const handleUserSelect = (user: User) => {
     if (selectedUsers.some((u) => u.id === user.id)) {
       setSelectedUsers(selectedUsers.filter((u) => u.id !== user.id));
     } else {
       setSelectedUsers([...selectedUsers, user]);
     }
+  };
+
+  const handleSelectLocation = (suggestion: LocationSuggestion) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: suggestion.full_name,
+      latitude: suggestion.coordinates[0],
+      longitude: suggestion.coordinates[1],
+    }));
+    setSuggestions([]);
   };
 
   const handleSubmit = async () => {
@@ -71,8 +203,7 @@ export default function CreateEventScreen() {
         max_participants: parseInt(formData.max_participants),
         invited_users: selectedUsers.map((user) => user.id),
       };
-      const response = await eventService.createEvent(eventData);
-      console.log("Réponse du serveur:", response);
+      await eventService.createEvent(eventData);
       router.back();
     } catch (error) {
       console.error("Erreur lors de la création de l'événement:", error);
@@ -195,13 +326,29 @@ export default function CreateEventScreen() {
             <Text className="text-white text-lg mb-2">Lieu</Text>
             <TextInput
               className="bg-[#1e2429] text-white p-4 rounded-xl"
-              placeholder="Ex: Parc des Sports"
+              placeholder="Rechercher une adresse..."
               placeholderTextColor="#394047"
               value={formData.location}
-              onChangeText={(text) =>
-                setFormData({ ...formData, location: text })
-              }
+              onChangeText={(text) => {
+                setFormData((prev) => ({ ...prev, location: text }));
+                searchLocation(text);
+              }}
             />
+
+            {suggestions.length > 0 && (
+              <View className="bg-[#1e2429] mt-1 rounded-xl overflow-hidden absolute w-full z-10">
+                {suggestions.map((suggestion, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => handleSelectLocation(suggestion)}
+                    className="p-4 border-b border-[#394047]"
+                    android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
+                  >
+                    <Text className="text-white">{suggestion.full_name}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            )}
           </View>
 
           {/* Distance */}

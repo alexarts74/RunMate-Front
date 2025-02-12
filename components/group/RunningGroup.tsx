@@ -48,7 +48,7 @@ const RunningGroup = () => {
         shadowRadius: 3.84,
         elevation: 5,
       }}
-      onPress={() => router.push(`/groups/${item.id}`)}
+      onPress={() => router.push(`/chat/group/${item.id}`)}
     >
       <Image
         source={
@@ -60,35 +60,20 @@ const RunningGroup = () => {
         style={{ resizeMode: "cover" }}
       />
 
-      <View className="absolute top-2 left-2 bg-green/90 px-3 py-1 rounded-full">
-        <Text className="text-[#12171b] text-xs font-bold">
-          {item.level === "beginner"
-            ? "Débutant"
-            : item.level === "intermediate"
-            ? "Intermédiaire"
-            : "Avancé"}
-        </Text>
-      </View>
-
       <View className="p-4">
         <Text className="text-white font-bold text-lg mb-2">{item.name}</Text>
-
-        <View className="flex-row items-center mb-3">
-          <Ionicons name="location" size={16} color="#b9f144" />
-          <Text className="text-white text-sm ml-2">{item.location}</Text>
-        </View>
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
             <Ionicons name="people" size={16} color="#b9f144" />
             <Text className="text-white text-sm ml-2">
-              {item.members_count}/{item.max_members} membres
+              {item.members_count} membres
             </Text>
           </View>
 
           <Pressable
             className="bg-green/20 px-4 py-2 rounded-lg"
-            onPress={() => router.push(`/groups/${item.id}`)}
+            onPress={() => router.push(`/chat/group/${item.id}`)}
           >
             <Text className="text-green font-semibold">Voir le groupe</Text>
           </Pressable>

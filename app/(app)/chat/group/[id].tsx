@@ -35,7 +35,6 @@ const GroupChatPage = () => {
       );
 
       if (response && Array.isArray(response.messages)) {
-        console.log("Nombre de messages reçus:", response.messages.length);
         const sortedMessages = [...response.messages].sort(
           (a, b) =>
             new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -64,7 +63,6 @@ const GroupChatPage = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect déclenché avec id:", id);
     loadMessages();
     loadGroupInfo();
   }, [id]);
@@ -72,9 +70,6 @@ const GroupChatPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        console.log("Envoi du message:", newMessage);
-        console.log("User actuel:", user);
-
         const tempMessage: GroupMessage = {
           id: Date.now(),
           content: newMessage,
@@ -86,21 +81,13 @@ const GroupChatPage = () => {
           },
         };
 
-        console.log("Message temporaire créé:", tempMessage);
         setMessages((prevMessages) => {
-          console.log("Messages précédents:", prevMessages);
           return [...prevMessages, tempMessage];
         });
 
         setNewMessage("");
 
-        console.log("Envoi au serveur...");
-        const response = await groupMessageService.sendGroupMessage(
-          id.toString(),
-          newMessage
-        );
-        console.log("Réponse du serveur après envoi:", response);
-
+        await groupMessageService.sendGroupMessage(id.toString(), newMessage);
         await loadMessages();
       } catch (error) {
         console.error("Erreur détaillée lors de l'envoi:", error);

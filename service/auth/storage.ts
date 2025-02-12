@@ -7,7 +7,6 @@ export const authStorage = {
   async storeToken(token: string) {
     try {
       if (!token) {
-        console.log("Pas de token à stocker");
         return;
       }
       await AsyncStorage.setItem(TOKEN_KEY, token);
@@ -70,10 +69,7 @@ export const authStorage = {
   async getAllKeys() {
     try {
       const keys = await AsyncStorage.getAllKeys();
-      const values = await AsyncStorage.multiGet(keys);
-      values.forEach(([key, value]) => {
-        console.log(`${key}:`, value);
-      });
+      await AsyncStorage.multiGet(keys);
     } catch (error) {
       console.error("Erreur lors de la lecture des clés:", error);
     }

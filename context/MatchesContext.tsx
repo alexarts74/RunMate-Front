@@ -24,13 +24,11 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const refreshMatches = async () => {
     try {
       if (!isAuthenticated) {
-        console.log("Utilisateur non authentifié, skip refreshMatches");
         setMatches([]);
         return;
       }
 
       if (!user?.runner_profile) {
-        console.log("Pas de profil runner, skip refreshMatches");
         setMatches([]);
         return;
       }
@@ -51,7 +49,6 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
 
   const applyFilters = async (filters: MatchFilters) => {
     try {
-      console.log("🔍 Filtres appliqués:", filters);
       setIsLoading(true);
       setCurrentFilters(filters);
       const filteredMatches = await matchesService.applyFilters(filters);

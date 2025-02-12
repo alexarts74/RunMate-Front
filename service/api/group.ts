@@ -1,3 +1,4 @@
+import { GroupInfoCreate } from "@/interface/Group";
 import { apiClient } from "./client";
 
 class GroupService {
@@ -21,13 +22,7 @@ class GroupService {
     }
   }
 
-  async createGroup(data: {
-    name: string;
-    description: string;
-    location: string;
-    max_members: number;
-    level: string;
-  }) {
+  async createGroup(data: GroupInfoCreate) {
     try {
       const response = await apiClient.post("/running_groups", data);
       return response.data;

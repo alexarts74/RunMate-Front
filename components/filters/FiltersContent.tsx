@@ -38,8 +38,6 @@ export function FiltersContent() {
     }
   };
 
-  console.log(filters.distance);
-
   return (
     <>
       {/* Filtres d'âge */}

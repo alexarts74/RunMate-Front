@@ -9,10 +9,6 @@ type MatchCardProps = {
 };
 
 export function MatchCard({ match }: MatchCardProps) {
-  const handleSendMessage = () => {
-    router.push(`/chat/${match.user.id}`);
-  };
-
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
@@ -45,7 +41,7 @@ export function MatchCard({ match }: MatchCardProps) {
         </View>
 
         <Pressable
-          onPress={handleSendMessage}
+          onPress={() => router.push(`/chat/${match.user.id}`)}
           className="p-3 mt-3 rounded-full"
         >
           <Ionicons name="mail-outline" size={24} color="white" />

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, SafeAreaView, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+} from "react-native";
 import { MatchesCarousel } from "@/components/matches/MatchesCarousel";
 import RunningGroup from "@/components/group/RunningGroup";
 import GetPremiumVersion from "@/components/GetPremiumVersion";
@@ -10,6 +17,8 @@ const HomepageScreen = () => {
   const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
     "matches"
   );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [eventsType, setEventsType] = useState<"all" | "my">("all");
 
   return (
     <SafeAreaView className="flex-1 bg-[#12171b]">
@@ -60,7 +69,7 @@ const HomepageScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={() => setActiveTab("events")}
+            onPress={() => setModalVisible(true)}
             className={`flex-1 py-4 ${
               activeTab === "events" ? "border-b-2 border-green" : ""
             }`}
@@ -102,10 +111,56 @@ const HomepageScreen = () => {
               </ScrollView>
             </>
           ) : (
-            <EventsList />
+            <EventsList eventsType={eventsType} />
           )}
         </View>
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-background m-5 p-5 rounded-2xl w-[80%] bg-[#12171b]">
+            <Text className="text-white text-xl font-bold mb-6 text-center">
+              Sélectionner les events
+            </Text>
+
+            <Pressable
+              onPress={() => {
+                setEventsType("my");
+                setActiveTab("events");
+                setModalVisible(false);
+              }}
+              className="py-4 mb-3 bg-[#2a3238] rounded-xl"
+            >
+              <Text className="text-white text-lg text-center">Mes Events</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                setEventsType("all");
+                setActiveTab("events");
+                setModalVisible(false);
+              }}
+              className="py-4 mb-6 bg-[#2a3238] rounded-xl"
+            >
+              <Text className="text-white text-lg text-center">
+                Tous les Events
+              </Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => setModalVisible(false)}
+              className="bg-green py-4 rounded-xl"
+            >
+              <Text className="text-black text-center font-bold">Fermer</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -12,7 +12,6 @@ export const authService = {
   },
 
   async login(credentials: { email: string; password: string }) {
-    console.log("login", credentials);
     return await apiClient.post("/users/log_in", { user: credentials });
   },
 

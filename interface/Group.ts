@@ -14,6 +14,14 @@ export interface GroupInfo {
   cover_image: string;
 }
 
+export interface GroupInfoCreate {
+  name: string;
+  description: string;
+  location: string;
+  max_members: number;
+  level: string;
+}
+
 export interface GroupMessage {
   id: number;
   content: string;

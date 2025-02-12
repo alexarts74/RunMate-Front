@@ -127,8 +127,6 @@ export default function SignUpForm() {
         ...locationData,
       };
 
-      console.log("Updated form data:", updatedFormData);
-
       // 3. Envoyer l'inscription
       const response = await authService.signUp(updatedFormData);
 

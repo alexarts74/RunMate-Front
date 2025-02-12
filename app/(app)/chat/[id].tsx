@@ -43,7 +43,6 @@ const ChatPage = () => {
   useEffect(() => {
     const initChat = async () => {
       try {
-        console.log("id:", id);
         const response = await directMessageService.getConversation(
           id.toString()
         );

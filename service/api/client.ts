@@ -51,10 +51,6 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
-    console.log("=== Début requête POST ===");
-    console.log("Endpoint:", endpoint);
-    console.log("Data envoyée:", data);
-
     try {
       const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
@@ -64,9 +60,7 @@ class ApiClient {
         body: JSON.stringify(data),
       });
 
-      console.log("Status de la réponse:", response.status);
       const responseData = await response.json();
-      console.log("Données reçues:", responseData);
 
       if (!response.ok) {
         console.error("Erreur HTTP:", response.status);
@@ -81,7 +75,7 @@ class ApiClient {
     }
   }
 
-  async get(endpoint: string, config?: { headers?: any }) {
+  async get(endpoint: string, config?: { headers?: any; params?: any }) {
     try {
       const defaultHeaders = await this.getHeaders();
       const headers = {
@@ -89,7 +83,25 @@ class ApiClient {
         ...(config?.headers || {}),
       };
 
-      const url = `${this.baseUrl}${endpoint}`;
+      // Construire l'URL avec les query parameters
+      let url = `${this.baseUrl}${endpoint}`;
+      if (config?.params) {
+        const queryParams = new URLSearchParams();
+
+        // Debug log avant transformation
+        Object.entries(config.params).forEach(([key, value]) => {
+          if (typeof value === "object") {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+              const paramKey = `${key}[${subKey}]`;
+              queryParams.append(paramKey, String(subValue));
+            });
+          } else {
+            queryParams.append(key, String(value));
+          }
+        });
+
+        url += `?${queryParams.toString()}`;
+      }
 
       const response = await this.fetchWithTimeout(url, {
         method: "GET",
@@ -99,11 +111,6 @@ class ApiClient {
       const responseData = await response.json();
 
       if (!response.ok) {
-        console.error("Réponse non OK:", {
-          status: response.status,
-          statusText: response.statusText,
-          data: responseData,
-        });
         throw new Error(
           responseData.message || `Erreur HTTP: ${response.status}`
         );

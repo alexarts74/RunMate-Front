@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text, Pressable, Alert, Image } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Event } from "@/interface/Event";
 
-export const EventCard = ({ event }: { event: Event }) => {
+export const EventCard = ({
+  event,
+  onEventUpdate,
+}: {
+  event: Event;
+  onEventUpdate: () => void;
+}) => {
   return (
     <Pressable
       onPress={() => router.push(`/events/${event.id}`)}
@@ -23,9 +29,13 @@ export const EventCard = ({ event }: { event: Event }) => {
       {/* Content Container */}
       <View className="p-4">
         <View className="flex-row justify-between items-center mb-2">
-          {event.is_creator && (
+          {event.is_creator ? (
             <Text className="text-green font-bold text-lg mb-2">Créateur</Text>
-          )}
+          ) : event.is_participant ? (
+            <Text className="text-blue-400 font-bold text-lg mb-2">
+              Participant
+            </Text>
+          ) : null}
         </View>
         <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
 
@@ -37,7 +47,9 @@ export const EventCard = ({ event }: { event: Event }) => {
         </View>
 
         <Text className="text-white mb-3">
-          {event.description.slice(0, 100)}...
+          {event.description
+            ? event.description.slice(0, 100) + "..."
+            : "Aucune description"}
         </Text>
 
         <View className="flex-row justify-between items-center mb-3">
