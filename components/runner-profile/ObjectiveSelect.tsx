@@ -1,6 +1,6 @@
 import React from "react";
 import { SelectList } from "react-native-dropdown-select-list";
-
+import { View, Text } from "react-native";
 const objectiveOptions = [
   {
     key: "5km_sous_25min",
@@ -42,31 +42,37 @@ type Props = {
 
 export function ObjectiveSelect({ handleChange }: Props) {
   return (
-    <SelectList
-      setSelected={(selectedValue: string) => {
-        // selectedValue sera la clé (key) car save="key"
-        handleChange("objective", selectedValue);
-      }}
-      data={objectiveOptions}
-      save="key"
-      placeholder="Votre objectif"
-      boxStyles={{
-        borderWidth: 1,
-        borderColor: "#394047",
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 16,
-        backgroundColor: "#12171b",
-      }}
-      dropdownStyles={{
-        borderWidth: 1,
-        borderColor: "#394047",
-        borderRadius: 8,
-        backgroundColor: "#12171b",
-      }}
-      inputStyles={{ color: "#fff" }}
-      dropdownTextStyles={{ color: "#fff" }}
-      search={false}
-    />
+    <View>
+      <Text className="text-white text-sm font-semibold pl-2 mb-1">
+        Objectif
+      </Text>
+
+      <SelectList
+        setSelected={(selectedValue: string) => {
+          // selectedValue sera la clé (key) car save="key"
+          handleChange("objective", selectedValue);
+        }}
+        data={objectiveOptions}
+        save="key"
+        placeholder="Votre objectif"
+        boxStyles={{
+          borderWidth: 1,
+          borderColor: "#394047",
+          borderRadius: 100,
+          padding: 16,
+          marginBottom: 2,
+          backgroundColor: "#12171b",
+        }}
+        dropdownStyles={{
+          borderWidth: 1,
+          borderColor: "#394047",
+          borderRadius: 8,
+          backgroundColor: "#12171b",
+        }}
+        inputStyles={{ color: "#fff" }}
+        dropdownTextStyles={{ color: "#fff" }}
+        search={false}
+      />
+    </View>
   );
 }

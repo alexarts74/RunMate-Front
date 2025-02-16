@@ -75,3 +75,49 @@ export const authStorage = {
     }
   },
 };
+
+export const signUpStorage = {
+  async saveSignUpStep(step: number) {
+    try {
+      await AsyncStorage.setItem("@signup_step", step.toString());
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde de l'étape:", error);
+    }
+  },
+
+  async getSignUpStep(): Promise<number> {
+    try {
+      const step = await AsyncStorage.getItem("@signup_step");
+      return step ? parseInt(step) : 1;
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'étape:", error);
+      return 1;
+    }
+  },
+
+  async saveSignUpData(data: any) {
+    try {
+      await AsyncStorage.setItem("@signup_data", JSON.stringify(data));
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde des données:", error);
+    }
+  },
+
+  async getSignUpData() {
+    try {
+      const data = await AsyncStorage.getItem("@signup_data");
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+      return null;
+    }
+  },
+
+  async clearSignUpData() {
+    try {
+      await AsyncStorage.multiRemove(["@signup_step", "@signup_data"]);
+    } catch (error) {
+      console.error("Erreur lors du nettoyage des données:", error);
+    }
+  },
+};

@@ -1,12 +1,22 @@
 import { authStorage } from "../auth/storage";
 import { apiClient } from "./client";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const authService = {
   async signUp(userData: {
     email: string;
     password: string;
     password_confirmation: string;
+    first_name: string;
+    last_name: string;
+    age: string;
+    gender: string;
+    bio: string;
+    profile_image: string;
+    city: string;
+    department: string;
+    postcode: string;
+    latitude: number;
+    longitude: number;
   }) {
     return await apiClient.post("/users/sign_up", { user: userData });
   },

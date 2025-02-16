@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput } from "react-native";
+import { TextInput, Text } from "react-native";
 
 type Props = {
   actual_pace: string;
@@ -16,28 +16,34 @@ export function PaceDistanceInputs({
 
   return (
     <>
+      <Text className="text-white text-sm font-semibold pl-2 mb-1">
+        Temps de course* (min/km)
+      </Text>
       <TextInput
-        className={`w-full border rounded-lg p-4 mb-4 bg-[#12171b] text-white ${
-          focusedInput === 'pace' ? 'border-green' : 'border-gray'
+        className={`w-full border rounded-full p-4 mb-4 bg-[#12171b] text-white ${
+          focusedInput === "pace" ? "border-green" : "border-gray"
         }`}
         placeholder="Allure actuelle (min/km)"
         placeholderTextColor="#394047"
         value={actual_pace}
         onChangeText={(value) => handleChange("actual_pace", value)}
-        onFocus={() => setFocusedInput('pace')}
+        onFocus={() => setFocusedInput("pace")}
         onBlur={() => setFocusedInput(null)}
         keyboardType="numeric"
       />
 
+      <Text className="text-white text-sm font-semibold pl-2 mb-1">
+        Distance habituelle*
+      </Text>
       <TextInput
-        className={`w-full border rounded-lg p-4 mb-4 bg-[#12171b] text-white ${
-          focusedInput === 'distance' ? 'border-green' : 'border-gray'
+        className={`w-full border rounded-full p-4 mb-4 bg-[#12171b] text-white ${
+          focusedInput === "distance" ? "border-green" : "border-gray"
         }`}
         placeholder="Distance habituelle (km)"
         placeholderTextColor="#394047"
         value={usual_distance}
         onChangeText={(value) => handleChange("usual_distance", value)}
-        onFocus={() => setFocusedInput('distance')}
+        onFocus={() => setFocusedInput("distance")}
         onBlur={() => setFocusedInput(null)}
         keyboardType="numeric"
       />

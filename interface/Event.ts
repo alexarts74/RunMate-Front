@@ -38,6 +38,8 @@ export interface Event extends CreateEventData, EventsResponse {
   is_participant: boolean;
   can_join: boolean;
   can_leave: boolean;
+  start_time: string;
+  end_time: string;
 }
 
 export interface EventsResponse {
@@ -54,6 +56,8 @@ export interface CreateEventData {
   name: string;
   description: string;
   start_date: string | Date;
+  start_time: string;
+  end_time: string;
   location: string;
   distance: number;
   level: EventLevel;

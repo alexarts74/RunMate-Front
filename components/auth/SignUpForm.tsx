@@ -1,36 +1,20 @@
-import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Pressable,
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  Image,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
-import { SelectList } from "react-native-dropdown-select-list";
-import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "@/context/AuthContext";
-import { Picker } from "@react-native-picker/picker";
 import { authService } from "@/service/api/auth";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Location from "expo-location";
-import { useFormValidation } from "@/hooks/auth/useFormValidation";
-import { validateSignUpForm } from "@/constants/formValidation";
 import { SignUpFormStep1 } from "./SignUpFormStep1";
 import { SignUpFormStep2 } from "./SignUpFormStep2";
+import { SignUpFormStep3 } from "./SignUpFormStep3";
+import { runnerProfileService } from "@/service/api/runnerProfile";
+import { signUpStorage } from "@/service/auth/storage";
 
 export default function SignUpForm() {
   const { login } = useAuth();
-  const { errors, validateForm, clearErrors } = useFormValidation();
   const [loading, setLoading] = useState(false);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [error, setError] = useState("");
-  const [showAgePicker, setShowAgePicker] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -41,46 +25,40 @@ export default function SignUpForm() {
     last_name: "",
     age: "",
     gender: "",
-    profile_image: "",
     bio: "",
-    city: "",
-    department: "",
-    postcode: "",
-    latitude: "",
-    longitude: "",
+    profile_image: "",
+    actual_pace: "",
+    usual_distance: "",
+    availability: [],
+    objective: "",
   });
 
-  const genderOptions = [
-    { key: "male", value: "Homme" },
-    { key: "female", value: "Femme" },
-    { key: "other", value: "Autre" },
-  ];
+  // Charger les données au montage du composant
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedStep = await signUpStorage.getSignUpStep();
+      const savedData = await signUpStorage.getSignUpData();
 
-  const ageOptions = Array.from({ length: 83 }, (_, i) => i + 18);
+      if (savedStep) setStep(savedStep);
+      if (savedData) setFormData(savedData);
+    };
 
-  const handleChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
+    loadSavedData();
+  }, []);
+
+  // Sauvegarder les données à chaque changement
+  const handleChange = async (name: string, value: any) => {
+    const newFormData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+    setFormData(newFormData);
+    await signUpStorage.saveSignUpData(newFormData);
   };
 
-  const pickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        handleChange("profile_image", result.assets[0].uri);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la sélection de l'image:", error);
-      setError("Erreur lors de la sélection de l'image");
-    }
+  const handleStepChange = async (newStep: number) => {
+    setStep(newStep);
+    await signUpStorage.saveSignUpStep(newStep);
   };
 
   const handleLocationUpdate = async () => {
@@ -117,28 +95,59 @@ export default function SignUpForm() {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleFinalSubmit = async () => {
     try {
       setError("");
       setLoading(true);
 
+      // 1. Récupérer la localisation
       const locationData = await handleLocationUpdate();
-      const updatedFormData = {
-        ...formData,
-        ...locationData,
+
+      // 2. Créer le compte utilisateur
+      const signUpResponse = await authService.signUp({
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        age: formData.age,
+        gender: formData.gender,
+        bio: formData.bio,
+        profile_image: formData.profile_image,
+        city: locationData.city,
+        department: locationData.department,
+        postcode: locationData.postcode,
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      });
+
+      // 3. Se connecter
+      await login(signUpResponse);
+
+      // 4. Créer le profil coureur
+      const savedProfile = await runnerProfileService.save({
+        actual_pace: formData.actual_pace,
+        usual_distance: formData.usual_distance,
+        availability: formData.availability,
+        objective: formData.objective,
+      });
+
+      const updatedUserData = {
+        ...signUpResponse,
+        user: {
+          ...signUpResponse.user,
+          runner_profile: savedProfile,
+        },
       };
 
-      const response = await authService.signUp(updatedFormData);
+      await login(updatedUserData);
 
-      if (!response.authentication_token) {
-        throw new Error("Pas de token dans la réponse");
-      }
-
-      await login(response);
-      router.replace("/(app)/runner/runner-profile");
+      // 5. Nettoyer et rediriger
+      await signUpStorage.clearSignUpData();
+      router.replace("/(tabs)/matches");
     } catch (err) {
-      console.error("Erreur inscription détaillée:", err);
-      setError("Erreur lors de l'inscription. Veuillez réessayer.");
+      console.error("Erreur finalisation inscription:", err);
+      setError("Erreur lors de la finalisation. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -149,14 +158,21 @@ export default function SignUpForm() {
       {step === 1 ? (
         <SignUpFormStep1
           formData={formData}
-          onNext={() => setStep(2)}
+          onNext={() => handleStepChange(2)}
+          handleChange={handleChange}
+        />
+      ) : step === 2 ? (
+        <SignUpFormStep2
+          formData={formData}
+          onBack={() => handleStepChange(1)}
+          onSubmit={() => handleStepChange(3)}
           handleChange={handleChange}
         />
       ) : (
-        <SignUpFormStep2
+        <SignUpFormStep3
           formData={formData}
-          onBack={() => setStep(1)}
-          onSubmit={handleSignUp}
+          onBack={() => handleStepChange(2)}
+          onSubmit={handleFinalSubmit}
           handleChange={handleChange}
         />
       )}

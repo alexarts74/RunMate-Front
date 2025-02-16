@@ -18,15 +18,17 @@ type Props = {
 
 export function AvailabilitySelect({ availability, handleChange }: Props) {
   const toggleDay = (key: string) => {
-    const newAvailability = availability.includes(key)
-      ? availability.filter(day => day !== key)
+    const newAvailability = availability?.includes(key)
+      ? availability.filter((day) => day !== key)
       : [...availability, key];
     handleChange("availability", newAvailability);
   };
 
   return (
     <View className="mb-4">
-      <Text className="text-white mb-2">Vos disponibilités</Text>
+      <Text className="text-white text-sm font-semibold pl-2 mb-2">
+        Vos disponibilités*
+      </Text>
       <View className="flex-row flex-wrap gap-2">
         {availabilityOptions.map((option) => (
           <Pressable

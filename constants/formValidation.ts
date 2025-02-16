@@ -57,6 +57,48 @@ export const FORM_VALIDATION_RULES = {
         required: "Le genre est requis",
       },
     },
+    profile_image: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "La photo de profil est requise",
+      },
+    },
+    actual_pace: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "L'allure est requise",
+      },
+    },
+    usual_distance: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "La distance habituelle est requise",
+      },
+    },
+    objective: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "L'objectif est requis",
+      },
+    },
+    availability: {
+      rules: {
+        required: true,
+        minLength: 1,
+      },
+      errorMessages: {
+        required: "Les disponibilités sont requises",
+        minLength: "Sélectionnez au moins une disponibilité",
+      },
+    },
   },
   login: {
     email: {
@@ -107,6 +149,10 @@ const validateSignUpForm = (formData: any) => {
       value: formData.gender,
       rules: FORM_VALIDATION_RULES.signup.gender.rules,
     },
+    profile_image: {
+      value: formData.profile_image,
+      rules: FORM_VALIDATION_RULES.signup.profile_image.rules,
+    },
   };
 };
 
@@ -137,7 +183,7 @@ export const validateSignUpFormStep1 = (formData: any) => ({
     value: formData.password_confirmation,
     rules: {
       required: true,
-      custom: (value) => value === formData.password,
+      custom: (value: string) => value === formData.password,
     },
   },
 });
@@ -147,7 +193,41 @@ export const validateSignUpFormStep2 = (formData: any) => ({
     value: formData.first_name,
     rules: FORM_VALIDATION_RULES.signup.first_name.rules,
   },
-  // ... autres validations pour l'étape 2
+  last_name: {
+    value: formData.last_name,
+    rules: FORM_VALIDATION_RULES.signup.last_name.rules,
+  },
+  age: {
+    value: formData.age,
+    rules: FORM_VALIDATION_RULES.signup.age.rules,
+  },
+  gender: {
+    value: formData.gender,
+    rules: FORM_VALIDATION_RULES.signup.gender.rules,
+  },
+  profile_image: {
+    value: formData.profile_image,
+    rules: FORM_VALIDATION_RULES.signup.profile_image.rules,
+  },
+});
+
+export const validateSignUpFormStep3 = (formData: any) => ({
+  actual_pace: {
+    value: formData.actual_pace,
+    rules: FORM_VALIDATION_RULES.signup.actual_pace.rules,
+  },
+  usual_distance: {
+    value: formData.usual_distance,
+    rules: FORM_VALIDATION_RULES.signup.usual_distance.rules,
+  },
+  objective: {
+    value: formData.objective,
+    rules: FORM_VALIDATION_RULES.signup.objective.rules,
+  },
+  availability: {
+    value: formData.availability,
+    rules: FORM_VALIDATION_RULES.signup.availability.rules,
+  },
 });
 
 export { validateSignUpForm, validateLoginForm };
