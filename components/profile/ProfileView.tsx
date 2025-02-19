@@ -2,24 +2,17 @@ import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
 
 type ProfileViewProps = {
   setIsEditing: (value: boolean) => void;
 };
 
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
-  const { user, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logout();
-    router.replace("/");
-  };
+  const { user } = useAuth();
 
   return (
     <ScrollView
-      className="flex-1 bg-[#12171b] px-5 py-6 pt-12 pb-24"
+      className="flex-1 bg-[#12171b] px-5 py-6 pt-6 pb-24"
       contentContainerStyle={{ paddingBottom: 150 }}
     >
       <View className="flex-row justify-between items-center mb-6">
@@ -82,17 +75,6 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </View>
         </View>
 
-        {/* Mettre une fois que j'aurais reglé cette Localisation */}
-
-        {/* <View>
-          <Text className="text-white text-sm font-semibold pl-2 mb-1">
-            Localisation
-          </Text>
-          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-[#1e2429]">
-            <Text className="text-white">{user?.location}</Text>
-          </View>
-        </View> */}
-
         <View>
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Bio
@@ -101,13 +83,6 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
             <Text className="text-white">{user?.bio}</Text>
           </View>
         </View>
-
-        <Pressable
-          className="bg-transparent border border-green py-4 rounded-full w-full mt-6 items-center"
-          onPress={handleLogout}
-        >
-          <Text className="text-green font-semibold">Se déconnecter</Text>
-        </Pressable>
       </View>
     </ScrollView>
   );

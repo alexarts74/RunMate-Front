@@ -12,6 +12,7 @@ type AuthContextType = {
   logout: () => Promise<void>;
   isLoading: boolean;
   signUp: (userData: User) => Promise<void>;
+  deleteAccount: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -109,6 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await authStorage.removeAuth();
       setUser(null);
       setIsAuthenticated(false);
+      router.replace("/login");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
       throw error;
@@ -174,6 +176,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const deleteAccount = async () => {
+    try {
+      await authService.deleteAccount();
+      await cleanStorage();
+      router.replace("/");
+    } catch (error) {
+      console.error("Erreur suppression compte:", error);
+    }
+  };
+
   // Initialisation de l'auth
   useEffect(() => {
     const initAuth = async () => {
@@ -202,6 +214,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         updateUser,
         isLoading,
+        deleteAccount,
       }}
     >
       {children}

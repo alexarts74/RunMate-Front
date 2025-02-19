@@ -82,15 +82,11 @@ export const authService = {
 
       return response;
     } catch (error) {
-      if (error.response) {
-        console.error("Erreur response:", error.response);
-        console.error("Status:", error.response.status);
-      } else if (error.request) {
-        console.error("Erreur request:", error.request);
-      } else {
-        console.error("Erreur:", error.message);
-      }
       throw error;
     }
+  },
+
+  async deleteAccount() {
+    return await apiClient.delete("/users/delete_account");
   },
 };
