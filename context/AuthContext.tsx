@@ -2,16 +2,16 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
 import { authStorage } from "@/service/auth/storage";
-import { UserWithRunnerProfile } from "@/interface/User";
+import User, { UserWithRunnerProfile } from "@/interface/User";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  updateUser: (userData: any) => Promise<void>;
+  updateUser: (userData: User) => Promise<void>;
   user: UserWithRunnerProfile | null;
-  login: (userData: any) => Promise<void>;
+  login: (userData: User) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
-  signUp: (userData: any) => Promise<void>;
+  signUp: (userData: User) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);

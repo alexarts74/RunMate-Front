@@ -13,6 +13,7 @@ interface User {
   authentication_token: string | null;
   created_at: string;
   updated_at: string;
+  location: string | null;
 }
 
 export interface UserWithRunnerProfile extends User {

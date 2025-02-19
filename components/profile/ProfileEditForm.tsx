@@ -19,14 +19,14 @@ type ProfileEditFormProps = {
 export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error] = useState("");
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: user?.email || "",
     first_name: user?.first_name || "",
     last_name: user?.last_name || "",
     age: user?.age?.toString() || "",
     gender: user?.gender || "",
-    location: user?.city || "",
     profile_image: user?.profile_image || "",
     bio: user?.bio || "",
   });
@@ -78,11 +78,11 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
       className="flex-1 bg-[#12171b] px-5 py-6 pt-12"
       contentContainerStyle={{ paddingBottom: 150 }}
     >
-      <Text className="text-2xl font-bold mb-6 mt-6 text-white">
+      <Text className="text-2xl font-bold mb-6 text-white">
         Modifier mon profil
       </Text>
 
-      <Pressable onPress={pickImage} className="items-center mb-6">
+      <Pressable onPress={pickImage} className="items-center mb-8">
         <Image
           source={
             formData.profile_image
@@ -91,85 +91,121 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           }
           className="w-32 h-32 rounded-full border-2 border-green"
         />
-        <Text className="text-white mt-2">Changer la photo</Text>
+        <Text className="text-green mt-2 font-semibold">Changer la photo</Text>
       </Pressable>
 
       <View className="space-y-4">
-        <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
-          placeholder="Prénom"
-          placeholderTextColor="#9CA3AF"
-          value={formData.first_name}
-          onChangeText={(value) => handleChange("first_name", value)}
-        />
+        <View>
+          <Text className="text-white text-sm font-semibold pl-2 mb-1">
+            Prénom
+          </Text>
+          <TextInput
+            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              focusedInput === "first_name"
+                ? "border-green"
+                : "border-[#2a3238]"
+            }`}
+            placeholder="Prénom"
+            placeholderTextColor="#9CA3AF"
+            value={formData.first_name}
+            onChangeText={(value) => handleChange("first_name", value)}
+            onFocus={() => setFocusedInput("first_name")}
+            onBlur={() => setFocusedInput(null)}
+          />
+        </View>
 
-        <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
-          placeholder="Nom"
-          placeholderTextColor="#9CA3AF"
-          value={formData.last_name}
-          onChangeText={(value) => handleChange("last_name", value)}
-        />
+        <View>
+          <Text className="text-white text-sm font-semibold pl-2 mb-1">
+            Nom
+          </Text>
+          <TextInput
+            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              focusedInput === "last_name" ? "border-green" : "border-[#2a3238]"
+            }`}
+            placeholder="Nom"
+            placeholderTextColor="#9CA3AF"
+            value={formData.last_name}
+            onChangeText={(value) => handleChange("last_name", value)}
+            onFocus={() => setFocusedInput("last_name")}
+            onBlur={() => setFocusedInput(null)}
+          />
+        </View>
 
-        <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
-          placeholder="Âge"
-          placeholderTextColor="#9CA3AF"
-          value={formData.age}
-          onChangeText={(value) => handleChange("age", value)}
-          keyboardType="numeric"
-        />
+        <View>
+          <Text className="text-white text-sm font-semibold pl-2 mb-1">
+            Âge
+          </Text>
+          <TextInput
+            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              focusedInput === "age" ? "border-green" : "border-[#2a3238]"
+            }`}
+            placeholder="Âge"
+            placeholderTextColor="#9CA3AF"
+            value={formData.age}
+            onChangeText={(value) => handleChange("age", value)}
+            onFocus={() => setFocusedInput("age")}
+            onBlur={() => setFocusedInput(null)}
+            keyboardType="numeric"
+          />
+        </View>
 
-        <SelectList
-          setSelected={(val: string) => handleChange("gender", val)}
-          data={genderOptions}
-          save="key"
-          defaultOption={{ key: formData.gender, value: formData.gender }}
-          placeholder="Sélectionnez votre genre"
-          boxStyles={{
-            borderWidth: 1,
-            borderColor: "#394047",
-            borderRadius: 8,
-            padding: 16,
-            backgroundColor: "#394047",
-          }}
-          dropdownStyles={{
-            borderWidth: 1,
-            borderColor: "#394047",
-            borderRadius: 8,
-            backgroundColor: "#394047",
-          }}
-          inputStyles={{ color: "#fff" }}
-          dropdownTextStyles={{ color: "#fff" }}
-          search={false}
-        />
+        <View>
+          <Text className="text-white text-sm font-semibold pl-2 mb-1">
+            Genre
+          </Text>
+          <SelectList
+            setSelected={(val: string) => handleChange("gender", val)}
+            data={genderOptions}
+            save="key"
+            defaultOption={{ key: formData.gender, value: formData.gender }}
+            placeholder="Sélectionnez votre genre"
+            boxStyles={{
+              borderWidth: 1,
+              borderColor: focusedInput === "gender" ? "#b9f144" : "#2a3238",
+              borderRadius: 9999,
+              padding: 16,
+              backgroundColor: "#1e2429",
+            }}
+            dropdownStyles={{
+              borderWidth: 1,
+              borderColor: "#2a3238",
+              borderRadius: 16,
+              backgroundColor: "#1e2429",
+              marginTop: 4,
+            }}
+            inputStyles={{ color: "#fff" }}
+            dropdownTextStyles={{ color: "#fff" }}
+            search={false}
+          />
+        </View>
 
-        <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
-          placeholder="Localisation"
-          placeholderTextColor="#9CA3AF"
-          value={formData.location}
-          onChangeText={(value) => handleChange("location", value)}
-        />
-
-        <TextInput
-          className="w-full border border-gray rounded-lg p-4 bg-gray text-white"
-          placeholder="Bio"
-          placeholderTextColor="#9CA3AF"
-          value={formData.bio}
-          onChangeText={(value) => handleChange("bio", value)}
-          multiline
-          numberOfLines={4}
-        />
+        <View>
+          <Text className="text-white text-sm font-semibold pl-2 mb-1">
+            Bio
+          </Text>
+          <TextInput
+            className={`w-full border rounded-2xl p-4 bg-[#1e2429] text-white ${
+              focusedInput === "bio" ? "border-green" : "border-[#2a3238]"
+            }`}
+            placeholder="Bio"
+            placeholderTextColor="#9CA3AF"
+            value={formData.bio}
+            onChangeText={(value) => handleChange("bio", value)}
+            onFocus={() => setFocusedInput("bio")}
+            onBlur={() => setFocusedInput(null)}
+            multiline
+            numberOfLines={4}
+          />
+        </View>
       </View>
 
       {error ? (
         <Text className="text-red-500 text-center mt-4">{error}</Text>
       ) : null}
 
-      <View className="space-y-3 px-8 mb-4 mt-6">
+      <View className="space-y-3 mt-6">
         <Pressable
-          className="bg-green py-3 rounded-full items-center"
+          className="bg-green py-4 rounded-full items-center"
           onPress={handleSubmit}
           disabled={loading}
         >
@@ -180,7 +216,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           )}
         </Pressable>
         <Pressable
-          className="bg-transparent border border-green py-3 rounded-full items-center"
+          className="bg-transparent border border-green py-4 rounded-full items-center"
           onPress={() => setIsEditing(false)}
         >
           <Text className="text-green font-semibold">Annuler</Text>
