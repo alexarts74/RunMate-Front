@@ -11,6 +11,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "react-native";
 import { useAuth } from "@/context/AuthContext";
+import User from "@/interface/User";
 
 type ProfileEditFormProps = {
   setIsEditing: (value: boolean) => void;
@@ -29,6 +30,9 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
     gender: user?.gender || "",
     profile_image: user?.profile_image || "",
     bio: user?.bio || "",
+    location: user?.city || "",
+    department: user?.department || "",
+    level: user?.level || "beginner",
   });
 
   const handleChange = (name: string, value: string) => {
@@ -57,7 +61,16 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
 
   const handleSubmit = async () => {
     try {
-      await updateUser(formData);
+      const userUpdate = {
+        ...formData,
+        age: parseInt(formData.age) || 0,
+        city: formData.location || "",
+        id: user?.id || 0,
+        department: formData.department || "",
+        level: formData.level || "beginner",
+      } as User;
+
+      await updateUser(userUpdate);
       setIsEditing(false);
       setLoading(true);
     } catch (error) {

@@ -122,9 +122,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       const response = await authService.updateUserProfile(userData);
 
+      console.log("response", response);
+
       // Utiliser directement userData qui contient déjà le runner_profile
-      await authStorage.storeUser(userData);
-      setUser(userData);
+      await authStorage.storeUser(response.user);
+      await authStorage.storeToken(response.authentication_token);
+
+      console.log("userData", userData);
+
+      setUser(response.user);
 
       // Vérifier ce qui est stocké
       await authStorage.getUser();
