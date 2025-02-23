@@ -96,7 +96,13 @@ export default function SignUpForm() {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
-        throw new Error("Permission de localisation refusée");
+        return {
+          city: "Sallanches",
+          department: "Haute-Savoie",
+          postcode: "74700",
+          latitude: 45.934,
+          longitude: 6.63,
+        };
       }
 
       const location = await Location.getCurrentPositionAsync({});
