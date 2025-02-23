@@ -3,11 +3,13 @@ import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { authService } from "@/service/api/auth";
 import * as Location from "expo-location";
+import { SignUpFormStep0 } from "./SignUpFormStep0";
 import { SignUpFormStep1 } from "./SignUpFormStep1";
 import { SignUpFormStep2 } from "./SignUpFormStep2";
 import { SignUpFormStep3 } from "./SignUpFormStep3";
 import { runnerProfileService } from "@/service/api/runnerProfile";
 import { signUpStorage } from "@/service/auth/storage";
+import { RunnerProfile } from "@/interface/User";
 
 export default function SignUpForm() {
   const { login } = useAuth();
@@ -15,7 +17,8 @@ export default function SignUpForm() {
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [error, setError] = useState("");
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
+  const [runnerType, setRunnerType] = useState<"chill" | "perf">("chill");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -27,31 +30,57 @@ export default function SignUpForm() {
     gender: "",
     bio: "",
     profile_image: "",
-    actual_pace: "",
-    usual_distance: "",
-    availability: [],
+    availability: "",
     objective: "",
+    running_type: "",
+    actual_pace: "",
+    target_pace: "",
+    usual_distance: "",
+    weekly_mileage: "",
+    running_frequency: [] as string[],
+    preferred_time_of_day: [] as string[],
+    training_days: [] as string[],
+    competition_goals: "",
+    social_preferences: [] as string[],
+    post_run_activities: [] as string[],
   });
 
-  // Charger les données au montage du composant
+  // Au début du composant, ajouter un useEffect pour nettoyer les données au montage
+  useEffect(() => {
+    const clearOldData = async () => {
+      await signUpStorage.clearSignUpData();
+    };
+    clearOldData();
+  }, []);
+
   useEffect(() => {
     const loadSavedData = async () => {
-      const savedStep = await signUpStorage.getSignUpStep();
-      const savedData = await signUpStorage.getSignUpData();
+      try {
+        const savedStep = await signUpStorage.getSignUpStep();
+        const savedData = await signUpStorage.getSignUpData();
 
-      if (savedStep) setStep(savedStep);
-      if (savedData) setFormData(savedData);
+        // Ne charger les données que si on n'est pas au début de l'inscription
+        if (savedStep && savedStep > 0 && savedData?.running_type) {
+          setStep(savedStep);
+          setRunnerType(savedData.running_type as "chill" | "perf");
+          setFormData(savedData);
+        } else {
+          await signUpStorage.clearSignUpData();
+        }
+      } catch (error) {
+        await signUpStorage.clearSignUpData();
+      }
     };
 
     loadSavedData();
   }, []);
 
-  // Sauvegarder les données à chaque changement
   const handleChange = async (name: string, value: any) => {
     const newFormData = {
       ...formData,
       [name]: value,
     };
+
     setFormData(newFormData);
     await signUpStorage.saveSignUpData(newFormData);
   };
@@ -95,6 +124,22 @@ export default function SignUpForm() {
     }
   };
 
+  const handleRunnerTypeSelect = async (type: "chill" | "perf") => {
+    try {
+      console.log("🎯 Selection du type:", type);
+      setRunnerType(type);
+      setFormData((prev) => ({
+        ...prev,
+        running_type: type,
+      }));
+      console.log("⏳ Avant changement de step");
+      await handleStepChange(1);
+      console.log("✅ Après changement de step");
+    } catch (error) {
+      console.error("❌ Erreur selection type:", error);
+    }
+  };
+
   const handleFinalSubmit = async () => {
     try {
       setError("");
@@ -102,6 +147,8 @@ export default function SignUpForm() {
 
       // 1. Récupérer la localisation
       const locationData = await handleLocationUpdate();
+
+      console.log("locationData", locationData);
 
       // 2. Créer le compte utilisateur
       const signUpResponse = await authService.signUp({
@@ -121,16 +168,36 @@ export default function SignUpForm() {
         longitude: locationData.longitude,
       });
 
+      console.log("signUpResponse", signUpResponse);
+
       // 3. Se connecter
       await login(signUpResponse);
 
-      // 4. Créer le profil coureur
-      const savedProfile = await runnerProfileService.save({
-        actual_pace: formData.actual_pace,
-        usual_distance: formData.usual_distance,
-        availability: formData.availability,
-        objective: formData.objective,
-      });
+      // 4. Créer le profil coureur avec les bons champs
+      const runnerProfileData: RunnerProfile = {
+        actual_pace: runnerType === "perf" ? formData.actual_pace : "",
+        target_pace: runnerType === "perf" ? formData.target_pace : "",
+        weekly_mileage:
+          runnerType === "perf"
+            ? parseInt(formData.weekly_mileage) || null
+            : null,
+        competition_goals:
+          runnerType === "perf" ? formData.competition_goals : "",
+        training_days: runnerType === "perf" ? formData.training_days : [],
+        usual_distance: formData.usual_distance.toString(),
+        preferred_time_of_day: formData.preferred_time_of_day || [],
+        running_type: runnerType,
+        availability: [],
+        objective: "",
+        social_preferences:
+          runnerType === "chill" ? formData.social_preferences : [],
+        post_run_activities:
+          runnerType === "chill" ? formData.post_run_activities : [],
+        running_frequency:
+          runnerType === "chill" ? formData.running_frequency : [],
+      };
+
+      const savedProfile = await runnerProfileService.save(runnerProfileData);
 
       const updatedUserData = {
         ...signUpResponse,
@@ -155,22 +222,27 @@ export default function SignUpForm() {
 
   return (
     <>
-      {step === 1 ? (
+      {step === 0 ? (
+        <SignUpFormStep0 onNext={handleRunnerTypeSelect} />
+      ) : step === 1 ? (
         <SignUpFormStep1
           formData={formData}
           onNext={() => handleStepChange(2)}
+          onBack={() => handleStepChange(0)}
           handleChange={handleChange}
         />
       ) : step === 2 ? (
         <SignUpFormStep2
           formData={formData}
+          runnerType={runnerType}
           onBack={() => handleStepChange(1)}
-          onSubmit={() => handleStepChange(3)}
+          onNext={() => handleStepChange(3)}
           handleChange={handleChange}
         />
       ) : (
         <SignUpFormStep3
           formData={formData}
+          runnerType={runnerType}
           onBack={() => handleStepChange(2)}
           onSubmit={handleFinalSubmit}
           handleChange={handleChange}

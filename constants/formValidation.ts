@@ -70,7 +70,15 @@ export const FORM_VALIDATION_RULES = {
         required: true,
       },
       errorMessages: {
-        required: "L'allure est requise",
+        required: "L'allure actuelle est requise",
+      },
+    },
+    target_pace: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "L'allure cible est requise",
       },
     },
     usual_distance: {
@@ -81,22 +89,67 @@ export const FORM_VALIDATION_RULES = {
         required: "La distance habituelle est requise",
       },
     },
-    objective: {
+    weekly_mileage: {
       rules: {
         required: true,
       },
       errorMessages: {
-        required: "L'objectif est requis",
+        required: "Le kilométrage hebdomadaire est requis",
       },
     },
-    availability: {
+    running_frequency: {
       rules: {
         required: true,
+        isArray: true,
         minLength: 1,
       },
       errorMessages: {
-        required: "Les disponibilités sont requises",
-        minLength: "Sélectionnez au moins une disponibilité",
+        required: "La fréquence de course est requise",
+        minLength: "Sélectionnez au moins une fréquence",
+      },
+    },
+    preferred_time_of_day: {
+      rules: {
+        required: true,
+        isArray: true,
+        minLength: 1,
+      },
+      errorMessages: {
+        required: "Le moment préféré est requis",
+        minLength: "Sélectionnez au moins un moment",
+      },
+    },
+    training_days: {
+      rules: {
+        required: true,
+        isArray: true,
+        minLength: 1,
+      },
+      errorMessages: {
+        required: "Les jours d'entraînement sont requis",
+        minLength: "Sélectionnez au moins un jour",
+      },
+    },
+    social_preferences: {
+      rules: {
+        required: true,
+        isArray: true,
+        minLength: 1,
+      },
+      errorMessages: {
+        required: "Les préférences sociales sont requises",
+        minLength: "Sélectionnez au moins une préférence",
+      },
+    },
+    post_run_activities: {
+      rules: {
+        required: true,
+        isArray: true,
+        minLength: 1,
+      },
+      errorMessages: {
+        required: "Les activités post-course sont requises",
+        minLength: "Sélectionnez au moins une activité",
       },
     },
   },
@@ -211,23 +264,59 @@ export const validateSignUpFormStep2 = (formData: any) => ({
   },
 });
 
-export const validateSignUpFormStep3 = (formData: any) => ({
-  actual_pace: {
-    value: formData.actual_pace,
-    rules: FORM_VALIDATION_RULES.signup.actual_pace.rules,
-  },
-  usual_distance: {
-    value: formData.usual_distance,
-    rules: FORM_VALIDATION_RULES.signup.usual_distance.rules,
-  },
-  objective: {
-    value: formData.objective,
-    rules: FORM_VALIDATION_RULES.signup.objective.rules,
-  },
-  availability: {
-    value: formData.availability,
-    rules: FORM_VALIDATION_RULES.signup.availability.rules,
-  },
-});
+export const validateSignUpFormStep3 = (
+  formData: any,
+  runnerType: "perf" | "chill"
+) => {
+  const commonValidations = {
+    usual_distance: {
+      value: formData.usual_distance,
+      rules: FORM_VALIDATION_RULES.signup.usual_distance.rules,
+    },
+    preferred_time_of_day: {
+      value: formData.preferred_time_of_day,
+      rules: FORM_VALIDATION_RULES.signup.preferred_time_of_day.rules,
+    },
+  };
+
+  const perfValidations = {
+    actual_pace: {
+      value: formData.actual_pace,
+      rules: FORM_VALIDATION_RULES.signup.actual_pace.rules,
+    },
+    target_pace: {
+      value: formData.target_pace,
+      rules: FORM_VALIDATION_RULES.signup.target_pace.rules,
+    },
+    weekly_mileage: {
+      value: formData.weekly_mileage,
+      rules: FORM_VALIDATION_RULES.signup.weekly_mileage.rules,
+    },
+    training_days: {
+      value: formData.training_days,
+      rules: FORM_VALIDATION_RULES.signup.training_days.rules,
+    },
+  };
+
+  const chillValidations = {
+    running_frequency: {
+      value: formData.running_frequency,
+      rules: FORM_VALIDATION_RULES.signup.running_frequency.rules,
+    },
+    social_preferences: {
+      value: formData.social_preferences,
+      rules: FORM_VALIDATION_RULES.signup.social_preferences.rules,
+    },
+    post_run_activities: {
+      value: formData.post_run_activities,
+      rules: FORM_VALIDATION_RULES.signup.post_run_activities.rules,
+    },
+  };
+
+  return {
+    ...commonValidations,
+    ...(runnerType === "perf" ? perfValidations : chillValidations),
+  };
+};
 
 export { validateSignUpForm, validateLoginForm };

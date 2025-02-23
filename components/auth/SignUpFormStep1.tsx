@@ -1,130 +1,132 @@
-import React, { useState } from "react";
-import { View, TextInput, Text, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Pressable, Image } from "react-native";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
 import { validateSignUpFormStep1 } from "@/constants/formValidation";
-import { ParticlesBackground } from "@/components/animations/ParticlesBackground";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { ActionButton } from "@/components/ui/ActionButton";
+
 interface SignUpFormStep1Props {
   formData: {
     email: string;
     password: string;
     password_confirmation: string;
+    profile_image: string;
   };
   onNext: () => void;
   handleChange: (name: string, value: string) => void;
+  onBack: () => void;
 }
 
-export const SignUpFormStep1 = ({
+export function SignUpFormStep1({
   formData,
   onNext,
   handleChange,
-}: SignUpFormStep1Props) => {
+  onBack,
+}: SignUpFormStep1Props) {
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { errors, validateForm, clearErrors } = useFormValidation();
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const router = useRouter();
-  const handleNextStep = () => {
+
+  const handleSubmit = () => {
     clearErrors();
-    const isValid = validateForm(validateSignUpFormStep1(formData));
-    if (isValid) {
+    if (validateForm(validateSignUpFormStep1(formData))) {
       onNext();
     }
   };
 
+  useEffect(() => {
+    const checkFormValidity = () => {
+      setIsLoading(true);
+      validateSignUpFormStep1(formData);
+      const hasAllRequiredFields =
+        formData.email.trim() !== "" &&
+        formData.password.trim() !== "" &&
+        formData.password_confirmation.trim() !== "";
+
+      setIsFormValid(hasAllRequiredFields);
+    };
+
+    checkFormValidity();
+    setIsLoading(false);
+  }, [formData]);
+
   return (
-    <View className="flex-1 bg-[#12171b] px-5">
-      <ParticlesBackground />
-      <View className="flex-row items-center justify-between mt-16">
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+    <View className="flex-1 ">
+      {/* Header Section */}
+      <View className="h-[15%] mt-8 flex-row items-center">
+        <Pressable
+          onPress={onBack}
+          className="bg-[#1e2429] p-1.5 rounded-full border border-[#2a3238] active:opacity-80 ml-4"
+        >
+          <Ionicons name="arrow-back" size={22} color="#b9f144" />
         </Pressable>
+
         <View className="flex-1">
-          <Text className="text-2xl font-bold text-white text-center">
-            Promis, on ne te
-          </Text>
-          <Text className="text-2xl font-bold text-white text-center">
-            spammera pas 🙂
+          <Text className="text-white text-2xl mr-8 font-bold text-center">
+            Promis on te{"\n"}
+            <Text className="text-green">spammera pas !</Text> 🙃
           </Text>
         </View>
       </View>
 
-      <View className="flex-1 justify-center">
-        <View className="space-y-4">
+      {/* Inputs Section */}
+      <View className="flex-1 justify-center -mt-24">
+        <View className="w-full space-y-5 px-4">
           <View>
-            <Text className="text-white text-sm font-semibold pl-2 mb-1">
-              Email*
-            </Text>
-            <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-                focusedInput === "email"
-                  ? `border-green ${errors.email ? "border-red-500" : ""}`
-                  : "border-[#2a3238]"
-              }`}
-              placeholder="Email"
-              placeholderTextColor="#9CA3AF"
-              value={formData.email}
-              onChangeText={(value) => handleChange("email", value)}
-              onFocus={() => setFocusedInput("email")}
-              onBlur={() => setFocusedInput(null)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-[#2a3238]">
+              <Ionicons name="mail-outline" size={20} color="#b9f144" />
+              <TextInput
+                className="flex-1 text-white ml-3"
+                placeholder="Email"
+                placeholderTextColor="#394047"
+                value={formData.email}
+                onChangeText={(text) => handleChange("email", text)}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
             {errors.email && (
-              <Text className="text-red-500 text-center mt-1">
-                {errors.email}
-              </Text>
+              <Text className="text-red-500 mt-1 ml-4">{errors.email}</Text>
             )}
           </View>
 
           <View>
-            <Text className="text-white text-sm font-semibold pl-2 mb-1">
-              Mot de passe*
-            </Text>
-            <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-                focusedInput === "password"
-                  ? `border-green ${errors.password ? "border-red-500" : ""}`
-                  : "border-[#2a3238]"
-              }`}
-              placeholder="Mot de passe"
-              placeholderTextColor="#9CA3AF"
-              value={formData.password}
-              onChangeText={(value) => handleChange("password", value)}
-              onFocus={() => setFocusedInput("password")}
-              onBlur={() => setFocusedInput(null)}
-              secureTextEntry
-            />
+            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-[#2a3238]">
+              <Ionicons name="lock-closed-outline" size={20} color="#b9f144" />
+              <TextInput
+                className="flex-1 text-white ml-3"
+                placeholder="Mot de passe"
+                placeholderTextColor="#394047"
+                value={formData.password}
+                onChangeText={(text) => handleChange("password", text)}
+                secureTextEntry
+              />
+            </View>
             {errors.password && (
-              <Text className="text-red-500 text-center mt-1">
-                {errors.password}
-              </Text>
+              <Text className="text-red-500 mt-1 ml-4">{errors.password}</Text>
             )}
           </View>
 
           <View>
-            <Text className="text-white text-sm font-semibold pl-2 mb-1">
-              Confirmer le mot de passe*
-            </Text>
-            <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-                focusedInput === "password_confirmation"
-                  ? `border-green ${
-                      errors.password_confirmation ? "border-red-500" : ""
-                    }`
-                  : "border-[#2a3238]"
-              }`}
-              placeholder="Confirmer le mot de passe"
-              placeholderTextColor="#9CA3AF"
-              value={formData.password_confirmation}
-              onChangeText={(value) =>
-                handleChange("password_confirmation", value)
-              }
-              onFocus={() => setFocusedInput("password_confirmation")}
-              onBlur={() => setFocusedInput(null)}
-              secureTextEntry
-            />
+            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-[#2a3238]">
+              <Ionicons
+                name="shield-checkmark-outline"
+                size={20}
+                color="#b9f144"
+              />
+              <TextInput
+                className="flex-1 text-white ml-3"
+                placeholder="Confirmer le mot de passe"
+                placeholderTextColor="#394047"
+                value={formData.password_confirmation}
+                onChangeText={(text) =>
+                  handleChange("password_confirmation", text)
+                }
+                secureTextEntry
+              />
+            </View>
             {errors.password_confirmation && (
-              <Text className="text-red-500 text-center mt-1">
+              <Text className="text-red-500 mt-1 ml-4">
                 {errors.password_confirmation}
               </Text>
             )}
@@ -132,14 +134,15 @@ export const SignUpFormStep1 = ({
         </View>
       </View>
 
-      <Pressable
-        className="bg-green py-4 rounded-full mb-12"
-        onPress={handleNextStep}
-      >
-        <Text className="text-sm font-semibold text-dark text-center">
-          Suivant
-        </Text>
-      </Pressable>
+      {/* Button Section - Fixed at bottom */}
+      <View className="absolute bottom-8 w-full">
+        <ActionButton
+          onPress={handleSubmit}
+          text="Continuer"
+          disabled={!isFormValid}
+          loading={isLoading}
+        />
+      </View>
     </View>
   );
-};
+}

@@ -84,5 +84,6 @@ export const useFormValidation = () => {
     validateField,
     validateForm,
     clearErrors,
+    setErrors,
   };
 };

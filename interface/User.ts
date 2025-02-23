@@ -25,6 +25,15 @@ export interface RunnerProfile {
   usual_distance: string;
   availability: string[];
   objective: string;
+  running_type: string;
+  target_pace: string;
+  weekly_mileage: number | null;
+  competition_goals: string;
+  training_days: string[];
+  social_preferences: string[];
+  post_run_activities: string[];
+  running_frequency: string[];
+  preferred_time_of_day: string[];
 }
 
 export default User;

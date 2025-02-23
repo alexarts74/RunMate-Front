@@ -10,13 +10,12 @@ import {
   Image,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
 import { validateSignUpFormStep2 } from "@/constants/formValidation";
-import { ParticlesBackground } from "@/components/animations/ParticlesBackground";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { GenderSelect } from "../GenderSelect";
+import { ActionButton } from "../ui/ActionButton";
 
 interface SignUpFormStep2Props {
   formData: {
@@ -27,29 +26,25 @@ interface SignUpFormStep2Props {
     bio: string;
     profile_image: string;
   };
+  runnerType: "chill" | "perf" | null;
   onBack: () => void;
-  onSubmit: () => void;
+  onNext: () => void;
   handleChange: (name: string, value: string) => void;
 }
 
-export const SignUpFormStep2 = ({
+export function SignUpFormStep2({
   formData,
+  runnerType,
   onBack,
-  onSubmit,
+  onNext,
   handleChange,
-}: SignUpFormStep2Props) => {
+}: SignUpFormStep2Props) {
   const { errors, validateForm, clearErrors } = useFormValidation();
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [showAgePicker, setShowAgePicker] = useState(false);
-  const router = useRouter();
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const ageOptions = Array.from({ length: 83 }, (_, i) => i + 18);
-  const genderOptions = [
-    { key: "male", value: "Homme" },
-    { key: "female", value: "Femme" },
-    { key: "other", value: "Autre" },
-  ];
 
   const pickImage = async () => {
     try {
@@ -70,46 +65,49 @@ export const SignUpFormStep2 = ({
 
   useEffect(() => {
     const checkFormValidity = () => {
-      const validationResult = validateSignUpFormStep2(formData);
+      validateSignUpFormStep2(formData);
       const hasAllRequiredFields =
         formData.first_name.trim() !== "" &&
         formData.last_name.trim() !== "" &&
         formData.age !== "" &&
-        formData.gender !== "";
+        formData.bio !== "" &&
+        formData.gender !== "" &&
+        formData.profile_image !== "";
 
       setIsFormValid(hasAllRequiredFields);
     };
-
     checkFormValidity();
   }, [formData]);
 
   const handleSubmit = () => {
+    setIsLoading(true);
     clearErrors();
-    const isValid = validateForm(validateSignUpFormStep2(formData));
-    if (isValid) {
-      onSubmit();
+    if (validateForm(validateSignUpFormStep2(formData))) {
+      onNext();
     }
+    setIsLoading(false);
   };
 
   return (
     <View className="flex-1 bg-[#12171b]">
-      <ParticlesBackground />
-      <ScrollView className="flex-1 px-5">
-        <View className="mt-16 mb-8 relative flex">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
-            className="absolute left-0 p-1 z-20"
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            className="bg-[#1e2429] p-1.5 rounded-full border border-[#2a3238] active:opacity-80 ml-4"
           >
-            <Ionicons name="arrow-back" size={24} color="#b9f144" />
+            <Ionicons name="arrow-back" size={22} color="#b9f144" />
           </Pressable>
 
-          <Text className="text-2xl font-bold text-white text-center mb-2">
-            Parle-nous de toi ☀️
-          </Text>
+          <View className="flex-1">
+            <Text className="text-white text-2xl mr-8 font-bold text-center">
+              Dis nous en{"\n"}
+              <Text className="text-green">plus sur toi</Text>
+            </Text>
+          </View>
         </View>
 
-        <View className="space-y-4 mb-20">
+        <View className="space-y-4 px-4">
           <View className="space-y-2">
             <Text className="text-white text-sm font-semibold pl-2">
               Prénom*
@@ -176,31 +174,12 @@ export const SignUpFormStep2 = ({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">
+            <Text className="text-white text-sm font-semibold pl-2 pb-2">
               Genre*
             </Text>
-            <SelectList
-              setSelected={(val: string) => handleChange("gender", val)}
-              data={genderOptions}
-              save="key"
-              placeholder="Sélectionnez votre genre"
-              boxStyles={{
-                borderWidth: 1,
-                borderColor: focusedInput === "gender" ? "#b9f144" : "#2a3238",
-                borderRadius: 50,
-                padding: 16,
-                backgroundColor: "#1e2429",
-              }}
-              dropdownStyles={{
-                borderWidth: 1,
-                borderColor: "#2a3238",
-                borderRadius: 12,
-                backgroundColor: "#1e2429",
-                marginTop: 4,
-              }}
-              inputStyles={{ color: "#fff" }}
-              dropdownTextStyles={{ color: "#fff" }}
-              search={false}
+            <GenderSelect
+              value={formData.gender}
+              onChange={(value) => handleChange("gender", value)}
             />
             {errors.gender && (
               <Text className="text-red-500 text-sm pl-2">{errors.gender}</Text>
@@ -208,7 +187,7 @@ export const SignUpFormStep2 = ({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">Bio</Text>
+            <Text className="text-white text-sm font-semibold pl-2">Bio*</Text>
             <TextInput
               className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
                 focusedInput === "bio" ? "border-green" : "border-[#2a3238]"
@@ -252,21 +231,19 @@ export const SignUpFormStep2 = ({
               )}
             </Pressable>
           </View>
-
-          <View className="flex-row space-x-4 mt-8">
-            <Pressable
-              className="flex-1 bg-green py-4 rounded-full disabled:opacity-50"
-              onPress={handleSubmit}
-              disabled={!isFormValid}
-              style={!isFormValid ? { opacity: 0.5 } : {}}
-            >
-              <Text className="text-base font-bold text-dark text-center">
-                S'inscrire
-              </Text>
-            </Pressable>
-          </View>
         </View>
+
+        <View className="h-32" />
       </ScrollView>
+
+      <View className="absolute bottom-0 left-0 right-0 p-6 bg-[#12171b]">
+        <ActionButton
+          text="Continuer"
+          onPress={handleSubmit}
+          disabled={!isFormValid}
+          loading={isLoading}
+        />
+      </View>
 
       <Modal visible={showAgePicker} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
@@ -305,4 +282,4 @@ export const SignUpFormStep2 = ({
       </Modal>
     </View>
   );
-};
+}

@@ -23,7 +23,7 @@ export default function LoginForm() {
   });
   const [loading, setLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const { errors, validateForm, clearErrors } = useFormValidation();
+  const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
   const { setMatches } = useMatches();
   const { login } = useAuth();
 
@@ -56,7 +56,7 @@ export default function LoginForm() {
     <View className="flex-1 bg-[#12171b] px-5">
       <ParticlesBackground />
       <View className="flex-row items-center justify-between mt-16">
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.replace("/")}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </Pressable>
         <View className="flex-1">
