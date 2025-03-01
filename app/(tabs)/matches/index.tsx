@@ -12,6 +12,7 @@ import RunningGroup from "@/components/group/RunningGroup";
 import GetPremiumVersion from "@/components/GetPremiumVersion";
 import { Ionicons } from "@expo/vector-icons";
 import { EventsList } from "@/components/events/EventsList";
+import { useAuth } from "@/context/AuthContext";
 
 const HomepageScreen = () => {
   const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
@@ -19,6 +20,17 @@ const HomepageScreen = () => {
   );
   const [modalVisible, setModalVisible] = useState(false);
   const [eventsType, setEventsType] = useState<"all" | "my">("all");
+
+  const { user } = useAuth();
+  console.log("👤 User Data:", {
+    running_type: user?.runner_profile?.running_type,
+    user_id: user?.id,
+    name: `${user?.first_name} ${user?.last_name}`,
+    location: {
+      city: user?.city,
+      department: user?.department,
+    },
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-[#12171b]">

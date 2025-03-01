@@ -124,7 +124,7 @@ export function MatchesCarousel() {
             />
 
             {/* Indicateurs de pagination */}
-            <View className="flex-row justify-center pt-4 space-x-2 pb-4">
+            {/* <View className="flex-row justify-center pt-4 space-x-2 pb-4">
               {matches.map((_, index) => (
                 <View
                   key={index}
@@ -133,7 +133,7 @@ export function MatchesCarousel() {
                   }`}
                 />
               ))}
-            </View>
+            </View> */}
           </View>
         )}
       </View>
