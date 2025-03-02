@@ -99,7 +99,7 @@ export const ParticlesBackground = () => {
             },
           ]}
         >
-          <FontAwesome5 name="running" size={24} color="#b9f144" />
+          <FontAwesome5 name="running" size={24} color="#8101f7" />
         </Animated.View>
       ))}
     </View>

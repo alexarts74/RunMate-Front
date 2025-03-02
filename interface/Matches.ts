@@ -17,12 +17,22 @@ export interface MatchUser {
     department: string;
     profile_image: string;
     bio?: string;
+    age: number;
     expo_push_token?: string;
     runner_profile: {
       actual_pace: string;
       usual_distance: number;
       availability: string[];
       objective: string;
+      running_type: string;
+      social_preferences?: string[];
+      running_frequency?: string;
+      target_pace?: string;
+      weekly_mileage?: string;
+      training_days?: string[];
+      competition_goals?: string;
+      post_run_activities?: string[];
+      preferred_time_of_day?: string[];
     };
   };
   score?: number;

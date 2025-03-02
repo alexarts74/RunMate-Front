@@ -30,7 +30,7 @@ export const EventCard = ({
       <View className="p-4">
         <View className="flex-row justify-between items-center mb-2">
           {event.is_creator ? (
-            <Text className="text-green font-bold text-lg mb-2">Créateur</Text>
+            <Text className="text-purple font-bold text-lg mb-2">Créateur</Text>
           ) : event.is_participant ? (
             <Text className="text-orange-400 font-bold text-lg mb-2">
               Participant
@@ -40,7 +40,7 @@ export const EventCard = ({
         <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
 
         <View className="flex-row items-center mb-2">
-          <Ionicons name="calendar" size={16} color="#b9f144" />
+          <Ionicons name="calendar" size={16} color="#8101f7" />
           <Text className="text-white ml-2">
             {new Date(event.start_date).toLocaleDateString()}
           </Text>
@@ -54,24 +54,24 @@ export const EventCard = ({
 
         <View className="flex-row justify-between items-center mb-3">
           <View className="flex-row items-center">
-            <Ionicons name="location" size={16} color="#b9f144" />
+            <Ionicons name="location" size={16} color="#8101f7" />
             <Text className="text-white ml-2">{event.location}</Text>
           </View>
         </View>
 
         <View className="flex-row justify-between items-center mb-4">
           <View className="flex-row items-center">
-            <Ionicons name="trending-up" size={16} color="#b9f144" />
+            <Ionicons name="trending-up" size={16} color="#8101f7" />
             <Text className="text-white ml-2">{event.distance} km</Text>
           </View>
         </View>
 
         <Pressable
           onPress={() => router.push(`/events/${event.id}`)}
-          className="bg-green py-2 rounded-lg"
+          className="bg-purple py-2 rounded-lg"
           android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }} // Effet de ripple sur Android
         >
-          <Text className="text-center text-[#12171b] font-bold">
+          <Text className="text-center text-white font-bold">
             Voir l'événement
           </Text>
         </Pressable>

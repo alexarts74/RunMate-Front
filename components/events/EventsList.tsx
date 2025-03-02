@@ -74,7 +74,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   }, [eventsType]);
 
   const DistanceFilter = () => (
-    <View className="bg-[#12171b] py-3">
+    <View className="bg-background py-3">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -90,14 +90,14 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
               }}
               className={`px-4 py-3 rounded-xl flex-row items-center gap-2 ${
                 radius === item.value
-                  ? "bg-[#1e2429] border border-green"
+                  ? "bg-[#1e2429] border border-purple"
                   : "bg-[#1e2429] border border-[#2a3137]"
               }`}
             >
               <Text className="text-base">{item.icon}</Text>
               <Text
                 className={`${
-                  radius === item.value ? "text-green font-bold" : "text-white"
+                  radius === item.value ? "text-purple font-bold" : "text-white"
                 } text-base`}
               >
                 {item.label}
@@ -113,7 +113,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     if (loading && !refreshing) {
       return (
         <View className="flex-1 justify-center h-full my-auto items-center">
-          <ActivityIndicator size="large" color="#b9f144" />
+          <ActivityIndicator size="large" color="#8101f7" />
           <Text className="text-white mt-4">Chargement des événements...</Text>
         </View>
       );
@@ -125,9 +125,9 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
           <Text className="text-red-500 text-center mb-4">{error}</Text>
           <Pressable
             onPress={() => loadEvents()}
-            className="bg-[#00dc82] px-6 py-3 rounded-xl"
+            className="bg-purple px-6 py-3 rounded-xl"
           >
-            <Text className="text-[#12171b] font-bold">Réessayer</Text>
+            <Text className="text-white font-bold">Réessayer</Text>
           </Pressable>
         </View>
       );
@@ -162,7 +162,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   };
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="flex-1 bg-background">
       {eventsType === "all" && <DistanceFilter />}
       <ScrollView
         className="flex-1"
@@ -170,7 +170,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#00dc82"
+            tintColor="#8101f7"
           />
         }
       >

@@ -62,13 +62,13 @@ export function RunnerProfileEditForm({
             onPress={() => setIsEditing(false)}
             className="bg-[#2a3238] p-3 rounded-full"
           >
-            <Ionicons name="close" size={20} color="#b9f144" />
+            <Ionicons name="close" size={20} color="#8101f7" />
           </Pressable>
         </View>
 
         <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="fitness-outline" size={24} color="#b9f144" />
+            <Ionicons name="fitness-outline" size={24} color="#8101f7" />
             <Text className="text-white text-base font-semibold">
               Performance
             </Text>
@@ -82,7 +82,7 @@ export function RunnerProfileEditForm({
 
         <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="trophy-outline" size={24} color="#b9f144" />
+            <Ionicons name="trophy-outline" size={24} color="#8101f7" />
             <Text className="text-white text-base font-semibold">Objectif</Text>
           </View>
           <ObjectiveSelect
@@ -93,7 +93,7 @@ export function RunnerProfileEditForm({
 
         <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="calendar-outline" size={24} color="#b9f144" />
+            <Ionicons name="calendar-outline" size={24} color="#8101f7" />
             <Text className="text-white text-base font-semibold">
               Disponibilités
             </Text>
@@ -106,20 +106,20 @@ export function RunnerProfileEditForm({
 
         <View className="space-y-3 mt-4">
           <Pressable
-            className="bg-green py-4 rounded-full items-center flex-row justify-center space-x-2"
+            className="bg-purple py-4 rounded-full items-center flex-row justify-center space-x-2"
             onPress={handleSubmit}
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#12171b" />
+              <ActivityIndicator color="#ffffff" />
             ) : (
               <>
                 <Ionicons
                   name="checkmark-circle-outline"
                   size={20}
-                  color="#12171b"
+                  color="#ffffff"
                 />
-                <Text className="text-dark font-semibold">Enregistrer</Text>
+                <Text className="text-white font-semibold">Enregistrer</Text>
               </>
             )}
           </Pressable>

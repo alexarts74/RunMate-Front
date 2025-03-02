@@ -88,7 +88,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
 
   return (
     <ScrollView
-      className="flex-1 bg-[#12171b] px-5 py-6 pt-12"
+      className="flex-1 bg-background px-5 py-6 pt-12"
       contentContainerStyle={{ paddingBottom: 150 }}
     >
       <Text className="text-2xl font-bold mb-6 text-white">
@@ -102,9 +102,9 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
               ? { uri: formData.profile_image }
               : require("@/assets/images/react-logo.png")
           }
-          className="w-32 h-32 rounded-full border-2 border-green"
+          className="w-32 h-32 rounded-full border-2 border-purple"
         />
-        <Text className="text-green mt-2 font-semibold">Changer la photo</Text>
+        <Text className="text-purple mt-2 font-semibold">Changer la photo</Text>
       </Pressable>
 
       <View className="space-y-4">
@@ -115,7 +115,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           <TextInput
             className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
               focusedInput === "first_name"
-                ? "border-green"
+                ? "border-purple"
                 : "border-[#2a3238]"
             }`}
             placeholder="Prénom"
@@ -133,7 +133,9 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           </Text>
           <TextInput
             className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-              focusedInput === "last_name" ? "border-green" : "border-[#2a3238]"
+              focusedInput === "last_name"
+                ? "border-purple"
+                : "border-[#2a3238]"
             }`}
             placeholder="Nom"
             placeholderTextColor="#9CA3AF"
@@ -150,7 +152,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           </Text>
           <TextInput
             className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-              focusedInput === "age" ? "border-green" : "border-[#2a3238]"
+              focusedInput === "age" ? "border-purple" : "border-[#2a3238]"
             }`}
             placeholder="Âge"
             placeholderTextColor="#9CA3AF"
@@ -174,7 +176,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             placeholder="Sélectionnez votre genre"
             boxStyles={{
               borderWidth: 1,
-              borderColor: focusedInput === "gender" ? "#b9f144" : "#2a3238",
+              borderColor: focusedInput === "gender" ? "#8101f7" : "#2a3238",
               borderRadius: 9999,
               padding: 16,
               backgroundColor: "#1e2429",
@@ -198,7 +200,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           </Text>
           <TextInput
             className={`w-full border rounded-2xl p-4 bg-[#1e2429] text-white ${
-              focusedInput === "bio" ? "border-green" : "border-[#2a3238]"
+              focusedInput === "bio" ? "border-purple" : "border-[#2a3238]"
             }`}
             placeholder="Bio"
             placeholderTextColor="#9CA3AF"
@@ -218,21 +220,21 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
 
       <View className="space-y-3 mt-6">
         <Pressable
-          className="bg-green py-4 rounded-full items-center"
+          className="bg-purple py-4 rounded-full items-center"
           onPress={handleSubmit}
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#12171b" />
+            <ActivityIndicator color="#ffffff" />
           ) : (
-            <Text className="text-dark font-semibold">Enregistrer</Text>
+            <Text className="text-white font-semibold">Enregistrer</Text>
           )}
         </Pressable>
         <Pressable
-          className="bg-transparent border border-green py-4 rounded-full items-center"
+          className="bg-transparent border border-purple py-4 rounded-full items-center"
           onPress={() => setIsEditing(false)}
         >
-          <Text className="text-green font-semibold">Annuler</Text>
+          <Text className="text-purple font-semibold">Annuler</Text>
         </Pressable>
       </View>
     </ScrollView>

@@ -129,26 +129,26 @@ export function SignUpFormStep3({
   }, [formData, runnerType]);
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="flex-1 bg-background">
       <ScrollView showsVerticalScrollIndicator={false} className="mb-32">
         {/* Header */}
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
-            className="bg-[#1e2429] p-1.5 rounded-full border border-[#2a3238] active:opacity-80 ml-6"
+            className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-6"
           >
-            <Ionicons name="arrow-back" size={22} color="#b9f144" />
+            <Ionicons name="arrow-back" size={22} color="#8101f7" />
           </Pressable>
 
           <View className="flex-1">
             <Text className="text-white text-2xl mr-8 font-bold text-center">
               {runnerType === "perf" ? (
                 <>
-                  Runner <Text className="text-green">Performance</Text> 🏃‍♂️
+                  Runner <Text className="text-purple">Performance</Text> 🏃‍♂️
                 </>
               ) : (
                 <>
-                  Runner <Text className="text-green">Chill</Text> 🎉
+                  Runner <Text className="text-purple">Chill</Text> 🎉
                 </>
               )}
             </Text>
@@ -164,16 +164,16 @@ export function SignUpFormStep3({
                   <Ionicons
                     name="speedometer-outline"
                     size={24}
-                    color="#b9f144"
+                    color="#8101f7"
                   />
                   <Text className="text-white text-sm font-semibold ml-2">
                     Allure actuelle
                   </Text>
                 </View>
                 <TextInput
-                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-[#2a3238]"
+                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700"
                   placeholder="min/km"
-                  placeholderTextColor="#394047"
+                  placeholderTextColor="#9CA3AF"
                   value={formData.actual_pace}
                   onChangeText={(text) => handleChange("actual_pace", text)}
                 />
@@ -186,16 +186,16 @@ export function SignUpFormStep3({
             )}
 
             <View>
-              <View className="flex-row items-center mb-2 ">
-                <Ionicons name="map-outline" size={18} color="#b9f144" />
+              <View className="flex-row items-center mb-2">
+                <Ionicons name="map-outline" size={18} color="#8101f7" />
                 <Text className="text-white text-sm font-semibold ml-2">
                   Distance habituelle
                 </Text>
               </View>
               <TextInput
-                className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-[#2a3238]"
+                className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700"
                 placeholder="km"
-                placeholderTextColor="#394047"
+                placeholderTextColor="#9CA3AF"
                 value={formData.usual_distance}
                 onChangeText={(text) => handleChange("usual_distance", text)}
               />
@@ -212,15 +212,15 @@ export function SignUpFormStep3({
             <View className="space-y-8">
               <View>
                 <View className="flex-row items-center mb-4 px-2">
-                  <Ionicons name="trophy-outline" size={24} color="#b9f144" />
+                  <Ionicons name="trophy-outline" size={24} color="#8101f7" />
                   <Text className="text-white text-sm font-semibold ml-2">
                     Objectif d'allure
                   </Text>
                 </View>
                 <TextInput
-                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-[#2a3238]"
+                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700"
                   placeholder="min/km"
-                  placeholderTextColor="#394047"
+                  placeholderTextColor="#9CA3AF"
                   value={formData.target_pace}
                   onChangeText={(text) => handleChange("target_pace", text)}
                 />
@@ -228,15 +228,15 @@ export function SignUpFormStep3({
 
               <View>
                 <View className="flex-row items-center mb-4 px-4">
-                  <Ionicons name="stats-chart" size={24} color="#b9f144" />
+                  <Ionicons name="stats-chart" size={24} color="#8101f7" />
                   <Text className="text-white text-sm font-semibold ml-2">
                     Kilométrage hebdomadaire
                   </Text>
                 </View>
                 <TextInput
-                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-[#2a3238]"
+                  className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700"
                   placeholder="km/semaine"
-                  placeholderTextColor="#394047"
+                  placeholderTextColor="#9CA3AF"
                   value={formData.weekly_mileage}
                   onChangeText={(text) => handleChange("weekly_mileage", text)}
                 />
@@ -322,7 +322,7 @@ export function SignUpFormStep3({
       </ScrollView>
 
       {/* Fixed Button at Bottom */}
-      <View className="absolute bottom-0 left-0 right-0 p-6 bg-[#12171b]">
+      <View className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t border-gray-700">
         <ActionButton
           onPress={handleSubmit}
           text={runnerType === "perf" ? "C'est parti ! 🚀" : "Let's go ! 🎯"}

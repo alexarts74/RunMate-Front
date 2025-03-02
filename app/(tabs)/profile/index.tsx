@@ -55,11 +55,11 @@ export default function ProfileScreen() {
                 <Ionicons
                   name="notifications-outline"
                   size={24}
-                  color="#b9f144"
+                  color="#8101f7"
                 />
                 <Text className="text-white font-semibold">Notifications</Text>
               </View>
-              <Ionicons name="chevron-forward" size={24} color="#666" />
+              <Ionicons name="chevron-forward" size={24} color="#687076" />
             </Pressable>
 
             <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
@@ -67,13 +67,13 @@ export default function ProfileScreen() {
                 <Ionicons
                   name="lock-closed-outline"
                   size={24}
-                  color="#b9f144"
+                  color="#8101f7"
                 />
                 <Text className="text-white font-semibold">
                   Confidentialité
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={24} color="#666" />
+              <Ionicons name="chevron-forward" size={24} color="#687076" />
             </Pressable>
 
             <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
@@ -81,19 +81,19 @@ export default function ProfileScreen() {
                 <Ionicons
                   name="help-circle-outline"
                   size={24}
-                  color="#b9f144"
+                  color="#8101f7"
                 />
                 <Text className="text-white font-semibold">Aide</Text>
               </View>
-              <Ionicons name="chevron-forward" size={24} color="#666" />
+              <Ionicons name="chevron-forward" size={24} color="#687076" />
             </Pressable>
 
             <View className="space-y-4 mt-6">
               <Pressable
-                className="bg-transparent border border-green py-4 rounded-full items-center mt-6"
+                className="bg-purple border  py-4 rounded-full items-center mt-6"
                 onPress={logout}
               >
-                <Text className="text-green font-semibold">Se déconnecter</Text>
+                <Text className="text-white font-semibold">Se déconnecter</Text>
               </Pressable>
               <Pressable
                 className="bg-transparent border border-red-500 py-4 rounded-full items-center"
@@ -110,15 +110,15 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View className="flex-1 bg-[#12171b]">
-      <View className="flex-row justify-around py-4 px-5 border-b border-[#2a3238] mt-12">
+    <View className="flex-1 bg-background">
+      <View className="flex-row justify-around py-4 px-5 border-b border-gray-700 mt-12">
         <Pressable
           onPress={() => {
             setActiveTab("profile");
             setIsEditing(false);
           }}
           className={`px-4 py-2 rounded-full ${
-            activeTab === "profile" ? "bg-[#2a3238]" : ""
+            activeTab === "profile" ? "bg-purple" : ""
           }`}
         >
           <Text className="text-white font-semibold">Profil</Text>
@@ -129,7 +129,7 @@ export default function ProfileScreen() {
             setIsEditing(false);
           }}
           className={`px-4 py-2 rounded-full ${
-            activeTab === "runner" ? "bg-[#2a3238]" : ""
+            activeTab === "runner" ? "bg-purple" : ""
           }`}
         >
           <Text className="text-white font-semibold">Runner</Text>
@@ -140,7 +140,7 @@ export default function ProfileScreen() {
             setIsEditing(false);
           }}
           className={`px-4 py-2 rounded-full ${
-            activeTab === "settings" ? "bg-[#2a3238]" : ""
+            activeTab === "settings" ? "bg-purple" : ""
           }`}
         >
           <Text className="text-white font-semibold">Réglages</Text>

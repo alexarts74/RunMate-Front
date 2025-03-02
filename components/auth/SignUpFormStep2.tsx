@@ -89,20 +89,20 @@ export function SignUpFormStep2({
   };
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="flex-1 bg-background">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
-            className="bg-[#1e2429] p-1.5 rounded-full border border-[#2a3238] active:opacity-80 ml-4"
+            className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
           >
-            <Ionicons name="arrow-back" size={22} color="#b9f144" />
+            <Ionicons name="arrow-back" size={22} color="#8101f7" />
           </Pressable>
 
           <View className="flex-1">
             <Text className="text-white text-2xl mr-8 font-bold text-center">
               Dis nous en{"\n"}
-              <Text className="text-green">plus sur toi</Text>
+              <Text className="text-purple">plus sur toi</Text>
             </Text>
           </View>
         </View>
@@ -115,8 +115,8 @@ export function SignUpFormStep2({
             <TextInput
               className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
                 focusedInput === "first_name"
-                  ? "border-green"
-                  : "border-[#2a3238]"
+                  ? "border-purple"
+                  : "border-gray-700"
               }`}
               placeholder="Prénom"
               placeholderTextColor="#9CA3AF"
@@ -137,8 +137,8 @@ export function SignUpFormStep2({
             <TextInput
               className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
                 focusedInput === "last_name"
-                  ? "border-green"
-                  : "border-[#2a3238]"
+                  ? "border-purple"
+                  : "border-gray-700"
               }`}
               placeholder="Nom"
               placeholderTextColor="#9CA3AF"
@@ -159,7 +159,7 @@ export function SignUpFormStep2({
             <TouchableOpacity
               onPress={() => setShowAgePicker(true)}
               className={`w-full border rounded-full p-4 bg-[#1e2429] ${
-                focusedInput === "age" ? "border-green" : "border-[#2a3238]"
+                focusedInput === "age" ? "border-purple" : "border-gray-700"
               }`}
             >
               <Text className="text-white">
@@ -190,7 +190,7 @@ export function SignUpFormStep2({
             <Text className="text-white text-sm font-semibold pl-2">Bio*</Text>
             <TextInput
               className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
-                focusedInput === "bio" ? "border-green" : "border-[#2a3238]"
+                focusedInput === "bio" ? "border-purple" : "border-gray-700"
               }`}
               placeholder="Parle-nous de toi..."
               placeholderTextColor="#9CA3AF"
@@ -212,8 +212,8 @@ export function SignUpFormStep2({
               onPress={pickImage}
               className={`w-full border rounded-2xl p-4 items-center justify-center bg-[#1e2429] ${
                 focusedInput === "profile_image"
-                  ? "border-green"
-                  : "border-[#2a3238]"
+                  ? "border-purple"
+                  : "border-gray-700"
               }`}
             >
               {formData.profile_image ? (
@@ -236,7 +236,7 @@ export function SignUpFormStep2({
         <View className="h-32" />
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 right-0 p-6 bg-[#12171b]">
+      <View className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t border-gray-700">
         <ActionButton
           text="Continuer"
           onPress={handleSubmit}
@@ -249,31 +249,27 @@ export function SignUpFormStep2({
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-[#1e2429] w-full p-4">
             <View className="flex-row justify-between items-center mb-4">
-              <TouchableOpacity onPress={() => setShowAgePicker(false)}>
-                <Text className="text-white">Annuler</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if (!formData.age) {
-                    handleChange("age", "18");
-                  }
-                  setShowAgePicker(false);
-                }}
-              >
-                <Text className="text-white">Confirmer</Text>
-              </TouchableOpacity>
+              <Text className="text-white text-lg font-semibold">
+                Sélectionnez votre âge
+              </Text>
+              <Pressable onPress={() => setShowAgePicker(false)}>
+                <Ionicons name="close" size={24} color="#8101f7" />
+              </Pressable>
             </View>
             <Picker
               selectedValue={formData.age}
-              onValueChange={(value) => handleChange("age", value.toString())}
-              style={{ color: "#fff" }}
+              onValueChange={(itemValue) => {
+                handleChange("age", itemValue.toString());
+                setShowAgePicker(false);
+              }}
+              style={{ color: "#ffffff" }}
             >
               {ageOptions.map((age) => (
                 <Picker.Item
                   key={age}
                   label={`${age} ans`}
                   value={age.toString()}
-                  style={{ color: "#fff" }}
+                  color="#ffffff"
                 />
               ))}
             </Picker>

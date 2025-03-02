@@ -33,24 +33,24 @@ const HomepageScreen = () => {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#12171b]">
+    <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
-        <View className="flex-row border-b border-[#2a3238]">
+        <View className="flex-row border-b border-gray-700">
           <Pressable
             onPress={() => setActiveTab("matches")}
             className={`flex-1 py-4 ${
-              activeTab === "matches" ? "border-b-2 border-green" : ""
+              activeTab === "matches" ? "border-b-2 border-purple" : ""
             }`}
           >
             <View className="flex-row items-center justify-center">
               <Ionicons
                 name="football-outline"
                 size={20}
-                color={activeTab === "matches" ? "#b9f144" : "#fff"}
+                color={activeTab === "matches" ? "#8101f7" : "#687076"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "matches" ? "text-green" : "text-white"
+                  activeTab === "matches" ? "text-purple" : "text-gray-400"
                 }`}
               >
                 Matches
@@ -61,18 +61,18 @@ const HomepageScreen = () => {
           <Pressable
             onPress={() => setActiveTab("groups")}
             className={`flex-1 py-4 ${
-              activeTab === "groups" ? "border-b-2 border-green" : ""
+              activeTab === "groups" ? "border-b-2 border-purple" : ""
             }`}
           >
             <View className="flex-row items-center justify-center">
               <Ionicons
                 name="people-outline"
                 size={20}
-                color={activeTab === "groups" ? "#b9f144" : "#fff"}
+                color={activeTab === "groups" ? "#8101f7" : "#687076"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "groups" ? "text-green" : "text-white"
+                  activeTab === "groups" ? "text-purple" : "text-gray-400"
                 }`}
               >
                 Groups
@@ -83,18 +83,18 @@ const HomepageScreen = () => {
           <Pressable
             onPress={() => setModalVisible(true)}
             className={`flex-1 py-4 ${
-              activeTab === "events" ? "border-b-2 border-green" : ""
+              activeTab === "events" ? "border-b-2 border-purple" : ""
             }`}
           >
             <View className="flex-row items-center justify-center">
               <Ionicons
                 name="calendar-outline"
                 size={20}
-                color={activeTab === "events" ? "#b9f144" : "#fff"}
+                color={activeTab === "events" ? "#8101f7" : "#687076"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "events" ? "text-green" : "text-white"
+                  activeTab === "events" ? "text-purple" : "text-gray-400"
                 }`}
               >
                 Events
@@ -109,7 +109,7 @@ const HomepageScreen = () => {
               <View className="mb-8">
                 <MatchesCarousel />
               </View>
-              <GetPremiumVersion />
+              {/* <GetPremiumVersion /> */}
             </>
           ) : activeTab === "groups" ? (
             <>
@@ -135,7 +135,7 @@ const HomepageScreen = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View className="flex-1 justify-center items-center bg-black/50">
-          <View className="bg-background m-5 p-5 rounded-2xl w-[80%] bg-[#12171b]">
+          <View className="bg-[#1e2429] m-5 p-5 rounded-2xl w-[80%]">
             <Text className="text-white text-xl font-bold mb-6 text-center">
               Sélectionner les events
             </Text>
@@ -146,7 +146,7 @@ const HomepageScreen = () => {
                 setActiveTab("events");
                 setModalVisible(false);
               }}
-              className="py-4 mb-3 bg-[#2a3238] rounded-xl"
+              className="py-4 mb-3 bg-background rounded-xl"
             >
               <Text className="text-white text-lg text-center">Mes Events</Text>
             </Pressable>
@@ -157,7 +157,7 @@ const HomepageScreen = () => {
                 setActiveTab("events");
                 setModalVisible(false);
               }}
-              className="py-4 mb-6 bg-[#2a3238] rounded-xl"
+              className="py-4 mb-6 bg-background rounded-xl"
             >
               <Text className="text-white text-lg text-center">
                 Tous les Events
@@ -166,9 +166,9 @@ const HomepageScreen = () => {
 
             <Pressable
               onPress={() => setModalVisible(false)}
-              className="bg-green py-4 rounded-xl"
+              className="bg-purple py-4 rounded-xl"
             >
-              <Text className="text-black text-center font-bold">Fermer</Text>
+              <Text className="text-white text-center font-bold">Fermer</Text>
             </Pressable>
           </View>
         </View>

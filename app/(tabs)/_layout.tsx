@@ -11,7 +11,7 @@ function CreateActionButton({ focused }: { focused: boolean }) {
     <>
       <TabBarIcon
         name="add-outline"
-        color={focused ? "#b9f144" : "#394047"}
+        color={focused ? "#8101f7" : "#687076"}
         size={28}
         onPress={() => setModalVisible(true)}
       />
@@ -29,16 +29,16 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#b9f144",
-        tabBarInactiveTintColor: "#394047",
+        tabBarActiveTintColor: "#8101f7",
+        tabBarInactiveTintColor: "#687076",
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: "#12171b",
-          borderTopColor: "#394047",
+          backgroundColor: "#1e2429",
+          borderTopColor: "#374151",
           height: 80,
           paddingBottom: 28,
           paddingTop: 0,
@@ -55,6 +55,9 @@ export default function TabLayout() {
               color={color}
             />
           ),
+          tabBarLabelStyle: {
+            color: "#ffffff",
+          },
         }}
       />
       <Tabs.Screen
@@ -69,8 +72,11 @@ export default function TabLayout() {
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: "#b9f144",
-            color: "#12171b",
+            backgroundColor: "#8101f7",
+            color: "#ffffff",
+          },
+          tabBarLabelStyle: {
+            color: "#ffffff",
           },
         }}
       />
@@ -79,6 +85,9 @@ export default function TabLayout() {
         options={{
           title: "Create",
           tabBarIcon: ({ focused }) => <CreateActionButton focused={focused} />,
+          tabBarLabelStyle: {
+            color: "#ffffff",
+          },
         }}
         listeners={{
           tabPress: (e) => {
@@ -97,6 +106,9 @@ export default function TabLayout() {
               color={color}
             />
           ),
+          tabBarLabelStyle: {
+            color: "#ffffff",
+          },
         }}
       />
     </Tabs>

@@ -65,7 +65,7 @@ export default function WelcomePage() {
   }
 
   return (
-    <View className="flex-1 bg-[#12171b] p-6 justify-between">
+    <View className="flex-1 bg-background p-6 justify-between">
       <Animated.View
         className="flex-1 justify-center items-center"
         style={{
@@ -80,7 +80,7 @@ export default function WelcomePage() {
           ],
         }}
       >
-        <Text className="text-5xl font-bold text-green mb-2.5">RunMate</Text>
+        <Text className="text-5xl font-bold text-purple mb-2.5">RunMate</Text>
         <Text className="text-lg text-white text-center px-5">
           Trouvez votre partenaire de course idéal
         </Text>
@@ -90,8 +90,8 @@ export default function WelcomePage() {
         className="absolute left-0 right-0 bottom-32 items-center"
         style={{ opacity: loaderOpacity }}
       >
-        <ActivityIndicator color="#b9f144" />
-        <Text className="text-green mt-4 text-base">Chargement...</Text>
+        <ActivityIndicator color="#8101f7" />
+        <Text className="text-purple mt-4 text-base">Chargement...</Text>
       </Animated.View>
 
       <Animated.View
@@ -101,17 +101,17 @@ export default function WelcomePage() {
         }}
       >
         <AnimatedPressable
-          className="bg-green py-3 rounded-full items-center"
+          className="bg-purple py-3 rounded-full items-center"
           onPress={() => router.push("/(auth)/login")}
         >
-          <Text className="text-sm font-semibold text-dark">Se connecter</Text>
+          <Text className="text-sm font-semibold text-white">Se connecter</Text>
         </AnimatedPressable>
 
         <AnimatedPressable
-          className="bg-gray py-3 rounded-full items-center border border-white"
+          className="bg-transparent py-3 rounded-full items-center border border-purple"
           onPress={() => router.push("/(auth)/signup")}
         >
-          <Text className="text-sm font-semibold text-white">
+          <Text className="text-sm font-semibold text-purple">
             Créer un compte
           </Text>
         </AnimatedPressable>

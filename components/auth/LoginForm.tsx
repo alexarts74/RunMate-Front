@@ -53,11 +53,11 @@ export default function LoginForm() {
   };
 
   return (
-    <View className="flex-1 bg-[#12171b] px-5">
+    <View className="flex-1 bg-background px-5">
       <ParticlesBackground />
       <View className="flex-row items-center justify-between mt-16">
         <Pressable onPress={() => router.replace("/")}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+          <Ionicons name="arrow-back" size={24} color="#8101f7" />
         </Pressable>
         <View className="flex-1">
           <Text className="text-2xl font-bold text-white text-center">
@@ -76,10 +76,10 @@ export default function LoginForm() {
               Email*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              className={`w-full border rounded-full p-4 bg-background text-white ${
                 focusedInput === "email"
-                  ? `border-green ${errors.email ? "border-red-500" : ""}`
-                  : "border-[#2a3238]"
+                  ? `border-purple ${errors.email ? "border-red-500" : ""}`
+                  : "border-gray-700"
               }`}
               placeholder="Email"
               placeholderTextColor="#9CA3AF"
@@ -102,10 +102,10 @@ export default function LoginForm() {
               Mot de passe*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              className={`w-full border rounded-full p-4 bg-background text-white ${
                 focusedInput === "password"
-                  ? `border-green ${errors.password ? "border-red-500" : ""}`
-                  : "border-[#2a3238]"
+                  ? `border-purple ${errors.password ? "border-red-500" : ""}`
+                  : "border-gray-700"
               }`}
               placeholder="Mot de passe"
               placeholderTextColor="#9CA3AF"
@@ -131,16 +131,16 @@ export default function LoginForm() {
       </View>
 
       <Pressable
-        className={`bg-green py-4 rounded-full mb-12 ${
+        className={`bg-purple py-4 rounded-full mb-12 ${
           loading ? "opacity-70" : ""
         }`}
         onPress={handleLogin}
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="#1a2126" />
+          <ActivityIndicator color="#ffffff" />
         ) : (
-          <Text className="text-sm font-semibold text-dark text-center">
+          <Text className="text-sm font-semibold text-white text-center">
             Se connecter
           </Text>
         )}

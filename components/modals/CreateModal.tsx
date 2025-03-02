@@ -28,7 +28,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
         <Pressable onPress={(e) => e.stopPropagation()}>
           <View className="bg-[#1e2429] rounded-3xl w-[320px] shadow-lg">
             {/* Header */}
-            <View className="p-6 border-b border-[#394047]">
+            <View className="p-6 border-b border-gray-700">
               <Text className="text-white text-2xl font-bold text-center">
                 Créer
               </Text>
@@ -38,11 +38,11 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
             <View className="p-6 space-y-4">
               <Pressable
                 onPress={() => handleAction("/events/create")}
-                className="bg-[#12171b] rounded-2xl overflow-hidden active:opacity-90"
+                className="bg-background rounded-2xl overflow-hidden active:opacity-90"
               >
                 <View className="flex-row items-center p-4">
                   <View className="w-12 h-12 bg-[#1e2429]/50 rounded-full items-center justify-center">
-                    <Ionicons name="calendar" size={24} color="#b9f144" />
+                    <Ionicons name="calendar" size={24} color="#8101f7" />
                   </View>
                   <View className="ml-4 flex-1">
                     <Text className="text-white text-lg font-semibold mb-1">
@@ -54,11 +54,11 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
 
               <Pressable
                 onPress={() => handleAction("/(app)/groups/create")}
-                className="bg-[#12171b] rounded-2xl overflow-hidden active:opacity-90"
+                className="bg-background rounded-2xl overflow-hidden active:opacity-90"
               >
                 <View className="flex-row items-center p-4">
                   <View className="w-12 h-12 bg-[#1e2429]/50 rounded-full items-center justify-center">
-                    <Ionicons name="people" size={24} color="#b9f144" />
+                    <Ionicons name="people" size={24} color="#8101f7" />
                   </View>
                   <View className="ml-4 flex-1">
                     <Text className="text-white text-lg font-semibold mb-1">
@@ -70,10 +70,10 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
             </View>
 
             {/* Footer */}
-            <View className="p-6 border-t border-[#394047]">
+            <View className="p-6 border-t border-gray-700">
               <Pressable
                 onPress={onClose}
-                className="bg-[#12171b] py-4 rounded-2xl active:opacity-90"
+                className="bg-background py-4 rounded-2xl active:opacity-90"
               >
                 <Text className="text-white text-center font-semibold text-lg">
                   Annuler

@@ -148,7 +148,7 @@ export default function EventDetailsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="flex-1 bg-background">
       <ScrollView className="flex-1">
         <View className="relative h-72">
           <Image
@@ -163,7 +163,7 @@ export default function EventDetailsScreen() {
               onPress={() => router.back()}
               className="w-10 h-10 bg-[#12171b]/50 rounded-full items-center justify-center"
             >
-              <Ionicons name="arrow-back" size={24} color="#b9f144" />
+              <Ionicons name="arrow-back" size={24} color="#8101f7" />
             </Pressable>
           </View>
         </View>
@@ -178,13 +178,13 @@ export default function EventDetailsScreen() {
           ) : (
             <View className="flex-row items-center space-x-1 space-y-2 mb-4">
               <View className="items-center mt-2.5 mr-2">
-                <Ionicons name="time-outline" size={20} color="#b9f144" />
+                <Ionicons name="time-outline" size={20} color="#8101f7" />
               </View>
 
               <View className="items-center">
                 <Text className="text-white text-sm">{countdown.days}j</Text>
               </View>
-              <Text className="text-green">:</Text>
+              <Text className="text-purple">:</Text>
               <View className="items-center">
                 <Text className="text-white text-sm">{countdown.hours}h</Text>
               </View>
@@ -198,20 +198,20 @@ export default function EventDetailsScreen() {
                   event.creator.profile_image ||
                   "https://via.placeholder.com/40",
               }}
-              className="w-14 h-14 rounded-full border-2 border-green"
+              className="w-14 h-14 rounded-full border-2 border-purple"
             />
             <View className="ml-4 flex-1">
               <Text className="text-white font-semibold text-lg">
                 {event.creator.name}
               </Text>
-              <Text className="text-green">Créateur</Text>
+              <Text className="text-purple">Créateur</Text>
             </View>
             {user?.id !== event.creator.id && (
               <Pressable
                 onPress={() => router.push(`/chat/${event.creator.id}`)}
-                className="bg-green px-4 py-2 rounded-full"
+                className="bg-purple px-4 py-2 rounded-full"
               >
-                <Text className="text-dark font-semibold">Message</Text>
+                <Text className="text-white font-semibold">Message</Text>
               </Pressable>
             )}
           </View>
@@ -219,7 +219,7 @@ export default function EventDetailsScreen() {
           <View className="space-y-6 mb-8">
             <View className="flex-row items-center ">
               <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="calendar" size={20} color="#b9f144" />
+                <Ionicons name="calendar" size={20} color="#8101f7" />
               </View>
               <View className="ml-4">
                 <Text className="text-white text-lg">
@@ -229,7 +229,7 @@ export default function EventDetailsScreen() {
                   <Text className="text-white text-sm">
                     {formatTime(event.start_time)}
                   </Text>
-                  <Text className="text-green">-</Text>
+                  <Text className="text-purple">-</Text>
                   <Text className="text-white text-sm">
                     {formatTime(event.end_time)}
                   </Text>
@@ -239,14 +239,14 @@ export default function EventDetailsScreen() {
 
             <View className="flex-row items-center">
               <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="location" size={20} color="#b9f144" />
+                <Ionicons name="location" size={20} color="#8101f7" />
               </View>
               <Text className="text-white ml-4 text-lg">{event.location}</Text>
             </View>
 
             <View className="flex-row items-center">
               <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="trending-up" size={20} color="#b9f144" />
+                <Ionicons name="trending-up" size={20} color="#8101f7" />
               </View>
               <Text className="text-white ml-4 text-lg">
                 {event.distance} km
@@ -312,10 +312,10 @@ export default function EventDetailsScreen() {
         <Pressable
           onPress={handleEventAction}
           className={`py-4 rounded-full ${
-            event.is_participant ? "bg-red-500" : "bg-green"
+            event.is_participant ? "bg-red-500" : "bg-purple"
           }`}
         >
-          <Text className="text-center text-[#12171b] font-bold text-base">
+          <Text className="text-center text-white font-bold text-base">
             {event.is_participant ? "Quitter" : "Participer"}
           </Text>
         </Pressable>

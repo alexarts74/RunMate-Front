@@ -12,7 +12,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
 
   return (
     <ScrollView
-      className="flex-1 bg-[#12171b] px-5 py-6 pt-6 pb-24"
+      className="flex-1 bg-background px-5 py-6 pt-6 pb-24"
       contentContainerStyle={{ paddingBottom: 150 }}
     >
       <View className="flex-row justify-between items-center mb-6">

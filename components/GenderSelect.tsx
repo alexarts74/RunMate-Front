@@ -33,7 +33,7 @@ export function GenderSelect({ value, onChange }: Props) {
         placeholder="Sélectionnez votre genre"
         boxStyles={{
           backgroundColor: "#1e2429",
-          borderColor: "transparent",
+          borderColor: "#374151",
           padding: 12,
           borderRadius: 200,
         }}
@@ -42,8 +42,12 @@ export function GenderSelect({ value, onChange }: Props) {
           backgroundColor: "#1e2429",
           borderRadius: 12,
           marginTop: 4,
+          borderColor: "#374151",
         }}
         dropdownTextStyles={{ color: "white" }}
+        dropdownItemStyles={{
+          borderBottomColor: "#374151",
+        }}
       />
     </View>
   );

@@ -40,7 +40,7 @@ const RunningGroup = () => {
 
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
-      className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4"
+      className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
@@ -65,17 +65,17 @@ const RunningGroup = () => {
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
-            <Ionicons name="people" size={16} color="#b9f144" />
-            <Text className="text-white text-sm ml-2">
+            <Ionicons name="people" size={16} color="#8101f7" />
+            <Text className="text-gray-300 text-sm ml-2">
               {item.members_count} membres
             </Text>
           </View>
 
           <Pressable
-            className="bg-green/20 px-4 py-2 rounded-lg"
+            className="bg-[#2a3238] px-4 py-2 rounded-lg"
             onPress={() => router.push(`/chat/group/${item.id}`)}
           >
-            <Text className="text-green font-semibold">Voir le groupe</Text>
+            <Text className="text-white font-semibold">Voir le groupe</Text>
           </Pressable>
         </View>
       </View>
@@ -83,7 +83,7 @@ const RunningGroup = () => {
   );
 
   return (
-    <View className="bg-[#12171b] flex-1">
+    <View className="bg-background flex-1">
       {isLoading ? (
         <View className="px-5">
           <Text className="text-white text-center">Chargement...</Text>

@@ -66,21 +66,21 @@ export function MatchesCarousel() {
   };
 
   return (
-    <View className="bg-[#12171b]">
+    <View className="bg-background">
       {/* Header */}
-      <View className="bg-[#12171b]">
+      <View className="bg-background">
         <View className="px-5 my-6">
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
-              <View className="w-1 h-6 bg-green rounded-full mr-3" />
+              <View className="w-1 h-6 bg-purple rounded-full mr-3" />
               <Text className="text-2xl font-bold text-white">Vos matches</Text>
             </View>
 
             <Pressable
               onPress={() => router.push("/runner/filters")}
-              className="bg-[#1e2429] p-2 rounded-xl flex-row items-center border border-green/20"
+              className="bg-[#1e2429] p-2 rounded-xl flex-row items-center border border-gray-700"
             >
-              <Ionicons name="filter" size={20} color="#b9f144" />
+              <Ionicons name="filter" size={20} color="#8101f7" />
             </Pressable>
           </View>
         </View>
@@ -99,9 +99,9 @@ export function MatchesCarousel() {
             </Text>
             <Pressable
               onPress={removeDistanceFilter}
-              className="bg-green px-6 py-3 rounded-full"
+              className="bg-purple px-6 py-3 rounded-full"
             >
-              <Text className="text-dark font-semibold">
+              <Text className="text-white font-semibold">
                 Élargir la recherche
               </Text>
             </Pressable>
