@@ -5,8 +5,11 @@ import {
   Pressable,
   Animated,
   ActivityIndicator,
+  Image,
+  Dimensions,
 } from "react-native";
 import { router } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function WelcomePage() {
   const [isReady, setIsReady] = useState(false);
@@ -14,6 +17,10 @@ export default function WelcomePage() {
   const titlePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
   const loaderOpacity = useRef(new Animated.Value(1)).current;
+  const imageScale = useRef(new Animated.Value(0.8)).current;
+  const imageOpacity = useRef(new Animated.Value(0)).current;
+  const buttonScale = useRef(new Animated.Value(0.9)).current;
+  const buttonOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // Attendre que l'AuthenticationGuard soit prêt
@@ -54,8 +61,30 @@ export default function WelcomePage() {
           duration: 800,
           useNativeDriver: true,
         }),
+        Animated.timing(imageScale, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(imageOpacity, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(buttonScale, {
+          toValue: 1,
+          duration: 800,
+          delay: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(buttonOpacity, {
+          toValue: 1,
+          duration: 800,
+          delay: 400,
+          useNativeDriver: true,
+        }),
       ]).start();
-    }, 2000);
+    }, 1500);
   };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -65,7 +94,12 @@ export default function WelcomePage() {
   }
 
   return (
-    <View className="flex-1 bg-background p-6 justify-between">
+    <View className="flex-1 bg-background">
+      <LinearGradient
+        colors={["rgba(129, 1, 247, 0.1)", "transparent"]}
+        className="absolute top-0 left-0 right-0 h-96"
+      />
+
       <Animated.View
         className="flex-1 justify-center items-center"
         style={{
@@ -74,14 +108,14 @@ export default function WelcomePage() {
             {
               translateY: titlePosition.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, -200],
+                outputRange: [0, -100],
               }),
             },
           ],
         }}
       >
-        <Text className="text-5xl font-bold text-purple mb-2.5">RunMate</Text>
-        <Text className="text-lg text-white text-center px-5">
+        <Text className="text-6xl font-bold text-purple mb-4">RunMate</Text>
+        <Text className="text-xl text-white text-center px-8">
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
@@ -95,23 +129,40 @@ export default function WelcomePage() {
       </Animated.View>
 
       <Animated.View
-        className="space-y-3 mb-12 px-8"
+        className="absolute left-0 right-0 bottom-56 items-center"
         style={{
-          opacity: contentOpacity,
+          opacity: imageOpacity,
+          transform: [{ scale: imageScale }],
+        }}
+      >
+        <Image
+          source={require("@/assets/images/react-logo.png")}
+          className="w-48 h-48"
+          resizeMode="contain"
+        />
+      </Animated.View>
+
+      <Animated.View
+        className="space-y-4 mb-12 px-8"
+        style={{
+          opacity: buttonOpacity,
+          transform: [{ scale: buttonScale }],
         }}
       >
         <AnimatedPressable
-          className="bg-purple py-3 rounded-full items-center"
+          className="bg-purple py-4 rounded-full items-center shadow-lg shadow-purple/30"
           onPress={() => router.push("/(auth)/login")}
         >
-          <Text className="text-sm font-semibold text-white">Se connecter</Text>
+          <Text className="text-base font-semibold text-white">
+            Se connecter
+          </Text>
         </AnimatedPressable>
 
         <AnimatedPressable
-          className="bg-transparent py-3 rounded-full items-center border border-purple"
+          className="bg-transparent py-4 rounded-full items-center border-2 border-purple"
           onPress={() => router.push("/(auth)/signup")}
         >
-          <Text className="text-sm font-semibold text-purple">
+          <Text className="text-base font-semibold text-purple">
             Créer un compte
           </Text>
         </AnimatedPressable>

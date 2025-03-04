@@ -14,7 +14,7 @@ export function SignUpFormStep0({ onNext }: Props) {
 
   return (
     <View className="flex-1 mt-16 p-4 bg-background">
-      <RunnerBackground />
+      {/* <RunnerBackgrsound /> */}
       <Text className="text-white text-2xl font-bold text-center px-4">
         Quel type de <Text className="text-purple">runner</Text> es tu ? 🏃
       </Text>

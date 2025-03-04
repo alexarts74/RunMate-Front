@@ -138,9 +138,7 @@ export default function SignUpForm() {
         ...prev,
         running_type: type,
       }));
-      console.log("⏳ Avant changement de step");
       await handleStepChange(1);
-      console.log("✅ Après changement de step");
     } catch (error) {
       console.error("❌ Erreur selection type:", error);
     }
@@ -153,8 +151,6 @@ export default function SignUpForm() {
 
       // 1. Récupérer la localisation
       const locationData = await handleLocationUpdate();
-
-      console.log("locationData", locationData);
 
       // 2. Créer le compte utilisateur
       const signUpResponse = await authService.signUp({
@@ -173,8 +169,6 @@ export default function SignUpForm() {
         latitude: locationData.latitude,
         longitude: locationData.longitude,
       });
-
-      console.log("signUpResponse", signUpResponse);
 
       // 3. Se connecter
       await login(signUpResponse);

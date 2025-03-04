@@ -39,18 +39,20 @@ const HomepageScreen = () => {
           <Pressable
             onPress={() => setActiveTab("matches")}
             className={`flex-1 py-4 ${
-              activeTab === "matches" ? "border-b-2 border-purple" : ""
+              activeTab === "matches"
+                ? "border-b-2 border-purple text-white"
+                : ""
             }`}
           >
             <View className="flex-row items-center justify-center">
               <Ionicons
                 name="football-outline"
                 size={20}
-                color={activeTab === "matches" ? "#8101f7" : "#687076"}
+                color={activeTab === "matches" ? "#8101f7" : "#ffffff"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "matches" ? "text-purple" : "text-gray-400"
+                  activeTab === "matches" ? "text-purple" : "text-white"
                 }`}
               >
                 Matches
@@ -68,11 +70,11 @@ const HomepageScreen = () => {
               <Ionicons
                 name="people-outline"
                 size={20}
-                color={activeTab === "groups" ? "#8101f7" : "#687076"}
+                color={activeTab === "groups" ? "#8101f7" : "#ffffff"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "groups" ? "text-purple" : "text-gray-400"
+                  activeTab === "groups" ? "text-purple" : "text-white"
                 }`}
               >
                 Groups
@@ -90,11 +92,11 @@ const HomepageScreen = () => {
               <Ionicons
                 name="calendar-outline"
                 size={20}
-                color={activeTab === "events" ? "#8101f7" : "#687076"}
+                color={activeTab === "events" ? "#8101f7" : "#ffffff"}
               />
               <Text
                 className={`ml-2 font-semibold ${
-                  activeTab === "events" ? "text-purple" : "text-gray-400"
+                  activeTab === "events" ? "text-purple" : "text-white"
                 }`}
               >
                 Events

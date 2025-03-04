@@ -76,7 +76,7 @@ const MessagesScreen = () => {
   }
 
   return (
-    <View className="flex-1 bg-[#12171b] pt-12">
+    <View className="flex-1 bg-background pt-12">
       <View className="px-4 py-4 border-b border-[#394047] flex-row items-center gap-x-4">
         <Pressable onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />

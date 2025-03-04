@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
+import { BlurView } from "expo-blur";
 
 function CreateActionButton({ focused }: { focused: boolean }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -10,9 +11,9 @@ function CreateActionButton({ focused }: { focused: boolean }) {
   return (
     <>
       <TabBarIcon
-        name="add-outline"
+        name="add-circle"
         color={focused ? "#8101f7" : "#687076"}
-        size={28}
+        size={26}
         onPress={() => setModalVisible(true)}
       />
       <CreateModal
@@ -37,11 +38,37 @@ export default function TabLayout() {
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: "#1e2429",
-          borderTopColor: "#374151",
-          height: 80,
+          backgroundColor: "transparent",
+          borderTopColor: "transparent",
+          height: 85,
           paddingBottom: 28,
           paddingTop: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 8,
+        },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={30}
+            tint="dark"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(30, 36, 41, 0.7)",
+              borderTopWidth: 1,
+              borderTopColor: "rgba(255, 255, 255, 0.1)",
+            }}
+          />
+        ),
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "500",
+          marginTop: 6,
         },
       }}
     >
@@ -51,13 +78,11 @@ export default function TabLayout() {
           title: "Matches",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
+              name={focused ? "compass" : "compass-outline"}
               color={color}
+              size={26}
             />
           ),
-          tabBarLabelStyle: {
-            color: "#ffffff",
-          },
         }}
       />
       <Tabs.Screen
@@ -66,17 +91,17 @@ export default function TabLayout() {
           title: "Messages",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "chatbubble" : "chatbubble-outline"}
+              name={focused ? "chatbubble-ellipses" : "chatbubbles-outline"}
               color={color}
+              size={26}
             />
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
             backgroundColor: "#8101f7",
             color: "#ffffff",
-          },
-          tabBarLabelStyle: {
-            color: "#ffffff",
+            fontSize: 12,
+            fontWeight: "600",
           },
         }}
       />
@@ -85,13 +110,9 @@ export default function TabLayout() {
         options={{
           title: "Create",
           tabBarIcon: ({ focused }) => <CreateActionButton focused={focused} />,
-          tabBarLabelStyle: {
-            color: "#ffffff",
-          },
         }}
         listeners={{
           tabPress: (e) => {
-            // Empêcher la navigation
             e.preventDefault();
           },
         }}
@@ -102,13 +123,11 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "person" : "person-outline"}
+              name={focused ? "person-circle" : "person-circle-outline"}
               color={color}
+              size={26}
             />
           ),
-          tabBarLabelStyle: {
-            color: "#ffffff",
-          },
         }}
       />
     </Tabs>
