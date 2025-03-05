@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 interface ActionButtonProps {
   onPress: () => void;
   text: string;
-  disabled?: boolean;
   icon?: keyof typeof Ionicons.glyphMap;
   iconSize?: number;
   className?: string;
@@ -16,7 +15,6 @@ interface ActionButtonProps {
 export function ActionButton({
   onPress,
   text,
-  disabled = false,
   icon = "arrow-forward",
   iconSize = 20,
   className = "",
@@ -27,15 +25,13 @@ export function ActionButton({
     <View className="w-[80%] mx-auto">
       <Pressable
         onPress={onPress}
-        className={`bg-green py-3 rounded-full active:opacity-90 ${className}`}
-        disabled={disabled}
-        style={disabled ? { opacity: 0.5 } : {}}
+        className={`bg-purple py-3 rounded-full active:opacity-90 ${className}`}
       >
         <View className="flex-row justify-center items-center space-x-2">
-          <Text className={`text-[#12171b] font-bold text-lg ${textClassName}`}>
+          <Text className={`text-white font-bold text-lg ${textClassName}`}>
             {loading ? "Chargement..." : text}
           </Text>
-          {icon && <Ionicons name={icon} size={iconSize} color="#12171b" />}
+          {icon && <Ionicons name={icon} size={iconSize} color="white" />}
         </View>
       </Pressable>
     </View>

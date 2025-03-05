@@ -173,6 +173,72 @@ export const FORM_VALIDATION_RULES = {
       },
     },
   },
+  createEvent: {
+    name: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "Le nom de l'événement est requis",
+      },
+    },
+    description: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "La description est requise",
+      },
+    },
+    start_date: {
+      rules: {
+        required: true,
+        futureDate: true,
+      },
+      errorMessages: {
+        required: "La date est requise",
+        futureDate: "La date doit être dans le futur",
+      },
+    },
+    location: {
+      rules: {
+        required: true,
+        validCoordinates: true,
+      },
+      errorMessages: {
+        required: "Le lieu est requis",
+        validCoordinates: "Veuillez sélectionner une adresse valide",
+      },
+    },
+    distance: {
+      rules: {
+        required: true,
+        positiveNumber: true,
+      },
+      errorMessages: {
+        required: "La distance est requise",
+        positiveNumber: "La distance doit être un nombre positif",
+      },
+    },
+    max_participants: {
+      rules: {
+        required: true,
+        positiveNumber: true,
+      },
+      errorMessages: {
+        required: "Le nombre de participants est requis",
+        positiveNumber: "Le nombre de participants doit être un nombre positif",
+      },
+    },
+    cover_image: {
+      rules: {
+        required: true,
+      },
+      errorMessages: {
+        required: "Une image de couverture est requise",
+      },
+    },
+  },
 };
 
 // Utilisation dans SignUpForm
@@ -317,6 +383,85 @@ export const validateSignUpFormStep3 = (
     ...commonValidations,
     ...(runnerType === "perf" ? perfValidations : chillValidations),
   };
+};
+
+export const resetErrorsAfterDelay = (
+  setErrors: (errors: { [key: string]: string }) => void
+) => {
+  setTimeout(() => {
+    setErrors({});
+  }, 2000);
+};
+
+export const validateCreateEventForm = (
+  formData: any,
+  setErrors: (errors: { [key: string]: string }) => void
+) => {
+  const errors: { [key: string]: string } = {};
+
+  // Nom
+  if (!formData.name.trim()) {
+    errors.name = FORM_VALIDATION_RULES.createEvent.name.errorMessages.required;
+  }
+
+  // Description
+  if (!formData.description.trim()) {
+    errors.description =
+      FORM_VALIDATION_RULES.createEvent.description.errorMessages.required;
+  }
+
+  // Date
+  if (formData.start_date < new Date()) {
+    errors.start_date =
+      FORM_VALIDATION_RULES.createEvent.start_date.errorMessages.futureDate;
+  }
+
+  // Lieu
+  if (!formData.location.trim()) {
+    errors.location =
+      FORM_VALIDATION_RULES.createEvent.location.errorMessages.required;
+  }
+  if (!formData.latitude || !formData.longitude) {
+    errors.location =
+      FORM_VALIDATION_RULES.createEvent.location.errorMessages.validCoordinates;
+  }
+
+  // Distance
+  if (!formData.distance.trim()) {
+    errors.distance =
+      FORM_VALIDATION_RULES.createEvent.distance.errorMessages.required;
+  } else if (
+    isNaN(parseFloat(formData.distance)) ||
+    parseFloat(formData.distance) <= 0
+  ) {
+    errors.distance =
+      FORM_VALIDATION_RULES.createEvent.distance.errorMessages.positiveNumber;
+  }
+
+  // Nombre de participants
+  if (!formData.max_participants.trim()) {
+    errors.max_participants =
+      FORM_VALIDATION_RULES.createEvent.max_participants.errorMessages.required;
+  } else if (
+    isNaN(parseInt(formData.max_participants)) ||
+    parseInt(formData.max_participants) <= 0
+  ) {
+    errors.max_participants =
+      FORM_VALIDATION_RULES.createEvent.max_participants.errorMessages.positiveNumber;
+  }
+
+  // Image de couverture
+  if (!formData.cover_image) {
+    errors.cover_image =
+      FORM_VALIDATION_RULES.createEvent.cover_image.errorMessages.required;
+  }
+
+  setErrors(errors);
+  if (Object.keys(errors).length > 0) {
+    resetErrorsAfterDelay(setErrors);
+  }
+
+  return errors;
 };
 
 export { validateSignUpForm, validateLoginForm };

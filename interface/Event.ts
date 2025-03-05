@@ -66,4 +66,5 @@ export interface CreateEventData {
   latitude: number | null;
   longitude: number | null;
   status?: EventStatus; // Optionnel car généralement défini par défaut côté serveur
+  invited_users: number[];
 }

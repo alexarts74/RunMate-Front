@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Pressable, Image } from "react-native";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
-import { validateSignUpFormStep1 } from "@/constants/formValidation";
+import {
+  validateSignUpFormStep1,
+  resetErrorsAfterDelay,
+} from "@/constants/formValidation";
 import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "@/components/ui/ActionButton";
 
@@ -25,13 +28,17 @@ export function SignUpFormStep1({
 }: SignUpFormStep1Props) {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { errors, validateForm, clearErrors } = useFormValidation();
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
 
   const handleSubmit = () => {
     clearErrors();
-    if (validateForm(validateSignUpFormStep1(formData))) {
-      onNext();
+    const isValid = validateForm(validateSignUpFormStep1(formData));
+    if (!isValid) {
+      resetErrorsAfterDelay(setErrors);
+      return;
     }
+    onNext();
   };
 
   useEffect(() => {
@@ -73,7 +80,15 @@ export function SignUpFormStep1({
       <View className="flex-1 justify-center -mt-24">
         <View className="w-full space-y-5 px-4">
           <View>
-            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-gray-700">
+            <View
+              className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                focusedInput === "email"
+                  ? `border-purple ${errors.email ? "border-red-500" : ""}`
+                  : errors.email
+                  ? "border-red-500"
+                  : "border-gray-700"
+              }`}
+            >
               <Ionicons name="mail-outline" size={20} color="#8101f7" />
               <TextInput
                 className="flex-1 text-white ml-3"
@@ -81,6 +96,8 @@ export function SignUpFormStep1({
                 placeholderTextColor="#9CA3AF"
                 value={formData.email}
                 onChangeText={(text) => handleChange("email", text)}
+                onFocus={() => setFocusedInput("email")}
+                onBlur={() => setFocusedInput(null)}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
@@ -91,7 +108,15 @@ export function SignUpFormStep1({
           </View>
 
           <View>
-            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-gray-700">
+            <View
+              className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                focusedInput === "password"
+                  ? `border-purple ${errors.password ? "border-red-500" : ""}`
+                  : errors.password
+                  ? "border-red-500"
+                  : "border-gray-700"
+              }`}
+            >
               <Ionicons name="lock-closed-outline" size={20} color="#8101f7" />
               <TextInput
                 className="flex-1 text-white ml-3"
@@ -99,6 +124,8 @@ export function SignUpFormStep1({
                 placeholderTextColor="#9CA3AF"
                 value={formData.password}
                 onChangeText={(text) => handleChange("password", text)}
+                onFocus={() => setFocusedInput("password")}
+                onBlur={() => setFocusedInput(null)}
                 secureTextEntry
               />
             </View>
@@ -108,7 +135,17 @@ export function SignUpFormStep1({
           </View>
 
           <View>
-            <View className="flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border border-gray-700">
+            <View
+              className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                focusedInput === "password_confirmation"
+                  ? `border-purple ${
+                      errors.password_confirmation ? "border-red-500" : ""
+                    }`
+                  : errors.password_confirmation
+                  ? "border-red-500"
+                  : "border-gray-700"
+              }`}
+            >
               <Ionicons
                 name="shield-checkmark-outline"
                 size={20}
@@ -122,6 +159,8 @@ export function SignUpFormStep1({
                 onChangeText={(text) =>
                   handleChange("password_confirmation", text)
                 }
+                onFocus={() => setFocusedInput("password_confirmation")}
+                onBlur={() => setFocusedInput(null)}
                 secureTextEntry
               />
             </View>
@@ -139,7 +178,6 @@ export function SignUpFormStep1({
         <ActionButton
           onPress={handleSubmit}
           text="Continuer"
-          disabled={!isFormValid}
           loading={isLoading}
         />
       </View>

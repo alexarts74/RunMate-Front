@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   Image,
+  Alert,
 } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,8 @@ import { UserSearch } from "@/components/UserSearch";
 import User from "@/interface/User";
 import { debounce } from "lodash";
 import * as Location from "expo-location";
+import { BlurView } from "expo-blur";
+import { validateCreateEventForm } from "@/constants/formValidation";
 
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
@@ -32,6 +35,10 @@ interface LocationSuggestion {
   coordinates: [number, number];
   full_name: string;
   street?: string;
+}
+
+interface ValidationErrors {
+  [key: string]: string;
 }
 
 export default function CreateEventScreen() {
@@ -52,6 +59,7 @@ export default function CreateEventScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
+  const [errors, setErrors] = useState<ValidationErrors>({});
 
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -196,6 +204,16 @@ export default function CreateEventScreen() {
   };
 
   const handleSubmit = async () => {
+    const validationErrors = validateCreateEventForm(formData, setErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      Alert.alert(
+        "Erreur de validation",
+        "Veuillez corriger les erreurs avant de créer l'événement"
+      );
+      return;
+    }
+
     try {
       const eventData: CreateEventData = {
         ...formData,
@@ -207,14 +225,18 @@ export default function CreateEventScreen() {
       router.back();
     } catch (error) {
       console.error("Erreur lors de la création de l'événement:", error);
+      Alert.alert(
+        "Erreur",
+        "Une erreur est survenue lors de la création de l'événement"
+      );
     }
   };
 
   return (
-    <View className="flex-1 bg-[#12171b] pt-8">
-      <View className="flex-row items-center p-4 border-b border-[#394047]">
+    <View className="flex-1 bg-background pt-8">
+      <View className="flex-row items-center p-4 border-b border-gray-700">
         <Pressable onPress={() => router.back()} className="mr-4">
-          <Ionicons name="close" size={24} color="#b9f144" />
+          <Ionicons name="close" size={24} color="#8101f7" />
         </Pressable>
         <Text className="text-white text-xl font-bold">Créer un événement</Text>
       </View>
@@ -222,42 +244,54 @@ export default function CreateEventScreen() {
       <ScrollView className="flex-1 p-4">
         <View className="space-y-4">
           {/* Image de couverture */}
-          <Pressable
-            onPress={handleImagePick}
-            className="h-40 bg-[#1e2429] rounded-xl items-center justify-center mb-4"
-          >
-            {formData.cover_image ? (
-              <Image
-                source={{ uri: formData.cover_image }}
-                className="w-full h-full rounded-xl"
-              />
-            ) : (
-              <View className="items-center">
-                <Ionicons name="image-outline" size={40} color="#394047" />
-                <Text className="text-[#394047] mt-2">Ajouter une photo</Text>
-              </View>
+          <View>
+            <Pressable
+              onPress={handleImagePick}
+              className="h-40 bg-[#1e2429] rounded-xl items-center justify-center mb-1 border border-gray-700"
+            >
+              {formData.cover_image ? (
+                <Image
+                  source={{ uri: formData.cover_image }}
+                  className="w-full h-full rounded-xl"
+                />
+              ) : (
+                <View className="items-center">
+                  <Ionicons name="image-outline" size={40} color="#687076" />
+                  <Text className="text-[#687076] mt-2">Ajouter une photo</Text>
+                </View>
+              )}
+            </Pressable>
+            {errors.cover_image && (
+              <Text className="text-red-500 text-sm">{errors.cover_image}</Text>
             )}
-          </Pressable>
+          </View>
 
           {/* Nom */}
           <View>
             <Text className="text-white text-lg mb-2">Nom de l'événement</Text>
             <TextInput
-              className="bg-[#1e2429] text-white p-4 rounded-xl"
+              className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                errors.name ? "border-red-500" : "border-gray-700"
+              }`}
               placeholder="Ex: Course matinale"
-              placeholderTextColor="#394047"
+              placeholderTextColor="#687076"
               value={formData.name}
               onChangeText={(text) => setFormData({ ...formData, name: text })}
             />
+            {errors.name && (
+              <Text className="text-red-500 text-sm mt-1">{errors.name}</Text>
+            )}
           </View>
 
           {/* Description */}
           <View>
             <Text className="text-white text-lg mb-2">Description</Text>
             <TextInput
-              className="bg-[#1e2429] text-white p-4 rounded-xl"
+              className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                errors.description ? "border-red-500" : "border-gray-700"
+              }`}
               placeholder="Décrivez votre événement"
-              placeholderTextColor="#394047"
+              placeholderTextColor="#687076"
               multiline
               numberOfLines={4}
               textAlignVertical="top"
@@ -266,6 +300,11 @@ export default function CreateEventScreen() {
                 setFormData({ ...formData, description: text })
               }
             />
+            {errors.description && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.description}
+              </Text>
+            )}
           </View>
 
           {/* Date */}
@@ -273,12 +312,19 @@ export default function CreateEventScreen() {
             <Text className="text-white text-lg mb-2">Date et heure</Text>
             <Pressable
               onPress={() => setShowDatePicker(true)}
-              className="bg-[#1e2429] p-4 rounded-xl"
+              className={`bg-[#1e2429] p-4 rounded-xl border ${
+                errors.start_date ? "border-red-500" : "border-gray-700"
+              }`}
             >
               <Text className="text-white">
                 {formData.start_date.toLocaleString()}
               </Text>
             </Pressable>
+            {errors.start_date && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.start_date}
+              </Text>
+            )}
             {showDatePicker && (
               <DateTimePicker
                 value={formData.start_date}
@@ -294,7 +340,7 @@ export default function CreateEventScreen() {
           {/* Niveau */}
           <View>
             <Text className="text-white text-lg mb-2">Niveau</Text>
-            <View className="flex-row flex-wrap gap-2">
+            <View className="flex-row justify-between flex-wrap gap-2">
               {Object.values(EventLevel)
                 .filter((value) => typeof value === "number")
                 .map((value) => (
@@ -303,15 +349,15 @@ export default function CreateEventScreen() {
                     onPress={() =>
                       setFormData({ ...formData, level: value as EventLevel })
                     }
-                    className={`px-4 py-2 rounded-xl ${
-                      formData.level === value ? "bg-green" : "bg-[#1e2429]"
+                    className={`flex-1 min-w-[45%] px-4 py-3 rounded-xl ${
+                      formData.level === value
+                        ? "bg-purple"
+                        : "bg-[#1e2429] border border-gray-700"
                     }`}
                   >
                     <Text
-                      className={`${
-                        formData.level === value
-                          ? "text-[#12171b]"
-                          : "text-white"
+                      className={`text-center font-medium ${
+                        formData.level === value ? "text-white" : "text-white"
                       }`}
                     >
                       {EventLevel[value]}
@@ -325,23 +371,30 @@ export default function CreateEventScreen() {
           <View>
             <Text className="text-white text-lg mb-2">Lieu</Text>
             <TextInput
-              className="bg-[#1e2429] text-white p-4 rounded-xl"
+              className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                errors.location ? "border-red-500" : "border-gray-700"
+              }`}
               placeholder="Rechercher une adresse..."
-              placeholderTextColor="#394047"
+              placeholderTextColor="#687076"
               value={formData.location}
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, location: text }));
                 searchLocation(text);
               }}
             />
+            {errors.location && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.location}
+              </Text>
+            )}
 
             {suggestions.length > 0 && (
-              <View className="bg-[#1e2429] mt-1 rounded-xl overflow-hidden absolute w-full z-10">
+              <View className="bg-[#1e2429] mt-1 rounded-xl overflow-hidden absolute w-full z-10 border border-gray-700">
                 {suggestions.map((suggestion, index) => (
                   <Pressable
                     key={index}
                     onPress={() => handleSelectLocation(suggestion)}
-                    className="p-4 border-b border-[#394047]"
+                    className="p-4 border-b border-gray-700"
                     android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
                   >
                     <Text className="text-white">{suggestion.full_name}</Text>
@@ -355,15 +408,22 @@ export default function CreateEventScreen() {
           <View>
             <Text className="text-white text-lg mb-2">Distance (km)</Text>
             <TextInput
-              className="bg-[#1e2429] text-white p-4 rounded-xl"
+              className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                errors.distance ? "border-red-500" : "border-gray-700"
+              }`}
               placeholder="Ex: 5"
-              placeholderTextColor="#394047"
+              placeholderTextColor="#687076"
               keyboardType="numeric"
               value={formData.distance}
               onChangeText={(text) =>
                 setFormData({ ...formData, distance: text })
               }
             />
+            {errors.distance && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.distance}
+              </Text>
+            )}
           </View>
 
           {/* Nombre max de participants */}
@@ -372,15 +432,22 @@ export default function CreateEventScreen() {
               Nombre maximum de participants
             </Text>
             <TextInput
-              className="bg-[#1e2429] text-white p-4 rounded-xl"
+              className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                errors.max_participants ? "border-red-500" : "border-gray-700"
+              }`}
               placeholder="Ex: 10"
-              placeholderTextColor="#394047"
+              placeholderTextColor="#687076"
               keyboardType="numeric"
               value={formData.max_participants}
               onChangeText={(text) =>
                 setFormData({ ...formData, max_participants: text })
               }
             />
+            {errors.max_participants && (
+              <Text className="text-red-500 text-sm mt-1">
+                {errors.max_participants}
+              </Text>
+            )}
           </View>
 
           <View>
@@ -396,12 +463,12 @@ export default function CreateEventScreen() {
       </ScrollView>
 
       {/* Footer */}
-      <View className="p-4 w-[70%] mx-auto">
+      <View className="p-4 w-[70%] mx-auto mb-2">
         <Pressable
           onPress={handleSubmit}
-          className="bg-green p-2 mb-4 rounded-full active:opacity-90"
+          className="bg-purple py-4 px-8 rounded-full active:opacity-90"
         >
-          <Text className="text-[#12171b] text-center font-bold text-lg">
+          <Text className="text-white text-center font-bold text-lg">
             Créer l'événement
           </Text>
         </Pressable>

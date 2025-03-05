@@ -5,6 +5,7 @@ import { Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
+import { Ionicons } from "@expo/vector-icons";
 
 export function FiltersContent() {
   const router = useRouter();
@@ -39,12 +40,15 @@ export function FiltersContent() {
   };
 
   return (
-    <>
+    <View className="flex-1 bg-background p-4">
       {/* Filtres d'âge */}
       <View className="mb-8">
-        <Text className="text-white text-lg mb-4">Âge</Text>
-        <View>
-          <Text className="text-green mb-2">
+        <View className="flex-row items-center mb-4">
+          <Ionicons name="person-outline" size={24} color="#8101f7" />
+          <Text className="text-white text-lg ml-2">Âge</Text>
+        </View>
+        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+          <Text className="text-white mb-2">
             Entre {filters.age_min} et {filters.age_max} ans
           </Text>
           <MultiSlider
@@ -59,19 +63,19 @@ export function FiltersContent() {
             min={18}
             max={80}
             step={1}
-            sliderLength={350}
+            sliderLength={280}
             selectedStyle={{
-              backgroundColor: "#b9f144",
+              backgroundColor: "#8101f7",
             }}
             unselectedStyle={{
-              backgroundColor: "#767577",
+              backgroundColor: "#394047",
             }}
             containerStyle={{
               height: 40,
               alignItems: "center",
             }}
             markerStyle={{
-              backgroundColor: "#b9f144",
+              backgroundColor: "#8101f7",
               height: 20,
               width: 20,
             }}
@@ -79,7 +83,7 @@ export function FiltersContent() {
               height: 4,
             }}
           />
-          <View className="flex-row justify-between">
+          <View className="flex-row justify-between mt-2">
             <Text className="text-white">18 ans</Text>
             <Text className="text-white">70 ans</Text>
           </View>
@@ -88,23 +92,30 @@ export function FiltersContent() {
 
       {/* Filtre de genre */}
       <View className="mb-8">
-        <Text className="text-white text-lg mb-4">Genre</Text>
+        <View className="flex-row items-center mb-4">
+          <Ionicons name="male-female-outline" size={24} color="#8101f7" />
+          <Text className="text-white text-lg ml-2">Genre</Text>
+        </View>
         <Pressable
           onPress={() => setShowGenderModal(true)}
-          className="bg-[#1e2429] p-4 rounded-xl border border-[#394047]"
+          className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 flex-row justify-between items-center"
         >
           <Text className="text-white">
             {genderOptions.find((opt) => opt.value === filters.gender)?.label ||
               "Sélectionner"}
           </Text>
+          <Ionicons name="chevron-down" size={20} color="#8101f7" />
         </Pressable>
       </View>
 
       {/* Filtre de distance */}
       <View className="mb-8">
-        <Text className="text-white text-lg mb-4">Distance maximale</Text>
-        <View>
-          <Text className="text-green mb-2">{filters.distance} km</Text>
+        <View className="flex-row items-center mb-4">
+          <Ionicons name="location-outline" size={24} color="#8101f7" />
+          <Text className="text-white text-lg ml-2">Distance maximale</Text>
+        </View>
+        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+          <Text className="text-white mb-2">{filters.distance} km</Text>
           <Slider
             value={filters.distance}
             onValueChange={(value: number) =>
@@ -113,11 +124,11 @@ export function FiltersContent() {
             minimumValue={1}
             maximumValue={100}
             step={1}
-            minimumTrackTintColor="#b9f144"
-            maximumTrackTintColor="#767577"
-            thumbTintColor="#b9f144"
+            minimumTrackTintColor="#8101f7"
+            maximumTrackTintColor="#394047"
+            thumbTintColor="#8101f7"
           />
-          <View className="flex-row justify-between">
+          <View className="flex-row justify-between mt-2">
             <Text className="text-white">1 km</Text>
             <Text className="text-white">100 km</Text>
           </View>
@@ -125,49 +136,57 @@ export function FiltersContent() {
       </View>
 
       {/* Filtres de compatibilité */}
-      <View className="space-y-4 mb-8">
-        <Text className="text-white text-lg mb-2">
-          Critères de compatibilité
-        </Text>
-        <View className="flex-row justify-between items-center">
-          <Text className="text-green">Rythme similaire</Text>
-          <Switch
-            value={filters.filter_pace}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, filter_pace: value }))
-            }
-            trackColor={{ false: "#767577", true: "#b9f144" }}
-          />
+      <View className="mb-8">
+        <View className="flex-row items-center mb-4">
+          <Ionicons name="fitness-outline" size={24} color="#8101f7" />
+          <Text className="text-white text-lg ml-2">
+            Critères de compatibilité
+          </Text>
         </View>
-        <View className="flex-row justify-between items-center">
-          <Text className="text-green">Distance similaire</Text>
-          <Switch
-            value={filters.filter_distance}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, filter_distance: value }))
-            }
-            trackColor={{ false: "#767577", true: "#b9f144" }}
-          />
-        </View>
-        <View className="flex-row justify-between items-center">
-          <Text className="text-green">Disponibilités similaires</Text>
-          <Switch
-            value={filters.filter_availability}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, filter_availability: value }))
-            }
-            trackColor={{ false: "#767577", true: "#b9f144" }}
-          />
+        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 space-y-4">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-white">Rythme similaire</Text>
+            <Switch
+              value={filters.filter_pace}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, filter_pace: value }))
+              }
+              trackColor={{ false: "#394047", true: "#8101f7" }}
+            />
+          </View>
+          <View className="flex-row justify-between items-center">
+            <Text className="text-white">Distance similaire</Text>
+            <Switch
+              value={filters.filter_distance}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, filter_distance: value }))
+              }
+              trackColor={{ false: "#394047", true: "#8101f7" }}
+            />
+          </View>
+          <View className="flex-row justify-between items-center">
+            <Text className="text-white">Disponibilités similaires</Text>
+            <Switch
+              value={filters.filter_availability}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, filter_availability: value }))
+              }
+              trackColor={{ false: "#394047", true: "#8101f7" }}
+            />
+          </View>
         </View>
       </View>
 
       {/* Modals */}
       <Modal visible={showGenderModal} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-[#12171b] rounded-t-3xl p-6">
-            <Text className="text-white text-xl mb-4">
-              Sélectionner le genre
-            </Text>
+          <View className="bg-[#1e2429] rounded-t-3xl p-6">
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="text-white text-xl">Sélectionner le genre</Text>
+              <Pressable onPress={() => setShowGenderModal(false)}>
+                <Ionicons name="close" size={24} color="#8101f7" />
+              </Pressable>
+            </View>
             {genderOptions.map((option) => (
               <TouchableOpacity
                 key={option.value}
@@ -175,14 +194,14 @@ export function FiltersContent() {
                   setFilters((prev) => ({ ...prev, gender: option.value }));
                   setShowGenderModal(false);
                 }}
-                className={`p-4 border-b border-[#394047] ${
-                  filters.gender === option.value ? "bg-[#1e2429]" : ""
+                className={`p-4 border-b border-gray-700 ${
+                  filters.gender === option.value ? "bg-[#2a3238]" : ""
                 }`}
               >
                 <Text
                   className={`${
                     filters.gender === option.value
-                      ? "text-green"
+                      ? "text-purple"
                       : "text-white"
                   }`}
                 >
@@ -190,22 +209,18 @@ export function FiltersContent() {
                 </Text>
               </TouchableOpacity>
             ))}
-            <TouchableOpacity
-              onPress={() => setShowGenderModal(false)}
-              className="mt-4 p-4 bg-[#1e2429] rounded-xl"
-            >
-              <Text className="text-white text-center">Fermer</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
       <Pressable
         onPress={handleApplyFilters}
-        className="bg-green py-4 rounded-full items-center mt-4"
+        className="bg-purple py-4 rounded-full items-center mt-4 active:opacity-90"
       >
-        <Text className="text-dark font-semibold">Appliquer les filtres</Text>
+        <Text className="text-white font-semibold text-lg">
+          Appliquer les filtres
+        </Text>
       </Pressable>
-    </>
+    </View>
   );
 }
