@@ -10,6 +10,7 @@ import {
 import { eventService } from "@/service/api/event";
 import { EventCard } from "./EventCard";
 import { Event } from "@/interface/Event";
+import LoadingScreen from "../LoadingScreen";
 
 interface EventsListProps {
   eventsType: "all" | "my";
@@ -111,12 +112,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
 
   const renderContent = () => {
     if (loading && !refreshing) {
-      return (
-        <View className="flex-1 justify-center h-full my-auto items-center">
-          <ActivityIndicator size="large" color="#8101f7" />
-          <Text className="text-white mt-4">Chargement des événements...</Text>
-        </View>
-      );
+      return <LoadingScreen />;
     }
 
     if (error) {

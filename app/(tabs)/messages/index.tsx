@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import { directMessageService } from "@/service/api/message";
 import { groupMessageService } from "@/service/api/groupMessage";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const MessagesScreen = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -68,11 +69,7 @@ const MessagesScreen = () => {
   };
 
   if (isLoading) {
-    return (
-      <View className="flex-1 bg-[#12171b] justify-center items-center">
-        <Text className="text-white">Chargement...</Text>
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (

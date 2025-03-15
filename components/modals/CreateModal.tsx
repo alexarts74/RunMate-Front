@@ -11,7 +11,7 @@ interface CreateModalProps {
 export function CreateModal({ visible, onClose }: CreateModalProps) {
   const handleAction = (route: string) => {
     onClose();
-    router.push(route);
+    router.push(route as any);
   };
 
   return (

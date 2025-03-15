@@ -88,7 +88,6 @@ export function SignUpFormStep3({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
-    console.log("handleSubmit");
     clearErrors();
     setIsLoading(true);
     if (validateForm(validateSignUpFormStep3(formData, runnerType))) {
@@ -189,7 +188,7 @@ export function SignUpFormStep3({
               <View className="flex-row items-center mb-2">
                 <Ionicons name="map-outline" size={18} color="#8101f7" />
                 <Text className="text-white text-sm font-semibold ml-2">
-                  Distance habituelle
+                  Distance habituelle / semaine (km)
                 </Text>
               </View>
               <TextInput
@@ -326,7 +325,6 @@ export function SignUpFormStep3({
         <ActionButton
           onPress={handleSubmit}
           text={runnerType === "perf" ? "C'est parti ! 🚀" : "Let's go ! 🎯"}
-          disabled={!isFormValid}
           loading={isLoading}
         />
       </View>

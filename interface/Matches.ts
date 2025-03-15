@@ -25,6 +25,7 @@ export interface MatchUser {
       availability: string[];
       objective: string;
       running_type: string;
+      flexible: boolean;
       social_preferences?: string[];
       running_frequency?: string;
       target_pace?: string;

@@ -240,7 +240,6 @@ export function SignUpFormStep2({
         <ActionButton
           text="Continuer"
           onPress={handleSubmit}
-          disabled={!isFormValid}
           loading={isLoading}
         />
       </View>

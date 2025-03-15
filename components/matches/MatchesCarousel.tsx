@@ -13,6 +13,7 @@ import { MatchCard } from "@/components/matches/MatchCard";
 import { router, useFocusEffect } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MatchUser } from "@/interface/Matches";
+import LoadingScreen from "../LoadingScreen";
 
 export function MatchesCarousel() {
   const { matches, refreshMatches, isLoading } = useMatches();
@@ -89,9 +90,7 @@ export function MatchesCarousel() {
       {/* Contenu principal */}
       <View className="pt-4">
         {isLoading ? (
-          <View className="px-5">
-            <Text className="text-white text-center">Chargement...</Text>
-          </View>
+          <LoadingScreen />
         ) : matches?.length === 0 ? (
           <View className="px-5 items-center space-y-4">
             <Text className="text-white text-center">
@@ -122,18 +121,6 @@ export function MatchesCarousel() {
               viewabilityConfig={viewabilityConfig}
               onViewableItemsChanged={onViewableItemsChanged}
             />
-
-            {/* Indicateurs de pagination */}
-            {/* <View className="flex-row justify-center pt-4 space-x-2 pb-4">
-              {matches.map((_, index) => (
-                <View
-                  key={index}
-                  className={`h-2 w-2 rounded-full ${
-                    index === activeIndex ? "bg-green" : "bg-gray"
-                  }`}
-                />
-              ))}
-            </View> */}
           </View>
         )}
       </View>

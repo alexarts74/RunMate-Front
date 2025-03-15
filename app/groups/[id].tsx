@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image, Pressable, Alert } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { groupService } from "@/service/api/group";
+import LoadingScreen from "@/components/LoadingScreen";
 
 type GroupDetails = {
   id: string;
@@ -93,11 +94,7 @@ export default function GroupDetailsScreen() {
   };
 
   if (isLoading) {
-    return (
-      <View className="flex-1 bg-[#12171b] items-center justify-center">
-        <Text className="text-white">Chargement...</Text>
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   if (!group) {

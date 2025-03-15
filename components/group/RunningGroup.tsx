@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, Pressable, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { groupService } from "@/service/api/group";
 import { useRouter, useFocusEffect } from "expo-router";
+import LoadingScreen from "../LoadingScreen";
 
 type RunningGroupType = {
   id: string;
@@ -85,9 +86,7 @@ const RunningGroup = () => {
   return (
     <View className="bg-background flex-1">
       {isLoading ? (
-        <View className="px-5">
-          <Text className="text-white text-center">Chargement...</Text>
-        </View>
+        <LoadingScreen />
       ) : (
         <FlatList
           data={groups}

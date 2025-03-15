@@ -6,12 +6,17 @@ import { RunnerProfileView } from "@/components/profile/RunnerProfileView";
 import { RunnerProfileEditForm } from "@/components/profile/RunnerProfileEditForm";
 import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import NotificationSettings from "@/components/settings/NotificationSettings";
+import PrivacySettings from "@/components/settings/PrivacySettings";
 
 type TabType = "profile" | "runner" | "settings";
+type SettingsType = "main" | "notifications" | "privacy";
 
 export default function ProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
   const [isEditing, setIsEditing] = useState(false);
+  const [activeSettings, setActiveSettings] = useState<SettingsType>("main");
   const { logout, deleteAccount } = useAuth();
 
   const handleDeleteAccount = () => {
@@ -44,68 +49,115 @@ export default function ProfileScreen() {
           <RunnerProfileView setIsEditing={setIsEditing} />
         );
       case "settings":
-        return (
-          <View className="px-5 space-y-4">
-            <Text className="text-2xl font-bold text-white mb-6 mt-6">
-              Paramètres
-            </Text>
-
-            <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
-              <View className="flex-row items-center space-x-3">
-                <Ionicons
-                  name="notifications-outline"
-                  size={24}
-                  color="#8101f7"
-                />
-                <Text className="text-white font-semibold">Notifications</Text>
+        switch (activeSettings) {
+          case "notifications":
+            return (
+              <View className="flex-1">
+                <View className="flex-row items-center px-5 py-4">
+                  <Pressable
+                    onPress={() => setActiveSettings("main")}
+                    className="p-2"
+                  >
+                    <Ionicons name="arrow-back" size={24} color="#fff" />
+                  </Pressable>
+                  <Text className="text-xl font-bold text-white ml-2">
+                    Notifications
+                  </Text>
+                </View>
+                <NotificationSettings />
               </View>
-              <Ionicons name="chevron-forward" size={24} color="#687076" />
-            </Pressable>
-
-            <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
-              <View className="flex-row items-center space-x-3">
-                <Ionicons
-                  name="lock-closed-outline"
-                  size={24}
-                  color="#8101f7"
-                />
-                <Text className="text-white font-semibold">
-                  Confidentialité
+            );
+          case "privacy":
+            return (
+              <View className="flex-1">
+                <View className="flex-row items-center px-5 py-4">
+                  <Pressable
+                    onPress={() => setActiveSettings("main")}
+                    className="p-2"
+                  >
+                    <Ionicons name="arrow-back" size={24} color="#fff" />
+                  </Pressable>
+                  <Text className="text-xl font-bold text-white ml-2">
+                    Confidentialité
+                  </Text>
+                </View>
+                <PrivacySettings />
+              </View>
+            );
+          default:
+            return (
+              <View className="px-5 space-y-4">
+                <Text className="text-2xl font-bold text-white mb-6 mt-6">
+                  Paramètres
                 </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={24} color="#687076" />
-            </Pressable>
 
-            <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
-              <View className="flex-row items-center space-x-3">
-                <Ionicons
-                  name="help-circle-outline"
-                  size={24}
-                  color="#8101f7"
-                />
-                <Text className="text-white font-semibold">Aide</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={24} color="#687076" />
-            </Pressable>
+                <Pressable
+                  className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl"
+                  onPress={() => setActiveSettings("notifications")}
+                >
+                  <View className="flex-row items-center space-x-3">
+                    <Ionicons
+                      name="notifications-outline"
+                      size={24}
+                      color="#8101f7"
+                    />
+                    <Text className="text-white font-semibold">
+                      Notifications
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#687076" />
+                </Pressable>
 
-            <View className="space-y-4 mt-6">
-              <Pressable
-                className="bg-purple border  py-4 rounded-full items-center mt-6"
-                onPress={logout}
-              >
-                <Text className="text-white font-semibold">Se déconnecter</Text>
-              </Pressable>
-              <Pressable
-                className="bg-transparent border border-red-500 py-4 rounded-full items-center"
-                onPress={handleDeleteAccount}
-              >
-                <Text className="text-red-500 font-semibold">
-                  Supprimer le compte
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        );
+                <Pressable
+                  className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl"
+                  onPress={() => setActiveSettings("privacy")}
+                >
+                  <View className="flex-row items-center space-x-3">
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={24}
+                      color="#8101f7"
+                    />
+                    <Text className="text-white font-semibold">
+                      Confidentialité
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#687076" />
+                </Pressable>
+
+                <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
+                  <View className="flex-row items-center space-x-3">
+                    <Ionicons
+                      name="help-circle-outline"
+                      size={24}
+                      color="#8101f7"
+                    />
+                    <Text className="text-white font-semibold">Aide</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#687076" />
+                </Pressable>
+
+                <View className="space-y-4 mt-6">
+                  <Pressable
+                    className="bg-purple py-4 rounded-full items-center"
+                    onPress={logout}
+                  >
+                    <Text className="text-white font-semibold">
+                      Se déconnecter
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    className="bg-transparent border border-red-500 py-4 rounded-full items-center"
+                    onPress={handleDeleteAccount}
+                  >
+                    <Text className="text-red-500 font-semibold">
+                      Supprimer le compte
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            );
+        }
     }
   };
 
@@ -116,6 +168,7 @@ export default function ProfileScreen() {
           onPress={() => {
             setActiveTab("profile");
             setIsEditing(false);
+            setActiveSettings("main");
           }}
           className={`px-4 py-2 rounded-full ${
             activeTab === "profile" ? "bg-purple" : ""
@@ -127,6 +180,7 @@ export default function ProfileScreen() {
           onPress={() => {
             setActiveTab("runner");
             setIsEditing(false);
+            setActiveSettings("main");
           }}
           className={`px-4 py-2 rounded-full ${
             activeTab === "runner" ? "bg-purple" : ""
@@ -138,6 +192,7 @@ export default function ProfileScreen() {
           onPress={() => {
             setActiveTab("settings");
             setIsEditing(false);
+            setActiveSettings("main");
           }}
           className={`px-4 py-2 rounded-full ${
             activeTab === "settings" ? "bg-purple" : ""

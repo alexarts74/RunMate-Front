@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { eventService } from "@/service/api/event";
 import { Event } from "@/interface/Event";
 import { useAuth } from "@/context/AuthContext";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -140,11 +141,7 @@ export default function EventDetailsScreen() {
   }, [event]);
 
   if (loading || !event) {
-    return (
-      <View className="flex-1 bg-[#12171b] justify-center items-center">
-        <Text className="text-white">Chargement...</Text>
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (

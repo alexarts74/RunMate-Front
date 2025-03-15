@@ -10,9 +10,11 @@ import { SignUpFormStep3 } from "./SignUpFormStep3";
 import { runnerProfileService } from "@/service/api/runnerProfile";
 import { signUpStorage } from "@/service/auth/storage";
 import { RunnerProfile } from "@/interface/User";
+import { useNotifications } from "@/context/NotificationContext";
 
 export default function SignUpForm() {
   const { login } = useAuth();
+  const { registerForPushNotifications } = useNotifications();
   const [loading, setLoading] = useState(false);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [error, setError] = useState("");
@@ -208,6 +210,9 @@ export default function SignUpForm() {
       };
 
       await login(updatedUserData);
+
+      // Enregistrer les notifications après l'inscription
+      await registerForPushNotifications();
 
       // 5. Nettoyer et rediriger
       await signUpStorage.clearSignUpData();

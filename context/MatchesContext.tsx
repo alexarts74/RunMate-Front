@@ -34,6 +34,10 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
       }
 
       setIsLoading(true);
+
+      // Ajout d'un délai artificiel de 2 secondes pour tester le loading screen
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const matchesData = currentFilters
         ? await matchesService.applyFilters(currentFilters)
         : await matchesService.getMatches();
@@ -50,6 +54,10 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   const applyFilters = async (filters: MatchFilters) => {
     try {
       setIsLoading(true);
+
+      // Ajout d'un délai artificiel de 2 secondes pour tester le loading screen
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       setCurrentFilters(filters);
       const filteredMatches = await matchesService.applyFilters(filters);
       setMatches(filteredMatches);

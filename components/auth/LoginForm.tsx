@@ -15,6 +15,7 @@ import { matchesService } from "@/service/api/matching";
 import { useMatches } from "@/context/MatchesContext";
 import { ParticlesBackground } from "@/components/animations/ParticlesBackground";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNotifications } from "@/context/NotificationContext";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ export default function LoginForm() {
   const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
   const { setMatches } = useMatches();
   const { login } = useAuth();
+  const { registerForPushNotifications } = useNotifications();
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -41,6 +43,10 @@ export default function LoginForm() {
       const userData = await authService.login(formData);
       await login(userData);
       await authService.getCurrentUser();
+
+      // Enregistrer les notifications après la connexion
+      await registerForPushNotifications();
+
       const matchesData = await matchesService.getMatches();
       setMatches(matchesData);
       router.replace("/(tabs)/matches");

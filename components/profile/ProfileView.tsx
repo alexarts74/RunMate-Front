@@ -19,9 +19,9 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
         <Text className="text-2xl font-bold text-white">Mon Profil</Text>
         <Pressable
           onPress={() => setIsEditing(true)}
-          className="flex-row items-center px-6 py-3 rounded-full"
+          className="flex-row items-center px-3 py-3 rounded-full"
         >
-          <Ionicons name="pencil" size={20} color="#b9f144" />
+          <Ionicons name="pencil" size={20} color="#8101f7" />
         </Pressable>
       </View>
 

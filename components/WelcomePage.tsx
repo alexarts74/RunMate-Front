@@ -1,29 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  Animated,
-  ActivityIndicator,
-  Image,
-  Dimensions,
-} from "react-native";
+import { View, Text, Pressable, Animated, Dimensions } from "react-native";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
+
+const { width: screenWidth } = Dimensions.get("window");
 
 export default function WelcomePage() {
   const [isReady, setIsReady] = useState(false);
   const titleScale = useRef(new Animated.Value(1)).current;
   const titlePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
-  const loaderOpacity = useRef(new Animated.Value(1)).current;
-  const imageScale = useRef(new Animated.Value(0.8)).current;
-  const imageOpacity = useRef(new Animated.Value(0)).current;
   const buttonScale = useRef(new Animated.Value(0.9)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
+  const imageScale = useRef(new Animated.Value(0.8)).current;
+  const imageOpacity = useRef(new Animated.Value(0)).current;
+  const imagePosition = useRef(new Animated.Value(-screenWidth)).current;
 
   useEffect(() => {
-    // Attendre que l'AuthenticationGuard soit prêt
     const timer = setTimeout(() => {
       setIsReady(true);
     }, 100);
@@ -38,53 +32,65 @@ export default function WelcomePage() {
   }, [isReady]);
 
   const startAnimations = () => {
-    setTimeout(() => {
-      Animated.timing(loaderOpacity, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
+    // Animation du logo en boucle
+    Animated.loop(
+      Animated.sequence([
+        // Entrée depuis la gauche
+        Animated.timing(imagePosition, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        // Pause de 2 secondes
+        Animated.delay(2000),
+        // Sortie vers la droite
+        Animated.timing(imagePosition, {
+          toValue: screenWidth,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
 
-      Animated.parallel([
-        Animated.timing(titleScale, {
-          toValue: 0.8,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(titlePosition, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(contentOpacity, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(imageScale, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(imageOpacity, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(buttonScale, {
-          toValue: 1,
-          duration: 800,
-          delay: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(buttonOpacity, {
-          toValue: 1,
-          duration: 800,
-          delay: 400,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }, 1500);
+    Animated.parallel([
+      Animated.timing(titleScale, {
+        toValue: 0.8,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(titlePosition, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(imageScale, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(imageOpacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonScale, {
+        toValue: 1,
+        duration: 800,
+        delay: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonOpacity, {
+        toValue: 1,
+        duration: 800,
+        delay: 400,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -121,24 +127,17 @@ export default function WelcomePage() {
       </Animated.View>
 
       <Animated.View
-        className="absolute left-0 right-0 bottom-32 items-center"
-        style={{ opacity: loaderOpacity }}
-      >
-        <ActivityIndicator color="#8101f7" />
-        <Text className="text-purple mt-4 text-base">Chargement...</Text>
-      </Animated.View>
-
-      <Animated.View
         className="absolute left-0 right-0 bottom-56 items-center"
         style={{
           opacity: imageOpacity,
-          transform: [{ scale: imageScale }],
+          transform: [{ scale: imageScale }, { translateX: imagePosition }],
         }}
       >
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          className="w-48 h-48"
-          resizeMode="contain"
+        <LottieView
+          source={require("../assets/videos/runner-icon.json")}
+          autoPlay
+          loop
+          style={{ width: 192, height: 192 }}
         />
       </Animated.View>
 
