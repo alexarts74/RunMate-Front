@@ -334,17 +334,6 @@ export const validateSignUpFormStep3 = (
   formData: any,
   runnerType: "perf" | "chill"
 ) => {
-  const commonValidations = {
-    usual_distance: {
-      value: formData.usual_distance,
-      rules: FORM_VALIDATION_RULES.signup.usual_distance.rules,
-    },
-    preferred_time_of_day: {
-      value: formData.preferred_time_of_day,
-      rules: FORM_VALIDATION_RULES.signup.preferred_time_of_day.rules,
-    },
-  };
-
   const perfValidations = {
     actual_pace: {
       value: formData.actual_pace,
@@ -377,12 +366,17 @@ export const validateSignUpFormStep3 = (
       value: formData.post_run_activities,
       rules: FORM_VALIDATION_RULES.signup.post_run_activities.rules,
     },
+    preferred_time_of_day: {
+      value: formData.preferred_time_of_day,
+      rules: FORM_VALIDATION_RULES.signup.preferred_time_of_day.rules,
+    },
+    usual_distance: {
+      value: formData.usual_distance,
+      rules: FORM_VALIDATION_RULES.signup.usual_distance.rules,
+    },
   };
 
-  return {
-    ...commonValidations,
-    ...(runnerType === "perf" ? perfValidations : chillValidations),
-  };
+  return runnerType === "perf" ? perfValidations : chillValidations;
 };
 
 export const resetErrorsAfterDelay = (

@@ -120,8 +120,10 @@ export default function WelcomePage() {
           ],
         }}
       >
-        <Text className="text-6xl font-bold text-purple mb-4">RunMate</Text>
-        <Text className="text-xl text-white text-center px-8">
+        <Text className="text-6xl font-bold text-purple font-fredoka mb-4">
+          RunMate
+        </Text>
+        <Text className="text-xl text-white text-center font-kanit-semibold px-8">
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
@@ -152,7 +154,7 @@ export default function WelcomePage() {
           className="bg-purple py-4 rounded-full items-center shadow-lg shadow-purple/30"
           onPress={() => router.push("/(auth)/login")}
         >
-          <Text className="text-base font-semibold text-white">
+          <Text className="text-base font-semibold text-white font-kanit-semibold">
             Se connecter
           </Text>
         </AnimatedPressable>
@@ -161,7 +163,7 @@ export default function WelcomePage() {
           className="bg-transparent py-4 rounded-full items-center border-2 border-purple"
           onPress={() => router.push("/(auth)/signup")}
         >
-          <Text className="text-base font-semibold text-purple">
+          <Text className="text-base font-semibold text-purple font-kanit-semibold">
             Créer un compte
           </Text>
         </AnimatedPressable>

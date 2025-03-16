@@ -3,17 +3,17 @@ import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface MultiSelectProps {
-  label: string;
   options: string[];
   selectedValues: string[];
   onChange: (values: string[]) => void;
+  label?: string;
 }
 
 export function MultiSelect({
-  label,
   options,
   selectedValues,
   onChange,
+  label,
 }: MultiSelectProps) {
   const toggleOption = (option: string) => {
     if (selectedValues.includes(option)) {
@@ -25,8 +25,7 @@ export function MultiSelect({
 
   return (
     <View>
-      <Text className="text-white text-sm font-semibold mb-2">{label}</Text>
-
+      {label && <Text className="text-white text-sm mb-2">{label}</Text>}
       <View className="flex-row flex-wrap gap-2">
         {options.map((option) => {
           const isSelected = selectedValues.includes(option);
@@ -44,7 +43,7 @@ export function MultiSelect({
               <Text
                 className={`${
                   isSelected ? "text-white" : "text-white"
-                } font-medium mr-2`}
+                } font-medium font-kanit mr-2`}
               >
                 {option}
               </Text>

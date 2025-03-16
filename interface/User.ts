@@ -22,13 +22,13 @@ export interface UserWithRunnerProfile extends User {
 
 export interface RunnerProfile {
   actual_pace: string;
-  usual_distance: string;
+  usual_distance: string | null;
   availability: string[];
   objective: string;
   running_type: string;
   target_pace: string;
   weekly_mileage: number | null;
-  competition_goals: string;
+  competition_goals: string[];
   training_days: string[];
   social_preferences: string[];
   post_run_activities: string[];

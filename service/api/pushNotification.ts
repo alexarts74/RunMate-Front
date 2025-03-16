@@ -147,18 +147,30 @@ export const pushNotificationService = {
 
   handleNotificationResponse(response: Notifications.NotificationResponse) {
     const data = response.notification.request.content.data;
+    console.log("📱 Notification cliquée:", data);
+
     switch (data.type) {
       case "message":
-        router.push(`/chat/${data.sender_id}`);
+        router.push({
+          pathname: "/(app)/chat/[id]",
+          params: { id: data.sender_id },
+        });
         break;
       case "match":
-        router.push(`/matches/${data.matched_user_id}`);
+        router.push({
+          pathname: "/(app)/runner/[id]",
+          params: { id: data.matched_user_id },
+        });
         break;
       case "run_invitation":
-        router.push(`/run/${data.run_id}`);
+        router.push({
+          pathname: "/(app)/runner/[id]",
+          params: { id: data.run_id },
+        });
         break;
       default:
         console.log("Type de notification non géré:", data.type);
+        router.push("/(app)/matches");
     }
   },
 };

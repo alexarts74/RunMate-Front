@@ -68,10 +68,6 @@ const MessagesScreen = () => {
     return `${item.type || "individual"}-${item.id || item.user?.id}`;
   };
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <View className="flex-1 bg-background pt-12">
       <View className="px-4 py-4 border-b border-[#394047] flex-row items-center gap-x-4">
@@ -80,6 +76,8 @@ const MessagesScreen = () => {
         </Pressable>
         <Text className="text-white text-2xl font-bold">Messages</Text>
       </View>
+
+      {isLoading && <LoadingScreen />}
 
       <FlatList
         data={conversations}

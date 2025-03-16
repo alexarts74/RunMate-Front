@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  Animated,
+  Dimensions,
 } from "react-native";
 import { MatchesCarousel } from "@/components/matches/MatchesCarousel";
 import RunningGroup from "@/components/group/RunningGroup";
@@ -14,34 +16,66 @@ import { Ionicons } from "@expo/vector-icons";
 import { EventsList } from "@/components/events/EventsList";
 import { useAuth } from "@/context/AuthContext";
 
+const { width } = Dimensions.get("window");
+
 const HomepageScreen = () => {
   const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
     "matches"
   );
   const [modalVisible, setModalVisible] = useState(false);
   const [eventsType, setEventsType] = useState<"all" | "my">("all");
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  const { user } = useAuth();
-  console.log("👤 User Data:", {
-    running_type: user?.runner_profile?.running_type,
-    user_id: user?.id,
-    name: `${user?.first_name} ${user?.last_name}`,
-    location: {
-      city: user?.city,
-      department: user?.department,
-    },
-  });
+  const handleTabChange = (tab: "matches" | "groups" | "events") => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => {
+      setActiveTab(tab);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
+  const renderContent = () => {
+    return (
+      <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
+        {activeTab === "matches" ? (
+          <>
+            <View className="mb-8">
+              <MatchesCarousel />
+            </View>
+          </>
+        ) : activeTab === "groups" ? (
+          <>
+            <ScrollView>
+              <View className="my-8 h-fit">
+                <RunningGroup />
+              </View>
+              <View className="mb-16">
+                <GetPremiumVersion />
+              </View>
+            </ScrollView>
+          </>
+        ) : (
+          <EventsList eventsType={eventsType} />
+        )}
+      </Animated.View>
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
         <View className="flex-row border-b border-gray-700">
           <Pressable
-            onPress={() => setActiveTab("matches")}
+            onPress={() => handleTabChange("matches")}
             className={`flex-1 py-4 ${
-              activeTab === "matches"
-                ? "border-b-2 border-purple text-white"
-                : ""
+              activeTab === "matches" ? "border-b-2 border-purple" : ""
             }`}
           >
             <View className="flex-row items-center justify-center">
@@ -61,7 +95,7 @@ const HomepageScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={() => setActiveTab("groups")}
+            onPress={() => handleTabChange("groups")}
             className={`flex-1 py-4 ${
               activeTab === "groups" ? "border-b-2 border-purple" : ""
             }`}
@@ -105,29 +139,7 @@ const HomepageScreen = () => {
           </Pressable>
         </View>
 
-        <View className="flex-1">
-          {activeTab === "matches" ? (
-            <>
-              <View className="mb-8">
-                <MatchesCarousel />
-              </View>
-              {/* <GetPremiumVersion /> */}
-            </>
-          ) : activeTab === "groups" ? (
-            <>
-              <ScrollView>
-                <View className="my-8 h-fit">
-                  <RunningGroup />
-                </View>
-                <View className="mb-16">
-                  <GetPremiumVersion />
-                </View>
-              </ScrollView>
-            </>
-          ) : (
-            <EventsList eventsType={eventsType} />
-          )}
-        </View>
+        <View className="flex-1">{renderContent()}</View>
       </View>
 
       <Modal
@@ -145,7 +157,7 @@ const HomepageScreen = () => {
             <Pressable
               onPress={() => {
                 setEventsType("my");
-                setActiveTab("events");
+                handleTabChange("events");
                 setModalVisible(false);
               }}
               className="py-4 mb-3 bg-background rounded-xl"
@@ -156,7 +168,7 @@ const HomepageScreen = () => {
             <Pressable
               onPress={() => {
                 setEventsType("all");
-                setActiveTab("events");
+                handleTabChange("events");
                 setModalVisible(false);
               }}
               className="py-4 mb-6 bg-background rounded-xl"

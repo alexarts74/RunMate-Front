@@ -100,7 +100,7 @@ export function SignUpFormStep2({
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-white text-2xl mr-8 font-bold text-center">
+            <Text className="text-white text-2xl mr-8 font-kanit-bold text-center">
               Dis nous en{"\n"}
               <Text className="text-purple">plus sur toi</Text>
             </Text>
@@ -109,18 +109,21 @@ export function SignUpFormStep2({
 
         <View className="space-y-4 px-4">
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">
+            <Text className="text-white text-sm font-kanit-semibold pl-2">
               Prénom*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
                 focusedInput === "first_name"
                   ? "border-purple"
                   : "border-gray-700"
               }`}
               placeholder="Prénom"
               placeholderTextColor="#9CA3AF"
-              value={formData.first_name}
+              value={
+                formData.first_name.charAt(0).toUpperCase() +
+                formData.first_name.slice(1)
+              }
               onChangeText={(value) => handleChange("first_name", value)}
               onFocus={() => setFocusedInput("first_name")}
               onBlur={() => setFocusedInput(null)}
@@ -133,16 +136,21 @@ export function SignUpFormStep2({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">Nom*</Text>
+            <Text className="text-white text-sm font-kanit-semibold pl-2">
+              Nom*
+            </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
                 focusedInput === "last_name"
                   ? "border-purple"
                   : "border-gray-700"
               }`}
               placeholder="Nom"
               placeholderTextColor="#9CA3AF"
-              value={formData.last_name}
+              value={
+                formData.last_name.charAt(0).toUpperCase() +
+                formData.last_name.slice(1)
+              }
               onChangeText={(value) => handleChange("last_name", value)}
               onFocus={() => setFocusedInput("last_name")}
               onBlur={() => setFocusedInput(null)}
@@ -155,14 +163,16 @@ export function SignUpFormStep2({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">Âge*</Text>
+            <Text className="text-white text-sm font-kanit-semibold pl-2">
+              Âge*
+            </Text>
             <TouchableOpacity
               onPress={() => setShowAgePicker(true)}
               className={`w-full border rounded-full p-4 bg-[#1e2429] ${
                 focusedInput === "age" ? "border-purple" : "border-gray-700"
               }`}
             >
-              <Text className="text-white">
+              <Text className="text-white font-kanit">
                 {formData.age
                   ? `${formData.age} ans`
                   : "Sélectionnez votre âge"}
@@ -174,7 +184,7 @@ export function SignUpFormStep2({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2 pb-2">
+            <Text className="text-white text-sm font-kanit-semibold pl-2 pb-2">
               Genre*
             </Text>
             <GenderSelect
@@ -187,9 +197,11 @@ export function SignUpFormStep2({
           </View>
 
           <View className="space-y-2">
-            <Text className="text-white text-sm font-semibold pl-2">Bio*</Text>
+            <Text className="text-white text-sm font-kanit-semibold pl-2">
+              Bio*
+            </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
                 focusedInput === "bio" ? "border-purple" : "border-gray-700"
               }`}
               placeholder="Parle-nous de toi..."
@@ -236,7 +248,7 @@ export function SignUpFormStep2({
         <View className="h-32" />
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t border-gray-700">
+      <View className="absolute bottom-0 left-0 w-full right-0 pb-8 pt-4 bg-background border-t border-gray-700">
         <ActionButton
           text="Continuer"
           onPress={handleSubmit}
@@ -248,7 +260,7 @@ export function SignUpFormStep2({
         <View className="flex-1 justify-end bg-black/50">
           <View className="bg-[#1e2429] w-full p-4">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-white text-lg font-semibold">
+              <Text className="text-white text-lg  font-semibold">
                 Sélectionnez votre âge
               </Text>
               <Pressable onPress={() => setShowAgePicker(false)}>

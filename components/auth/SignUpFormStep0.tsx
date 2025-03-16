@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { RunnerBackground } from "../animations/RunnerBackground";
 
 type RunnerType = "chill" | "perf";
 
@@ -19,7 +18,7 @@ export function SignUpFormStep0({ onNext }: Props) {
   return (
     <View className="flex-1 mt-8 p-4 bg-background">
       {/* <RunnerBackgrsound /> */}
-      <Text className="text-white text-2xl font-bold text-center px-4 mb-6">
+      <Text className="text-white text-2xl font-kanit-bold text-center px-4 my-12">
         Quel type de <Text className="text-purple">runner</Text> es tu ?
       </Text>
 
@@ -33,11 +32,11 @@ export function SignUpFormStep0({ onNext }: Props) {
               <View className="bg-[#2a3238] p-2.5 rounded-full">
                 <Ionicons name="leaf-outline" size={22} color="#8101f7" />
               </View>
-              <Text className="text-white text-lg font-bold ml-3">
+              <Text className="text-white text-lg font-kanit-semibold ml-3">
                 Je suis un runner Chill
               </Text>
             </View>
-            <Text className="text-white text-sm leading-5">
+            <Text className="text-white text-sm leading-5 font-kanit">
               Je cours pour le plaisir, la santé et la socialisation. Je ne suis
               pas focalisé sur la performance.
             </Text>
@@ -47,7 +46,7 @@ export function SignUpFormStep0({ onNext }: Props) {
                 size={18}
                 color="#8101f7"
               />
-              <Text className="text-purple ml-2 font-semibold text-sm">
+              <Text className="text-purple ml-2 font-kanit-medium text-sm">
                 Choisir ce profil
               </Text>
             </View>
@@ -61,11 +60,11 @@ export function SignUpFormStep0({ onNext }: Props) {
               <View className="bg-[#2a3238] p-2.5 rounded-full">
                 <Ionicons name="trophy-outline" size={22} color="#8101f7" />
               </View>
-              <Text className="text-white text-lg font-bold ml-3">
+              <Text className="text-white text-lg font-kanit-semibold ml-3">
                 Je suis un runner Perf
               </Text>
             </View>
-            <Text className="text-white text-sm leading-5">
+            <Text className="text-white text-sm leading-5 font-kanit">
               Je cours pour la performance, avec des objectifs précis et un plan
               d'entraînement structuré.
             </Text>
@@ -75,14 +74,14 @@ export function SignUpFormStep0({ onNext }: Props) {
                 size={18}
                 color="#8101f7"
               />
-              <Text className="text-purple ml-2 font-semibold text-sm">
+              <Text className="text-purple ml-2 font-kanit-medium text-sm">
                 Choisir ce profil
               </Text>
             </View>
           </Pressable>
 
           <View className="mt-4">
-            <Text className="text-white text-base font-semibold mb-4 mt-8">
+            <Text className="text-white text-base font-kanit-semibold mb-4 mt-8">
               Option supplémentaire
             </Text>
             <Pressable
@@ -102,10 +101,10 @@ export function SignUpFormStep0({ onNext }: Props) {
                   )}
                 </View>
                 <View className="flex-1">
-                  <Text className="text-white text-base font-bold ml-6">
+                  <Text className="text-white text-base font-kanit-semibold ml-6">
                     Je suis flexible
                   </Text>
-                  <Text className="text-white text-sm leading-5 mt-1 ml-6">
+                  <Text className="text-white text-sm leading-5 mt-1 ml-6 font-kanit">
                     Je peux m'adapter aux objectifs, et entrainements de mes
                     partenaires.
                   </Text>

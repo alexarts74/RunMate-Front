@@ -42,7 +42,7 @@ export default function SignUpForm() {
     running_frequency: [] as string[],
     preferred_time_of_day: [] as string[],
     training_days: [] as string[],
-    competition_goals: "",
+    competition_goals: [] as string[],
     social_preferences: [] as string[],
     post_run_activities: [] as string[],
   });
@@ -170,6 +170,7 @@ export default function SignUpForm() {
         postcode: locationData.postcode,
         latitude: locationData.latitude,
         longitude: locationData.longitude,
+        running_type: runnerType,
       });
 
       // 3. Se connecter
@@ -184,9 +185,10 @@ export default function SignUpForm() {
             ? parseInt(formData.weekly_mileage) || null
             : null,
         competition_goals:
-          runnerType === "perf" ? formData.competition_goals : "",
+          runnerType === "perf" ? formData.competition_goals : [],
         training_days: runnerType === "perf" ? formData.training_days : [],
-        usual_distance: formData.usual_distance.toString(),
+        usual_distance:
+          runnerType === "chill" ? formData.usual_distance.toString() : null,
         preferred_time_of_day: formData.preferred_time_of_day || [],
         running_type: runnerType,
         availability: [],

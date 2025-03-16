@@ -58,12 +58,8 @@ export function MatchCard({ match }: MatchCardProps) {
               </View>
             </View>
             <View className="bg-purple/10 px-3 py-1 rounded-full">
-              <View className="flex-row items-center space-x-1">
-                <Ionicons name="time-outline" size={14} color="#8101f7" />
-                <Text className="text-purple font-medium">
-                  {match.user.runner_profile.running_frequency}
-                </Text>
-              </View>
+              <Ionicons name="location-outline" size={16} color="#8101f7" />
+              <Text className="text-gray-300">{match.user.city}</Text>
             </View>
           </View>
 
@@ -72,10 +68,11 @@ export function MatchCard({ match }: MatchCardProps) {
               {match.user.runner_profile.objective}
             </Text>
           </View>
-
-          <View className="flex-row items-center space-x-2 bg-gray-800/30 px-3 py-2 rounded-full w-fit">
-            <Ionicons name="location-outline" size={16} color="#8101f7" />
-            <Text className="text-gray-300">{match.user.city}</Text>
+          <View className="flex-row items-center space-x-1">
+            <Ionicons name="time-outline" size={14} color="#8101f7" />
+            <Text className="text-purple font-medium">
+              {match.user.runner_profile.running_frequency}
+            </Text>
           </View>
         </View>
       </View>

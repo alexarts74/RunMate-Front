@@ -28,7 +28,9 @@ export function ActionButton({
         className={`bg-purple py-3 rounded-full active:opacity-90 ${className}`}
       >
         <View className="flex-row justify-center items-center space-x-2">
-          <Text className={`text-white font-bold text-lg ${textClassName}`}>
+          <Text
+            className={`text-white font-kanit-bold text-lg ${textClassName}`}
+          >
             {loading ? "Chargement..." : text}
           </Text>
           {icon && <Ionicons name={icon} size={iconSize} color="white" />}
