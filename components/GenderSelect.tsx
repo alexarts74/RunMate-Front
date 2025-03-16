@@ -30,7 +30,7 @@ export function GenderSelect({ value, onChange }: Props) {
               }
             : undefined
         }
-        placeholder="Sélectionnez votre genre"
+        placeholder="Etes-vous ?"
         boxStyles={{
           backgroundColor: "#1e2429",
           borderColor: "#374151",

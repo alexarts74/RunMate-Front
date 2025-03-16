@@ -50,7 +50,7 @@ export function MatchCard({ match }: MatchCardProps) {
                       isChillRunner ? "text-blue-400" : "text-red-400"
                     }`}
                   >
-                    {isChillRunner ? "Coureur Chill" : "Coureur Intense"}
+                    {isChillRunner ? "Chill" : "Performer"}
                   </Text>
                 </View>
                 <Text className="text-gray-400">•</Text>

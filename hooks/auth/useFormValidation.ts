@@ -40,7 +40,7 @@ export const useFormValidation = () => {
         "Le mot de passe doit contenir au moins 6 caractères, une lettre et un chiffre";
     } else if (rules.minLength && value.length < rules.minLength) {
       isValid = false;
-      errorMessage = `Minimum ${rules.minLength} caractères requis`;
+      errorMessage = `Minimum ${rules.minLength} caractères / choix requis`;
     } else if (rules.maxLength && value.length > rules.maxLength) {
       isValid = false;
       errorMessage = `Maximum ${rules.maxLength} caractères autorisés`;

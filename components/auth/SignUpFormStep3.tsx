@@ -9,7 +9,10 @@ import {
   Alert,
 } from "react-native";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
-import { validateSignUpFormStep3 } from "@/constants/formValidation";
+import {
+  validateSignUpFormStep3,
+  resetErrorsAfterDelay,
+} from "@/constants/formValidation";
 import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "../ui/ActionButton";
 import { MultiSelect } from "../ui/MultiSelect";
@@ -26,7 +29,7 @@ interface SignUpFormStep3Props {
     competition_goals: string[];
     social_preferences: string[];
     post_run_activities: string[];
-    objective: string;
+    objective: string[];
   };
   runnerType: "chill" | "perf";
   onBack: () => void;
@@ -43,16 +46,14 @@ const PERFORMANCE_OBJECTIVES = [
   { value: "ultra_trail", label: "Ultra-trail" },
 ];
 
-//Beoin des objectifs en chill ?
-
-// const CHILL_OBJECTIVES = [
-//   "course_reguliere",
-//   "perdre_du_poids",
-//   "ameliorer_endurance",
-//   "social_running",
-//   "decouverte",
-//   "bien_etre",
-// ];
+const CHILL_OBJECTIVES_OPTIONS = [
+  { value: "course_reguliere", label: "Course régulière" },
+  { value: "perdre_du_poids", label: "Perdre du poids" },
+  { value: "ameliorer_endurance", label: "Améliorer l'endurance" },
+  { value: "social_running", label: "Social running" },
+  { value: "decouverte", label: "Découverte" },
+  { value: "bien_etre", label: "Bien-être" },
+];
 
 const TIME_PREFERENCES = [
   { value: "matin_tot", label: "Très tôt (5h-8h)" },
@@ -103,11 +104,12 @@ export function SignUpFormStep3({
   onSubmit,
   handleChange,
 }: SignUpFormStep3Props) {
-  const { errors, validateForm, clearErrors } = useFormValidation();
+  const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPacePicker, setShowPacePicker] = useState(false);
   const [showTargetPacePicker, setShowTargetPacePicker] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   useEffect(() => {
     const checkFormValidity = () => {
@@ -121,7 +123,8 @@ export function SignUpFormStep3({
         Array.isArray(formData.post_run_activities) &&
         formData.post_run_activities.length > 0 &&
         Array.isArray(formData.preferred_time_of_day) &&
-        formData.preferred_time_of_day.length > 0;
+        formData.preferred_time_of_day.length > 0 &&
+        formData.objective.length > 0;
 
       const perfRequiredFields =
         formData.actual_pace.trim() !== "" &&
@@ -136,14 +139,6 @@ export function SignUpFormStep3({
         commonRequiredFields &&
         (runnerType === "perf" ? perfRequiredFields : chillRequiredFields);
 
-      console.log("🎯 Validation détaillée:", {
-        commonRequiredFields,
-        perfRequiredFields: runnerType === "perf" ? perfRequiredFields : "N/A",
-        chillRequiredFields:
-          runnerType === "chill" ? chillRequiredFields : "N/A",
-        isValid,
-      });
-
       setIsFormValid(isValid);
     };
 
@@ -152,17 +147,17 @@ export function SignUpFormStep3({
 
   const handleSubmit = () => {
     clearErrors();
-    console.log("🎯 formData:", formData);
     setIsLoading(true);
-    console.log("🎯 runnerType:", runnerType);
-    console.log("🎯 isFormValid:", isFormValid);
-
     const validationResult = validateSignUpFormStep3(formData, runnerType);
-    console.log("🎯 validationResult:", validationResult);
+    const isValid = validateForm(validationResult);
 
-    if (validateForm(validationResult)) {
-      onSubmit();
+    if (!isValid) {
+      resetErrorsAfterDelay(setErrors);
+      setIsLoading(false);
+      return;
     }
+
+    onSubmit();
     setIsLoading(false);
   };
 
@@ -213,7 +208,9 @@ export function SignUpFormStep3({
                   </View>
                   <Pressable
                     onPress={() => setShowPacePicker(true)}
-                    className="bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border border-gray-700"
+                    className={`bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border ${
+                      errors.actual_pace ? "border-red-500" : "border-gray-700"
+                    }`}
                   >
                     <Text className="text-white font-kanit">
                       {formData.actual_pace
@@ -273,8 +270,6 @@ export function SignUpFormStep3({
                   </View>
                 </Modal>
 
-                {/* Distance habituelle / semaine (km) */}
-
                 <View>
                   <View className="flex-row items-center mb-2">
                     <View className="w-8 items-center">
@@ -290,7 +285,9 @@ export function SignUpFormStep3({
                   </View>
                   <Pressable
                     onPress={() => setShowTargetPacePicker(true)}
-                    className="bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border border-gray-700"
+                    className={`bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border ${
+                      errors.target_pace ? "border-red-500" : "border-gray-700"
+                    }`}
                   >
                     <Text className="text-white font-kanit">
                       {formData.target_pace
@@ -361,15 +358,34 @@ export function SignUpFormStep3({
                       Kilométrage hebdomadaire
                     </Text>
                   </View>
-                  <TextInput
-                    className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700 font-kanit"
-                    placeholder="km/semaine"
-                    placeholderTextColor="#9CA3AF"
-                    value={formData.weekly_mileage}
-                    onChangeText={(text) =>
-                      handleChange("weekly_mileage", text)
-                    }
-                  />
+                  <View
+                    className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                      focusedInput === "weekly_mileage"
+                        ? `border-purple ${
+                            errors.weekly_mileage ? "border-red-500" : ""
+                          }`
+                        : errors.weekly_mileage
+                        ? "border-red-500"
+                        : "border-gray-700"
+                    }`}
+                  >
+                    <TextInput
+                      className="flex-1 text-white font-kanit"
+                      placeholder="km/semaine"
+                      placeholderTextColor="#9CA3AF"
+                      value={formData.weekly_mileage}
+                      onChangeText={(text) =>
+                        handleChange("weekly_mileage", text)
+                      }
+                      onFocus={() => setFocusedInput("weekly_mileage")}
+                      onBlur={() => setFocusedInput(null)}
+                    />
+                  </View>
+                  {errors.weekly_mileage && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                      {errors.weekly_mileage}
+                    </Text>
+                  )}
                 </View>
 
                 <View className="space-y-4">
@@ -426,13 +442,7 @@ export function SignUpFormStep3({
                         : []
                     }
                     onChange={(values) => {
-                      console.log("Values sélectionnées brutes:", values);
                       const selectedValues = values.filter((v) => v);
-                      console.log(
-                        "Valeurs sélectionnées filtrées:",
-                        selectedValues
-                      );
-
                       const selectedObjectives = selectedValues
                         .map((label) => {
                           const objective = PERFORMANCE_OBJECTIVES.find(
@@ -442,12 +452,7 @@ export function SignUpFormStep3({
                         })
                         .filter((value) => value);
 
-                      console.log("Objectifs trouvés:", selectedObjectives);
                       handleChange("competition_goals", selectedObjectives);
-                      console.log(
-                        "Valeurs finales envoyées:",
-                        selectedObjectives
-                      );
                     }}
                   />
                 </View>
@@ -457,6 +462,65 @@ export function SignUpFormStep3({
             {/* Chill Fields */}
             {runnerType === "chill" && (
               <View className="space-y-4">
+                <View>
+                  <View className="flex-row items-center mb-2">
+                    <View className="w-8 items-center">
+                      <Ionicons name="map-outline" size={22} color="#8101f7" />
+                    </View>
+                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                      Distance habituelle / semaine (km)
+                    </Text>
+                  </View>
+                  <View
+                    className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                      focusedInput === "usual_distance"
+                        ? `border-purple ${
+                            errors.usual_distance ? "border-red-500" : ""
+                          }`
+                        : errors.usual_distance
+                        ? "border-red-500"
+                        : "border-gray-700"
+                    }`}
+                  >
+                    <TextInput
+                      className="flex-1 text-white font-kanit"
+                      placeholder="km"
+                      placeholderTextColor="#9CA3AF"
+                      value={formData.usual_distance}
+                      onChangeText={(text) =>
+                        handleChange("usual_distance", text)
+                      }
+                      onFocus={() => setFocusedInput("usual_distance")}
+                      onBlur={() => setFocusedInput(null)}
+                    />
+                  </View>
+                  {errors.usual_distance && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                      {errors.usual_distance}
+                    </Text>
+                  )}
+                </View>
+                <View>
+                  <View className="flex-row items-center mb-2">
+                    <View className="w-8 items-center">
+                      <Ionicons name="flag-outline" size={22} color="#8101f7" />
+                    </View>
+                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                      Objectif principal
+                    </Text>
+                  </View>
+                  <MultiSelect
+                    options={CHILL_OBJECTIVES_OPTIONS.map((obj) => obj.label)}
+                    selectedValues={formData.objective}
+                    onChange={(values) => handleChange("objective", values)}
+                  />
+                  {errors.objective && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                      {errors.objective}
+                    </Text>
+                  )}
+                </View>
+
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
                     <Ionicons name="people-outline" size={22} color="#8101f7" />
@@ -472,6 +536,11 @@ export function SignUpFormStep3({
                     handleChange("social_preferences", values)
                   }
                 />
+                {errors.social_preferences && (
+                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    {errors.social_preferences}
+                  </Text>
+                )}
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
@@ -490,6 +559,11 @@ export function SignUpFormStep3({
                     handleChange("post_run_activities", values)
                   }
                 />
+                {errors.post_run_activities && (
+                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    {errors.post_run_activities}
+                  </Text>
+                )}
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
@@ -506,6 +580,11 @@ export function SignUpFormStep3({
                     handleChange("running_frequency", values)
                   }
                 />
+                {errors.running_frequency && (
+                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    {errors.running_frequency}
+                  </Text>
+                )}
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
@@ -522,31 +601,11 @@ export function SignUpFormStep3({
                     handleChange("preferred_time_of_day", values)
                   }
                 />
-
-                <View>
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
-                      <Ionicons name="map-outline" size={22} color="#8101f7" />
-                    </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
-                      Distance habituelle / semaine (km)
-                    </Text>
-                  </View>
-                  <TextInput
-                    className="bg-[#1e2429] text-white px-6 py-4 rounded-full border border-gray-700 font-kanit"
-                    placeholder="km"
-                    placeholderTextColor="#9CA3AF"
-                    value={formData.usual_distance}
-                    onChangeText={(text) =>
-                      handleChange("usual_distance", text)
-                    }
-                  />
-                  {errors.usual_distance && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
-                      {errors.usual_distance}
-                    </Text>
-                  )}
-                </View>
+                {errors.preferred_time_of_day && (
+                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    {errors.preferred_time_of_day}
+                  </Text>
+                )}
               </View>
             )}
           </View>
