@@ -6,17 +6,17 @@ export default {
     slug: "runmate-front-expo",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/run-mate-logo.png",
+    icon: "./assets/images/splaash.png",
     splash: {
-      image: "./assets/images/splash-screen.png",
+      image: "./assets/images/splaash.png",
       resizeMode: "cover",
-      backgroundColor: "#1e2429",
+      backgroundColor: "#14141b",
     },
     scheme: "runmate",
-    userInterfaceStyle: "automatic",
+    userInterfaceStyle: "dark",
     newArchEnabled: true,
     notification: {
-      icon: "./assets/images/run-mate-logo.png",
+      icon: "./assets/images/splaash.png",
       color: "#000000",
       androidMode: "default",
       androidCollapsedTitle: "RunMate",
@@ -24,17 +24,32 @@ export default {
     },
     ios: {
       supportsTablet: true,
+      splash: {
+        image: "./assets/images/splaash.png",
+        resizeMode: "cover",
+        backgroundColor: "#14141b",
+      },
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/run-mate-logo.png",
-        backgroundColor: "#000000",
+        foregroundImage: "./assets/images/splaash.png",
+        backgroundColor: "#14141b",
+      },
+      splash: {
+        image: "./assets/images/splaash.png",
+        resizeMode: "cover",
+        backgroundColor: "#14141b",
       },
     },
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/run-mate-logo.png",
+      favicon: "./assets/images/splaash.png",
+      splash: {
+        image: "./assets/images/splaash.png",
+        resizeMode: "cover",
+        backgroundColor: "#14141b",
+      },
     },
     plugins: ["expo-router", "expo-image-picker", "expo-location", "expo-font"],
     experiments: {

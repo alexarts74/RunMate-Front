@@ -33,7 +33,7 @@ export default function SignUpForm() {
     bio: "",
     profile_image: "",
     availability: "",
-    objective: "",
+    objective: [] as string[],
     running_type: "",
     actual_pace: "",
     target_pace: "",

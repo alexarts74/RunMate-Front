@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import React from "react";
 import WelcomePage from "@/components/WelcomePage";
 

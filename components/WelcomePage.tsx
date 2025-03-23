@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, Dimensions } from "react-native";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,31 +7,13 @@ import LottieView from "lottie-react-native";
 const { width: screenWidth } = Dimensions.get("window");
 
 export default function WelcomePage() {
-  const [isReady, setIsReady] = useState(false);
-  const titleScale = useRef(new Animated.Value(1)).current;
-  const titlePosition = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(0)).current;
-  const buttonScale = useRef(new Animated.Value(0.9)).current;
-  const buttonOpacity = useRef(new Animated.Value(0)).current;
   const imageScale = useRef(new Animated.Value(0.8)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const imagePosition = useRef(new Animated.Value(-screenWidth)).current;
+  const buttonScale = useRef(new Animated.Value(0.9)).current;
+  const buttonOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsReady(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (isReady) {
-      startAnimations();
-    }
-  }, [isReady]);
-
-  const startAnimations = () => {
     // Animation du logo en boucle
     Animated.loop(
       Animated.sequence([
@@ -52,22 +34,8 @@ export default function WelcomePage() {
       ])
     ).start();
 
+    // Animation des boutons et du logo
     Animated.parallel([
-      Animated.timing(titleScale, {
-        toValue: 0.8,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(titlePosition, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
       Animated.timing(imageScale, {
         toValue: 1,
         duration: 1000,
@@ -91,13 +59,9 @@ export default function WelcomePage() {
         useNativeDriver: true,
       }),
     ]).start();
-  };
+  }, []);
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-  if (!isReady) {
-    return null;
-  }
 
   return (
     <View className="flex-1 bg-background">
@@ -106,18 +70,10 @@ export default function WelcomePage() {
         className="absolute top-0 left-0 right-0 h-96"
       />
 
-      <Animated.View
+      <View
         className="flex-1 justify-center items-center"
         style={{
-          transform: [
-            { scale: titleScale },
-            {
-              translateY: titlePosition.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, -100],
-              }),
-            },
-          ],
+          transform: [{ scale: 0.8 }, { translateY: -100 }],
         }}
       >
         <Text className="text-6xl font-bold text-purple font-fredoka mb-4">
@@ -126,7 +82,7 @@ export default function WelcomePage() {
         <Text className="text-xl text-white text-center font-kanit-semibold px-8">
           Trouvez votre partenaire de course idéal
         </Text>
-      </Animated.View>
+      </View>
 
       <Animated.View
         className="absolute left-0 right-0 bottom-56 items-center"
