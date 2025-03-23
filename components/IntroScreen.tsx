@@ -103,16 +103,12 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   };
 
   const handleLoginPress = () => {
-    if (onFinish) {
-      onFinish();
-    }
+    // Uniquement naviguer, ne pas appeler onFinish
     router.push("/(auth)/login");
   };
 
   const handleSignupPress = () => {
-    if (onFinish) {
-      onFinish();
-    }
+    // Uniquement naviguer, ne pas appeler onFinish
     router.push("/(auth)/signup");
   };
 
@@ -122,7 +118,7 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
     <View className="flex-1 bg-background">
       <LinearGradient
         colors={["rgba(129, 1, 247, 0.1)", "transparent"]}
-        className="absolute top-0 left-0 right-0 h-36"
+        className="absolute top-0 left-0 right-0 h-96"
       />
 
       <Animated.View
@@ -140,8 +136,8 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
         }}
       >
         <Text className="text-6xl font-bold font-fredoka mb-4">
-          <Text className="text-white">Run</Text>
-          <Text className="text-purple">Mate</Text>
+          <Text className="text-purple">Run</Text>
+          <Text className="text-white">Mate</Text>
         </Text>
         <Text className="text-xl text-white text-center font-kanit-semibold px-8">
           Trouvez votre partenaire de course idéal

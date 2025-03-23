@@ -35,18 +35,27 @@ export default function AuthenticationGuard({
 
   useEffect(() => {
     if (!isLoading) {
-      const inAuthGroup = segments[0] === "(auth)";
-      const isIndex = segments.length === 0 || (segments[0] as string) === "";
+      const inAuthGroup = segments.length > 0 && segments[0] === "(auth)";
+      const isRoot = segments.length === 0;
 
       if (isAuthenticated) {
-        if (inAuthGroup || isIndex) {
-          router.replace("/(tabs)/matches");
+        if (inAuthGroup || isRoot) {
+          setTimeout(() => {
+            router.replace("/(tabs)/matches");
+          }, 100);
+        }
+      } else {
+        if (!inAuthGroup && !isRoot) {
+          setTimeout(() => {
+            router.replace("/(auth)/login");
+          }, 100);
         }
       }
     }
   }, [isAuthenticated, segments, isLoading, user]);
 
   if (isLoading) {
+    console.log("AuthenticationGuard est en chargement...");
     return null;
   }
 

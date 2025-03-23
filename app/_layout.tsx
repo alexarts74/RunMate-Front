@@ -12,7 +12,9 @@ import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 
 // Empêcher le splash screen de se cacher automatiquement
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {
+  /* ignore l'erreur */
+});
 
 // Configuration globale des notifications
 Notifications.setNotificationHandler({
@@ -25,7 +27,6 @@ Notifications.setNotificationHandler({
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
     async function prepare() {
@@ -45,8 +46,12 @@ export default function RootLayout() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // Cacher le splash screen natif
-      await SplashScreen.hideAsync();
+      // Cacher le splash screen natif avec un délai
+      setTimeout(async () => {
+        await SplashScreen.hideAsync().catch(() => {
+          /* ignore l'erreur */
+        });
+      }, 500);
     }
   }, [appIsReady]);
 
@@ -56,34 +61,20 @@ export default function RootLayout() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {showIntro ? (
-        <IntroScreen onFinish={() => setShowIntro(false)} />
-      ) : (
-        <AuthProvider>
-          <NotificationsProvider>
-            <UnreadMessagesProvider>
-              <MatchesProvider>
-                <AuthenticationGuard>
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen
-                      name="(auth)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="(tabs)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="(app)"
-                      options={{ headerShown: false }}
-                    />
-                  </Stack>
-                </AuthenticationGuard>
-              </MatchesProvider>
-            </UnreadMessagesProvider>
-          </NotificationsProvider>
-        </AuthProvider>
-      )}
+      <AuthProvider>
+        <NotificationsProvider>
+          <UnreadMessagesProvider>
+            <MatchesProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="(app)" options={{ headerShown: false }} />
+              </Stack>
+            </MatchesProvider>
+          </UnreadMessagesProvider>
+        </NotificationsProvider>
+      </AuthProvider>
     </View>
   );
 }

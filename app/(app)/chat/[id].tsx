@@ -86,20 +86,20 @@ const ChatPage = () => {
     <View
       className={`p-3 rounded-xl max-w-[85%] mb-2 ${
         item.sender_id === user?.id
-          ? "bg-green self-end"
+          ? "bg-purple self-end"
           : "bg-[#1e2429] self-start"
       }`}
     >
       <Text
         className={`mb-2 ${
-          item.sender_id === user?.id ? "text-dark" : "text-white"
+          item.sender_id === user?.id ? "text-white" : "text-white"
         }`}
       >
         {item.content}
       </Text>
       <Text
         className={`text-xs ${
-          item.sender_id === user?.id ? "text-dark" : "text-gray"
+          item.sender_id === user?.id ? "text-gray-200" : "text-gray-400"
         }`}
       >
         {new Date(item.created_at).toLocaleTimeString()}
@@ -115,7 +115,7 @@ const ChatPage = () => {
       {/* Header */}
       <View className="flex-row items-center px-4 pt-14 pb-4 bg-[#12171b] border-b border-[#394047]">
         <Pressable onPress={() => router.back()} className="p-2 mr-3">
-          <Ionicons name="arrow-back" size={24} color="#b9f144" />
+          <Ionicons name="arrow-back" size={24} color="#8101f7" />
         </Pressable>
 
         <Image
@@ -148,9 +148,9 @@ const ChatPage = () => {
           />
           <Pressable
             onPress={sendMessage}
-            className="bg-green w-10 h-10 rounded-full items-center justify-center"
+            className="bg-purple w-10 h-10 rounded-full items-center justify-center"
           >
-            <Ionicons name="send" size={20} color="#12171b" />
+            <Ionicons name="send" size={20} color="#ffffff" />
           </Pressable>
         </View>
       </View>

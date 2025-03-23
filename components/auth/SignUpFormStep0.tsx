@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useRouter } from "expo-router";
 type RunnerType = "chill" | "perf";
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 
 export function SignUpFormStep0({ onNext }: Props) {
   const [isFlexible, setIsFlexible] = useState(false);
+  const router = useRouter();
 
   const handleNext = (type: RunnerType) => {
     onNext(type, isFlexible);
@@ -18,10 +19,19 @@ export function SignUpFormStep0({ onNext }: Props) {
   return (
     <View className="flex-1 mt-8 p-4 bg-background">
       {/* <RunnerBackgrsound /> */}
-      <Text className="text-white text-2xl font-kanit-bold text-center px-4 my-12">
-        Quel type de <Text className="text-purple">runner</Text> es tu ?
-      </Text>
+      <View className="relative flex-row items-center justify-center my-12">
+        <Pressable
+          onPress={() => router.back()}
+          className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
+        >
+          <Ionicons name="arrow-back" size={22} color="#8101f7" />
+        </Pressable>
 
+        <Text className="text-white text-2xl font-kanit-bold text-center w-[80%]">
+          Quel type de
+          <Text className="text-purple"> runner</Text> {"\n"}es tu ?
+        </Text>
+      </View>
       <View className="flex-1 justify-center -mt-10">
         <View className="space-y-3">
           <Pressable

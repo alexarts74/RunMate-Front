@@ -1,11 +1,6 @@
-import { Pressable, Text, View } from "react-native";
 import React from "react";
-import WelcomePage from "@/components/WelcomePage";
+import { IntroScreen } from "@/components/IntroScreen";
 
-export default function HomeScreen() {
-  return (
-    <View className="flex-1 justify-center items-center bg-[#14141b]">
-      <WelcomePage />
-    </View>
-  );
+export default function Index() {
+  return <IntroScreen />;
 }
