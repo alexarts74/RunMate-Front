@@ -10,19 +10,16 @@ export default function AuthenticationGuard({
   children: React.ReactNode;
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  const { login, isAuthenticated, user } = useAuth();
+  const { login, isAuthenticated, user, updateUser } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     const init = async () => {
       try {
-        const token = await authStorage.getToken();
-        const userData = await authStorage.getUser();
-
-        if (token && userData) {
-          await login(userData);
-        }
+        // Ne pas lancer le login à chaque rechargement
+        // Laisser AuthContext gérer l'initialisation au démarrage
+        setIsLoading(false);
       } catch (error) {
         console.error("❌ Erreur init:", error);
       } finally {

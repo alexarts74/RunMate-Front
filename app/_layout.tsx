@@ -62,18 +62,26 @@ export default function RootLayout() {
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <AuthProvider>
-        <NotificationsProvider>
-          <UnreadMessagesProvider>
-            <MatchesProvider>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="(app)" options={{ headerShown: false }} />
-              </Stack>
-            </MatchesProvider>
-          </UnreadMessagesProvider>
-        </NotificationsProvider>
+        <AuthenticationGuard>
+          <NotificationsProvider>
+            <UnreadMessagesProvider>
+              <MatchesProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="(app)" options={{ headerShown: false }} />
+                </Stack>
+              </MatchesProvider>
+            </UnreadMessagesProvider>
+          </NotificationsProvider>
+        </AuthenticationGuard>
       </AuthProvider>
     </View>
   );

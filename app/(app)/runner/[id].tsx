@@ -128,10 +128,45 @@ export default function RunnerProfileScreen() {
   const preferredTimeOfDay = parseJsonIfNeeded(
     runner.runner_profile.preferred_time_of_day
   );
+  const competitionGoals = parseJsonIfNeeded(
+    runner.runner_profile.competition_goals
+  );
+  const objective = parseJsonIfNeeded(runner.runner_profile.objective);
+  const runningFrequency = parseJsonIfNeeded(
+    runner.runner_profile.running_frequency
+  );
+  const socialPreferences = parseJsonIfNeeded(
+    runner.runner_profile.social_preferences
+  );
+  const postRunActivities = parseJsonIfNeeded(
+    runner.runner_profile.post_run_activities
+  );
+  const trainingDays = parseJsonIfNeeded(runner.runner_profile.training_days);
 
   // Helper function to capitalize first letter
   const capitalize = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1);
+
+  // Formatage des objectifs de compétition
+  const formatCompetitionGoal = (goal: string) => {
+    // Remplacer les underscores par des espaces
+    let formattedGoal = goal.replace(/_/g, " ");
+
+    // Traduire et formater certains objectifs communs
+    switch (goal) {
+      case "semi_marathon":
+        return "Semi-marathon";
+      case "marathon":
+        return "Marathon";
+      case "10km_sous_50min":
+        return "10km sous 50min";
+      case "5km_sous_25min":
+        return "5km sous 25min";
+      default:
+        // Mettre une majuscule à la première lettre
+        return formattedGoal.charAt(0).toUpperCase() + formattedGoal.slice(1);
+    }
+  };
 
   return (
     <StyledSafeAreaView className="flex-1 bg-[#14141b]">
@@ -141,10 +176,13 @@ export default function RunnerProfileScreen() {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* Header avec image de profil */}
-        <StyledView className="pt-8 px-5">
+        <StyledView className="pt-2 px-5">
           {/* Header avec bouton retour */}
           <StyledView className="flex-row items-center mb-4">
-            <StyledPressable onPress={() => router.back()} className="p-2">
+            <StyledPressable
+              onPress={() => router.back()}
+              className="p-2 rounded-full"
+            >
               <Ionicons name="arrow-back" size={24} color="#fff" />
             </StyledPressable>
             <StyledText className="text-xl font-bold text-white ml-2">
@@ -225,6 +263,7 @@ export default function RunnerProfileScreen() {
           {/* Statistiques de course - cartes */}
           <CollapsibleSection title="Statistiques" icon="stats-chart-outline">
             <StyledView className="flex-row justify-between gap-x-2">
+              {/* Allure actuelle - affiché pour tous */}
               <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
                   <Ionicons name="walk-outline" size={18} color="#8101f7" />
@@ -237,200 +276,65 @@ export default function RunnerProfileScreen() {
                 </StyledText>
               </StyledView>
 
+              {/* Distance - adapté selon le type */}
               <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
                   <Ionicons name="resize-outline" size={18} color="#8101f7" />
                 </StyledView>
                 <StyledText className="text-white text-center mt-1 text-sm">
-                  Distance
+                  {runner.runner_profile.running_type === "perf"
+                    ? "Distance/semaine"
+                    : "Distance"}
                 </StyledText>
                 <StyledText className="text-purple text-base font-bold">
-                  {runner.runner_profile.usual_distance} km
+                  {runner.runner_profile.running_type === "perf"
+                    ? `${runner.runner_profile.weekly_mileage || 0} km/sem`
+                    : `${runner.runner_profile.usual_distance || 0} km`}
                 </StyledText>
               </StyledView>
 
+              {/* Troisième carte adaptée selon le type */}
               <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
-                  <Ionicons name="repeat-outline" size={18} color="#8101f7" />
+                  {runner.runner_profile.running_type === "perf" ? (
+                    <Ionicons
+                      name="speedometer-outline"
+                      size={18}
+                      color="#8101f7"
+                    />
+                  ) : (
+                    <Ionicons name="repeat-outline" size={18} color="#8101f7" />
+                  )}
                 </StyledView>
                 <StyledText className="text-white text-center mt-1 text-sm">
-                  Fréquence
+                  {runner.runner_profile.running_type === "perf"
+                    ? "Target Pace"
+                    : "Fréquence"}
                 </StyledText>
                 <StyledText className="text-purple text-base font-bold">
-                  {capitalize(runner.runner_profile.running_frequency || "N/A")}
+                  {runner.runner_profile.running_type === "perf"
+                    ? `${runner.runner_profile.target_pace || "N/A"}`
+                    : `${
+                        Array.isArray(runningFrequency) &&
+                        runningFrequency.length > 0
+                          ? runningFrequency.join(", ")
+                          : "N/A"
+                      }`}
                 </StyledText>
               </StyledView>
             </StyledView>
           </CollapsibleSection>
 
-          {/* Infos principales */}
-          <CollapsibleSection
-            title="Infos pratiques"
-            icon="information-circle-outline"
-          >
-            {/* Objectif */}
-            <StyledView className="mb-4">
-              <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="trophy-outline" size={18} color="#8101f7" />
-                <StyledText className="text-white ml-2 font-medium">
-                  Objectif
-                </StyledText>
-              </StyledView>
-              <StyledText className="text-gray-300 ml-6 text-sm">
-                {typeof runner.runner_profile.objective === "string"
-                  ? runner.runner_profile.objective.charAt(0).toUpperCase() +
-                    runner.runner_profile.objective.slice(1)
-                  : Array.isArray(runner.runner_profile.objective)
-                  ? (runner.runner_profile.objective as string[]).length > 0
-                    ? (runner.runner_profile.objective as string[]).join(", ")
-                    : "Non précisé"
-                  : "Non précisé"}
-              </StyledText>
-            </StyledView>
-
-            {/* Disponibilités */}
-            <StyledView className="mb-4">
-              <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="calendar-outline" size={18} color="#8101f7" />
-                <StyledText className="text-white ml-2 font-medium">
-                  Disponibilités
-                </StyledText>
-              </StyledView>
-              <StyledView className="flex-row flex-wrap ml-6">
-                {availability && availability.length > 0 ? (
-                  Array.isArray(availability) &&
-                  availability.map((day, index) => (
-                    <StyledView
-                      key={index}
-                      className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
-                    >
-                      <StyledText className="text-purple text-xs text-center">
-                        {capitalize(day)}
-                      </StyledText>
-                    </StyledView>
-                  ))
-                ) : (
-                  <StyledText className="text-gray-400 text-sm">
-                    Aucune disponibilité renseignée
-                  </StyledText>
-                )}
-              </StyledView>
-            </StyledView>
-
-            {/* Préférence temporelle */}
-            {preferredTimeOfDay && preferredTimeOfDay.length > 0 && (
-              <StyledView>
-                <StyledView className="flex-row items-center mb-1">
-                  <Ionicons name="time-outline" size={18} color="#8101f7" />
-                  <StyledText className="text-white ml-2 font-medium">
-                    Moments préférés
-                  </StyledText>
-                </StyledView>
-                <StyledView className="flex-row flex-wrap ml-6">
-                  {Array.isArray(preferredTimeOfDay) &&
-                    preferredTimeOfDay.map((time, index) => (
-                      <StyledView
-                        key={index}
-                        className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
-                      >
-                        <StyledText className="text-purple text-xs">
-                          {time}
-                        </StyledText>
-                      </StyledView>
-                    ))}
-                </StyledView>
-              </StyledView>
-            )}
-          </CollapsibleSection>
-
-          {/* Section spécifique au type de runner */}
-          <CollapsibleSection
-            title={
-              runner.runner_profile.running_type === "chill"
-                ? "Préférences sociales"
-                : "Objectifs de performance"
-            }
-            icon={
-              runner.runner_profile.running_type === "chill"
-                ? "people-outline"
-                : "ribbon-outline"
-            }
-          >
-            {/* Contenu spécifique au type de runner */}
-            {runner.runner_profile.running_type === "chill" ? (
-              <StyledView>
-                {/* Préférences Sociales - pour runners chill */}
-                {runner.runner_profile.social_preferences &&
-                  runner.runner_profile.social_preferences.length > 0 && (
-                    <StyledView className="mb-4">
-                      <StyledView className="flex-row items-center mb-1">
-                        <Ionicons
-                          name="people-outline"
-                          size={18}
-                          color="#8101f7"
-                        />
-                        <StyledText className="text-white ml-2 font-medium">
-                          Préférences sociales
-                        </StyledText>
-                      </StyledView>
-                      <StyledView className="flex-row flex-wrap ml-6">
-                        {Array.isArray(
-                          runner.runner_profile.social_preferences
-                        ) &&
-                          runner.runner_profile.social_preferences.map(
-                            (pref, index) => (
-                              <StyledView
-                                key={index}
-                                className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
-                              >
-                                <StyledText className="text-purple text-xs">
-                                  {pref}
-                                </StyledText>
-                              </StyledView>
-                            )
-                          )}
-                      </StyledView>
-                    </StyledView>
-                  )}
-
-                {/* Activités après course - pour runners chill */}
-                {runner.runner_profile.post_run_activities &&
-                  runner.runner_profile.post_run_activities.length > 0 && (
-                    <StyledView>
-                      <StyledView className="flex-row items-center mb-1">
-                        <Ionicons
-                          name="cafe-outline"
-                          size={18}
-                          color="#8101f7"
-                        />
-                        <StyledText className="text-white ml-2 font-medium">
-                          Après la course
-                        </StyledText>
-                      </StyledView>
-                      <StyledView className="flex-row flex-wrap ml-6">
-                        {Array.isArray(
-                          runner.runner_profile.post_run_activities
-                        ) &&
-                          runner.runner_profile.post_run_activities.map(
-                            (activity, index) => (
-                              <StyledView
-                                key={index}
-                                className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
-                              >
-                                <StyledText className="text-purple text-xs">
-                                  {activity}
-                                </StyledText>
-                              </StyledView>
-                            )
-                          )}
-                      </StyledView>
-                    </StyledView>
-                  )}
-              </StyledView>
-            ) : (
-              <StyledView>
+          {/* Sections conditionnelles selon le type de runner */}
+          {runner.runner_profile.running_type === "perf" ? (
+            <>
+              {/* Section pour les runners perf */}
+              <CollapsibleSection
+                title="Objectifs de performance"
+                icon="ribbon-outline"
+              >
                 {/* Objectifs de compétition - pour runners perf */}
-                {runner.runner_profile.competition_goals && (
+                {competitionGoals && (
                   <StyledView className="mb-4">
                     <StyledView className="flex-row items-center mb-1">
                       <Ionicons
@@ -443,34 +347,195 @@ export default function RunnerProfileScreen() {
                       </StyledText>
                     </StyledView>
                     <StyledText className="text-gray-300 ml-6 text-sm">
-                      {runner.runner_profile.competition_goals}
+                      {Array.isArray(competitionGoals)
+                        ? competitionGoals.map(formatCompetitionGoal).join(", ")
+                        : typeof competitionGoals === "string"
+                        ? formatCompetitionGoal(competitionGoals)
+                        : "Non précisé"}
                     </StyledText>
                   </StyledView>
                 )}
 
-                {/* Allure cible - pour runners perf */}
-                {runner.runner_profile.target_pace && (
+                {/* Jours d'entraînement - pour runners perf */}
+                {Array.isArray(trainingDays) && trainingDays.length > 0 && (
                   <StyledView>
                     <StyledView className="flex-row items-center mb-1">
                       <Ionicons
-                        name="speedometer-outline"
+                        name="calendar-outline"
                         size={18}
                         color="#8101f7"
                       />
                       <StyledText className="text-white ml-2 font-medium">
-                        Allure cible
+                        Jours d'entraînement
                       </StyledText>
                     </StyledView>
-                    <StyledText className="text-gray-300 ml-6 text-sm">
-                      {runner.runner_profile.target_pace} min/km
-                    </StyledText>
+                    <StyledView className="flex-row flex-wrap ml-6">
+                      {trainingDays.map((day, index) => (
+                        <StyledView
+                          key={index}
+                          className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                        >
+                          <StyledText className="text-purple text-xs">
+                            {capitalize(day)}
+                          </StyledText>
+                        </StyledView>
+                      ))}
+                    </StyledView>
                   </StyledView>
                 )}
-              </StyledView>
-            )}
-          </CollapsibleSection>
+              </CollapsibleSection>
+            </>
+          ) : (
+            <>
+              {/* Sections pour runners chill */}
+              <CollapsibleSection
+                title="Infos pratiques"
+                icon="information-circle-outline"
+              >
+                {/* Objectif */}
+                <StyledView className="mb-4">
+                  <StyledView className="flex-row items-center mb-1">
+                    <Ionicons name="trophy-outline" size={18} color="#8101f7" />
+                    <StyledText className="text-white ml-2 font-medium">
+                      Objectif
+                    </StyledText>
+                  </StyledView>
+                  <StyledText className="text-gray-300 ml-6 text-sm">
+                    {typeof objective === "string"
+                      ? objective.charAt(0).toUpperCase() + objective.slice(1)
+                      : Array.isArray(objective)
+                      ? objective.length > 0
+                        ? objective.join(", ")
+                        : "Non précisé"
+                      : "Non précisé"}
+                  </StyledText>
+                </StyledView>
 
-          {/* Section info supplémentaires */}
+                {/* Disponibilités */}
+                <StyledView className="mb-4">
+                  <StyledView className="flex-row items-center mb-1">
+                    <Ionicons
+                      name="calendar-outline"
+                      size={18}
+                      color="#8101f7"
+                    />
+                    <StyledText className="text-white ml-2 font-medium">
+                      Disponibilités
+                    </StyledText>
+                  </StyledView>
+                  <StyledView className="flex-row flex-wrap ml-6">
+                    {Array.isArray(availability) && availability.length > 0 ? (
+                      availability.map((day, index) => (
+                        <StyledView
+                          key={index}
+                          className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                        >
+                          <StyledText className="text-purple text-xs text-center">
+                            {capitalize(day)}
+                          </StyledText>
+                        </StyledView>
+                      ))
+                    ) : (
+                      <StyledText className="text-gray-400 text-sm">
+                        Aucune disponibilité renseignée
+                      </StyledText>
+                    )}
+                  </StyledView>
+                </StyledView>
+
+                {/* Préférence temporelle */}
+                {Array.isArray(preferredTimeOfDay) &&
+                  preferredTimeOfDay.length > 0 && (
+                    <StyledView>
+                      <StyledView className="flex-row items-center mb-1">
+                        <Ionicons
+                          name="time-outline"
+                          size={18}
+                          color="#8101f7"
+                        />
+                        <StyledText className="text-white ml-2 font-medium">
+                          Moments préférés
+                        </StyledText>
+                      </StyledView>
+                      <StyledView className="flex-row flex-wrap ml-6">
+                        {preferredTimeOfDay.map((time, index) => (
+                          <StyledView
+                            key={index}
+                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                          >
+                            <StyledText className="text-purple text-xs">
+                              {time}
+                            </StyledText>
+                          </StyledView>
+                        ))}
+                      </StyledView>
+                    </StyledView>
+                  )}
+              </CollapsibleSection>
+
+              {/* Préférences sociales pour runners chill */}
+              <CollapsibleSection
+                title="Préférences sociales"
+                icon="people-outline"
+              >
+                {/* Préférences Sociales */}
+                {socialPreferences && socialPreferences.length > 0 && (
+                  <StyledView className="mb-4">
+                    <StyledView className="flex-row items-center mb-1">
+                      <Ionicons
+                        name="people-outline"
+                        size={18}
+                        color="#8101f7"
+                      />
+                      <StyledText className="text-white ml-2 font-medium">
+                        Préférences sociales
+                      </StyledText>
+                    </StyledView>
+                    <StyledView className="flex-row flex-wrap ml-6">
+                      {Array.isArray(socialPreferences) &&
+                        socialPreferences.map((pref, index) => (
+                          <StyledView
+                            key={index}
+                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                          >
+                            <StyledText className="text-purple text-xs">
+                              {pref}
+                            </StyledText>
+                          </StyledView>
+                        ))}
+                    </StyledView>
+                  </StyledView>
+                )}
+
+                {/* Activités après course */}
+                {postRunActivities && postRunActivities.length > 0 && (
+                  <StyledView>
+                    <StyledView className="flex-row items-center mb-1">
+                      <Ionicons name="cafe-outline" size={18} color="#8101f7" />
+                      <StyledText className="text-white ml-2 font-medium">
+                        Après la course
+                      </StyledText>
+                    </StyledView>
+                    <StyledView className="flex-row flex-wrap ml-6">
+                      {Array.isArray(postRunActivities) &&
+                        postRunActivities.map((activity, index) => (
+                          <StyledView
+                            key={index}
+                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                          >
+                            <StyledText className="text-purple text-xs">
+                              {activity}
+                            </StyledText>
+                          </StyledView>
+                        ))}
+                    </StyledView>
+                  </StyledView>
+                )}
+              </CollapsibleSection>
+            </>
+          )}
+
+          {/* Section info supplémentaires pour tous */}
           <CollapsibleSection
             title="Plus d'informations"
             icon="ellipsis-horizontal-circle-outline"
