@@ -213,9 +213,6 @@ export default function SignUpForm() {
 
       await login(updatedUserData);
 
-      // Enregistrer les notifications après l'inscription
-      await registerForPushNotifications();
-
       // 5. Nettoyer et rediriger
       await signUpStorage.clearSignUpData();
       router.replace("/(tabs)/matches");

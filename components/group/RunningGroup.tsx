@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Image, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  Pressable,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { groupService } from "@/service/api/group";
 import { useRouter, useFocusEffect } from "expo-router";
 import LoadingScreen from "../LoadingScreen";
+import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
 
 type RunningGroupType = {
   id: string;
@@ -19,9 +28,17 @@ type RunningGroupType = {
 const RunningGroup = () => {
   const [groups, setGroups] = useState<RunningGroupType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const router = useRouter();
 
+  const handleFeatureAccess = () => {
+    setShowPremiumModal(true);
+    return false;
+  };
+
   const fetchGroups = async () => {
+    if (!handleFeatureAccess()) return;
+
     setIsLoading(true);
     try {
       const groupsData = await groupService.getGroups();
@@ -49,7 +66,7 @@ const RunningGroup = () => {
         shadowRadius: 3.84,
         elevation: 5,
       }}
-      onPress={() => router.push(`/chat/group/${item.id}`)}
+      onPress={() => handleFeatureAccess()}
     >
       <Image
         source={
@@ -74,7 +91,7 @@ const RunningGroup = () => {
 
           <Pressable
             className="bg-[#2a3238] px-4 py-2 rounded-lg"
-            onPress={() => router.push(`/chat/group/${item.id}`)}
+            onPress={() => handleFeatureAccess()}
           >
             <Text className="text-white font-semibold">Voir le groupe</Text>
           </Pressable>
@@ -85,26 +102,45 @@ const RunningGroup = () => {
 
   return (
     <View className="bg-background flex-1">
-      {isLoading ? (
-        <LoadingScreen />
-      ) : (
-        <FlatList
-          data={groups}
-          renderItem={renderGroup}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          ListEmptyComponent={() => (
-            <View className="px-5">
-              <Text className="text-white text-center">
-                Aucun groupe trouvé
-              </Text>
-            </View>
-          )}
-        />
-      )}
+      <View
+        style={[styles.container, showPremiumModal && styles.blurContainer]}
+      >
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <FlatList
+            data={groups}
+            renderItem={renderGroup}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            ListEmptyComponent={() => (
+              <View className="px-5">
+                <Text className="text-white text-center">
+                  Aucun groupe trouvé
+                </Text>
+              </View>
+            )}
+          />
+        )}
+      </View>
+      <PremiumFeatureModal
+        visible={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        title="Fonctionnalité Premium"
+        description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  blurContainer: {
+    opacity: 0.3,
+  },
+});
 
 export default RunningGroup;

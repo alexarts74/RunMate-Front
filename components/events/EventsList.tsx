@@ -6,11 +6,13 @@ import {
   RefreshControl,
   Pressable,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import { eventService } from "@/service/api/event";
 import { EventCard } from "./EventCard";
 import { Event } from "@/interface/Event";
 import LoadingScreen from "../LoadingScreen";
+import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
 
 interface EventsListProps {
   eventsType: "all" | "my";
@@ -31,20 +33,33 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   const [loading, setLoading] = useState(true);
   const [radius, setRadius] = useState<number>(5);
   const [error, setError] = useState<string | null>(null);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+
+  const isPremiumFeature = eventsType === "my";
+
+  const handleFeatureAccess = () => {
+    if (isPremiumFeature) {
+      setShowPremiumModal(true);
+      return false;
+    }
+    return true;
+  };
 
   const loadEvents = async (selectedRadius: number = radius) => {
+    if (!handleFeatureAccess()) return;
+
     setLoading(true);
     setError(null);
     try {
       if (eventsType === "my") {
         const response = await eventService.getMyEvents();
         const createdEvents = response.created.map((item) => ({
-          ...item.event,
+          ...item,
           is_creator: true,
           is_participant: false,
         }));
         const participatingEvents = response.participating.map((item) => ({
-          ...item.event,
+          ...item,
           is_creator: false,
           is_participant: true,
         }));
@@ -53,8 +68,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
         const response = await eventService.getAllEvents({
           radius: selectedRadius,
         });
-        const events = response.map((item) => item.event);
-        setEvents(events);
+        setEvents(response);
       }
     } catch (error) {
       console.error("Erreur lors du chargement des événements:", error);
@@ -159,19 +173,38 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
 
   return (
     <View className="flex-1 bg-background">
-      {eventsType === "all" && <DistanceFilter />}
-      <ScrollView
-        className="flex-1"
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#8101f7"
-          />
-        }
+      <View
+        style={[styles.container, showPremiumModal && styles.blurContainer]}
       >
-        {renderContent()}
-      </ScrollView>
+        {eventsType === "all" && <DistanceFilter />}
+        <ScrollView
+          className="flex-1"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="#8101f7"
+            />
+          }
+        >
+          {renderContent()}
+        </ScrollView>
+      </View>
+      <PremiumFeatureModal
+        visible={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        title="Fonctionnalité Premium"
+        description="Cette fonctionnalité sera bientôt disponible dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  blurContainer: {
+    opacity: 0.3,
+  },
+});

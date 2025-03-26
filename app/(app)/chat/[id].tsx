@@ -72,8 +72,11 @@ const ChatPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        await directMessageService.sendMessage(id.toString(), newMessage);
-        await pushNotificationService.registerForPushNotifications();
+        const messageResponse = await directMessageService.sendMessage(
+          id.toString(),
+          newMessage
+        );
+        // On ne réenregistre pas le token à chaque message, il est déjà géré par le NotificationContext
         setNewMessage("");
         loadMessages();
       } catch (error) {

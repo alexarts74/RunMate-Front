@@ -6,7 +6,7 @@ import { useAuth } from "./AuthContext";
 
 type NotificationsContextType = {
   hasPermission: boolean;
-  registerForPushNotifications: () => Promise<void>;
+  registerForPushNotifications: () => Promise<string | null>;
   notificationSettings: {
     matchNotifications: boolean;
     messageNotifications: boolean;
@@ -33,7 +33,7 @@ export function NotificationsProvider({
   const router = useRouter();
   const { user } = useAuth();
 
-  const registerForPushNotifications = async () => {
+  const registerForPushNotifications = async (): Promise<string | null> => {
     try {
       const token =
         await pushNotificationService.registerForPushNotifications();
@@ -44,12 +44,14 @@ export function NotificationsProvider({
           await pushNotificationService.loadNotificationPreferences();
         setNotificationSettings(settings);
       }
+      return token;
     } catch (error) {
       console.error(
         "❌ Erreur lors de l'enregistrement des notifications:",
         error
       );
       setHasPermission(false);
+      return null;
     }
   };
 
