@@ -21,6 +21,10 @@ export function FiltersContent() {
     filter_pace: false,
     filter_distance: false,
     filter_availability: false,
+    running_type: "chill",
+    filter_competition_goals: false,
+    filter_training_days: false,
+    filter_social_preferences: false,
   });
 
   const genderOptions = [
@@ -28,6 +32,11 @@ export function FiltersContent() {
     { label: "Homme", value: "male" },
     { label: "Femme", value: "female" },
     { label: "Autre", value: "other" },
+  ];
+
+  const runningTypeOptions = [
+    { label: "Chill", value: "chill" },
+    { label: "Performance", value: "perf" },
   ];
 
   const handleApplyFilters = async () => {
@@ -90,6 +99,44 @@ export function FiltersContent() {
         </View>
       </View>
 
+      {/* Type de runner */}
+      <View className="mb-8">
+        <View className="flex-row items-center mb-4">
+          <Ionicons name="fitness-outline" size={24} color="#8101f7" />
+          <Text className="text-white text-lg ml-2">Type de runner</Text>
+        </View>
+        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+          <View className="flex-row justify-between">
+            {runningTypeOptions.map((option) => (
+              <Pressable
+                key={option.value}
+                onPress={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    running_type: option.value,
+                  }))
+                }
+                className={`flex-1 mx-1 py-2 rounded-lg ${
+                  filters.running_type === option.value
+                    ? "bg-purple"
+                    : "bg-[#2a3238]"
+                }`}
+              >
+                <Text
+                  className={`text-center ${
+                    filters.running_type === option.value
+                      ? "text-white font-semibold"
+                      : "text-gray-400"
+                  }`}
+                >
+                  {option.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </View>
+
       {/* Filtre de genre */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
@@ -136,15 +183,16 @@ export function FiltersContent() {
       </View>
 
       {/* Filtres de compatibilité */}
-      <View className="mb-8">
+      <View className="mb-12">
         <View className="flex-row items-center mb-4">
           <Ionicons name="fitness-outline" size={24} color="#8101f7" />
           <Text className="text-white text-lg ml-2">
             Critères de compatibilité
           </Text>
         </View>
-        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 space-y-4">
-          <View className="flex-row justify-between items-center">
+        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 space-y-6">
+          {/* Critères communs */}
+          <View className="flex-row justify-between mb-2 items-center">
             <Text className="text-white">Rythme similaire</Text>
             <Switch
               value={filters.filter_pace}
@@ -154,26 +202,73 @@ export function FiltersContent() {
               trackColor={{ false: "#394047", true: "#8101f7" }}
             />
           </View>
-          <View className="flex-row justify-between items-center">
-            <Text className="text-white">Distance similaire</Text>
-            <Switch
-              value={filters.filter_distance}
-              onValueChange={(value) =>
-                setFilters((prev) => ({ ...prev, filter_distance: value }))
-              }
-              trackColor={{ false: "#394047", true: "#8101f7" }}
-            />
-          </View>
-          <View className="flex-row justify-between items-center">
-            <Text className="text-white">Disponibilités similaires</Text>
-            <Switch
-              value={filters.filter_availability}
-              onValueChange={(value) =>
-                setFilters((prev) => ({ ...prev, filter_availability: value }))
-              }
-              trackColor={{ false: "#394047", true: "#8101f7" }}
-            />
-          </View>
+
+          {/* Critères spécifiques selon le type */}
+          {filters.running_type === "perf" ? (
+            <>
+              <View className="flex-row justify-between items-center mb-2">
+                <Text className="text-white">
+                  Objectifs de compétition similaires
+                </Text>
+                <Switch
+                  value={filters.filter_competition_goals}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      filter_competition_goals: value,
+                    }))
+                  }
+                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                />
+              </View>
+              <View className="flex-row justify-between items-center mb-2">
+                <Text className="text-white">
+                  Jours d'entraînement similaires
+                </Text>
+                <Switch
+                  value={filters.filter_training_days}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      filter_training_days: value,
+                    }))
+                  }
+                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View className="flex-row justify-between items-center mb-2">
+                <Text className="text-white">Disponibilités similaires</Text>
+                <Switch
+                  value={filters.filter_availability}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      filter_availability: value,
+                    }))
+                  }
+                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                />
+              </View>
+              <View className="flex-row justify-between items-center mb-2">
+                <Text className="text-white font-kanit-light">
+                  Préférences sociales similaires
+                </Text>
+                <Switch
+                  value={filters.filter_social_preferences}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      filter_social_preferences: value,
+                    }))
+                  }
+                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                />
+              </View>
+            </>
+          )}
         </View>
       </View>
 
@@ -215,9 +310,9 @@ export function FiltersContent() {
 
       <Pressable
         onPress={handleApplyFilters}
-        className="bg-purple py-4 rounded-full items-center mt-4 active:opacity-90"
+        className="bg-purple py-3 rounded-full items-center mt-8 mb-8 active:opacity-90 w-3/4 mx-auto"
       >
-        <Text className="text-white font-semibold text-lg">
+        <Text className="text-white font-semibold text-base">
           Appliquer les filtres
         </Text>
       </Pressable>
