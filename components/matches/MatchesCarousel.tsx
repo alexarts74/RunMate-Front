@@ -74,7 +74,9 @@ export function MatchesCarousel() {
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
               <View className="w-1 h-6 bg-purple rounded-full mr-3" />
-              <Text className="text-2xl font-bold text-white">Vos matches</Text>
+              <Text className="text-2xl font-kanit-semibold text-white">
+                Vos matches
+              </Text>
             </View>
 
             <Pressable
@@ -100,7 +102,7 @@ export function MatchesCarousel() {
               onPress={removeDistanceFilter}
               className="bg-purple px-6 py-3 rounded-full"
             >
-              <Text className="text-white font-semibold">
+              <Text className="text-white font-kanit font-semibold">
                 Élargir la recherche
               </Text>
             </Pressable>

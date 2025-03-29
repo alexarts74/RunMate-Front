@@ -17,7 +17,6 @@ import { directMessageService } from "@/service/api/message";
 import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
-import { pushNotificationService } from "@/service/api/pushNotification";
 
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
@@ -94,14 +93,14 @@ const ChatPage = () => {
       }`}
     >
       <Text
-        className={`mb-2 ${
+        className={`mb-2 font-kanit ${
           item.sender_id === user?.id ? "text-white" : "text-white"
         }`}
       >
         {item.content}
       </Text>
       <Text
-        className={`text-xs ${
+        className={`text-xs font-kanit ${
           item.sender_id === user?.id ? "text-gray-200" : "text-gray-400"
         }`}
       >
@@ -130,7 +129,7 @@ const ChatPage = () => {
           className="w-10 h-10 rounded-full mr-3"
         />
 
-        <Text className="text-white text-lg font-bold flex-1">
+        <Text className="text-white font-kanit text-lg font-bold flex-1">
           {match?.user.first_name} {match?.user.last_name}
         </Text>
       </View>
@@ -147,7 +146,7 @@ const ChatPage = () => {
             onChangeText={setNewMessage}
             placeholder="Votre message..."
             placeholderTextColor="#9CA3AF"
-            className="flex-1 bg-[#1e2429] text-white rounded-full px-4 py-2 mr-2"
+            className="flex-1 bg-[#1e2429] text-white rounded-full px-4 py-2 mr-2 font-kanit"
           />
           <Pressable
             onPress={sendMessage}

@@ -97,10 +97,10 @@ export function MatchCard({ match }: MatchCardProps) {
           <View className="px-5 pt-2 pb-4">
             {/* Name, age en ligne */}
             <View className="flex-row items-center mb-5">
-              <Text className="text-2xl font-bold text-white mr-2 drop-shadow-md">
+              <Text className="text-2xl font-bold font-kanit text-white mr-2 drop-shadow-md">
                 {match.user.first_name} {match.user.last_name}
               </Text>
-              <Text className="text-xl text-white drop-shadow-md">
+              <Text className="text-xl text-white font-kanit drop-shadow-md">
                 {match.user.age} ans
               </Text>
             </View>
@@ -112,10 +112,10 @@ export function MatchCard({ match }: MatchCardProps) {
                 <>
                   {/* 1. Préférences sociales */}
                   {socialPreferences && socialPreferences.length > 0 && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="people-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -128,14 +128,14 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 2. Disponibilités */}
                   {availability && availability.length > 0 && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
+                    <View className="bg-background border border-purple  px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons
                         name="calendar-outline"
                         size={14}
                         color="#fff"
                       />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -146,10 +146,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 3. Fréquence */}
                   {runningFrequency && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="time-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -160,10 +160,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 4. Activités après course */}
                   {postRunActivities && postRunActivities.length > 0 && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="cafe-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -176,10 +176,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* Flexible badge pour les chill runners */}
                   {isFlexible && (
-                    <View className="bg-green px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons name="leaf-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -193,14 +193,14 @@ export function MatchCard({ match }: MatchCardProps) {
                 <>
                   {/* 1. Allure actuelle */}
                   {actualPace && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="speedometer-outline"
                         size={14}
                         color="#fff"
                       />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -211,14 +211,14 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 2. Allure cible si différente */}
                   {targetPace && targetPace !== actualPace && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="trending-down-outline"
                         size={14}
                         color="#fff"
                       />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -229,14 +229,14 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 3. Distance habituelle */}
                   {weeklyDistance && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="footsteps-outline"
                         size={14}
                         color="#fff"
                       />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -247,10 +247,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* 4. Objectifs de compétition */}
                   {competitionGoals && competitionGoals.length > 0 && (
-                    <View className="bg-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="trophy-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
@@ -265,10 +265,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
                   {/* Flexible badge pour les perf runners */}
                   {isFlexible && (
-                    <View className="bg-green px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
+                    <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons name="leaf-outline" size={14} color="#fff" />
                       <Text
-                        className="text-white ml-1.5 text-xs font-medium"
+                        className="text-white ml-1.5 text-xs font-kanit font-medium"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >

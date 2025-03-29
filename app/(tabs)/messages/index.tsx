@@ -74,7 +74,9 @@ const MessagesScreen = () => {
         <Pressable onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </Pressable>
-        <Text className="text-white text-2xl font-bold">Messages</Text>
+        <Text className="text-white text-2xl font-kanit-semibold">
+          Messages
+        </Text>
       </View>
 
       {isLoading && <LoadingScreen />}
