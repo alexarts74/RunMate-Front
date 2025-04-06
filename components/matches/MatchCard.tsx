@@ -14,23 +14,54 @@ export function MatchCard({ match }: MatchCardProps) {
   const isFlexible = match.user.runner_profile.flexible;
 
   // Convertir availability qui est une chaîne JSON en tableau si nécessaire
-  const availability =
-    typeof match.user.runner_profile.availability === "string"
-      ? JSON.parse(match.user.runner_profile.availability)
-      : match.user.runner_profile.availability;
+  let availability: string[] = [];
+  try {
+    // Si c'est déjà un tableau, on l'utilise directement
+    if (Array.isArray(match.user.runner_profile.availability)) {
+      availability = match.user.runner_profile.availability;
+    }
+    // Si c'est une chaîne JSON valide, on la parse
+    else if (typeof match.user.runner_profile.availability === "string") {
+      const availabilityStr = match.user.runner_profile.availability as string;
+      if (availabilityStr.startsWith("[") || availabilityStr.startsWith("{")) {
+        availability = JSON.parse(availabilityStr);
+      } else {
+        // Si c'est une chaîne simple, on la met dans un tableau
+        availability = [availabilityStr];
+      }
+    }
+  } catch (error) {
+    return null;
+  }
 
   // Données spécifiques au type de runner
   const socialPreferences = match.user.runner_profile.social_preferences;
   const postRunActivities = match.user.runner_profile.post_run_activities;
   const targetPace = match.user.runner_profile.target_pace;
   const actualPace = match.user.runner_profile.actual_pace;
-  const competitionGoals =
-    typeof match.user.runner_profile.competition_goals === "string"
-      ? JSON.parse(match.user.runner_profile.competition_goals)
-      : match.user.runner_profile.competition_goals;
   const runningFrequency = match.user.runner_profile.running_frequency;
-  const usualDistance = match.user.runner_profile.usual_distance;
   const weeklyDistance = match.user.runner_profile.weekly_mileage;
+  const distanceKm = match.distance_km;
+
+  let competitionGoals: string[] = [];
+  try {
+    // Si c'est déjà un tableau, on l'utilise directement
+    if (Array.isArray(match.user.runner_profile.competition_goals)) {
+      competitionGoals = match.user.runner_profile.competition_goals;
+    }
+    // Si c'est une chaîne JSON valide, on la parse
+    else if (typeof match.user.runner_profile.competition_goals === "string") {
+      const goalsStr = match.user.runner_profile.competition_goals as string;
+      if (goalsStr.startsWith("[") || goalsStr.startsWith("{")) {
+        competitionGoals = JSON.parse(goalsStr);
+      } else {
+        // Si c'est une chaîne simple, on la met dans un tableau
+        competitionGoals = [goalsStr];
+      }
+    }
+  } catch (error) {
+    return null;
+  }
 
   // Formatage des jours de disponibilité
   const formatDay = (day: string) => {
@@ -84,6 +115,16 @@ export function MatchCard({ match }: MatchCardProps) {
           className="absolute w-full h-full"
           style={{ resizeMode: "cover" }}
         />
+
+        {/* Distance mise en valeur - en haut à droite */}
+        {distanceKm && (
+          <View className="absolute top-4 right-4 bg-purple px-4 py-2 rounded-full flex-row items-center z-10">
+            <Ionicons name="location-outline" size={16} color="#fff" />
+            <Text className="text-white ml-1.5 text-base font-kanit font-bold">
+              {distanceKm} km
+            </Text>
+          </View>
+        )}
 
         {/* Gradient overlay - plus court pour laisser plus d'espace à l'image */}
         <LinearGradient

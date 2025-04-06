@@ -134,7 +134,6 @@ export default function SignUpForm() {
 
   const handleRunnerTypeSelect = async (type: "chill" | "perf") => {
     try {
-      console.log("🎯 Selection du type:", type);
       setRunnerType(type);
       setFormData((prev) => ({
         ...prev,

@@ -64,15 +64,11 @@ export default function EventDetailsScreen() {
 
   const getTimeUntilEvent = (eventDate: string) => {
     if (!eventDate) {
-      console.log("Pas de date d'événement fournie");
       return { days: 0, hours: 0, isExpired: true };
     }
 
     const now = new Date();
-    console.log("Date actuelle brute:", now);
     const event = new Date(eventDate);
-    console.log("Date événement brute:", event);
-    console.log("Date événement string reçue:", eventDate);
 
     // Réinitialiser les heures pour avoir un calcul précis des jours
     now.setHours(0, 0, 0, 0);
@@ -80,27 +76,18 @@ export default function EventDetailsScreen() {
 
     // Calculer la différence en jours
     const differenceInTime = event.getTime() - now.getTime();
-    console.log("Différence en millisecondes:", differenceInTime);
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
     // Pour les heures, utiliser la date originale
     const currentTime = new Date();
     const eventTime = new Date(eventDate);
     const differenceForTime = eventTime.getTime() - currentTime.getTime();
-    console.log("Différence pour les heures:", differenceForTime);
 
     if (differenceInTime <= 0) {
-      console.log("L'événement est expiré");
       return { days: 0, hours: 0, isExpired: true };
     }
 
     const hours = Math.floor((differenceForTime / (1000 * 60 * 60)) % 24);
-
-    console.log({
-      differenceInDays,
-      hours,
-      isExpired: false,
-    });
 
     return {
       days: differenceInDays,
@@ -108,11 +95,6 @@ export default function EventDetailsScreen() {
       isExpired: false,
     };
   };
-
-  useEffect(() => {
-    console.log("Event data:", event);
-    console.log("Start date:", event?.start_date);
-  }, [event]);
 
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -128,11 +110,9 @@ export default function EventDetailsScreen() {
 
   useEffect(() => {
     if (!event?.start_date) {
-      console.log("Pas de date de début");
       return;
     }
 
-    console.log("Mise en place du timer avec la date:", event.start_date);
     const timer = setInterval(() => {
       setCountdown(getTimeUntilEvent(event.start_date as string));
     }, 3600000);

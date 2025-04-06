@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import Slider from "@react-native-community/slider";
 import { Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { Ionicons } from "@expo/vector-icons";
+import { ActionButton } from "../ui/ActionButton";
 
 export function FiltersContent() {
   const router = useRouter();
   const [showGenderModal, setShowGenderModal] = useState(false);
   const { applyFilters } = useMatches();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [filters, setFilters] = useState({
     age_min: 18,
@@ -40,11 +49,14 @@ export function FiltersContent() {
   ];
 
   const handleApplyFilters = async () => {
+    setIsLoading(true);
     try {
       await applyFilters(filters);
       router.back();
     } catch (error) {
       console.error("Erreur lors de l'application des filtres:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,7 +110,6 @@ export function FiltersContent() {
           </View>
         </View>
       </View>
-
       {/* Type de runner */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
@@ -136,7 +147,6 @@ export function FiltersContent() {
           </View>
         </View>
       </View>
-
       {/* Filtre de genre */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
@@ -154,7 +164,6 @@ export function FiltersContent() {
           <Ionicons name="chevron-down" size={20} color="#8101f7" />
         </Pressable>
       </View>
-
       {/* Filtre de distance */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
@@ -181,7 +190,6 @@ export function FiltersContent() {
           </View>
         </View>
       </View>
-
       {/* Filtres de compatibilité */}
       <View className="mb-12">
         <View className="flex-row items-center mb-4">
@@ -271,7 +279,6 @@ export function FiltersContent() {
           )}
         </View>
       </View>
-
       {/* Modals */}
       <Modal visible={showGenderModal} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
@@ -307,15 +314,11 @@ export function FiltersContent() {
           </View>
         </View>
       </Modal>
-
-      <Pressable
+      <ActionButton
         onPress={handleApplyFilters}
-        className="bg-purple py-3 rounded-full items-center mt-8 mb-8 active:opacity-90 w-3/4 mx-auto"
-      >
-        <Text className="text-white font-semibold text-base">
-          Appliquer les filtres
-        </Text>
-      </Pressable>
+        text="Appliquer les filtres"
+        loading={isLoading}
+      />
     </View>
   );
 }

@@ -20,7 +20,6 @@ export const pushNotificationService = {
   async registerForPushNotifications() {
     try {
       if (!Device.isDevice) {
-        console.log("❌ Pas un appareil physique");
         return null;
       }
 
@@ -36,7 +35,6 @@ export const pushNotificationService = {
       }
 
       if (finalStatus !== "granted") {
-        console.log("❌ Permission refusée");
         return null;
       }
 
@@ -45,24 +43,14 @@ export const pushNotificationService = {
         projectId: process.env.EXPO_PROJECT_ID,
       });
 
-      console.log("✅ Token Expo obtenu:", expoPushToken.data);
-
       // Vérifier le token d'authentification
-      const authToken = await authStorage.getToken();
-      console.log(
-        "🔑 Token d'authentification:",
-        authToken ? "Présent" : "Absent"
-      );
-
+      await authStorage.getToken();
       // Envoyer le token au backend
       const response = await apiClient.put("/users/update_push_token", {
         user: {
           expo_push_token: expoPushToken.data,
         },
       });
-
-      console.log("📡 Réponse du backend:", response);
-      console.log("✅ Token enregistré sur le backend");
       return expoPushToken.data;
     } catch (error) {
       console.error("❌ Erreur dans registerForPushNotifications:", error);
@@ -147,7 +135,6 @@ export const pushNotificationService = {
 
   handleNotificationResponse(response: Notifications.NotificationResponse) {
     const data = response.notification.request.content.data;
-    console.log("📱 Notification cliquée:", data);
 
     switch (data.type) {
       case "message":
@@ -169,7 +156,6 @@ export const pushNotificationService = {
         });
         break;
       default:
-        console.log("Type de notification non géré:", data.type);
         router.push("/(app)/matches");
     }
   },

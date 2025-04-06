@@ -3,6 +3,7 @@ import { authStorage } from "@/service/auth/storage";
 import { useAuth } from "@/context/AuthContext";
 import React from "react";
 import { useSegments, useRouter } from "expo-router";
+import LoadingScreen from "../LoadingScreen";
 
 export default function AuthenticationGuard({
   children,
@@ -17,8 +18,6 @@ export default function AuthenticationGuard({
   useEffect(() => {
     const init = async () => {
       try {
-        // Ne pas lancer le login à chaque rechargement
-        // Laisser AuthContext gérer l'initialisation au démarrage
         setIsLoading(false);
       } catch (error) {
         console.error("❌ Erreur init:", error);
@@ -52,8 +51,7 @@ export default function AuthenticationGuard({
   }, [isAuthenticated, segments, isLoading, user]);
 
   if (isLoading) {
-    console.log("AuthenticationGuard est en chargement...");
-    return null;
+    return <LoadingScreen />;
   }
 
   return children;

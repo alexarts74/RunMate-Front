@@ -72,7 +72,6 @@ export function MatchesProvider({ children }: { children: React.ReactNode }) {
   // Rafraîchir les matches quand l'authentification ou le profil runner change
   useEffect(() => {
     if (!isAuthenticated) {
-      console.error("Utilisateur non authentifié, skip useEffect");
       return;
     }
 

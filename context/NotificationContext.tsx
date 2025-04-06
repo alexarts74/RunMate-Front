@@ -77,7 +77,6 @@ export function NotificationsProvider({
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         const data = notification.request.content.data;
-        console.log("📬 Notification reçue:", data);
       });
 
     // Écouteur pour les clics sur les notifications
