@@ -35,7 +35,7 @@ export function SocialPreferencesSelect({ value, onChange }: Props) {
             onPress={() => toggleOption(option.key)}
             className={`py-2 px-4 rounded-full ${
               value.includes(option.key)
-                ? "bg-green"
+                ? "bg-purple"
                 : "bg-[#1e2429] border border-[#2a3238]"
             }`}
           >

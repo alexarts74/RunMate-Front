@@ -99,7 +99,7 @@ export function ConversationItem({
               : conversation.last_message?.content || "Aucun message"}
           </Text>
           {conversation.unread_messages > 0 && (
-            <View className="bg-green rounded-full w-6 h-6 items-center justify-center ml-2">
+            <View className="bg-purple rounded-full w-6 h-6 items-center justify-center ml-2">
               <Text className="text-dark text-xs font-bold">
                 {conversation.unread_messages}
               </Text>

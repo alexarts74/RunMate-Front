@@ -23,7 +23,7 @@ export function DistanceInputs({
       </Text>
       <TextInput
         className={`bg-[#1e2429] text-white p-4 rounded-xl mb-4 ${
-          focusedInput === "usual_distance" ? "border border-green" : ""
+          focusedInput === "usual_distance" ? "border border-purple" : ""
         }`}
         placeholder="Ex: 10"
         placeholderTextColor="#394047"
@@ -41,7 +41,7 @@ export function DistanceInputs({
           </Text>
           <TextInput
             className={`bg-[#1e2429] text-white p-4 rounded-xl mb-4 ${
-              focusedInput === "weekly_mileage" ? "border border-green" : ""
+              focusedInput === "weekly_mileage" ? "border border-purple" : ""
             }`}
             placeholder="Ex: 40"
             placeholderTextColor="#394047"

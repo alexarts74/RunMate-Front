@@ -32,7 +32,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
               ? { uri: user?.profile_image }
               : require("@/assets/images/react-logo.png")
           }
-          className="w-32 h-32 rounded-full border-2 border-green"
+          className="w-32 h-32 rounded-full border-2 border-purple"
         />
       </View>
 

@@ -10,9 +10,6 @@ type GroupDetails = {
   name: string;
   description: string;
   members_count: number;
-  max_members: number;
-  location: string;
-  level: string;
   cover_image: string | null;
   creator: {
     id: number;
@@ -38,7 +35,6 @@ type GroupDetails = {
 export default function GroupDetailsScreen() {
   const { id } = useLocalSearchParams();
   const [group, setGroup] = useState<GroupDetails | null>(null);
-  const [members, setMembers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isJoining, setIsJoining] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -66,7 +62,6 @@ export default function GroupDetailsScreen() {
     try {
       await groupService.joinGroup(id as string);
       Alert.alert("Succès", "Vous avez rejoint le groupe avec succès !");
-      // Recharger les données du groupe
       const updatedGroup = await groupService.getGroupById(id as string);
       setGroup(updatedGroup);
     } catch (error: any) {
@@ -135,10 +130,6 @@ export default function GroupDetailsScreen() {
             <Text className="text-2xl font-bold text-white mb-2">
               {group.name}
             </Text>
-            <View className="flex-row items-center mb-4">
-              <Ionicons name="location" size={16} color="#b9f144" />
-              <Text className="text-white ml-2">{group.location}</Text>
-            </View>
           </View>
 
           {/* Autres informations du groupe */}
@@ -151,10 +142,8 @@ export default function GroupDetailsScreen() {
 
           {/* Membres */}
           <View>
-            <Text className="text-white font-bold text-lg mb-2">
-              Membres ({group.members_count}/{group.max_members})
-            </Text>
             <View className="flex-row flex-wrap">
+              {console.log(group.members)}
               {group.members?.map((member) => (
                 <View key={member.id} className="mr-2 mb-2">
                   <Image
@@ -166,7 +155,7 @@ export default function GroupDetailsScreen() {
                     className="w-12 h-12 rounded-full"
                   />
                   <Text className="text-white text-center text-xs mt-1">
-                    {member.first_name}
+                    {member.first_name} {member.last_name}
                   </Text>
                 </View>
               ))}
@@ -177,9 +166,9 @@ export default function GroupDetailsScreen() {
               <Pressable
                 onPress={() => {
                   router.push({
-                    pathname: `/chat/group/${id}`,
+                    pathname: "/chat/group/[id]",
                     params: {
-                      id: id,
+                      id: id as string,
                       type: "group",
                       name: group.name,
                       image:
@@ -197,7 +186,7 @@ export default function GroupDetailsScreen() {
                     }}
                     className="w-12 h-12 rounded-xl"
                   />
-                  <View className="absolute -bottom-1 -right-1 bg-green w-4 h-4 rounded-full border-2 border-[#12171b]" />
+                  <View className="absolute -bottom-1 -right-1 bg-purple w-4 h-4 rounded-full border-2 border-[#12171b]" />
                 </View>
 
                 <View className="flex-1 ml-4">
@@ -224,7 +213,7 @@ export default function GroupDetailsScreen() {
       {/* Bouton Rejoindre/Quitter */}
 
       <View className="px-5 py-3 mb-2 border-t border-[#2a3238]">
-        {group.is_member && (
+        {group.is_member ? (
           <Pressable
             onPress={handleLeaveGroup}
             disabled={isLeaving}
@@ -234,6 +223,18 @@ export default function GroupDetailsScreen() {
           >
             <Text className="text-center text-white font-semibold text-sm">
               {isLeaving ? "En cours..." : "Quitter le groupe"}
+            </Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={handleJoinGroup}
+            disabled={isJoining}
+            className={`bg-purple py-3 rounded-full w-48 self-center ${
+              isJoining ? "opacity-50" : ""
+            }`}
+          >
+            <Text className="text-center text-white font-semibold text-sm">
+              {isJoining ? "En cours..." : "Rejoindre le groupe"}
             </Text>
           </Pressable>
         )}

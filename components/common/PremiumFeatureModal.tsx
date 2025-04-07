@@ -1,7 +1,6 @@
 import React from "react";
-import { View, Text, Modal, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, Modal, Pressable, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRouter } from "expo-router";
 
 interface PremiumFeatureModalProps {
   visible: boolean;
@@ -16,14 +15,6 @@ export const PremiumFeatureModal = ({
   title,
   description,
 }: PremiumFeatureModalProps) => {
-  const router = useRouter();
-
-  const handleRedirectToMatch = () => {
-    // Fermer le modal puis rediriger
-    onClose();
-    router.push("/(tabs)/matches");
-  };
-
   return (
     <Modal
       animationType="fade"
@@ -38,26 +29,21 @@ export const PremiumFeatureModal = ({
         <View className="bg-[#1e2429] rounded-2xl p-6 w-full max-w-sm border border-purple/30">
           <View className="items-center mb-4">
             <Ionicons name="star" size={48} color="#8101f7" />
-            <Text className="text-white text-xl font-bold mt-2">{title}</Text>
-            <Text className="text-gray-400 text-center mt-2">
+            <Text className="text-white text-xl font-bold mt-2 font-kanit">
+              {title}
+            </Text>
+            <Text className="text-gray-400 text-center mt-2 font-kanit">
               {description}
             </Text>
           </View>
 
           <Pressable
-            onPress={handleRedirectToMatch}
-            className="bg-purple py-3 rounded-xl mt-4"
-          >
-            <Text className="text-white text-center font-bold">
-              Découvrir les matchs disponibles
-            </Text>
-          </Pressable>
-
-          <Pressable
             onPress={onClose}
             className="py-3 mt-3 rounded-xl border border-gray-600"
           >
-            <Text className="text-white text-center font-bold">Fermer</Text>
+            <Text className="text-white text-center font-bold font-kanit">
+              Fermer
+            </Text>
           </Pressable>
         </View>
       </View>

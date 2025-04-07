@@ -23,7 +23,7 @@ export function PaceInputs({
       </Text>
       <TextInput
         className={`bg-[#1e2429] text-white p-4 rounded-xl mb-4 ${
-          focusedInput === "actual_pace" ? "border border-green" : ""
+          focusedInput === "actual_pace" ? "border border-purple" : ""
         }`}
         placeholder="Ex: 5:30"
         placeholderTextColor="#394047"
@@ -40,7 +40,7 @@ export function PaceInputs({
           </Text>
           <TextInput
             className={`bg-[#1e2429] text-white p-4 rounded-xl mb-4 ${
-              focusedInput === "target_pace" ? "border border-green" : ""
+              focusedInput === "target_pace" ? "border border-purple" : ""
             }`}
             placeholder="Ex: 5:00"
             placeholderTextColor="#394047"

@@ -124,7 +124,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
             <Pressable
               onPress={handleSendMessage}
               disabled={!newMessage.trim()}
-              className="bg-green px-4 py-3 rounded-r-xl"
+              className="bg-purple px-4 py-3 rounded-r-xl"
             >
               <Text className="text-[#12171b] font-semibold">Envoyer</Text>
             </Pressable>

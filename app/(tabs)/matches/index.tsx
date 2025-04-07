@@ -5,7 +5,6 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  Modal,
   Animated,
   Dimensions,
 } from "react-native";
@@ -15,14 +14,16 @@ import GetPremiumVersion from "@/components/GetPremiumVersion";
 import { Ionicons } from "@expo/vector-icons";
 import { EventsList } from "@/components/events/EventsList";
 import { useAuth } from "@/context/AuthContext";
-
-const { width } = Dimensions.get("window");
+import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
+import { EventsSelectionModal } from "@/components/events/EventsSelectionModal";
 
 const HomepageScreen = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
     "matches"
   );
   const [modalVisible, setModalVisible] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [eventsType, setEventsType] = useState<"all" | "my">("all");
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -39,6 +40,31 @@ const HomepageScreen = () => {
         useNativeDriver: true,
       }).start();
     });
+  };
+
+  // Vérification premium pour l'accès aux événements
+  const handleEventsTab = () => {
+    if (user?.is_premium) {
+      setModalVisible(true);
+    } else {
+      setShowPremiumModal(true);
+    }
+  };
+
+  // Gestion de la fermeture de la modale premium
+  const closePremiumModal = () => {
+    setShowPremiumModal(false);
+    // Rester sur l'onglet en cours ou revenir à l'onglet Matches
+    if (activeTab !== "matches") {
+      handleTabChange("matches");
+    }
+  };
+
+  // Gestion de la sélection du type d'événements
+  const handleSelectEventsType = (type: "all" | "my") => {
+    setEventsType(type);
+    handleTabChange("events");
+    setModalVisible(false);
   };
 
   const renderContent = () => {
@@ -117,7 +143,7 @@ const HomepageScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={() => setModalVisible(true)}
+            onPress={handleEventsTab}
             className={`flex-1 py-4 ${
               activeTab === "events" ? "border-b-2 border-purple" : ""
             }`}
@@ -142,55 +168,20 @@ const HomepageScreen = () => {
         <View className="flex-1">{renderContent()}</View>
       </View>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
+      {/* Utilisation du composant EventsSelectionModal */}
+      <EventsSelectionModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View className="flex-1 justify-center items-center bg-black/50">
-          <View className="bg-[#1e2429] m-5 p-5 rounded-2xl w-[80%]">
-            <Text className="text-white font-kanit text-xl font-bold mb-6 text-center">
-              Sélectionner les events
-            </Text>
+        onClose={() => setModalVisible(false)}
+        onSelectEventsType={handleSelectEventsType}
+      />
 
-            <Pressable
-              onPress={() => {
-                setEventsType("my");
-                handleTabChange("events");
-                setModalVisible(false);
-              }}
-              className="py-4 mb-3 bg-background rounded-xl"
-            >
-              <Text className="text-white font-kanit text-lg text-center">
-                Mes Events
-              </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => {
-                setEventsType("all");
-                handleTabChange("events");
-                setModalVisible(false);
-              }}
-              className="py-4 mb-6 bg-background rounded-xl"
-            >
-              <Text className="text-white font-kanit text-lg text-center">
-                Tous les Events
-              </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => setModalVisible(false)}
-              className="bg-purple py-4 rounded-xl"
-            >
-              <Text className="text-white font-kanit text-center font-bold">
-                Fermer
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+      {/* Modale premium pour les utilisateurs non premium */}
+      <PremiumFeatureModal
+        visible={showPremiumModal}
+        onClose={closePremiumModal}
+        title="Fonctionnalité Premium"
+        description="Les événements seront bientôt disponibles dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+      />
     </SafeAreaView>
   );
 };

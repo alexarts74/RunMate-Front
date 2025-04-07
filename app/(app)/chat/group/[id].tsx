@@ -47,7 +47,7 @@ const GroupChatPage = () => {
       }
     } catch (error) {
       console.error("=== Erreur dans loadMessages ===");
-      console.error("Message d'erreur:", error?.message);
+      console.error("Message d'erreur:", error);
       setMessages([]);
       setGroupMessages(null);
     }
@@ -114,7 +114,7 @@ const GroupChatPage = () => {
       <View
         className={`rounded-xl max-w-[75%] ${
           item.sender.id === user?.id
-            ? "self-end bg-green ml-auto"
+            ? "self-end bg-purple ml-auto"
             : "bg-gray-50"
         }`}
       >
@@ -222,7 +222,7 @@ const GroupChatPage = () => {
           />
           <Pressable
             onPress={sendMessage}
-            className="bg-green w-10 h-10 rounded-full items-center justify-center"
+            className="bg-purple w-10 h-10 rounded-full items-center justify-center"
           >
             <Ionicons name="send" size={20} color="white" />
           </Pressable>
@@ -262,7 +262,7 @@ const GroupChatPage = () => {
                   <View className="flex-1">
                     <Text className="text-gray-900 font-bold">{item.name}</Text>
                     {item.is_admin && (
-                      <Text className="text-green text-sm">Admin</Text>
+                      <Text className="text-purple text-sm">Admin</Text>
                     )}
                   </View>
                 </View>

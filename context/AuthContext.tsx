@@ -68,18 +68,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Token manquant");
       }
 
-      // D'abord stocker le token et les données utilisateur initiales
       await authStorage.storeToken(userData.authentication_token);
       await authStorage.storeUser(userData.user);
-
-      // Vérifier le stockage
       await authStorage.getToken();
 
-      // Mettre à jour l'état avec les données initiales
       setUser(userData.user);
       setIsAuthenticated(true);
 
-      // Ensuite seulement essayer d'obtenir les données complètes
       try {
         const completeUserData = await authService.getCurrentUser();
 
@@ -92,7 +87,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           "Erreur lors de la récupération des données complètes:",
           error
         );
-        // Ne pas throw l'erreur ici, continuer avec les données de base
       }
     } catch (error) {
       console.error("❌ Erreur login:", error);
@@ -123,13 +117,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const response = await authService.updateUserProfile(userData);
-
-      // Utiliser directement userData qui contient déjà le runner_profile
       await authStorage.storeUser(response.user);
       await authStorage.storeToken(response.authentication_token);
       setUser(response.user);
-
-      // Vérifier ce qui est stocké
       await authStorage.getUser();
 
       return response;
@@ -183,6 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialisation de l'auth
   useEffect(() => {
+    console.log("useEffect");
     const initAuth = async () => {
       try {
         const isAuth = await checkAuth();
@@ -198,6 +189,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initAuth();
   }, []);
+
+  // Effet de nettoyage - vérifie la validité de l'utilisateur stocké et déconnecte si nécessaire
+  // useEffect(() => {
+  //   authStorage.removeAuth();
+  // }, []);
 
   return (
     <AuthContext.Provider

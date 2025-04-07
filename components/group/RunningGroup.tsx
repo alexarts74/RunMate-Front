@@ -13,6 +13,7 @@ import { groupService } from "@/service/api/group";
 import { useRouter, useFocusEffect } from "expo-router";
 import LoadingScreen from "../LoadingScreen";
 import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
+import { useAuth } from "@/context/AuthContext";
 
 type RunningGroupType = {
   id: string;
@@ -30,14 +31,23 @@ const RunningGroup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
 
-  const handleFeatureAccess = () => {
-    setShowPremiumModal(true);
-    return false;
+  const handleFeatureAccess = (groupId: string) => {
+    if (user?.is_premium) {
+      router.push(`/groups/${groupId}`);
+      return true;
+    } else {
+      setShowPremiumModal(true);
+      return false;
+    }
   };
 
   const fetchGroups = async () => {
-    if (!handleFeatureAccess()) return;
+    if (!user?.is_premium) {
+      setShowPremiumModal(true);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -56,6 +66,11 @@ const RunningGroup = () => {
     }, [])
   );
 
+  const closeModal = () => {
+    setShowPremiumModal(false);
+    router.replace("/");
+  };
+
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
       className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"
@@ -66,7 +81,7 @@ const RunningGroup = () => {
         shadowRadius: 3.84,
         elevation: 5,
       }}
-      onPress={() => handleFeatureAccess()}
+      onPress={() => handleFeatureAccess(item.id)}
     >
       <Image
         source={
@@ -91,7 +106,7 @@ const RunningGroup = () => {
 
           <Pressable
             className="bg-[#2a3238] px-4 py-2 rounded-lg"
-            onPress={() => handleFeatureAccess()}
+            onPress={() => handleFeatureAccess(item.id)}
           >
             <Text className="text-white font-semibold">Voir le groupe</Text>
           </Pressable>
@@ -126,7 +141,7 @@ const RunningGroup = () => {
       </View>
       <PremiumFeatureModal
         visible={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
+        onClose={closeModal}
         title="Fonctionnalité Premium"
         description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
       />

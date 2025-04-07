@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { authStorage } from "@/service/auth/storage";
 import { useAuth } from "@/context/AuthContext";
 import React from "react";
 import { useSegments, useRouter } from "expo-router";
@@ -11,7 +10,7 @@ export default function AuthenticationGuard({
   children: React.ReactNode;
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  const { login, isAuthenticated, user, updateUser } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 

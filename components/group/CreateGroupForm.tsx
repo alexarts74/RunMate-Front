@@ -19,6 +19,9 @@ interface CreateGroupForm {
   name: string;
   description: string;
   cover_image: string;
+  location: string;
+  level: string;
+  max_members: number;
 }
 
 export function CreateGroupForm() {
@@ -26,6 +29,9 @@ export function CreateGroupForm() {
     name: "",
     description: "",
     cover_image: "",
+    location: "",
+    level: "",
+    max_members: 0,
   });
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -65,6 +71,9 @@ export function CreateGroupForm() {
         description: form.description,
         cover_image: form.cover_image,
         invited_members: selectedUsers.map((user) => user.id),
+        location: form.location,
+        level: form.level,
+        max_members: form.max_members,
       };
 
       await groupService.createGroup(groupData);
@@ -137,13 +146,49 @@ export function CreateGroupForm() {
             />
           </View>
         </View>
+
+        <View>
+          <Text className="text-white text-lg mb-2">Localisation</Text>
+          <TextInput
+            className="bg-[#1e2429] text-white p-4 rounded-xl"
+            placeholder="Ex: Paris, France"
+            placeholderTextColor="#394047"
+            value={form.location}
+            onChangeText={(text) => setForm({ ...form, location: text })}
+          />
+        </View>
+
+        <View>
+          <Text className="text-white text-lg mb-2">Niveau</Text>
+          <TextInput
+            className="bg-[#1e2429] text-white p-4 rounded-xl"
+            placeholder="Ex: Débutant, Intermédiaire, Avancé"
+            placeholderTextColor="#394047"
+            value={form.level}
+            onChangeText={(text) => setForm({ ...form, level: text })}
+          />
+        </View>
+
+        <View>
+          <Text className="text-white text-lg mb-2">Nombre de membres</Text>
+          <TextInput
+            className="bg-[#1e2429] text-white p-4 rounded-xl"
+            placeholder="Ex: 10"
+            placeholderTextColor="#394047"
+            value={form.max_members.toString()}
+            onChangeText={(text) =>
+              setForm({ ...form, max_members: parseInt(text) })
+            }
+            keyboardType="numeric"
+          />
+        </View>
       </ScrollView>
 
       <View className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#394047] bg-[#12171b]">
         <Pressable
           onPress={handleSubmit}
           disabled={isLoading}
-          className="bg-green py-3 px-6 rounded-xl active:opacity-90 mx-auto"
+          className="bg-purple py-3 px-6 rounded-xl active:opacity-90 mx-auto"
         >
           <Text className="text-[#12171b] text-center font-bold text-base">
             {isLoading ? "Création..." : "Créer le groupe"}

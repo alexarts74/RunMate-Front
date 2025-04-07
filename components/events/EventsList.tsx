@@ -5,7 +5,6 @@ import {
   ScrollView,
   RefreshControl,
   Pressable,
-  ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import { eventService } from "@/service/api/event";
@@ -13,6 +12,8 @@ import { EventCard } from "./EventCard";
 import { Event } from "@/interface/Event";
 import LoadingScreen from "../LoadingScreen";
 import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "expo-router";
 
 interface EventsListProps {
   eventsType: "all" | "my";
@@ -34,15 +35,26 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   const [radius, setRadius] = useState<number>(5);
   const [error, setError] = useState<string | null>(null);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
 
+  // Vérifier si l'utilisateur est premium et si la fonctionnalité nécessite le premium
   const isPremiumFeature = eventsType === "my";
 
   const handleFeatureAccess = () => {
-    if (isPremiumFeature) {
+    if (
+      isPremiumFeature &&
+      !(user && "is_premium" in user && user.is_premium)
+    ) {
       setShowPremiumModal(true);
       return false;
     }
     return true;
+  };
+
+  const closeModal = () => {
+    setShowPremiumModal(false);
+    router.replace("/(tabs)/matches");
   };
 
   const loadEvents = async (selectedRadius: number = radius) => {
@@ -192,7 +204,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
       </View>
       <PremiumFeatureModal
         visible={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
+        onClose={closeModal}
         title="Fonctionnalité Premium"
         description="Cette fonctionnalité sera bientôt disponible dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
       />

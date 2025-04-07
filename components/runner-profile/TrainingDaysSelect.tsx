@@ -37,7 +37,7 @@ export function TrainingDaysSelect({ value, onChange }: Props) {
             onPress={() => toggleDay(day.key)}
             className={`py-2 px-4 rounded-full ${
               value.includes(day.key)
-                ? "bg-green"
+                ? "bg-purple"
                 : "bg-[#1e2429] border border-[#2a3238]"
             }`}
           >

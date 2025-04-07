@@ -14,6 +14,7 @@ interface User {
   created_at: string;
   updated_at: string;
   location: string | null;
+  is_premium: boolean;
 }
 
 export interface UserWithRunnerProfile extends User {
