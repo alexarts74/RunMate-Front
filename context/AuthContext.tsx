@@ -173,7 +173,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialisation de l'auth
   useEffect(() => {
-    console.log("useEffect");
     const initAuth = async () => {
       try {
         const isAuth = await checkAuth();

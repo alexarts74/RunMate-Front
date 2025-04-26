@@ -130,10 +130,31 @@ const RunningGroup = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
             ListEmptyComponent={() => (
-              <View className="px-5">
-                <Text className="text-white text-center">
+              <View className="flex-1 items-center justify-center px-6 py-10">
+                <View className="bg-[#2a3238]/30 p-8 rounded-full mb-6">
+                  <Ionicons name="fitness" size={60} color="#8101f7" />
+                </View>
+                <Text className="text-white font-kanit text-2xl font-bold text-center mb-3">
                   Aucun groupe trouvé
                 </Text>
+                <Text className="text-gray-400 text-base font-kanit text-center mb-8">
+                  Les groupes de course vous permettent de rencontrer d'autres
+                  coureurs et de participer à des événements ensemble.
+                </Text>
+                <Pressable
+                  className="bg-[#8101f7] rounded-full px-6 py-3 flex-row items-center"
+                  onPress={() => router.push("/")}
+                >
+                  <Ionicons
+                    name="people"
+                    size={20}
+                    color="white"
+                    style={{ marginRight: 8 }}
+                  />
+                  <Text className="text-white font-kanit font-semibold">
+                    Explorer les groupes
+                  </Text>
+                </Pressable>
               </View>
             )}
           />
@@ -143,7 +164,7 @@ const RunningGroup = () => {
         visible={showPremiumModal}
         onClose={closeModal}
         title="Fonctionnalité Premium"
-        description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+        description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Stay tuned !"
       />
     </View>
   );

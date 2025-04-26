@@ -81,13 +81,41 @@ const MessagesScreen = () => {
 
       {isLoading && <LoadingScreen />}
 
-      <FlatList
-        data={conversations}
-        renderItem={renderConversation}
-        keyExtractor={keyExtractor}
-        onRefresh={loadConversations}
-        refreshing={isLoading}
-      />
+      {conversations.length === 0 ? (
+        <View className="flex-1 items-center justify-center px-6">
+          <View className="bg-[#394047]/30 p-8 rounded-full mb-6">
+            <Ionicons name="chatbubbles-outline" size={60} color="#888" />
+          </View>
+          <Text className="text-white text-2xl font-kanit-semibold text-center mb-3">
+            Aucune conversation trouvée
+          </Text>
+          <Text className="text-gray-400 text-base font-kanit-regular text-center mb-8">
+            Commencez une conversation avec un utilisateur ou un groupe
+          </Text>
+          <Pressable
+            className="bg-primary rounded-full px-6 py-3 bg-purple flex-row items-center"
+            onPress={() => router.push("/")}
+          >
+            <Ionicons
+              name="chatbubble-ellipses"
+              size={20}
+              color="white"
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-white text-base font-kanit-semibold">
+              Trouve ton RunMate
+            </Text>
+          </Pressable>
+        </View>
+      ) : (
+        <FlatList
+          data={conversations}
+          renderItem={renderConversation}
+          keyExtractor={keyExtractor}
+          onRefresh={loadConversations}
+          refreshing={isLoading}
+        />
+      )}
     </View>
   );
 };

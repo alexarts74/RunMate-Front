@@ -143,7 +143,6 @@ export default function GroupDetailsScreen() {
           {/* Membres */}
           <View>
             <View className="flex-row flex-wrap">
-              {console.log(group.members)}
               {group.members?.map((member) => (
                 <View key={member.id} className="mr-2 mb-2">
                   <Image

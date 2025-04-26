@@ -25,7 +25,6 @@ const distances = [
   { label: "10km", value: 10, icon: "🏃", id: "run" },
   { label: "50km", value: 50, icon: "🚴", id: "bike" },
   { label: "200km", value: 200, icon: "🚗", id: "car" },
-  { label: "1000km", value: 1000, icon: "✈️", id: "plane" },
 ];
 
 export const EventsList = ({ eventsType }: EventsListProps) => {

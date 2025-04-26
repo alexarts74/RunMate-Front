@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { MatchesCarousel } from "@/components/matches/MatchesCarousel";
 import RunningGroup from "@/components/group/RunningGroup";
-import GetPremiumVersion from "@/components/GetPremiumVersion";
 import { Ionicons } from "@expo/vector-icons";
 import { EventsList } from "@/components/events/EventsList";
 import { useAuth } from "@/context/AuthContext";
@@ -82,9 +81,9 @@ const HomepageScreen = () => {
               <View className="my-8 h-fit">
                 <RunningGroup />
               </View>
-              <View className="mb-16">
+              {/* <View className="mb-16">
                 <GetPremiumVersion />
-              </View>
+              </View> */}
             </ScrollView>
           </>
         ) : (

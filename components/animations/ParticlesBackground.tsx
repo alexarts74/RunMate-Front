@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { View, Animated, Dimensions, StyleSheet } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 const PARTICLE_COUNT = 8;
@@ -99,7 +99,7 @@ export const ParticlesBackground = () => {
             },
           ]}
         >
-          <FontAwesome5 name="running" size={24} color="#8101f7" />
+          <Ionicons name="walk" size={24} color="#8101f7" />
         </Animated.View>
       ))}
     </View>

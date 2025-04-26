@@ -3,7 +3,7 @@ import "dotenv/config";
 export default {
   expo: {
     name: "RunMate",
-    slug: "runmate-front-expo",
+    slug: "RunMate2",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/splaash.png",
@@ -23,6 +23,7 @@ export default {
       iosDisplayInForeground: true,
     },
     ios: {
+      bundleIdentifier: "com.alexarts.runmate",
       supportsTablet: true,
       splash: {
         image: "./assets/images/splaash.png",
@@ -57,7 +58,7 @@ export default {
     },
     extra: {
       eas: {
-        projectId: process.env.EXPO_PROJECT_ID,
+        projectId: "8fca9dbf-a426-4a68-9082-a46e2109da67",
       },
     },
   },

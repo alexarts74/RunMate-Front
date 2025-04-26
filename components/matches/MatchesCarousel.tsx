@@ -94,14 +94,27 @@ export function MatchesCarousel() {
         {isLoading ? (
           <LoadingScreen />
         ) : matches?.length === 0 ? (
-          <View className="px-5 items-center space-y-4">
-            <Text className="text-white text-center">
-              Aucun match trouvé pour le moment
+          <View className="flex-1 items-center justify-center px-6 py-10">
+            <View className="bg-[#2a3238]/30 p-8 rounded-full mb-6">
+              <Ionicons name="search" size={60} color="#8101f7" />
+            </View>
+            <Text className="text-white font-kanit-semibold text-2xl text-center mb-3">
+              Aucun RunMate trouvé
+            </Text>
+            <Text className="text-gray-400 font-kanit text-base text-center mb-8">
+              Nous n'avons pas trouvé de coureurs correspondant à vos critères
+              actuels. Essayez d'élargir vos critères de recherche.
             </Text>
             <Pressable
               onPress={removeDistanceFilter}
-              className="bg-purple px-6 py-3 rounded-full"
+              className="bg-purple rounded-full px-6 py-3 flex-row items-center"
             >
+              <Ionicons
+                name="location"
+                size={18}
+                color="white"
+                style={{ marginRight: 8 }}
+              />
               <Text className="text-white font-kanit font-semibold">
                 Élargir la recherche
               </Text>
