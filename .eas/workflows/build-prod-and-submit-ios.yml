@@ -1,0 +1,24 @@
+name: Build and Submit iOS App
+
+on:
+  push:
+    branches: ["master"]
+    filters:
+      commit_message:
+        includes: "build:"
+
+jobs:
+  build_ios:
+    name: Build iOS
+    type: build
+    params:
+      platform: ios
+      profile: production
+
+  submit_ios:
+    name: Submit to App Store
+    type: submit
+    params:
+      platform: ios
+    dependsOn:
+      - build_ios
