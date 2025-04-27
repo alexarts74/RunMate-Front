@@ -90,21 +90,24 @@ export function MatchesCarousel() {
       </View>
 
       {/* Contenu principal */}
+
       <View className="pt-4">
         {isLoading ? (
           <LoadingScreen />
-        ) : matches?.length === 0 ? (
-          <View className="flex-1 items-center justify-center px-6 py-10">
-            <View className="bg-[#2a3238]/30 p-8 rounded-full mb-6">
-              <Ionicons name="search" size={60} color="#8101f7" />
+        ) : matches?.length === 0 || matches === undefined ? (
+          <View className="items-center justify-center px-6 py-6">
+            <View className=" p-6 rounded-2xl mb-6 items-center">
+              <Ionicons
+                name="search"
+                size={60}
+                color="#8101f7"
+                className="mb-4"
+              />
+              <Text className="text-white text-center text-lg font-kanit mb-3">
+                Nous n'avons pas trouvé de coureurs correspondant à vos critères
+                actuels. Essayez d'élargir vos critères de recherche.
+              </Text>
             </View>
-            <Text className="text-white font-kanit-semibold text-2xl text-center mb-3">
-              Aucun RunMate trouvé
-            </Text>
-            <Text className="text-gray-400 font-kanit text-base text-center mb-8">
-              Nous n'avons pas trouvé de coureurs correspondant à vos critères
-              actuels. Essayez d'élargir vos critères de recherche.
-            </Text>
             <Pressable
               onPress={removeDistanceFilter}
               className="bg-purple rounded-full px-6 py-3 flex-row items-center"
@@ -121,7 +124,7 @@ export function MatchesCarousel() {
             </Pressable>
           </View>
         ) : (
-          <View className="">
+          <View>
             <FlatList
               data={matches}
               renderItem={renderItem}

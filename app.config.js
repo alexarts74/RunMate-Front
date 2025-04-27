@@ -22,6 +22,9 @@ export default {
       androidCollapsedTitle: "RunMate",
       iosDisplayInForeground: true,
     },
+    extra: {
+      apiBaseUrl: process.env.API_BASE_URL_LOCAL,
+    },
     ios: {
       bundleIdentifier: "com.alexarts.runmate",
       supportsTablet: true,
@@ -29,6 +32,9 @@ export default {
         image: "./assets/images/splaash.png",
         resizeMode: "cover",
         backgroundColor: "#14141b",
+      },
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
       },
     },
     android: {

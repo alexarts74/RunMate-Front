@@ -70,7 +70,7 @@ export default function LoginForm() {
       <ParticlesBackground />
       <View className="flex-row items-center mb-10 mt-16">
         <Pressable
-          onPress={() => router.back()}
+          onPress={() => router.replace("/")}
           className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80"
           style={{ position: "absolute", zIndex: 10 }}
         >
