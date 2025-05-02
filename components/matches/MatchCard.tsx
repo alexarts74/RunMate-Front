@@ -9,6 +9,66 @@ type MatchCardProps = {
   match: MatchUser;
 };
 
+// Fonction utilitaire pour traiter en toute sécurité les tableaux et les chaînes JSON
+const safelyFormatArray = (value: any, separator: string = ", "): string => {
+  try {
+    if (Array.isArray(value)) {
+      return value
+        .filter((item) => item !== null && item !== undefined)
+        .map((item) => String(item))
+        .join(separator);
+    } else if (typeof value === "string") {
+      const valueStr = value as string;
+      if (valueStr.startsWith("[") || valueStr.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(valueStr);
+          if (Array.isArray(parsed)) {
+            return parsed.map((item) => String(item)).join(separator);
+          }
+          return String(parsed);
+        } catch (e) {
+          return valueStr;
+        }
+      }
+      return valueStr;
+    }
+    return value !== null && value !== undefined ? String(value) : "";
+  } catch (error) {
+    console.error(`Erreur de formatage: ${error}`);
+    return "";
+  }
+};
+
+// Ajoutons un wrapper de sécurité pour tous les éléments de texte
+const SafeText = ({ children }: { children: React.ReactNode }) => {
+  // Si l'enfant est un string, number ou boolean, on le rend dans un Text
+  if (
+    typeof children === "string" ||
+    typeof children === "number" ||
+    typeof children === "boolean"
+  ) {
+    return <Text>{String(children)}</Text>;
+  }
+
+  // Si c'est déjà un élément React, on le retourne
+  return <>{children}</>;
+};
+
+// Remplaçons la façon dont on vérifie les types de données
+const isValidArray = (value: any): boolean => {
+  return Array.isArray(value) && value.length > 0;
+};
+
+const isValidString = (value: any): boolean => {
+  return typeof value === "string" && value.trim() !== "";
+};
+
+const isValid = (value: any): boolean => {
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value === "string") return value.trim() !== "";
+  return value !== null && value !== undefined;
+};
+
 export function MatchCard({ match }: MatchCardProps) {
   const isChillRunner = match.user.runner_profile.running_type === "chill";
   const isFlexible = match.user.runner_profile.flexible;
@@ -31,7 +91,9 @@ export function MatchCard({ match }: MatchCardProps) {
       }
     }
   } catch (error) {
-    return null;
+    console.error("Erreur parsing availability:", error);
+    // Assurer qu'on retourne un tableau vide en cas d'erreur
+    availability = [];
   }
 
   // Données spécifiques au type de runner
@@ -60,7 +122,9 @@ export function MatchCard({ match }: MatchCardProps) {
       }
     }
   } catch (error) {
-    return null;
+    console.error("Erreur parsing competition_goals:", error);
+    // Assurer qu'on retourne un tableau vide en cas d'erreur
+    competitionGoals = [];
   }
 
   // Formatage des jours de disponibilité
@@ -98,6 +162,11 @@ export function MatchCard({ match }: MatchCardProps) {
     }
   };
 
+  // Formater runningFrequency si c'est un tableau
+  const formatRunningFrequency = () => {
+    return safelyFormatArray(runningFrequency);
+  };
+
   return (
     <View className="shadow-xl">
       <Pressable
@@ -117,14 +186,16 @@ export function MatchCard({ match }: MatchCardProps) {
         />
 
         {/* Distance mise en valeur - en haut à droite */}
-        {distanceKm && (
+        {distanceKm ? (
           <View className="absolute top-4 right-4 bg-purple px-4 py-2 rounded-full flex-row items-center z-10">
             <Ionicons name="location-outline" size={16} color="#fff" />
             <Text className="text-white ml-1.5 text-base font-kanit font-bold">
-              {distanceKm} km
+              {typeof distanceKm === "number" || typeof distanceKm === "string"
+                ? `${distanceKm} km`
+                : ""}
             </Text>
           </View>
-        )}
+        ) : null}
 
         {/* Gradient overlay - plus court pour laisser plus d'espace à l'image */}
         <LinearGradient
@@ -152,7 +223,10 @@ export function MatchCard({ match }: MatchCardProps) {
                 // Bulles pour runner CHILL
                 <>
                   {/* 1. Préférences sociales */}
-                  {socialPreferences && socialPreferences.length > 0 && (
+                  {socialPreferences &&
+                  (Array.isArray(socialPreferences)
+                    ? socialPreferences.length > 0
+                    : socialPreferences) ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="people-outline" size={14} color="#fff" />
                       <Text
@@ -160,15 +234,13 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {Array.isArray(socialPreferences)
-                          ? socialPreferences.join(", ")
-                          : socialPreferences}
+                        {safelyFormatArray(socialPreferences)}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 2. Disponibilités */}
-                  {availability && availability.length > 0 && (
+                  {availability && availability.length > 0 ? (
                     <View className="bg-background border border-purple  px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons
                         name="calendar-outline"
@@ -180,13 +252,17 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {availability.map(formatDay).join(", ")}
+                        {availability
+                          .filter((item) => item !== null && item !== undefined)
+                          .map((item) => formatDay(String(item)))
+                          .filter((day) => day !== "")
+                          .join(", ")}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 3. Fréquence */}
-                  {runningFrequency && (
+                  {runningFrequency ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="time-outline" size={14} color="#fff" />
                       <Text
@@ -194,13 +270,16 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {runningFrequency}
+                        {formatRunningFrequency()}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 4. Activités après course */}
-                  {postRunActivities && postRunActivities.length > 0 && (
+                  {postRunActivities &&
+                  (Array.isArray(postRunActivities)
+                    ? postRunActivities.length > 0
+                    : postRunActivities) ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="cafe-outline" size={14} color="#fff" />
                       <Text
@@ -208,15 +287,13 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {Array.isArray(postRunActivities)
-                          ? postRunActivities.join(", ")
-                          : postRunActivities}
+                        {safelyFormatArray(postRunActivities)}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* Flexible badge pour les chill runners */}
-                  {isFlexible && (
+                  {isFlexible ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons name="leaf-outline" size={14} color="#fff" />
                       <Text
@@ -227,13 +304,13 @@ export function MatchCard({ match }: MatchCardProps) {
                         Flexible
                       </Text>
                     </View>
-                  )}
+                  ) : null}
                 </>
               ) : (
                 // Bulles pour runner PERF
                 <>
                   {/* 1. Allure actuelle */}
-                  {actualPace && (
+                  {actualPace ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="speedometer-outline"
@@ -245,13 +322,16 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {actualPace} min/km
+                        {typeof actualPace === "string" ||
+                        typeof actualPace === "number"
+                          ? `${actualPace} min/km`
+                          : ""}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 2. Allure cible si différente */}
-                  {targetPace && targetPace !== actualPace && (
+                  {targetPace && targetPace !== actualPace ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="trending-down-outline"
@@ -263,13 +343,16 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {targetPace} min/km
+                        {typeof targetPace === "string" ||
+                        typeof targetPace === "number"
+                          ? `${targetPace} min/km`
+                          : ""}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 3. Distance habituelle */}
-                  {weeklyDistance && (
+                  {weeklyDistance ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons
                         name="footsteps-outline"
@@ -281,13 +364,19 @@ export function MatchCard({ match }: MatchCardProps) {
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
-                        {weeklyDistance} km
+                        {typeof weeklyDistance === "string" ||
+                        typeof weeklyDistance === "number"
+                          ? `${weeklyDistance} km`
+                          : ""}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* 4. Objectifs de compétition */}
-                  {competitionGoals && competitionGoals.length > 0 && (
+                  {competitionGoals &&
+                  (Array.isArray(competitionGoals)
+                    ? competitionGoals.length > 0
+                    : competitionGoals) ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-[47%]">
                       <Ionicons name="trophy-outline" size={14} color="#fff" />
                       <Text
@@ -297,15 +386,22 @@ export function MatchCard({ match }: MatchCardProps) {
                       >
                         {Array.isArray(competitionGoals)
                           ? competitionGoals
-                              .map(formatCompetitionGoal)
+                              .filter(
+                                (item) => item !== null && item !== undefined
+                              )
+                              .map((goal) =>
+                                formatCompetitionGoal(String(goal))
+                              )
                               .join(", ")
-                          : formatCompetitionGoal(competitionGoals)}
+                          : typeof competitionGoals === "string"
+                          ? formatCompetitionGoal(competitionGoals)
+                          : ""}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
 
                   {/* Flexible badge pour les perf runners */}
-                  {isFlexible && (
+                  {isFlexible ? (
                     <View className="bg-background border border-purple px-4 py-2 rounded-full flex-row items-center mb-3 w-fit">
                       <Ionicons name="leaf-outline" size={14} color="#fff" />
                       <Text
@@ -316,7 +412,7 @@ export function MatchCard({ match }: MatchCardProps) {
                         Flexible
                       </Text>
                     </View>
-                  )}
+                  ) : null}
                 </>
               )}
             </View>

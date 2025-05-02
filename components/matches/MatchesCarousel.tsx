@@ -51,16 +51,18 @@ export function MatchesCarousel() {
   );
 
   // Rendu d'un item du carrousel
-  const renderItem = ({ item }: { item: MatchUser }) => (
-    <View
-      style={{
-        width: ITEM_WIDTH,
-        marginHorizontal: SPACING / 2,
-      }}
-    >
-      <MatchCard match={item} />
-    </View>
-  );
+  const renderItem = ({ item }: { item: MatchUser }) => {
+    return (
+      <View
+        style={{
+          width: ITEM_WIDTH,
+          marginHorizontal: SPACING / 2,
+        }}
+      >
+        <MatchCard match={item} />
+      </View>
+    );
+  };
 
   const removeDistanceFilter = () => {
     router.push("/runner/filters");
