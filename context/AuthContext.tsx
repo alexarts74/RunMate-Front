@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { authService } from "@/service/api/auth";
 import { authStorage } from "@/service/auth/storage";
 import User, { UserWithRunnerProfile } from "@/interface/User";
+import { UserInfo } from "os";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -13,6 +14,7 @@ type AuthContextType = {
   isLoading: boolean;
   signUp: (userData: User) => Promise<void>;
   deleteAccount: () => Promise<void>;
+  updateUserSubscriptionPlan: (userData: User) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -171,6 +173,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateUserSubscriptionPlan = async (userData: User) => {
+    try {
+      const response = await authService.updateUserSubscriptionPlan(userData);
+      await authStorage.storeUser(response.user);
+      setUser(response.user);
+    } catch (error) {
+      console.error("Erreur dans updateUserProfile:", error);
+      throw error;
+    }
+  };
+
   // Initialisation de l'auth
   useEffect(() => {
     const initAuth = async () => {
@@ -200,9 +213,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated,
         user,
         login,
+        updateUser,
         logout,
         signUp,
-        updateUser,
+        updateUserSubscriptionPlan,
         isLoading,
         deleteAccount,
       }}

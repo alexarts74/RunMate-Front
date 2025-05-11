@@ -71,6 +71,11 @@ const RunningGroup = () => {
     router.replace("/");
   };
 
+  const onUpgrade = () => {
+    router.push("/premium");
+    setShowPremiumModal(false);
+  };
+
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
       className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"
@@ -161,6 +166,7 @@ const RunningGroup = () => {
         )}
       </View>
       <PremiumFeatureModal
+        onUpgrade={onUpgrade}
         visible={showPremiumModal}
         onClose={closeModal}
         title="Fonctionnalité Premium"

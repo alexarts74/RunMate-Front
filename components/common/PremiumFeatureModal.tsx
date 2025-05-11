@@ -7,11 +7,13 @@ interface PremiumFeatureModalProps {
   onClose: () => void;
   title: string;
   description: string;
+  onUpgrade: () => void;
 }
 
 export const PremiumFeatureModal = ({
   visible,
   onClose,
+  onUpgrade,
   title,
   description,
 }: PremiumFeatureModalProps) => {
@@ -43,6 +45,14 @@ export const PremiumFeatureModal = ({
           >
             <Text className="text-white text-center font-bold font-kanit">
               Fermer
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={onUpgrade}
+            className="py-3 mt-3 rounded-xl border border-gray-600"
+          >
+            <Text className="text-white text-center font-bold font-kanit">
+              Upgrade
             </Text>
           </Pressable>
         </View>

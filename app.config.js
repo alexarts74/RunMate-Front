@@ -60,7 +60,7 @@ export default {
       typedRoutes: true,
     },
     extra: {
-      apiBaseUrl: process.env.API_BASE_URL_PROD,
+      apiBaseUrl: process.env.API_BASE_URL_LOCAL,
       eas: {
         projectId: "8fca9dbf-a426-4a68-9082-a46e2109da67",
       },
