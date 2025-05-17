@@ -71,8 +71,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       await authStorage.storeToken(userData.authentication_token);
+      console.log("Token:", userData.authentication_token);
       await authStorage.storeUser(userData.user);
       await authStorage.getToken();
+      console.log("Token in storage:", await authStorage.getToken());
 
       setUser(userData.user);
       setIsAuthenticated(true);

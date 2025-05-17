@@ -9,11 +9,12 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import { useConfirmPayment } from "@stripe/stripe-react-native";
-import { useStripe } from "@/context/StripeContext";
+import { useStripe as useStripeContext } from "@/context/StripeContext";
+import { useStripe } from "@stripe/stripe-react-native";
 import { useAuth } from "@/context/AuthContext";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { PaymentIntent } from "@stripe/stripe-react-native";
 
 // Types d'abonnements disponibles
 const subscriptionPlans = [
@@ -61,11 +62,10 @@ export default function PaymentScreen() {
   });
 
   const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
-  const { makeSubscription, isLoading } = useStripe();
-  const { confirmPayment } = useConfirmPayment();
+  const { makeSubscription, confirmPayment, handleNextAction, isLoading } =
+    useStripeContext();
+  const { createPaymentMethod } = useStripe();
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const { user, updateUserSubscriptionPlan } = useAuth();
 
   // Validation basique des champs de carte
   const isCardValid = () => {
@@ -88,37 +88,60 @@ export default function PaymentScreen() {
 
     try {
       setIsProcessing(true);
-      const { clientSecret, subscriptionId } = await makeSubscription(
-        selectedPlan.id
+
+      // 1. Créer l'abonnement et obtenir le clientSecret
+      const { clientSecret } = await makeSubscription(selectedPlan.id);
+
+      // 2. Créer la méthode de paiement avec les détails de la carte
+      const { paymentMethod, error: paymentMethodError } =
+        await createPaymentMethod({
+          paymentMethodType: "Card",
+          paymentMethodData: {
+            card: {
+              number: cardDetails.number.replace(/\s/g, ""),
+              expMonth: parseInt(cardDetails.expMonth),
+              expYear: parseInt(cardDetails.expYear),
+              cvc: cardDetails.cvc,
+            },
+          },
+        });
+
+      if (paymentMethodError || !paymentMethod) {
+        throw new Error(
+          paymentMethodError?.message ||
+            "Erreur lors de la création de la méthode de paiement"
+        );
+      }
+
+      // 3. Confirmer le paiement avec Stripe
+      const { error, paymentIntent } = await confirmPayment(
+        clientSecret,
+        paymentMethod.id
       );
 
-      try {
-        // Pour les besoins de ce test, nous simulons un paiement réussi
-        // Dans une implémentation réelle, vous utiliseriez confirmPayment
+      if (error) {
+        throw new Error(error.message);
+      }
 
-        console.log("Paiement simulé avec succès pour:", subscriptionId);
-
-        // Afficher l'alerte de succès
+      // 4. Vérifier le statut du paiement
+      if (paymentIntent?.status === "succeeded") {
         Alert.alert(
           "Paiement réussi",
           "Votre abonnement premium est maintenant actif !",
           [{ text: "OK", onPress: () => router.back() }]
         );
-      } catch (confirmError) {
-        console.error(
-          "Erreur lors de la confirmation du paiement",
-          confirmError
-        );
-        Alert.alert(
-          "Erreur",
-          "Impossible de confirmer le paiement, veuillez réessayer"
-        );
+      } else if (paymentIntent?.status === "requires_action") {
+        // Gérer l'authentification 3D Secure si nécessaire
+        const { error: actionError } = await handleNextAction(clientSecret);
+        if (actionError) {
+          throw new Error(actionError.message);
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors du processus de paiement", error);
       Alert.alert(
         "Erreur",
-        "Une erreur est survenue lors du processus de paiement"
+        error.message || "Une erreur est survenue lors du processus de paiement"
       );
     } finally {
       setIsProcessing(false);

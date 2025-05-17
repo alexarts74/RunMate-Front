@@ -99,6 +99,13 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     loadEvents();
   }, [eventsType]);
 
+  useEffect(() => {
+    if (user?.is_premium) {
+      setShowPremiumModal(false);
+      loadEvents();
+    }
+  }, [user?.is_premium]);
+
   const DistanceFilter = () => (
     <View className="bg-background py-3">
       <ScrollView
@@ -202,6 +209,10 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
         </ScrollView>
       </View>
       <PremiumFeatureModal
+        onUpgrade={() => {
+          router.push("/premium");
+          setShowPremiumModal(false);
+        }}
         visible={showPremiumModal}
         onClose={closeModal}
         title="Fonctionnalité Premium"

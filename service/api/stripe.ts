@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+import { API_CONFIG } from "@/config/api";
 
 // URL de base pour les endpoints Stripe (à remplacer par votre URL de backend)
 
@@ -32,6 +33,8 @@ export const stripeService = {
   createSubscription: async (planId: string) => {
     console.log("planId", planId);
     try {
+      const url = `${API_CONFIG.BASE_URL}${API_CONFIG.API_VERSION}/payments/create-subscription`;
+      console.log("Route complète:", url);
       return await apiClient.post("/payments/create-subscription", {
         planId,
       });

@@ -76,6 +76,14 @@ const RunningGroup = () => {
     setShowPremiumModal(false);
   };
 
+  useEffect(() => {
+    if (user?.is_premium) {
+      console.log("user is premium");
+      setShowPremiumModal(false);
+      fetchGroups();
+    }
+  }, [user?.is_premium]);
+
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
       className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"

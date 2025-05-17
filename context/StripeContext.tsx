@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { StripeProvider } from "@stripe/stripe-react-native";
+import React, { createContext, useContext, useState } from "react";
+import { StripeProvider, useConfirmPayment } from "@stripe/stripe-react-native";
 import { Alert } from "react-native";
 import { stripeService } from "@/service/api/stripe";
 
@@ -14,6 +14,11 @@ type StripeContextType = {
   makeSubscription: (
     planId: string
   ) => Promise<{ clientSecret: string; subscriptionId: string }>;
+  confirmPayment: (
+    clientSecret: string,
+    paymentMethodId: string
+  ) => Promise<{ error?: any; paymentIntent?: any }>;
+  handleNextAction: (clientSecret: string) => Promise<{ error?: any }>;
   isLoading: boolean;
 };
 
@@ -31,6 +36,10 @@ export const StripeContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    confirmPayment: stripeConfirmPayment,
+    handleNextAction: stripeHandleNextAction,
+  } = useConfirmPayment();
 
   // Créer une intention de paiement unique en utilisant le service
   const createPaymentIntent = async (
@@ -71,9 +80,48 @@ export const StripeContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  // Confirmer le paiement
+  const confirmPayment = async (
+    clientSecret: string,
+    paymentMethodId: string
+  ) => {
+    try {
+      setIsLoading(true);
+      const { error, paymentIntent } = await stripeConfirmPayment(
+        clientSecret,
+        {
+          paymentMethodType: "card",
+          paymentMethod: paymentMethodId,
+        }
+      );
+      return { error, paymentIntent };
+    } catch (error) {
+      console.error("Erreur lors de la confirmation du paiement", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Gérer l'action suivante (3D Secure)
+  const handleNextAction = async (clientSecret: string) => {
+    try {
+      setIsLoading(true);
+      const { error } = await stripeHandleNextAction(clientSecret);
+      return { error };
+    } catch (error) {
+      console.error("Erreur lors du traitement de l'action suivante", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = {
     createPaymentIntent,
     makeSubscription,
+    confirmPayment,
+    handleNextAction,
     isLoading,
   };
 
