@@ -6,15 +6,14 @@ import {
   ActivityIndicator,
   ScrollView,
   Pressable,
-  TextInput,
   StyleSheet,
+  TextInput,
 } from "react-native";
 import { useStripe as useStripeContext } from "@/context/StripeContext";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useAuth } from "@/context/AuthContext";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { PaymentIntent } from "@stripe/stripe-react-native";
 
 // Types d'abonnements disponibles
 const subscriptionPlans = [
@@ -53,19 +52,17 @@ interface CardDetails {
 }
 
 export default function PaymentScreen() {
-  // État pour les champs de carte manuels
+  const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
+  const { makeSubscription, confirmPayment, handleNextAction, isLoading } =
+    useStripeContext();
+  const { createPaymentMethod } = useStripe();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [cardDetails, setCardDetails] = useState<CardDetails>({
     number: "",
     expMonth: "",
     expYear: "",
     cvc: "",
   });
-
-  const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
-  const { makeSubscription, confirmPayment, handleNextAction, isLoading } =
-    useStripeContext();
-  const { createPaymentMethod } = useStripe();
-  const [isProcessing, setIsProcessing] = useState(false);
 
   // Validation basique des champs de carte
   const isCardValid = () => {
@@ -78,7 +75,16 @@ export default function PaymentScreen() {
   };
 
   const handlePayPress = async () => {
+    console.log("Début du processus de paiement");
+    console.log("Détails de la carte:", {
+      number: cardDetails.number,
+      expMonth: cardDetails.expMonth,
+      expYear: cardDetails.expYear,
+      cvc: cardDetails.cvc,
+    });
+
     if (!isCardValid()) {
+      console.log("Validation de la carte échouée");
       Alert.alert(
         "Erreur",
         "Veuillez compléter correctement les informations de votre carte"
@@ -88,25 +94,45 @@ export default function PaymentScreen() {
 
     try {
       setIsProcessing(true);
+      console.log("Création de l'abonnement pour le plan:", selectedPlan.id);
 
       // 1. Créer l'abonnement et obtenir le clientSecret
-      const { clientSecret } = await makeSubscription(selectedPlan.id);
+      const response = await makeSubscription(selectedPlan.id);
+      console.log("Réponse complète:", response);
+      const { client_secret: clientSecret } = response;
+      console.log("ClientSecret obtenu:", clientSecret);
 
-      // 2. Créer la méthode de paiement avec les détails de la carte
+      if (!clientSecret) {
+        throw new Error(
+          "Impossible d'obtenir le clientSecret. Veuillez réessayer."
+        );
+      }
+
+      console.log("CardDetails", cardDetails);
+
+      // 2. Créer la méthode de paiement
+      console.log("Création de la méthode de paiement...");
       const { paymentMethod, error: paymentMethodError } =
         await createPaymentMethod({
           paymentMethodType: "Card",
           paymentMethodData: {
-            card: {
-              number: cardDetails.number.replace(/\s/g, ""),
-              expMonth: parseInt(cardDetails.expMonth),
-              expYear: parseInt(cardDetails.expYear),
-              cvc: cardDetails.cvc,
+            billingDetails: {
+              // Ajout des détails de facturation si nécessaire
             },
+            cvc: cardDetails.cvc,
           },
         });
 
+      console.log("Résultat création méthode de paiement:", {
+        paymentMethod,
+        error: paymentMethodError,
+      });
+
       if (paymentMethodError || !paymentMethod) {
+        console.error(
+          "Erreur création méthode de paiement:",
+          paymentMethodError
+        );
         throw new Error(
           paymentMethodError?.message ||
             "Erreur lors de la création de la méthode de paiement"
@@ -114,16 +140,24 @@ export default function PaymentScreen() {
       }
 
       // 3. Confirmer le paiement avec Stripe
+      console.log("Confirmation du paiement avec clientSecret:", clientSecret);
       const { error, paymentIntent } = await confirmPayment(
         clientSecret,
         paymentMethod.id
       );
 
+      console.log("Résultat confirmation paiement:", {
+        error,
+        paymentIntent,
+      });
+
       if (error) {
+        console.error("Erreur confirmation paiement:", error);
         throw new Error(error.message);
       }
 
       // 4. Vérifier le statut du paiement
+      console.log("Statut du paiement:", paymentIntent?.status);
       if (paymentIntent?.status === "succeeded") {
         Alert.alert(
           "Paiement réussi",
@@ -131,20 +165,22 @@ export default function PaymentScreen() {
           [{ text: "OK", onPress: () => router.back() }]
         );
       } else if (paymentIntent?.status === "requires_action") {
-        // Gérer l'authentification 3D Secure si nécessaire
+        console.log("Action supplémentaire requise");
         const { error: actionError } = await handleNextAction(clientSecret);
         if (actionError) {
+          console.error("Erreur action supplémentaire:", actionError);
           throw new Error(actionError.message);
         }
       }
     } catch (error: any) {
-      console.error("Erreur lors du processus de paiement", error);
+      console.error("Erreur détaillée lors du processus de paiement:", error);
       Alert.alert(
         "Erreur",
         error.message || "Une erreur est survenue lors du processus de paiement"
       );
     } finally {
       setIsProcessing(false);
+      console.log("Fin du processus de paiement");
     }
   };
 

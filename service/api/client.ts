@@ -68,11 +68,14 @@ class ApiClient {
       });
 
       const responseData = await response.json();
+      console.log("Réponse du serveur:", responseData);
 
       if (!response.ok) {
         console.error("Erreur HTTP:", response.status);
         console.error("Détails de l'erreur:", responseData);
-        throw new Error(`Erreur HTTP: ${response.status}`);
+        throw new Error(
+          responseData.message || `Erreur HTTP: ${response.status}`
+        );
       }
 
       return responseData;

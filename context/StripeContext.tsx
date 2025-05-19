@@ -11,9 +11,14 @@ type StripeContextType = {
     amount: number,
     currency: string
   ) => Promise<{ clientSecret: string }>;
-  makeSubscription: (
-    planId: string
-  ) => Promise<{ clientSecret: string; subscriptionId: string }>;
+  makeSubscription: (planId: string) => Promise<{
+    client_secret: string;
+    subscription_id: string;
+    subscription_status: string;
+    amount: number;
+    currency: string;
+    invoice_id: string;
+  }>;
   confirmPayment: (
     clientSecret: string,
     paymentMethodId: string
