@@ -8,6 +8,11 @@ class ApiClient {
   constructor() {
     this.baseUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.API_VERSION}`;
     this.timeout = 10000;
+
+    console.log("🚀 ApiClient initialisé avec:", {
+      baseUrl: this.baseUrl,
+      timeout: this.timeout,
+    });
   }
 
   private async getHeaders() {
@@ -25,6 +30,12 @@ class ApiClient {
     try {
       const headers = await this.getHeaders();
 
+      console.log("🌐 Requête API:", {
+        url,
+        method: options.method,
+        headers: headers,
+      });
+
       const response = await fetch(url, {
         ...options,
         headers: {
@@ -34,7 +45,27 @@ class ApiClient {
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
 
+      console.log("📡 Réponse API:", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+      });
+
       if (!response.ok) {
+        // Vérifier si la réponse est du HTML (erreur de serveur)
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("text/html")) {
+          const htmlText = await response.text();
+          console.error("❌ Serveur retourne du HTML au lieu de JSON:", {
+            status: response.status,
+            contentType,
+            htmlPreview: htmlText.substring(0, 200) + "...",
+          });
+          throw new Error(
+            `Erreur serveur: Le serveur retourne du HTML (${response.status}). Vérifiez l'URL de l'API.`
+          );
+        }
+
         const data = await response.json();
         if (response.status === 401) {
           await authStorage.removeAuth();
@@ -45,7 +76,11 @@ class ApiClient {
 
       return response;
     } catch (error) {
-      console.error("Erreur fetchWithTimeout:", error);
+      console.error("❌ Erreur fetchWithTimeout:", {
+        url,
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+      });
       throw error;
     }
   }
@@ -90,7 +125,7 @@ class ApiClient {
 
         // Debug log avant transformation
         Object.entries(config.params).forEach(([key, value]) => {
-          if (typeof value === "object") {
+          if (value && typeof value === "object" && !Array.isArray(value)) {
             Object.entries(value).forEach(([subKey, subValue]) => {
               const paramKey = `${key}[${subKey}]`;
               queryParams.append(paramKey, String(subValue));

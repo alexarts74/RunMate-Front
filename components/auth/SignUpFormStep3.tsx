@@ -87,14 +87,60 @@ const POST_RUN_ACTIVITIES = [
 
 const PACE_OPTIONS = [
   { value: "4:00", label: "4:00 min/km" },
+  { value: "4:05", label: "4:05 min/km" },
+  { value: "4:10", label: "4:10 min/km" },
+  { value: "4:15", label: "4:15 min/km" },
+  { value: "4:20", label: "4:20 min/km" },
+  { value: "4:25", label: "4:25 min/km" },
   { value: "4:30", label: "4:30 min/km" },
+  { value: "4:35", label: "4:35 min/km" },
+  { value: "4:40", label: "4:40 min/km" },
+  { value: "4:45", label: "4:45 min/km" },
+  { value: "4:50", label: "4:50 min/km" },
+  { value: "4:55", label: "4:55 min/km" },
   { value: "5:00", label: "5:00 min/km" },
+  { value: "5:05", label: "5:05 min/km" },
+  { value: "5:10", label: "5:10 min/km" },
+  { value: "5:15", label: "5:15 min/km" },
+  { value: "5:20", label: "5:20 min/km" },
+  { value: "5:25", label: "5:25 min/km" },
   { value: "5:30", label: "5:30 min/km" },
+  { value: "5:35", label: "5:35 min/km" },
+  { value: "5:40", label: "5:40 min/km" },
+  { value: "5:45", label: "5:45 min/km" },
+  { value: "5:50", label: "5:50 min/km" },
+  { value: "5:55", label: "5:55 min/km" },
   { value: "6:00", label: "6:00 min/km" },
+  { value: "6:05", label: "6:05 min/km" },
+  { value: "6:10", label: "6:10 min/km" },
+  { value: "6:15", label: "6:15 min/km" },
+  { value: "6:20", label: "6:20 min/km" },
+  { value: "6:25", label: "6:25 min/km" },
   { value: "6:30", label: "6:30 min/km" },
+  { value: "6:35", label: "6:35 min/km" },
+  { value: "6:40", label: "6:40 min/km" },
+  { value: "6:45", label: "6:45 min/km" },
+  { value: "6:50", label: "6:50 min/km" },
+  { value: "6:55", label: "6:55 min/km" },
   { value: "7:00", label: "7:00 min/km" },
+  { value: "7:05", label: "7:05 min/km" },
+  { value: "7:10", label: "7:10 min/km" },
+  { value: "7:15", label: "7:15 min/km" },
+  { value: "7:20", label: "7:20 min/km" },
+  { value: "7:25", label: "7:25 min/km" },
   { value: "7:30", label: "7:30 min/km" },
+  { value: "7:35", label: "7:35 min/km" },
+  { value: "7:40", label: "7:40 min/km" },
+  { value: "7:45", label: "7:45 min/km" },
+  { value: "7:50", label: "7:50 min/km" },
+  { value: "7:55", label: "7:55 min/km" },
   { value: "8:00", label: "8:00 min/km" },
+  { value: "8:05", label: "8:05 min/km" },
+  { value: "8:10", label: "8:10 min/km" },
+  { value: "8:15", label: "8:15 min/km" },
+  { value: "8:20", label: "8:20 min/km" },
+  { value: "8:25", label: "8:25 min/km" },
+  { value: "8:30", label: "8:30 min/km" },
 ];
 
 export function SignUpFormStep3({
@@ -292,7 +338,7 @@ export function SignUpFormStep3({
                     <Text className="text-white font-kanit">
                       {formData.target_pace
                         ? `${formData.target_pace} min/km`
-                        : "Sélectionnez votre objectif d'allure"}
+                        : "Sélectionnez votre objectif d'allure en EF"}
                     </Text>
                   </Pressable>
                   {errors.target_pace && (
