@@ -28,14 +28,17 @@ export const stripeService = {
   /**
    * Crée un abonnement pour un plan donné
    * @param planId Identifiant du plan d'abonnement Stripe
+   * @param cardDetails Détails de la carte bancaire
    * @returns Promise avec la clé secrète client et l'ID d'abonnement
    */
-  createSubscription: async (planId: string) => {
+  createSubscription: async (planId: string, cardDetails?: any) => {
     console.log("planId", planId);
     try {
-      return await apiClient.post("/payments/create-subscription", {
-        planId,
-      });
+      const payload: any = { planId };
+      if (cardDetails) {
+        payload.cardDetails = cardDetails;
+      }
+      return await apiClient.post("/payments/create-subscription", payload);
     } catch (error) {
       console.error("Erreur lors de la création de l'abonnement:", error);
       throw error;

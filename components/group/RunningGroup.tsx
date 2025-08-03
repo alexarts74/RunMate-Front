@@ -78,7 +78,6 @@ const RunningGroup = () => {
 
   useEffect(() => {
     if (user?.is_premium) {
-      console.log("user is premium");
       setShowPremiumModal(false);
       fetchGroups();
     }

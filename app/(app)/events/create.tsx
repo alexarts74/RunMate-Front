@@ -17,12 +17,11 @@ import { eventService } from "@/service/api/event";
 import { CreateEventData } from "@/interface/Event";
 import { UserSearch } from "@/components/UserSearch";
 import User from "@/interface/User";
-import { debounce } from "lodash";
 import * as Location from "expo-location";
-import { BlurView } from "expo-blur";
 import { validateCreateEventForm } from "@/constants/formValidation";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
+import { debounce } from "lodash";
 
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
@@ -507,6 +506,10 @@ export default function CreateEventScreen() {
 
       {/* Modal Premium */}
       <PremiumFeatureModal
+        onUpgrade={() => {
+          router.push("/premium");
+          setShowPremiumModal(false);
+        }}
         visible={showPremiumModal}
         onClose={closeModal}
         title="Fonctionnalité Premium"

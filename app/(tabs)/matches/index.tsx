@@ -15,6 +15,7 @@ import { EventsList } from "@/components/events/EventsList";
 import { useAuth } from "@/context/AuthContext";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { EventsSelectionModal } from "@/components/events/EventsSelectionModal";
+import { router } from "expo-router";
 
 const HomepageScreen = () => {
   const { user } = useAuth();
@@ -176,6 +177,10 @@ const HomepageScreen = () => {
 
       {/* Modale premium pour les utilisateurs non premium */}
       <PremiumFeatureModal
+        onUpgrade={() => {
+          router.push("/premium");
+          setShowPremiumModal(false);
+        }}
         visible={showPremiumModal}
         onClose={closePremiumModal}
         title="Fonctionnalité Premium"
