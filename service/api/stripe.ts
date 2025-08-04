@@ -5,6 +5,45 @@ import { API_CONFIG } from "@/config/api";
 
 export const stripeService = {
   /**
+   * Crée un token Stripe pour les détails de carte
+   * @param cardDetails Détails de la carte bancaire
+   * @returns Promise avec le token Stripe
+   */
+  createToken: async (cardDetails: {
+    number: string;
+    expMonth: string;
+    expYear: string;
+    cvc: string;
+  }) => {
+    try {
+      const response = await fetch("https://api.stripe.com/v1/tokens", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          "card[number]": cardDetails.number.replace(/\s/g, ""),
+          "card[exp_month]": cardDetails.expMonth,
+          "card[exp_year]": cardDetails.expYear,
+          "card[cvc]": cardDetails.cvc,
+        }).toString(),
+      });
+
+      const tokenData = await response.json();
+
+      if (tokenData.error) {
+        throw new Error(`Erreur création token: ${tokenData.error.message}`);
+      }
+
+      return tokenData;
+    } catch (error) {
+      console.error("Erreur lors de la création du token:", error);
+      throw error;
+    }
+  },
+
+  /**
    * Crée une intention de paiement pour un montant donné
    * @param amount Montant en centimes (ex: 999 pour 9,99€)
    * @param currency Devise (par défaut EUR)

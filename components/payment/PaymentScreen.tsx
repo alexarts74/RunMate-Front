@@ -6,12 +6,10 @@ import {
   ActivityIndicator,
   ScrollView,
   Pressable,
-  StyleSheet,
   TextInput,
 } from "react-native";
 import { useStripe as useStripeContext } from "@/context/StripeContext";
 import { useStripe } from "@stripe/stripe-react-native";
-import { useAuth } from "@/context/AuthContext";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -53,8 +51,13 @@ interface CardDetails {
 
 export default function PaymentScreen() {
   const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
-  const { makeSubscription, confirmPayment, handleNextAction, isLoading } =
-    useStripeContext();
+  const {
+    createToken,
+    makeSubscription,
+    confirmPayment,
+    handleNextAction,
+    isLoading,
+  } = useStripeContext();
   const { createPaymentMethod } = useStripe();
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardDetails, setCardDetails] = useState<CardDetails>({
@@ -99,9 +102,15 @@ export default function PaymentScreen() {
           tokenToUse
         );
       } else {
-        // En production, vous devrez créer un vrai token
-        // TODO: Implémenter createToken pour la production
-        throw new Error("Création de token non implémentée pour la production");
+        // En production, créer un vrai token avec les détails de la carte
+        try {
+          const tokenResponse = await createToken(cardDetails);
+          tokenToUse = tokenResponse.id;
+          console.log("Token créé pour la production:", tokenToUse);
+        } catch (error) {
+          console.error("Erreur lors de la création du token:", error);
+          throw new Error("Impossible de créer le token de paiement");
+        }
       }
 
       // 1. Créer l'abonnement avec le token

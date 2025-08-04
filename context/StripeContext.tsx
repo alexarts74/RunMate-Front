@@ -3,10 +3,16 @@ import { StripeProvider, useConfirmPayment } from "@stripe/stripe-react-native";
 import { Alert } from "react-native";
 import { stripeService } from "@/service/api/stripe";
 
-// Remplacez par votre clé publique Stripe
-const STRIPE_PUBLIC_KEY = "pk_test_VOTRE_CLE_PUBLIQUE";
+// Clé publique Stripe depuis les variables d'environnement
+const STRIPE_PUBLIC_KEY = process.env.STRIPE_PUBLIC_KEY || "";
 
 type StripeContextType = {
+  createToken: (cardDetails: {
+    number: string;
+    expMonth: string;
+    expYear: string;
+    cvc: string;
+  }) => Promise<{ id: string }>;
   createPaymentIntent: (
     amount: number,
     currency: string
@@ -70,6 +76,26 @@ export const StripeContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  // Créer un token Stripe
+  const createToken = async (cardDetails: {
+    number: string;
+    expMonth: string;
+    expYear: string;
+    cvc: string;
+  }) => {
+    try {
+      setIsLoading(true);
+      const response = await stripeService.createToken(cardDetails);
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la création du token", error);
+      Alert.alert("Erreur", "Impossible de créer le token de paiement");
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Créer un abonnement en utilisant le service
   const makeSubscription = async (planId: string, cardDetails?: any) => {
     try {
@@ -118,6 +144,7 @@ export const StripeContextProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const value = {
+    createToken,
     createPaymentIntent,
     makeSubscription,
     confirmPayment,
