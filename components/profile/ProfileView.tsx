@@ -21,7 +21,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           onPress={() => setIsEditing(true)}
           className="flex-row items-center px-3 py-3 rounded-full"
         >
-          <Ionicons name="pencil" size={20} color="#8101f7" />
+          <Ionicons name="pencil" size={20} color="#f0c2fe" />
         </Pressable>
       </View>
 
@@ -41,7 +41,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Nom complet
           </Text>
-          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-[#1e2429]">
+          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-background">
             <Text className="text-white">
               {user?.first_name} {user?.last_name}
             </Text>
@@ -52,7 +52,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Email
           </Text>
-          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-[#1e2429]">
+          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-background">
             <Text className="text-white">{user?.email}</Text>
           </View>
         </View>
@@ -61,7 +61,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Âge
           </Text>
-          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-[#1e2429]">
+          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-background">
             <Text className="text-white">{user?.age} ans</Text>
           </View>
         </View>
@@ -70,7 +70,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Genre
           </Text>
-          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-[#1e2429]">
+          <View className="w-full border border-[#2a3238] rounded-full p-4 bg-background">
             <Text className="text-white">{user?.gender}</Text>
           </View>
         </View>
@@ -79,7 +79,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           <Text className="text-white text-sm font-semibold pl-2 mb-1">
             Bio
           </Text>
-          <View className="w-full border border-[#2a3238] rounded-2xl p-4 bg-[#1e2429]">
+          <View className="w-full border border-[#2a3238] rounded-2xl p-4 bg-background">
             <Text className="text-white">{user?.bio}</Text>
           </View>
         </View>

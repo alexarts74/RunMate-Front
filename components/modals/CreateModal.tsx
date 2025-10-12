@@ -26,7 +26,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
         onPress={onClose}
       >
         <Pressable onPress={(e) => e.stopPropagation()}>
-          <View className="bg-[#1e2429] rounded-3xl w-[320px] shadow-lg">
+          <View className="bg-background rounded-3xl w-[320px] shadow-lg">
             {/* Header */}
             <View className="p-6 border-b border-gray-700">
               <Text className="text-white text-2xl font-bold text-center">
@@ -41,8 +41,8 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                 className="bg-background rounded-2xl overflow-hidden active:opacity-90"
               >
                 <View className="flex-row items-center p-4">
-                  <View className="w-12 h-12 bg-[#1e2429]/50 rounded-full items-center justify-center">
-                    <Ionicons name="calendar" size={24} color="#8101f7" />
+                  <View className="w-12 h-12 bg-background/50 rounded-full items-center justify-center">
+                    <Ionicons name="calendar" size={24} color="#f0c2fe" />
                   </View>
                   <View className="ml-4 flex-1">
                     <Text className="text-white text-lg font-semibold mb-1">
@@ -57,8 +57,8 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                 className="bg-background rounded-2xl overflow-hidden active:opacity-90"
               >
                 <View className="flex-row items-center p-4">
-                  <View className="w-12 h-12 bg-[#1e2429]/50 rounded-full items-center justify-center">
-                    <Ionicons name="people" size={24} color="#8101f7" />
+                  <View className="w-12 h-12 bg-background/50 rounded-full items-center justify-center">
+                    <Ionicons name="people" size={24} color="#f0c2fe" />
                   </View>
                   <View className="ml-4 flex-1">
                     <Text className="text-white text-lg font-semibold mb-1">

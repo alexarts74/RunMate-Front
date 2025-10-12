@@ -112,12 +112,12 @@ const ChatPage = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-[#12171b]"
+      className="flex-1 bg-background"
     >
       {/* Header */}
-      <View className="flex-row items-center px-4 pt-14 pb-4 bg-[#12171b] border-b border-[#394047]">
+      <View className="flex-row items-center px-4 pt-14 pb-4 bg-background border-b border-[#394047]">
         <Pressable onPress={() => router.back()} className="p-2 mr-3">
-          <Ionicons name="arrow-back" size={24} color="#8101f7" />
+          <Ionicons name="arrow-back" size={24} color="#401346" />
         </Pressable>
 
         <Image

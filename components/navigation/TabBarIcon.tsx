@@ -3,16 +3,58 @@ import { type IconProps } from "@expo/vector-icons/build/createIconSet";
 import { type ComponentProps } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
+import { View, TouchableOpacity } from "react-native";
+
+interface TabBarIconProps
+  extends IconProps<ComponentProps<typeof Ionicons>["name"]> {
+  focused?: boolean;
+  onPress?: () => void;
+}
 
 export function TabBarIcon({
   style,
+  focused,
+  onPress,
   ...rest
-}: IconProps<ComponentProps<typeof Ionicons>["name"]>) {
-  return (
-    <Ionicons
-      size={22}
-      style={[{ marginBottom: -3, fontFamily: "Kanit" }, style]}
-      {...rest}
-    />
+}: TabBarIconProps) {
+  const IconComponent = (
+    <>
+      {focused ? (
+        <View
+          style={{
+            width: 64,
+            height: 48,
+            borderRadius: 24,
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 0,
+            marginBottom: 2,
+          }}
+        >
+          <Ionicons
+            size={22}
+            style={[{ fontFamily: "Kanit" }, style]}
+            {...rest}
+          />
+        </View>
+      ) : (
+        <Ionicons
+          size={22}
+          style={[{ marginBottom: 2, fontFamily: "Kanit" }, style]}
+          {...rest}
+        />
+      )}
+    </>
   );
+
+  if (onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+        {IconComponent}
+      </TouchableOpacity>
+    );
+  }
+
+  return IconComponent;
 }

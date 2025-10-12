@@ -138,9 +138,9 @@ export default function EventDetailsScreen() {
           <View className="absolute z-10 top-12 left-4">
             <Pressable
               onPress={() => router.back()}
-              className="w-10 h-10 bg-[#12171b]/50 rounded-full items-center justify-center"
+              className="w-10 h-10 bg-background/50 rounded-full items-center justify-center"
             >
-              <Ionicons name="arrow-back" size={24} color="#8101f7" />
+              <Ionicons name="arrow-back" size={24} color="#401346" />
             </Pressable>
           </View>
         </View>
@@ -155,7 +155,7 @@ export default function EventDetailsScreen() {
           ) : (
             <View className="flex-row items-center space-x-1 space-y-2 mb-4">
               <View className="items-center mt-2.5 mr-2">
-                <Ionicons name="time-outline" size={20} color="#8101f7" />
+                <Ionicons name="time-outline" size={20} color="#401346" />
               </View>
 
               <View className="items-center">
@@ -168,7 +168,7 @@ export default function EventDetailsScreen() {
             </View>
           )}
 
-          <View className="flex-row items-center mb-8 bg-[#1e2429] p-4 rounded-2xl">
+          <View className="flex-row items-center mb-8 bg-background p-4 rounded-2xl">
             <Image
               source={{
                 uri:
@@ -195,8 +195,8 @@ export default function EventDetailsScreen() {
 
           <View className="space-y-6 mb-8">
             <View className="flex-row items-center ">
-              <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="calendar" size={20} color="#8101f7" />
+              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
+                <Ionicons name="calendar" size={20} color="#401346" />
               </View>
               <View className="ml-4">
                 <Text className="text-white text-lg">
@@ -215,15 +215,15 @@ export default function EventDetailsScreen() {
             </View>
 
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="location" size={20} color="#8101f7" />
+              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
+                <Ionicons name="location" size={20} color="#401346" />
               </View>
               <Text className="text-white ml-4 text-lg">{event.location}</Text>
             </View>
 
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-[#1e2429] rounded-full items-center justify-center">
-                <Ionicons name="trending-up" size={20} color="#8101f7" />
+              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
+                <Ionicons name="trending-up" size={20} color="#401346" />
               </View>
               <Text className="text-white ml-4 text-lg">
                 {event.distance} km
@@ -231,7 +231,7 @@ export default function EventDetailsScreen() {
             </View>
           </View>
 
-          <View className="bg-[#1e2429] p-4 rounded-2xl mb-8">
+          <View className="bg-background p-4 rounded-2xl mb-8">
             <Text className="text-white text-lg font-bold mb-2">
               Description
             </Text>
@@ -250,7 +250,7 @@ export default function EventDetailsScreen() {
                     // style={{ marginLeft: index > 0 ? -12 : 0 }}
                     className="relative"
                   >
-                    <View className="border-2 border-[#12171b] rounded-full">
+                    <View className="border-2 border-background rounded-full">
                       <Image
                         source={{
                           uri:
@@ -285,7 +285,7 @@ export default function EventDetailsScreen() {
         </View>
       </ScrollView>
 
-      <View className="px-6 pb-8 pt-4 bg-[#12171b]">
+      <View className="px-6 pb-8 pt-4 bg-background">
         <Pressable
           onPress={handleEventAction}
           className={`py-4 rounded-full ${

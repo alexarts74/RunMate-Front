@@ -30,7 +30,7 @@ export const PremiumFeatureModal = ({
       >
         <View className="bg-[#1e2429] rounded-2xl p-6 w-full max-w-sm border border-purple/30">
           <View className="items-center mb-4">
-            <Ionicons name="star" size={48} color="#8101f7" />
+            <Ionicons name="star" size={48} color="#f0c2fe" />
             <Text className="text-white text-xl font-bold mt-2 font-kanit">
               {title}
             </Text>

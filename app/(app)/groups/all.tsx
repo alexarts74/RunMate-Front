@@ -5,14 +5,13 @@ import {
   FlatList,
   Image,
   Pressable,
-  Alert,
-  StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { groupService } from "@/service/api/group";
-import { useRouter, useFocusEffect } from "expo-router";
-import LoadingScreen from "../LoadingScreen";
-import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
+import { useRouter } from "expo-router";
+import LoadingScreen from "@/components/LoadingScreen";
+import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
 
 type RunningGroupType = {
@@ -26,7 +25,7 @@ type RunningGroupType = {
   max_members: number;
 };
 
-const RunningGroup = () => {
+export default function AllGroupsScreen() {
   const [groups, setGroups] = useState<RunningGroupType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
@@ -60,21 +59,9 @@ const RunningGroup = () => {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchGroups();
-    }, [])
-  );
-
-  const closeModal = () => {
-    setShowPremiumModal(false);
-    router.replace("/");
-  };
-
-  const onUpgrade = () => {
-    router.push("/premium");
-    setShowPremiumModal(false);
-  };
+  useEffect(() => {
+    fetchGroups();
+  }, []);
 
   useEffect(() => {
     if (user?.is_premium) {
@@ -106,7 +93,9 @@ const RunningGroup = () => {
       />
 
       <View className="p-4">
-        <Text className="text-white font-bold text-lg mb-2">{item.name}</Text>
+        <Text className="text-white font-kanit-semibold text-lg mb-2">
+          {item.name}
+        </Text>
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
@@ -120,7 +109,9 @@ const RunningGroup = () => {
             className="bg-background px-4 py-2 rounded-lg"
             onPress={() => handleFeatureAccess(item.id)}
           >
-            <Text className="text-white font-semibold">Voir le groupe</Text>
+            <Text className="text-white font-kanit-semibold text-sm">
+              Voir le groupe
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -128,10 +119,19 @@ const RunningGroup = () => {
   );
 
   return (
-    <View className="bg-background flex-1">
-      <View
-        style={[styles.container, showPremiumModal && styles.blurContainer]}
-      >
+    <View className="flex-1 bg-background">
+      <SafeAreaView className="bg-background">
+        <View className="px-5 py-4 flex-row items-center border-b border-gray-700">
+          <Pressable onPress={() => router.back()} className="mr-3">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </Pressable>
+          <Text className="text-2xl font-kanit-semibold text-white">
+            Groupes de course
+          </Text>
+        </View>
+      </SafeAreaView>
+
+      <View className="flex-1">
         {isLoading ? (
           <LoadingScreen />
         ) : (
@@ -140,7 +140,7 @@ const RunningGroup = () => {
             renderItem={renderGroup}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
             ListEmptyComponent={() => (
               <View className="flex-1 items-center justify-center px-6 py-10">
                 <View className="bg-background/30 p-8 rounded-full mb-6">
@@ -155,16 +155,16 @@ const RunningGroup = () => {
                 </Text>
                 <Pressable
                   className="bg-purple rounded-full px-6 py-3 flex-row items-center"
-                  onPress={() => router.push("/")}
+                  onPress={() => router.push("/groups/create")}
                 >
                   <Ionicons
-                    name="people"
+                    name="add-circle"
                     size={20}
                     color="white"
                     style={{ marginRight: 8 }}
                   />
                   <Text className="text-white font-kanit font-semibold">
-                    Explorer les groupes
+                    Créer un groupe
                   </Text>
                 </Pressable>
               </View>
@@ -172,24 +172,20 @@ const RunningGroup = () => {
           />
         )}
       </View>
+
       <PremiumFeatureModal
-        onUpgrade={onUpgrade}
+        onUpgrade={() => {
+          router.push("/premium");
+          setShowPremiumModal(false);
+        }}
         visible={showPremiumModal}
-        onClose={closeModal}
+        onClose={() => {
+          setShowPremiumModal(false);
+          router.back();
+        }}
         title="Fonctionnalité Premium"
         description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Stay tuned !"
       />
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  blurContainer: {
-    opacity: 0.3,
-  },
-});
-
-export default RunningGroup;
+}

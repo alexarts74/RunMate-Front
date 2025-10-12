@@ -22,9 +22,9 @@ export function SignUpFormStep0({ onNext }: Props) {
       <View className="relative flex-row items-center justify-center my-12">
         <Pressable
           onPress={() => router.back()}
-          className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
+          className="bg-background p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
         >
-          <Ionicons name="arrow-back" size={22} color="#8101f7" />
+          <Ionicons name="arrow-back" size={22} color="#401346" />
         </Pressable>
 
         <Text className="text-white text-2xl font-kanit-bold text-center w-[80%]">
@@ -40,7 +40,7 @@ export function SignUpFormStep0({ onNext }: Props) {
           >
             <View className="flex-row items-center mb-2">
               <View className="bg-[#2a3238] p-2.5 rounded-full">
-                <Ionicons name="leaf-outline" size={22} color="#8101f7" />
+                <Ionicons name="leaf-outline" size={22} color="#401346" />
               </View>
               <Text className="text-white text-lg font-kanit-semibold ml-3">
                 Je suis un runner Chill
@@ -54,7 +54,7 @@ export function SignUpFormStep0({ onNext }: Props) {
               <Ionicons
                 name="arrow-forward-circle-outline"
                 size={18}
-                color="#8101f7"
+                color="#401346"
               />
               <Text className="text-purple ml-2 font-kanit-medium text-sm">
                 Choisir ce profil
@@ -68,7 +68,7 @@ export function SignUpFormStep0({ onNext }: Props) {
           >
             <View className="flex-row items-center mb-2">
               <View className="bg-[#2a3238] p-2.5 rounded-full">
-                <Ionicons name="trophy-outline" size={22} color="#8101f7" />
+                <Ionicons name="trophy-outline" size={22} color="#f0c2fe" />
               </View>
               <Text className="text-white text-lg font-kanit-semibold ml-3">
                 Je suis un runner Perf
@@ -82,7 +82,7 @@ export function SignUpFormStep0({ onNext }: Props) {
               <Ionicons
                 name="arrow-forward-circle-outline"
                 size={18}
-                color="#8101f7"
+                color="#f0c2fe"
               />
               <Text className="text-purple ml-2 font-kanit-medium text-sm">
                 Choisir ce profil

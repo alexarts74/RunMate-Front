@@ -4,8 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        purple: "#8101f7",
-        background: "#14141b",
+        purple: "#401346",
+        // purple: "#f0c2fe",
+        background: "#1b1d21",
         gray: {
           50: "#f9fafb",
           100: "#f3f4f6",
@@ -18,7 +19,7 @@ module.exports = {
           800: "#1f2937",
           900: "#111827",
         },
-        dark: "#1a2126",
+        dark: "#1b1d21",
       },
       fontFamily: {
         fredoka: ["Fredoka"],

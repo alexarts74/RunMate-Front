@@ -96,7 +96,7 @@ export function SignUpFormStep2({
             onPress={onBack}
             className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
           >
-            <Ionicons name="arrow-back" size={22} color="#8101f7" />
+            <Ionicons name="arrow-back" size={22} color="#f0c2fe" />
           </Pressable>
 
           <View className="flex-1">
@@ -264,7 +264,7 @@ export function SignUpFormStep2({
                 Sélectionnez votre âge
               </Text>
               <Pressable onPress={() => setShowAgePicker(false)}>
-                <Ionicons name="close" size={24} color="#8101f7" />
+                <Ionicons name="close" size={24} color="#f0c2fe" />
               </Pressable>
             </View>
             <Picker

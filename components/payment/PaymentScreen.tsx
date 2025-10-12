@@ -226,7 +226,7 @@ export default function PaymentScreen() {
                   <Ionicons
                     name="checkmark-circle"
                     size={16}
-                    color={selectedPlan.id === plan.id ? "#8101f7" : "#6B7280"}
+                    color={selectedPlan.id === plan.id ? "#f0c2fe" : "#6B7280"}
                   />
                   <Text className="text-white ml-2 font-kanit">{feature}</Text>
                 </View>
@@ -256,12 +256,12 @@ export default function PaymentScreen() {
           Informations de paiement
         </Text>
 
-        <View className="bg-[#1a1f24] rounded-xl p-4 mb-8">
+        <View className="bg-background rounded-xl p-4 mb-8">
           {/* Numéro de carte */}
           <View className="mb-4">
             <Text className="text-white mb-2 font-kanit">Numéro de carte</Text>
             <TextInput
-              className="bg-[#2a3238] text-white rounded-md p-2"
+              className="bg-background text-white rounded-md p-2"
               placeholder="4242 4242 4242 4242"
               placeholderTextColor="#6B7280"
               keyboardType="numeric"
@@ -278,7 +278,7 @@ export default function PaymentScreen() {
             <View className="flex-1 mr-2">
               <Text className="text-white mb-2 font-kanit">Mois (MM)</Text>
               <TextInput
-                className="bg-[#2a3238] text-white rounded-md p-2"
+                className="bg-background text-white rounded-md p-2"
                 placeholder="MM"
                 placeholderTextColor="#6B7280"
                 keyboardType="numeric"
@@ -291,7 +291,7 @@ export default function PaymentScreen() {
             <View className="flex-1 mr-2">
               <Text className="text-white mb-2 font-kanit">Année (AA)</Text>
               <TextInput
-                className="bg-[#2a3238] text-white rounded-md p-2"
+                className="bg-background text-white rounded-md p-2"
                 placeholder="AA"
                 placeholderTextColor="#6B7280"
                 keyboardType="numeric"
@@ -304,7 +304,7 @@ export default function PaymentScreen() {
             <View className="flex-1">
               <Text className="text-white mb-2 font-kanit">CVC</Text>
               <TextInput
-                className="bg-[#2a3238] text-white rounded-md p-2"
+                className="bg-background text-white rounded-md p-2"
                 placeholder="123"
                 placeholderTextColor="#6B7280"
                 keyboardType="numeric"
@@ -340,7 +340,7 @@ export default function PaymentScreen() {
         </Pressable>
 
         <View className="flex-row items-center justify-center mt-4 mb-10">
-          <Ionicons name="lock-closed" size={14} color="#8101f7" />
+          <Ionicons name="lock-closed" size={14} color="#f0c2fe" />
           <Text className="text-gray-400 ml-1 font-kanit text-sm">
             Paiement sécurisé via Stripe
           </Text>

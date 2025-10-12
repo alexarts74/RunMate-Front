@@ -1,192 +1,131 @@
-import React, { useState, useRef } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Animated,
-  Dimensions,
-} from "react-native";
-import { MatchesCarousel } from "@/components/matches/MatchesCarousel";
-import RunningGroup from "@/components/group/RunningGroup";
-import { Ionicons } from "@expo/vector-icons";
-import { EventsList } from "@/components/events/EventsList";
+import React, { useState, useEffect } from "react";
+import { View, Text, SafeAreaView, ScrollView, Pressable } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { MatchesSection } from "@/components/matches/MatchesSection";
+import { GroupsSection } from "@/components/group/GroupsSection";
+import { EventsSection } from "@/components/events/EventsSection";
 import { useAuth } from "@/context/AuthContext";
-import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
-import { EventsSelectionModal } from "@/components/events/EventsSelectionModal";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 const HomepageScreen = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<"matches" | "groups" | "events">(
-    "matches"
-  );
-  const [modalVisible, setModalVisible] = useState(false);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [eventsType, setEventsType] = useState<"all" | "my">("all");
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  const handleTabChange = (tab: "matches" | "groups" | "events") => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start(() => {
-      setActiveTab(tab);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }).start();
-    });
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour >= 5 && hour < 12) return "Bonjour";
+    if (hour >= 12 && hour < 18) return "Bon après-midi";
+    return "Bonsoir";
   };
 
-  // Vérification premium pour l'accès aux événements
-  const handleEventsTab = () => {
-    if (user?.is_premium) {
-      setModalVisible(true);
-    } else {
-      setShowPremiumModal(true);
-    }
-  };
-
-  // Gestion de la fermeture de la modale premium
-  const closePremiumModal = () => {
-    setShowPremiumModal(false);
-    // Rester sur l'onglet en cours ou revenir à l'onglet Matches
-    if (activeTab !== "matches") {
-      handleTabChange("matches");
-    }
-  };
-
-  // Gestion de la sélection du type d'événements
-  const handleSelectEventsType = (type: "all" | "my") => {
-    setEventsType(type);
-    handleTabChange("events");
-    setModalVisible(false);
-  };
-
-  const renderContent = () => {
-    return (
-      <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
-        {activeTab === "matches" ? (
-          <>
-            <View className="mb-8">
-              <MatchesCarousel />
-            </View>
-          </>
-        ) : activeTab === "groups" ? (
-          <>
-            <ScrollView>
-              <View className="my-8 h-fit">
-                <RunningGroup />
-              </View>
-              {/* <View className="mb-16">
-                <GetPremiumVersion />
-              </View> */}
-            </ScrollView>
-          </>
-        ) : (
-          <EventsList eventsType={eventsType} />
-        )}
-      </Animated.View>
-    );
+  const getWeatherIcon = () => {
+    const hour = currentTime.getHours();
+    if (hour >= 6 && hour < 12) return "sunny";
+    if (hour >= 12 && hour < 18) return "partly-sunny";
+    if (hour >= 18 && hour < 22) return "cloudy";
+    return "moon";
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1">
-        <View className="flex-row border-b border-gray-700">
-          <Pressable
-            onPress={() => handleTabChange("matches")}
-            className={`flex-1 py-4 ${
-              activeTab === "matches" ? "border-b-2 border-purple" : ""
-            }`}
-          >
-            <View className="flex-row items-center justify-center">
-              <Ionicons
-                name="football-outline"
-                size={20}
-                color={activeTab === "matches" ? "#8101f7" : "#ffffff"}
-              />
-              <Text
-                className={`ml-2 font-kanit font-semibold ${
-                  activeTab === "matches" ? "text-purple" : "text-white"
-                }`}
-              >
-                Matches
-              </Text>
-            </View>
-          </Pressable>
+    <View className="flex-1 bg-background">
+      {/* Header */}
+      <LinearGradient
+        colors={["#480f47", "#311332"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={{ flex: 0 }}
+      >
+        <SafeAreaView>
+          <View className="px-5 py-5">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1">
+                <Text className="text-3xl font-kanit-semibold text-white mb-1">
+                  {getGreeting()} {user?.first_name || "Runner"} !
+                </Text>
+                <View className="flex-row items-center">
+                  <Ionicons
+                    name={getWeatherIcon()}
+                    size={16}
+                    color="#f0c2fe"
+                    style={{ marginRight: 6 }}
+                  />
+                  <Text className="text-gray-300 font-kanit text-sm">
+                    Parfait pour courir maintenant
+                  </Text>
+                </View>
+              </View>
 
-          <Pressable
-            onPress={() => handleTabChange("groups")}
-            className={`flex-1 py-4 ${
-              activeTab === "groups" ? "border-b-2 border-purple" : ""
-            }`}
-          >
-            <View className="flex-row items-center justify-center">
-              <Ionicons
-                name="people-outline"
-                size={20}
-                color={activeTab === "groups" ? "#8101f7" : "#ffffff"}
-              />
-              <Text
-                className={`ml-2 font-kanit font-semibold ${
-                  activeTab === "groups" ? "text-purple" : "text-white"
-                }`}
+              <Pressable
+                className="bg-white/10 backdrop-blur-sm rounded-xl py-3 px-4 flex-row items-center"
+                onPress={() => router.push("/create")}
               >
-                Groups
-              </Text>
+                <Ionicons
+                  name="play"
+                  size={18}
+                  color="white"
+                  style={{ marginRight: 6 }}
+                />
+                <Text className="text-white font-kanit-semibold text-sm">
+                  Run
+                </Text>
+              </Pressable>
             </View>
-          </Pressable>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
 
-          <Pressable
-            onPress={handleEventsTab}
-            className={`flex-1 py-4 ${
-              activeTab === "events" ? "border-b-2 border-purple" : ""
-            }`}
-          >
-            <View className="flex-row items-center justify-center">
-              <Ionicons
-                name="calendar-outline"
-                size={20}
-                color={activeTab === "events" ? "#8101f7" : "#ffffff"}
-              />
-              <Text
-                className={`ml-2 font-kanit font-semibold ${
-                  activeTab === "events" ? "text-purple" : "text-white"
-                }`}
-              >
-                Events
-              </Text>
-            </View>
-          </Pressable>
+      {/* Contenu scrollable */}
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        {/* Section Matches */}
+        <View className="bg-background">
+          <MatchesSection />
         </View>
 
-        <View className="flex-1">{renderContent()}</View>
-      </View>
+        {/* Séparateur avec titre */}
+        <View className="mx-5 my-4">
+          <View className="flex-row items-center mb-2">
+            <View className="h-px bg-gray-700 flex-1" />
+            {/* <Text className="text-gray-500 text-xs font-kanit px-3">
+              GROUPES DE COURSE
+            </Text> */}
+            <View className="h-px bg-gray-700 flex-1" />
+          </View>
+        </View>
 
-      {/* Utilisation du composant EventsSelectionModal */}
-      <EventsSelectionModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSelectEventsType={handleSelectEventsType}
-      />
+        {/* Section Groupes */}
+        <GroupsSection />
 
-      {/* Modale premium pour les utilisateurs non premium */}
-      <PremiumFeatureModal
-        onUpgrade={() => {
-          router.push("/premium");
-          setShowPremiumModal(false);
-        }}
-        visible={showPremiumModal}
-        onClose={closePremiumModal}
-        title="Fonctionnalité Premium"
-        description="Les événements seront bientôt disponibles dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
-      />
-    </SafeAreaView>
+        {/* Séparateur avec titre */}
+        <View className="mx-5 my-4">
+          <View className="flex-row items-center mb-2">
+            <View className="h-px bg-gray-700 flex-1" />
+            {/* <Text className="text-gray-500 text-xs font-kanit px-3">
+              ÉVÉNEMENTS À VENIR
+            </Text> */}
+            <View className="h-px bg-gray-700 flex-1" />
+          </View>
+        </View>
+
+        {/* Section Events */}
+        <EventsSection />
+
+        {/* Espace supplémentaire pour laisser voir qu'il y a plus */}
+        <View className="h-32" />
+      </ScrollView>
+    </View>
   );
 };
 

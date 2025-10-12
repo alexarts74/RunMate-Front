@@ -184,13 +184,13 @@ export function CreateGroupForm() {
         </View>
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#394047] bg-[#12171b]">
+      <View className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#394047] bg-background">
         <Pressable
           onPress={handleSubmit}
           disabled={isLoading}
           className="bg-purple py-3 px-6 rounded-xl active:opacity-90 mx-auto"
         >
-          <Text className="text-[#12171b] text-center font-bold text-base">
+          <Text className="text-background text-center font-bold text-base">
             {isLoading ? "Création..." : "Créer le groupe"}
           </Text>
         </Pressable>

@@ -8,7 +8,6 @@ import { NotificationsProvider } from "@/context/NotificationContext";
 import { StripeContextProvider } from "@/context/StripeContext";
 import * as Notifications from "expo-notifications";
 import { loadFonts } from "../utils/fonts";
-import { IntroScreen } from "@/components/IntroScreen";
 import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 

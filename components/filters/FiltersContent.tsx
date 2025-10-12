@@ -65,10 +65,10 @@ export function FiltersContent() {
       {/* Filtres d'âge */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
-          <Ionicons name="person-outline" size={24} color="#8101f7" />
+          <Ionicons name="person-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-lg ml-2">Âge</Text>
         </View>
-        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+        <View className="bg-background p-4 rounded-xl border border-gray-700">
           <Text className="text-white mb-2">
             Entre {filters.age_min} et {filters.age_max} ans
           </Text>
@@ -86,7 +86,7 @@ export function FiltersContent() {
             step={1}
             sliderLength={280}
             selectedStyle={{
-              backgroundColor: "#8101f7",
+              backgroundColor: "#f0c2fe",
             }}
             unselectedStyle={{
               backgroundColor: "#394047",
@@ -96,7 +96,7 @@ export function FiltersContent() {
               alignItems: "center",
             }}
             markerStyle={{
-              backgroundColor: "#8101f7",
+              backgroundColor: "#f0c2fe",
               height: 20,
               width: 20,
             }}
@@ -113,10 +113,10 @@ export function FiltersContent() {
       {/* Type de runner */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
-          <Ionicons name="fitness-outline" size={24} color="#8101f7" />
+          <Ionicons name="fitness-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-lg ml-2">Type de runner</Text>
         </View>
-        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+        <View className="bg-background p-4 rounded-xl border border-gray-700">
           <View className="flex-row justify-between">
             {runningTypeOptions.map((option) => (
               <Pressable
@@ -150,27 +150,27 @@ export function FiltersContent() {
       {/* Filtre de genre */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
-          <Ionicons name="male-female-outline" size={24} color="#8101f7" />
+          <Ionicons name="male-female-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-lg ml-2">Genre</Text>
         </View>
         <Pressable
           onPress={() => setShowGenderModal(true)}
-          className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 flex-row justify-between items-center"
+          className="bg-background p-4 rounded-xl border border-gray-700 flex-row justify-between items-center"
         >
           <Text className="text-white">
             {genderOptions.find((opt) => opt.value === filters.gender)?.label ||
               "Sélectionner"}
           </Text>
-          <Ionicons name="chevron-down" size={20} color="#8101f7" />
+          <Ionicons name="chevron-down" size={20} color="#f0c2fe" />
         </Pressable>
       </View>
       {/* Filtre de distance */}
       <View className="mb-8">
         <View className="flex-row items-center mb-4">
-          <Ionicons name="location-outline" size={24} color="#8101f7" />
+          <Ionicons name="location-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-lg ml-2">Distance maximale</Text>
         </View>
-        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700">
+        <View className="bg-background p-4 rounded-xl border border-gray-700">
           <Text className="text-white mb-2">{filters.distance} km</Text>
           <Slider
             value={filters.distance}
@@ -180,9 +180,9 @@ export function FiltersContent() {
             minimumValue={1}
             maximumValue={100}
             step={1}
-            minimumTrackTintColor="#8101f7"
+            minimumTrackTintColor="#f0c2fe"
             maximumTrackTintColor="#394047"
-            thumbTintColor="#8101f7"
+            thumbTintColor="#f0c2fe"
           />
           <View className="flex-row justify-between mt-2">
             <Text className="text-white">1 km</Text>
@@ -193,12 +193,12 @@ export function FiltersContent() {
       {/* Filtres de compatibilité */}
       <View className="mb-12">
         <View className="flex-row items-center mb-4">
-          <Ionicons name="fitness-outline" size={24} color="#8101f7" />
+          <Ionicons name="fitness-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-lg ml-2">
             Critères de compatibilité
           </Text>
         </View>
-        <View className="bg-[#1e2429] p-4 rounded-xl border border-gray-700 space-y-6">
+        <View className="bg-background p-4 rounded-xl border border-gray-700 space-y-6">
           {/* Critères communs */}
           <View className="flex-row justify-between mb-2 items-center">
             <Text className="text-white">Rythme similaire</Text>
@@ -207,7 +207,7 @@ export function FiltersContent() {
               onValueChange={(value) =>
                 setFilters((prev) => ({ ...prev, filter_pace: value }))
               }
-              trackColor={{ false: "#394047", true: "#8101f7" }}
+              trackColor={{ false: "#394047", true: "#f0c2fe" }}
             />
           </View>
 
@@ -226,7 +226,7 @@ export function FiltersContent() {
                       filter_competition_goals: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                  trackColor={{ false: "#394047", true: "#f0c2fe" }}
                 />
               </View>
               <View className="flex-row justify-between items-center mb-2">
@@ -241,7 +241,7 @@ export function FiltersContent() {
                       filter_training_days: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                  trackColor={{ false: "#394047", true: "#f0c2fe" }}
                 />
               </View>
             </>
@@ -257,7 +257,7 @@ export function FiltersContent() {
                       filter_availability: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                  trackColor={{ false: "#394047", true: "#f0c2fe" }}
                 />
               </View>
               <View className="flex-row justify-between items-center mb-2">
@@ -272,7 +272,7 @@ export function FiltersContent() {
                       filter_social_preferences: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#8101f7" }}
+                  trackColor={{ false: "#394047", true: "#f0c2fe" }}
                 />
               </View>
             </>
@@ -282,11 +282,11 @@ export function FiltersContent() {
       {/* Modals */}
       <Modal visible={showGenderModal} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-[#1e2429] rounded-t-3xl p-6">
+          <View className="bg-background rounded-t-3xl p-6">
             <View className="flex-row justify-between items-center mb-4">
               <Text className="text-white text-xl">Sélectionner le genre</Text>
               <Pressable onPress={() => setShowGenderModal(false)}>
-                <Ionicons name="close" size={24} color="#8101f7" />
+                <Ionicons name="close" size={24} color="#f0c2fe" />
               </Pressable>
             </View>
             {genderOptions.map((option) => (
@@ -297,7 +297,7 @@ export function FiltersContent() {
                   setShowGenderModal(false);
                 }}
                 className={`p-4 border-b border-gray-700 ${
-                  filters.gender === option.value ? "bg-[#2a3238]" : ""
+                  filters.gender === option.value ? "bg-background" : ""
                 }`}
               >
                 <Text

@@ -1,31 +1,29 @@
+import React, { useState, useCallback, useRef } from "react";
 import {
   View,
   Text,
   Pressable,
+  SafeAreaView,
   Dimensions,
   FlatList,
   ViewToken,
-  Animated,
 } from "react-native";
-import React, { useState, useCallback, useRef } from "react";
 import { useMatches } from "@/context/MatchesContext";
 import { MatchCard } from "@/components/matches/MatchCard";
 import { router, useFocusEffect } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MatchUser } from "@/interface/Matches";
-import LoadingScreen from "../LoadingScreen";
+import LoadingScreen from "@/components/LoadingScreen";
 
-export function MatchesCarousel() {
+export default function AllMatchesScreen() {
   const { matches, refreshMatches, isLoading } = useMatches();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
 
-  // Configuration du carrousel
   const { width: screenWidth } = Dimensions.get("window");
   const ITEM_WIDTH = screenWidth * 0.95;
 
-  // Rafraîchir les matches au focus initial
   useFocusEffect(
     React.useCallback(() => {
       if (isInitialLoad) {
@@ -35,7 +33,6 @@ export function MatchesCarousel() {
     }, [isInitialLoad])
   );
 
-  // Configuration de la visibilité des items
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50,
     minimumViewTime: 300,
@@ -50,14 +47,9 @@ export function MatchesCarousel() {
     []
   );
 
-  // Rendu d'un item du carrousel sans effet d'orientation
   const renderItem = ({ item, index }: { item: MatchUser; index: number }) => {
     const isActive = index === activeIndex;
-
-    // Masquer les cartes non actives
     const opacity = isActive ? 1 : 0;
-
-    const offset = (screenWidth - ITEM_WIDTH) / 2;
 
     return (
       <View
@@ -71,18 +63,14 @@ export function MatchesCarousel() {
           style={{
             width: ITEM_WIDTH,
             opacity: opacity,
-            height: 550, // Hauteur augmentée
-            justifyContent: "flex-end", // Aligner les cartes en bas
+            height: 550,
+            justifyContent: "flex-end",
           }}
         >
           <MatchCard match={item} />
         </View>
       </View>
     );
-  };
-
-  const removeDistanceFilter = () => {
-    router.push("/runner/filters");
   };
 
   const goToPrevious = () => {
@@ -120,36 +108,33 @@ export function MatchesCarousel() {
   };
 
   return (
-    <View className="bg-background">
-      {/* Header */}
-      <View className="bg-background">
-        <View className="px-5 pt-6 pb-2">
-          <View className="flex-row justify-between items-center">
-            <View className="flex-row items-center">
-              <View className="w-1 h-6 bg-purple rounded-full mr-3" />
-              <Text className="text-2xl font-kanit-semibold text-white">
-                Vos matches
-              </Text>
-            </View>
-
-            <Pressable
-              onPress={() => router.push("/runner/filters")}
-              className="bg-background p-2 rounded-xl flex-row items-center border border-gray-700"
-            >
-              <Ionicons name="filter" size={20} color="#f0c2fe" />
+    <View className="flex-1 bg-background">
+      <SafeAreaView className="bg-background">
+        <View className="px-5 py-4 flex-row justify-between items-center border-b border-gray-700">
+          <View className="flex-row items-center flex-1">
+            <Pressable onPress={() => router.back()} className="mr-3">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
             </Pressable>
+            <Text className="text-2xl font-kanit-semibold text-white">
+              Tous vos matches
+            </Text>
           </View>
+
+          <Pressable
+            onPress={() => router.push("/runner/filters")}
+            className="bg-background p-2 rounded-xl border border-gray-700"
+          >
+            <Ionicons name="filter" size={20} color="#f0c2fe" />
+          </Pressable>
         </View>
-      </View>
+      </SafeAreaView>
 
-      {/* Contenu principal */}
-
-      <View>
+      <View className="flex-1">
         {isLoading ? (
           <LoadingScreen />
         ) : matches?.length === 0 || matches === undefined ? (
-          <View className="items-center justify-center px-6 py-6">
-            <View className=" p-6 rounded-2xl mb-6 items-center">
+          <View className="items-center justify-center px-6 py-12">
+            <View className="p-6 rounded-2xl mb-6 items-center">
               <Ionicons
                 name="search"
                 size={60}
@@ -162,7 +147,7 @@ export function MatchesCarousel() {
               </Text>
             </View>
             <Pressable
-              onPress={removeDistanceFilter}
+              onPress={() => router.push("/runner/filters")}
               className="bg-purple rounded-full px-6 py-3 flex-row items-center"
             >
               <Ionicons
@@ -177,7 +162,7 @@ export function MatchesCarousel() {
             </Pressable>
           </View>
         ) : (
-          <View className="relative">
+          <View className="relative flex-1">
             {/* Boutons de navigation */}
             <View
               className="absolute top-1/2 left-0 right-0 flex-row justify-between px-4 z-10"

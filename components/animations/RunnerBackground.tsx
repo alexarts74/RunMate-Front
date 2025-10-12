@@ -91,7 +91,7 @@ export const RunnerBackground = () => {
             },
           ]}
         >
-          <Ionicons name="walk" size={24} color="#8101f7" />
+          <Ionicons name="walk" size={24} color="#401346" />
         </Animated.View>
       ))}
     </View>

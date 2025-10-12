@@ -94,14 +94,14 @@ export default function GroupDetailsScreen() {
 
   if (!group) {
     return (
-      <View className="flex-1 bg-[#12171b] items-center justify-center">
+      <View className="flex-1 bg-background items-center justify-center">
         <Text className="text-white">Groupe non trouvé</Text>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-[#12171b]">
+    <View className="flex-1 bg-background">
       <ScrollView>
         {/* Image de couverture et infos de base */}
         <View className="relative h-64">

@@ -26,7 +26,7 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <StyledView className="space-y-4">
-      <StyledView className="bg-[#1e2429] rounded-xl overflow-hidden">
+      <StyledView className="bg-background rounded-xl overflow-hidden">
         {items.map((item, index) => (
           <StyledPressable
             key={item.title}
@@ -36,7 +36,7 @@ export default function SettingsSection({
             onPress={item.onToggle}
           >
             <StyledView className="flex-row items-center space-x-3 flex-1">
-              <Ionicons name={item.icon} size={24} color="#8101f7" />
+              <Ionicons name={item.icon} size={24} color="#f0c2fe" />
               <StyledView className="flex-1">
                 <StyledText className="text-white font-semibold">
                   {item.title}
@@ -51,7 +51,7 @@ export default function SettingsSection({
             <Switch
               value={item.value}
               onValueChange={item.onToggle}
-              trackColor={{ false: "#2a3238", true: "#8101f7" }}
+              trackColor={{ false: "#2a3238", true: "#f0c2fe" }}
               thumbColor="#fff"
             />
           </StyledPressable>

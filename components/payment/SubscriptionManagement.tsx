@@ -146,7 +146,7 @@ export default function SubscriptionManagement() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-background justify-center items-center">
-        <ActivityIndicator size="large" color="#8101f7" />
+        <ActivityIndicator size="large" color="#f0c2fe" />
         <Text className="text-white mt-4 font-kanit">
           Chargement des informations...
         </Text>
@@ -160,7 +160,7 @@ export default function SubscriptionManagement() {
         <View className="flex-row items-center mb-6">
           <Pressable
             onPress={() => router.back()}
-            className="bg-[#1e2429] p-2 rounded-xl mr-3"
+            className="bg-background p-2 rounded-xl mr-3"
           >
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </Pressable>
@@ -170,12 +170,12 @@ export default function SubscriptionManagement() {
         </View>
 
         {/* Statut de l'abonnement */}
-        <View className="bg-[#1a1f24] p-5 rounded-xl mb-6">
+        <View className="bg-background p-5 rounded-xl mb-6">
           {subscription ? (
             <>
               <View className="flex-row justify-between items-center mb-4">
                 <View className="flex-row items-center">
-                  <Ionicons name="diamond" size={24} color="#8101f7" />
+                  <Ionicons name="diamond" size={24} color="#f0c2fe" />
                   <Text className="text-xl font-kanit-semibold text-white ml-2">
                     RunMate Premium
                   </Text>
@@ -255,7 +255,7 @@ export default function SubscriptionManagement() {
               {!subscription.cancelAtPeriodEnd && (
                 <Pressable
                   onPress={handleCancelSubscription}
-                  className="bg-[#2a3238] py-3 rounded-xl items-center mt-2"
+                  className="bg-background py-3 rounded-xl items-center mt-2"
                 >
                   <Text className="text-white font-kanit">
                     Annuler l'abonnement
@@ -268,7 +268,7 @@ export default function SubscriptionManagement() {
               <Ionicons
                 name="diamond-outline"
                 size={40}
-                color="#8101f7"
+                color="#f0c2fe"
                 className="mb-4"
               />
               <Text className="text-white text-center font-kanit-semibold text-lg mb-3">
@@ -296,7 +296,7 @@ export default function SubscriptionManagement() {
               Historique des paiements
             </Text>
 
-            <View className="bg-[#1a1f24] rounded-xl overflow-hidden">
+            <View className="bg-background rounded-xl overflow-hidden">
               {paymentHistory.map((payment, index) => (
                 <View
                   key={payment.id}

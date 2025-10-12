@@ -113,7 +113,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             Prénom
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+            className={`w-full border rounded-full p-4 bg-background text-white ${
               focusedInput === "first_name"
                 ? "border-purple"
                 : "border-[#2a3238]"
@@ -132,7 +132,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             Nom
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+            className={`w-full border rounded-full p-4 bg-background text-white ${
               focusedInput === "last_name"
                 ? "border-purple"
                 : "border-[#2a3238]"
@@ -151,7 +151,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             Âge
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-[#1e2429] text-white ${
+            className={`w-full border rounded-full p-4 bg-background text-white ${
               focusedInput === "age" ? "border-purple" : "border-[#2a3238]"
             }`}
             placeholder="Âge"
@@ -176,16 +176,16 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             placeholder="Sélectionnez votre genre"
             boxStyles={{
               borderWidth: 1,
-              borderColor: focusedInput === "gender" ? "#8101f7" : "#2a3238",
+              borderColor: focusedInput === "gender" ? "#f0c2fe" : "#2a3238",
               borderRadius: 9999,
               padding: 16,
-              backgroundColor: "#1e2429",
+              backgroundColor: "#background",
             }}
             dropdownStyles={{
               borderWidth: 1,
               borderColor: "#2a3238",
               borderRadius: 16,
-              backgroundColor: "#1e2429",
+              backgroundColor: "#background",
               marginTop: 4,
             }}
             inputStyles={{ color: "#fff" }}
@@ -199,7 +199,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             Bio
           </Text>
           <TextInput
-            className={`w-full border rounded-2xl p-4 bg-[#1e2429] text-white ${
+            className={`w-full border rounded-2xl p-4 bg-background text-white ${
               focusedInput === "bio" ? "border-purple" : "border-[#2a3238]"
             }`}
             placeholder="Bio"
