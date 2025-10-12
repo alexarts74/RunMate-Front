@@ -5,17 +5,13 @@ class GroupService {
   async getGroups() {
     try {
       const response = await apiClient.get("/running_groups");
-      // Si response est directement le tableau de groupes
       if (Array.isArray(response)) {
         return response;
       }
-
-      // Si les données sont dans response.data
       if (response.data) {
         return response.data;
       }
-
-      return []; // Retourne un tableau vide si pas de données
+      return [];
     } catch (error) {
       console.error("Erreur lors de la récupération des groupes:", error);
       throw error;

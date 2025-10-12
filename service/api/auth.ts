@@ -1,3 +1,4 @@
+import User from "@/interface/User";
 import { authStorage } from "../auth/storage";
 import { apiClient } from "./client";
 
@@ -89,5 +90,14 @@ export const authService = {
 
   async deleteAccount() {
     return await apiClient.delete("/users/delete_account");
+  },
+
+  async updateUserSubscriptionPlan(userData: User) {
+    return await apiClient.put("/users/update_subscription_plan", {
+      user: {
+        ...userData,
+        is_premium: userData.is_premium,
+      },
+    });
   },
 };

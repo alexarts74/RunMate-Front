@@ -20,7 +20,7 @@ export function PaceDistanceInputs({
         Temps de course* (min/km)
       </Text>
       <TextInput
-        className={`w-full border rounded-full p-4 mb-4 bg-[#12171b] text-white ${
+        className={`w-full border rounded-full p-4 mb-4 bg-background text-white ${
           focusedInput === "pace" ? "border-purple" : "border-gray"
         }`}
         placeholder="Allure actuelle (min/km)"
@@ -36,7 +36,7 @@ export function PaceDistanceInputs({
         Distance habituelle*
       </Text>
       <TextInput
-        className={`w-full border rounded-full p-4 mb-4 bg-[#12171b] text-white ${
+        className={`w-full border rounded-full p-4 mb-4 bg-background text-white ${
           focusedInput === "distance" ? "border-purple" : "border-gray"
         }`}
         placeholder="Distance habituelle (km)"

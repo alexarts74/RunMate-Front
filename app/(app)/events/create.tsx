@@ -17,12 +17,11 @@ import { eventService } from "@/service/api/event";
 import { CreateEventData } from "@/interface/Event";
 import { UserSearch } from "@/components/UserSearch";
 import User from "@/interface/User";
-import { debounce } from "lodash";
 import * as Location from "expo-location";
-import { BlurView } from "expo-blur";
 import { validateCreateEventForm } from "@/constants/formValidation";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
+import { debounce } from "lodash";
 
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
@@ -256,7 +255,7 @@ export default function CreateEventScreen() {
       >
         <View className="flex-row items-center p-4 border-b border-gray-700">
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color="#8101f7" />
+            <Ionicons name="close" size={24} color="#401346" />
           </Pressable>
           <Text className="text-white text-xl font-bold">
             Créer un événement
@@ -269,7 +268,7 @@ export default function CreateEventScreen() {
             <View>
               <Pressable
                 onPress={handleImagePick}
-                className="h-40 bg-[#1e2429] rounded-xl items-center justify-center mb-1 border border-gray-700"
+                className="h-40 bg-background rounded-xl items-center justify-center mb-1 border border-gray-700"
               >
                 {formData.cover_image ? (
                   <Image
@@ -298,7 +297,7 @@ export default function CreateEventScreen() {
                 Nom de l'événement
               </Text>
               <TextInput
-                className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                className={`bg-background text-white p-4 rounded-xl border ${
                   errors.name ? "border-red-500" : "border-gray-700"
                 }`}
                 placeholder="Ex: Course matinale"
@@ -317,7 +316,7 @@ export default function CreateEventScreen() {
             <View>
               <Text className="text-white text-lg mb-2">Description</Text>
               <TextInput
-                className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                className={`bg-background text-white p-4 rounded-xl border ${
                   errors.description ? "border-red-500" : "border-gray-700"
                 }`}
                 placeholder="Décrivez votre événement"
@@ -342,7 +341,7 @@ export default function CreateEventScreen() {
               <Text className="text-white text-lg mb-2">Date et heure</Text>
               <Pressable
                 onPress={() => setShowDatePicker(true)}
-                className={`bg-[#1e2429] p-4 rounded-xl border ${
+                className={`bg-background p-4 rounded-xl border ${
                   errors.start_date ? "border-red-500" : "border-gray-700"
                 }`}
               >
@@ -401,7 +400,7 @@ export default function CreateEventScreen() {
             <View>
               <Text className="text-white text-lg mb-2">Lieu</Text>
               <TextInput
-                className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                className={`bg-background text-white p-4 rounded-xl border ${
                   errors.location ? "border-red-500" : "border-gray-700"
                 }`}
                 placeholder="Rechercher une adresse..."
@@ -419,7 +418,7 @@ export default function CreateEventScreen() {
               )}
 
               {suggestions.length > 0 && (
-                <View className="bg-[#1e2429] mt-1 rounded-xl overflow-hidden absolute w-full z-10 border border-gray-700">
+                <View className="bg-background mt-1 rounded-xl overflow-hidden absolute w-full z-10 border border-gray-700">
                   {suggestions.map((suggestion, index) => (
                     <Pressable
                       key={index}
@@ -438,7 +437,7 @@ export default function CreateEventScreen() {
             <View>
               <Text className="text-white text-lg mb-2">Distance (km)</Text>
               <TextInput
-                className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                className={`bg-background text-white p-4 rounded-xl border ${
                   errors.distance ? "border-red-500" : "border-gray-700"
                 }`}
                 placeholder="Ex: 5"
@@ -462,7 +461,7 @@ export default function CreateEventScreen() {
                 Nombre maximum de participants
               </Text>
               <TextInput
-                className={`bg-[#1e2429] text-white p-4 rounded-xl border ${
+                className={`bg-background text-white p-4 rounded-xl border ${
                   errors.max_participants ? "border-red-500" : "border-gray-700"
                 }`}
                 placeholder="Ex: 10"
@@ -507,6 +506,10 @@ export default function CreateEventScreen() {
 
       {/* Modal Premium */}
       <PremiumFeatureModal
+        onUpgrade={() => {
+          router.push("/premium");
+          setShowPremiumModal(false);
+        }}
         visible={showPremiumModal}
         onClose={closeModal}
         title="Fonctionnalité Premium"

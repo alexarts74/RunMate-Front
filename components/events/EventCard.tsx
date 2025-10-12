@@ -40,7 +40,7 @@ export const EventCard = ({
         <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
 
         <View className="flex-row items-center mb-2">
-          <Ionicons name="calendar" size={16} color="#8101f7" />
+          <Ionicons name="calendar" size={16} color="#f0c2fe" />
           <Text className="text-white ml-2">
             {new Date(event.start_date).toLocaleDateString()}
           </Text>
@@ -54,14 +54,14 @@ export const EventCard = ({
 
         <View className="flex-row justify-between items-center mb-3">
           <View className="flex-row items-center">
-            <Ionicons name="location" size={16} color="#8101f7" />
+            <Ionicons name="location" size={16} color="#f0c2fe" />
             <Text className="text-white ml-2">{event.location}</Text>
           </View>
         </View>
 
         <View className="flex-row justify-between items-center mb-4">
           <View className="flex-row items-center">
-            <Ionicons name="trending-up" size={16} color="#8101f7" />
+            <Ionicons name="trending-up" size={16} color="#f0c2fe" />
             <Text className="text-white ml-2">{event.distance} km</Text>
           </View>
         </View>

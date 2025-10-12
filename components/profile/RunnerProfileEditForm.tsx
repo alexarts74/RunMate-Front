@@ -60,15 +60,15 @@ export function RunnerProfileEditForm({
           </Text>
           <Pressable
             onPress={() => setIsEditing(false)}
-            className="bg-[#2a3238] p-3 rounded-full"
+            className="bg-background p-3 rounded-full"
           >
-            <Ionicons name="close" size={20} color="#8101f7" />
+            <Ionicons name="close" size={20} color="#f0c2fe" />
           </Pressable>
         </View>
 
-        <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="fitness-outline" size={24} color="#8101f7" />
+            <Ionicons name="fitness-outline" size={24} color="#f0c2fe" />
             <Text className="text-white text-base font-semibold">
               Performance
             </Text>
@@ -80,20 +80,17 @@ export function RunnerProfileEditForm({
           />
         </View>
 
-        <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="trophy-outline" size={24} color="#8101f7" />
+            <Ionicons name="trophy-outline" size={24} color="#f0c2fe" />
             <Text className="text-white text-base font-semibold">Objectif</Text>
           </View>
-          <ObjectiveSelect
-            value={formData.objective}
-            handleChange={handleChange}
-          />
+          <ObjectiveSelect handleChange={handleChange} />
         </View>
 
-        <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="calendar-outline" size={24} color="#8101f7" />
+            <Ionicons name="calendar-outline" size={24} color="#f0c2fe" />
             <Text className="text-white text-base font-semibold">
               Disponibilités
             </Text>

@@ -71,10 +71,10 @@ export default function LoginForm() {
       <View className="flex-row items-center mb-10 mt-16">
         <Pressable
           onPress={() => router.replace("/")}
-          className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80"
+          className="bg-background p-1.5 rounded-full border border-gray-700 active:opacity-80"
           style={{ position: "absolute", zIndex: 10 }}
         >
-          <Ionicons name="arrow-back" size={22} color="#8101f7" />
+          <Ionicons name="arrow-back" size={22} color="#401346" />
         </Pressable>
         <View className="flex-1 items-center justify-center">
           <Text className="text-2xl font-bold text-white text-center">
@@ -101,7 +101,7 @@ export default function LoginForm() {
                   : "border-gray-700"
               }`}
             >
-              <Ionicons name="mail-outline" size={20} color="#8101f7" />
+              <Ionicons name="mail-outline" size={20} color="#401346" />
               <TextInput
                 className="flex-1 text-white ml-3 font-kanit"
                 placeholder="Email"
@@ -134,7 +134,7 @@ export default function LoginForm() {
                   : "border-gray-700"
               }`}
             >
-              <Ionicons name="lock-closed-outline" size={20} color="#8101f7" />
+              <Ionicons name="lock-closed-outline" size={20} color="#401346" />
               <TextInput
                 className="flex-1 text-white ml-3 font-kanit"
                 placeholder="Mot de passe"

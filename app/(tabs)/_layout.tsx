@@ -1,9 +1,11 @@
+// TabLayout.tsx
 import { Tabs } from "expo-router";
 import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { BlurView } from "expo-blur";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
-import { BlurView } from "expo-blur";
 
 function CreateActionButton({ focused }: { focused: boolean }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -12,8 +14,8 @@ function CreateActionButton({ focused }: { focused: boolean }) {
     <>
       <TabBarIcon
         name="add-circle"
-        color={focused ? "#8101f7" : "#687076"}
-        size={26}
+        color={focused ? "#f0c2fe" : "rgba(255, 255, 255, 0.6)"}
+        focused={focused}
         onPress={() => setModalVisible(true)}
       />
       <CreateModal
@@ -30,57 +32,72 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#8101f7",
-        tabBarInactiveTintColor: "#687076",
+        tabBarActiveTintColor: "#f0c2fe",
+        tabBarInactiveTintColor: "rgba(255, 255, 255, 0.6)",
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
+          bottom: 15,
+          marginHorizontal: "6%",
+          alignSelf: "center",
+          width: "88%",
+          maxWidth: "90%",
           backgroundColor: "transparent",
-          borderTopColor: "transparent",
-          height: 85,
-          paddingBottom: 28,
-          paddingTop: 0,
-          elevation: 0,
+          borderTopWidth: 0,
+          height: 60,
+          paddingBottom: 5,
+          paddingTop: 5,
+          shadowColor: "transparent",
           shadowOpacity: 0,
+          elevation: 0,
         },
         tabBarItemStyle: {
-          paddingVertical: 8,
+          paddingVertical: 1,
+          height: 50,
+          justifyContent: "center",
+          alignItems: "center",
         },
         tabBarBackground: () => (
-          <BlurView
-            intensity={30}
-            tint="dark"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(30, 36, 41, 0.7)",
-              borderTopWidth: 1,
-              borderTopColor: "rgba(255, 255, 255, 0.1)",
-            }}
-          />
+          <View style={StyleSheet.absoluteFill}>
+            <BlurView
+              intensity={25}
+              tint="systemChromeMaterialDark"
+              style={{
+                flex: 1,
+                borderRadius: 28,
+                overflow: "hidden",
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: "rgba(28, 28, 30, 0.72)",
+                  borderRadius: 28,
+                  borderWidth: 0.5,
+                  borderColor: "rgba(255, 255, 255, 0.18)",
+                }}
+              />
+            </BlurView>
+          </View>
         ),
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
-          marginTop: 6,
+          fontSize: 11,
+          fontWeight: "600",
+          marginTop: -2,
+          fontFamily: "Kanit",
+          textAlign: "center",
         },
       }}
     >
       <Tabs.Screen
         name="matches/index"
         options={{
-          title: "Matches",
+          title: "Accueil",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "compass" : "compass-outline"}
+              name={focused ? "home" : "home-outline"}
               color={color}
-              size={26}
+              focused={focused}
             />
           ),
         }}
@@ -93,15 +110,18 @@ export default function TabLayout() {
             <TabBarIcon
               name={focused ? "chatbubble-ellipses" : "chatbubbles-outline"}
               color={color}
-              size={26}
+              focused={focused}
             />
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: "#8101f7",
+            backgroundColor: "#f0c2fe",
             color: "#ffffff",
-            fontSize: 12,
-            fontWeight: "600",
+            fontSize: 10,
+            fontWeight: "700",
+            borderRadius: 10,
+            minWidth: 18,
+            height: 18,
           },
         }}
       />
@@ -125,7 +145,7 @@ export default function TabLayout() {
             <TabBarIcon
               name={focused ? "person-circle" : "person-circle-outline"}
               color={color}
-              size={26}
+              focused={focused}
             />
           ),
         }}

@@ -65,7 +65,7 @@ const CollapsibleSection = ({
       >
         <StyledView className="flex-row items-center">
           <StyledView className="bg-[#2a3238] p-2 rounded-full">
-            <Ionicons name={icon as any} size={18} color="#8101f7" />
+            <Ionicons name={icon as any} size={18} color="#401346" />
           </StyledView>
           <StyledText className="text-white ml-2 font-medium">
             {title}
@@ -264,9 +264,9 @@ export default function RunnerProfileScreen() {
           <CollapsibleSection title="Statistiques" icon="stats-chart-outline">
             <StyledView className="flex-row justify-between gap-x-2">
               {/* Allure actuelle - affiché pour tous */}
-              <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
+              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
-                  <Ionicons name="walk-outline" size={18} color="#8101f7" />
+                  <Ionicons name="walk-outline" size={18} color="#401346" />
                 </StyledView>
                 <StyledText className="text-white text-center mt-1 text-sm">
                   Pace
@@ -277,9 +277,9 @@ export default function RunnerProfileScreen() {
               </StyledView>
 
               {/* Distance - adapté selon le type */}
-              <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
+              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
-                  <Ionicons name="resize-outline" size={18} color="#8101f7" />
+                  <Ionicons name="resize-outline" size={18} color="#401346" />
                 </StyledView>
                 <StyledText className="text-white text-center mt-1 text-sm">
                   {runner.runner_profile.running_type === "perf"
@@ -294,16 +294,16 @@ export default function RunnerProfileScreen() {
               </StyledView>
 
               {/* Troisième carte adaptée selon le type */}
-              <StyledView className="items-center bg-[#1e2429] p-3 rounded-xl flex-1">
+              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
                 <StyledView className="bg-[#2a3238] p-2 rounded-full">
                   {runner.runner_profile.running_type === "perf" ? (
                     <Ionicons
                       name="speedometer-outline"
                       size={18}
-                      color="#8101f7"
+                      color="#401346"
                     />
                   ) : (
-                    <Ionicons name="repeat-outline" size={18} color="#8101f7" />
+                    <Ionicons name="repeat-outline" size={18} color="#401346" />
                   )}
                 </StyledView>
                 <StyledText className="text-white text-center mt-1 text-sm">
@@ -340,7 +340,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="ribbon-outline"
                         size={18}
-                        color="#8101f7"
+                        color="#401346"
                       />
                       <StyledText className="text-white ml-2 font-medium">
                         Objectifs de compétition
@@ -363,7 +363,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="calendar-outline"
                         size={18}
-                        color="#8101f7"
+                        color="#401346"
                       />
                       <StyledText className="text-white ml-2 font-medium">
                         Jours d'entraînement
@@ -395,7 +395,7 @@ export default function RunnerProfileScreen() {
                 {/* Objectif */}
                 <StyledView className="mb-4">
                   <StyledView className="flex-row items-center mb-1">
-                    <Ionicons name="trophy-outline" size={18} color="#8101f7" />
+                    <Ionicons name="trophy-outline" size={18} color="#401346" />
                     <StyledText className="text-white ml-2 font-medium">
                       Objectif
                     </StyledText>
@@ -417,7 +417,7 @@ export default function RunnerProfileScreen() {
                     <Ionicons
                       name="calendar-outline"
                       size={18}
-                      color="#8101f7"
+                      color="#401346"
                     />
                     <StyledText className="text-white ml-2 font-medium">
                       Disponibilités
@@ -451,7 +451,7 @@ export default function RunnerProfileScreen() {
                         <Ionicons
                           name="time-outline"
                           size={18}
-                          color="#8101f7"
+                          color="#401346"
                         />
                         <StyledText className="text-white ml-2 font-medium">
                           Moments préférés
@@ -485,7 +485,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="people-outline"
                         size={18}
-                        color="#8101f7"
+                        color="#401346"
                       />
                       <StyledText className="text-white ml-2 font-medium">
                         Préférences sociales
@@ -511,7 +511,7 @@ export default function RunnerProfileScreen() {
                 {postRunActivities && postRunActivities.length > 0 && (
                   <StyledView>
                     <StyledView className="flex-row items-center mb-1">
-                      <Ionicons name="cafe-outline" size={18} color="#8101f7" />
+                      <Ionicons name="cafe-outline" size={18} color="#401346" />
                       <StyledText className="text-white ml-2 font-medium">
                         Après la course
                       </StyledText>
@@ -544,7 +544,7 @@ export default function RunnerProfileScreen() {
             {/* Dernière activité */}
             <StyledView className="mb-3">
               <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="pulse-outline" size={18} color="#8101f7" />
+                <Ionicons name="pulse-outline" size={18} color="#401346" />
                 <StyledText className="text-white ml-2 font-medium">
                   Dernière activité
                 </StyledText>
@@ -561,7 +561,7 @@ export default function RunnerProfileScreen() {
             {/* Date d'inscription */}
             <StyledView>
               <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="create-outline" size={18} color="#8101f7" />
+                <Ionicons name="create-outline" size={18} color="#401346" />
                 <StyledText className="text-white ml-2 font-medium">
                   Membre depuis
                 </StyledText>

@@ -216,7 +216,7 @@ export function SignUpFormStep3({
             onPress={onBack}
             className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-6"
           >
-            <Ionicons name="arrow-back" size={22} color="#8101f7" />
+            <Ionicons name="arrow-back" size={22} color="#401346" />
           </Pressable>
 
           <View className="flex-1">
@@ -245,7 +245,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="speedometer-outline"
                         size={24}
-                        color="#8101f7"
+                        color="#401346"
                       />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
@@ -254,7 +254,7 @@ export function SignUpFormStep3({
                   </View>
                   <Pressable
                     onPress={() => setShowPacePicker(true)}
-                    className={`bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border ${
+                    className={`bg-background flex-row items-center px-6 py-4 rounded-full border ${
                       errors.actual_pace ? "border-red-500" : "border-gray-700"
                     }`}
                   >
@@ -277,13 +277,13 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-[#1e2429] w-full p-4">
+                    <View className="bg-background w-full p-4">
                       <View className="flex-row justify-between items-center mb-4">
                         <Text className="text-white text-lg font-kanit-semibold">
                           Sélectionnez votre allure
                         </Text>
                         <Pressable onPress={() => setShowPacePicker(false)}>
-                          <Ionicons name="close" size={24} color="#8101f7" />
+                          <Ionicons name="close" size={24} color="#401346" />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
@@ -322,7 +322,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#8101f7"
+                        color="#401346"
                       />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
@@ -331,7 +331,7 @@ export function SignUpFormStep3({
                   </View>
                   <Pressable
                     onPress={() => setShowTargetPacePicker(true)}
-                    className={`bg-[#1e2429] flex-row items-center px-6 py-4 rounded-full border ${
+                    className={`bg-background flex-row items-center px-6 py-4 rounded-full border ${
                       errors.target_pace ? "border-red-500" : "border-gray-700"
                     }`}
                   >
@@ -354,7 +354,7 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-[#1e2429] w-full p-4">
+                    <View className="bg-background w-full p-4">
                       <View className="flex-row justify-between items-center mb-4">
                         <Text className="text-white text-lg font-kanit-semibold">
                           Sélectionnez votre objectif d'allure
@@ -362,7 +362,7 @@ export function SignUpFormStep3({
                         <Pressable
                           onPress={() => setShowTargetPacePicker(false)}
                         >
-                          <Ionicons name="close" size={24} color="#8101f7" />
+                          <Ionicons name="close" size={24} color="#401346" />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
@@ -398,14 +398,14 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-2">
                     <View className="w-8 items-center">
-                      <Ionicons name="stats-chart" size={22} color="#8101f7" />
+                      <Ionicons name="stats-chart" size={22} color="#401346" />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
                       Kilométrage hebdomadaire
                     </Text>
                   </View>
                   <View
-                    className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                    className={`flex-row items-center bg-background px-6 py-4 rounded-full border ${
                       focusedInput === "weekly_mileage"
                         ? `border-purple ${
                             errors.weekly_mileage ? "border-red-500" : ""
@@ -440,7 +440,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="calendar-outline"
                         size={22}
-                        color="#8101f7"
+                        color="#401346"
                       />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
@@ -466,7 +466,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#8101f7"
+                        color="#401346"
                       />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
@@ -511,14 +511,14 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-2">
                     <View className="w-8 items-center">
-                      <Ionicons name="map-outline" size={22} color="#8101f7" />
+                      <Ionicons name="map-outline" size={22} color="#401346" />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
                       Distance habituelle / semaine (km)
                     </Text>
                   </View>
                   <View
-                    className={`flex-row items-center bg-[#1e2429] px-6 py-4 rounded-full border ${
+                    className={`flex-row items-center bg-background px-6 py-4 rounded-full border ${
                       focusedInput === "usual_distance"
                         ? `border-purple ${
                             errors.usual_distance ? "border-red-500" : ""
@@ -549,7 +549,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-2">
                     <View className="w-8 items-center">
-                      <Ionicons name="flag-outline" size={22} color="#8101f7" />
+                      <Ionicons name="flag-outline" size={22} color="#401346" />
                     </View>
                     <Text className="text-white text-sm font-kanit-semibold ml-4">
                       Objectif principal
@@ -569,7 +569,7 @@ export function SignUpFormStep3({
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#8101f7" />
+                    <Ionicons name="people-outline" size={22} color="#401346" />
                   </View>
                   <Text className="text-white text-sm font-kanit-semibold ml-4">
                     Préférences sociales
@@ -590,7 +590,7 @@ export function SignUpFormStep3({
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#8101f7" />
+                    <Ionicons name="people-outline" size={22} color="#401346" />
                   </View>
                   <Text className="text-white text-sm font-kanit-semibold ml-4">
                     Activités post-course
@@ -613,7 +613,7 @@ export function SignUpFormStep3({
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#8101f7" />
+                    <Ionicons name="people-outline" size={22} color="#401346" />
                   </View>
                   <Text className="text-white text-sm font-kanit-semibold ml-4">
                     Fréquence de course
@@ -634,7 +634,7 @@ export function SignUpFormStep3({
 
                 <View className="flex-row items-center mb-2">
                   <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#8101f7" />
+                    <Ionicons name="people-outline" size={22} color="#401346" />
                   </View>
                   <Text className="text-white text-sm font-kanit-semibold ml-4">
                     Préférences de course

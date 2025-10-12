@@ -5,19 +5,16 @@ import {
   ScrollView,
   RefreshControl,
   Pressable,
-  StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import { eventService } from "@/service/api/event";
-import { EventCard } from "./EventCard";
+import { EventCard } from "@/components/events/EventCard";
 import { Event } from "@/interface/Event";
-import LoadingScreen from "../LoadingScreen";
-import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
+import LoadingScreen from "@/components/LoadingScreen";
+import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
-
-interface EventsListProps {
-  eventsType: "all" | "my";
-}
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const distances = [
   { label: "Tous", value: 1000, icon: "🌍", id: "all" },
@@ -27,33 +24,22 @@ const distances = [
   { label: "200km", value: 200, icon: "🚗", id: "car" },
 ];
 
-export const EventsList = ({ eventsType }: EventsListProps) => {
+export default function AllEventsScreen() {
   const [events, setEvents] = useState<Event[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [radius, setRadius] = useState<number>(5);
+  const [radius, setRadius] = useState<number>(10);
   const [error, setError] = useState<string | null>(null);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
 
-  // Vérifier si l'utilisateur est premium et si la fonctionnalité nécessite le premium
-  const isPremiumFeature = eventsType === "my";
-
   const handleFeatureAccess = () => {
-    if (
-      isPremiumFeature &&
-      !(user && "is_premium" in user && user.is_premium)
-    ) {
+    if (!(user && "is_premium" in user && user.is_premium)) {
       setShowPremiumModal(true);
       return false;
     }
     return true;
-  };
-
-  const closeModal = () => {
-    setShowPremiumModal(false);
-    router.replace("/(tabs)/matches");
   };
 
   const loadEvents = async (selectedRadius: number = radius) => {
@@ -62,25 +48,10 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     setLoading(true);
     setError(null);
     try {
-      if (eventsType === "my") {
-        const response = await eventService.getMyEvents();
-        const createdEvents = response.created.map((item) => ({
-          ...item,
-          is_creator: true,
-          is_participant: false,
-        }));
-        const participatingEvents = response.participating.map((item) => ({
-          ...item,
-          is_creator: false,
-          is_participant: true,
-        }));
-        setEvents([...createdEvents, ...participatingEvents]);
-      } else {
-        const response = await eventService.getAllEvents({
-          radius: selectedRadius,
-        });
-        setEvents(response);
-      }
+      const response = await eventService.getAllEvents({
+        radius: selectedRadius,
+      });
+      setEvents(response);
     } catch (error) {
       console.error("Erreur lors du chargement des événements:", error);
       setError("Impossible de charger les événements. Veuillez réessayer.");
@@ -97,7 +68,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
 
   useEffect(() => {
     loadEvents();
-  }, [eventsType]);
+  }, []);
 
   useEffect(() => {
     if (user?.is_premium) {
@@ -111,7 +82,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        className="px-4 mt-4"
+        className="px-4"
       >
         <View className="flex-row gap-2">
           {distances.map((item) => (
@@ -155,7 +126,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
             onPress={() => loadEvents()}
             className="bg-purple px-6 py-3 rounded-xl"
           >
-            <Text className="text-white font-bold">Réessayer</Text>
+            <Text className="text-white font-kanit-semibold">Réessayer</Text>
           </Pressable>
         </View>
       );
@@ -164,7 +135,8 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     if (events.length === 0) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-white text-center text-lg mb-2">
+          <Ionicons name="calendar-outline" size={60} color="#f0c2fe" />
+          <Text className="text-white text-center text-lg mb-2 mt-4 font-kanit">
             Aucun événement disponible
           </Text>
           <Text className="text-gray-400 text-center">
@@ -191,42 +163,45 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
 
   return (
     <View className="flex-1 bg-background">
-      <View
-        style={[styles.container, showPremiumModal && styles.blurContainer]}
+      <SafeAreaView className="bg-background">
+        <View className="px-5 py-4 flex-row items-center border-b border-gray-700">
+          <Pressable onPress={() => router.back()} className="mr-3">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </Pressable>
+          <Text className="text-2xl font-kanit-semibold text-white">
+            Événements
+          </Text>
+        </View>
+      </SafeAreaView>
+
+      <DistanceFilter />
+
+      <ScrollView
+        className="flex-1"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#f0c2fe"
+          />
+        }
       >
-        {eventsType === "all" && <DistanceFilter />}
-        <ScrollView
-          className="flex-1"
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="#f0c2fe"
-            />
-          }
-        >
-          {renderContent()}
-        </ScrollView>
-      </View>
+        {renderContent()}
+      </ScrollView>
+
       <PremiumFeatureModal
         onUpgrade={() => {
           router.push("/premium");
           setShowPremiumModal(false);
         }}
         visible={showPremiumModal}
-        onClose={closeModal}
+        onClose={() => {
+          setShowPremiumModal(false);
+          router.back();
+        }}
         title="Fonctionnalité Premium"
         description="Cette fonctionnalité sera bientôt disponible dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
       />
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  blurContainer: {
-    opacity: 0.3,
-  },
-});
+}

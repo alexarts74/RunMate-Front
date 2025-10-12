@@ -37,7 +37,7 @@ export function MultiSelect({
               className={`flex-row items-center px-4 py-2 rounded-full border ${
                 isSelected
                   ? "bg-purple border-purple"
-                  : "bg-[#1e2429] border-gray-700"
+                  : "bg-background border-gray-700"
               }`}
             >
               <Text
@@ -50,7 +50,7 @@ export function MultiSelect({
               <Ionicons
                 name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                 size={16}
-                color={isSelected ? "white" : "#8101f7"}
+                color={isSelected ? "white" : "#f0c2fe"}
               />
             </Pressable>
           );

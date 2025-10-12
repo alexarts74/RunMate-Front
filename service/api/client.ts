@@ -17,6 +17,7 @@ class ApiClient {
 
   private async getHeaders() {
     const token = await authStorage.getToken();
+    console.log("Token:", token);
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -89,6 +90,12 @@ class ApiClient {
     try {
       const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
+      console.log("URL complète:", url);
+      console.log("Base URL:", this.baseUrl);
+      console.log("Endpoint:", endpoint);
+      console.log("Headers:", headers);
+      console.log("Data:", data);
+
       const response = await this.fetchWithTimeout(url, {
         method: "POST",
         headers,
@@ -96,11 +103,14 @@ class ApiClient {
       });
 
       const responseData = await response.json();
+      console.log("Réponse du serveur:", responseData);
 
       if (!response.ok) {
         console.error("Erreur HTTP:", response.status);
         console.error("Détails de l'erreur:", responseData);
-        throw new Error(`Erreur HTTP: ${response.status}`);
+        throw new Error(
+          responseData.message || `Erreur HTTP: ${response.status}`
+        );
       }
 
       return responseData;

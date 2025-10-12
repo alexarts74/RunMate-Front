@@ -92,14 +92,14 @@ export default function ProfileScreen() {
                 </Text>
 
                 <Pressable
-                  className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl"
+                  className="flex-row items-center justify-between bg-background p-4 rounded-2xl"
                   onPress={() => setActiveSettings("notifications")}
                 >
                   <View className="flex-row items-center space-x-3">
                     <Ionicons
                       name="notifications-outline"
                       size={24}
-                      color="#8101f7"
+                      color="#401346"
                     />
                     <Text className="text-white font-semibold">
                       Notifications
@@ -109,14 +109,14 @@ export default function ProfileScreen() {
                 </Pressable>
 
                 <Pressable
-                  className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl"
+                  className="flex-row items-center justify-between bg-background p-4 rounded-2xl"
                   onPress={() => setActiveSettings("privacy")}
                 >
                   <View className="flex-row items-center space-x-3">
                     <Ionicons
                       name="lock-closed-outline"
                       size={24}
-                      color="#8101f7"
+                      color="#401346"
                     />
                     <Text className="text-white font-semibold">
                       Confidentialité
@@ -125,12 +125,12 @@ export default function ProfileScreen() {
                   <Ionicons name="chevron-forward" size={24} color="#687076" />
                 </Pressable>
 
-                <Pressable className="flex-row items-center justify-between bg-[#1e2429] p-4 rounded-2xl">
+                <Pressable className="flex-row items-center justify-between bg-background p-4 rounded-2xl">
                   <View className="flex-row items-center space-x-3">
                     <Ionicons
                       name="help-circle-outline"
                       size={24}
-                      color="#8101f7"
+                      color="#401346"
                     />
                     <Text className="text-white font-semibold">Aide</Text>
                   </View>

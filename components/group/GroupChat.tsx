@@ -96,7 +96,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1"
     >
-      <View className="flex-1 bg-[#12171b]">
+      <View className="flex-1 bg-background">
         <FlatList
           data={messages}
           renderItem={renderMessage}
@@ -126,7 +126,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
               disabled={!newMessage.trim()}
               className="bg-purple px-4 py-3 rounded-r-xl"
             >
-              <Text className="text-[#12171b] font-semibold">Envoyer</Text>
+              <Text className="text-background font-semibold">Envoyer</Text>
             </Pressable>
           </View>
         </View>

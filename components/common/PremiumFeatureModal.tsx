@@ -7,11 +7,13 @@ interface PremiumFeatureModalProps {
   onClose: () => void;
   title: string;
   description: string;
+  onUpgrade: () => void;
 }
 
 export const PremiumFeatureModal = ({
   visible,
   onClose,
+  onUpgrade,
   title,
   description,
 }: PremiumFeatureModalProps) => {
@@ -28,7 +30,7 @@ export const PremiumFeatureModal = ({
       >
         <View className="bg-[#1e2429] rounded-2xl p-6 w-full max-w-sm border border-purple/30">
           <View className="items-center mb-4">
-            <Ionicons name="star" size={48} color="#8101f7" />
+            <Ionicons name="star" size={48} color="#f0c2fe" />
             <Text className="text-white text-xl font-bold mt-2 font-kanit">
               {title}
             </Text>
@@ -43,6 +45,14 @@ export const PremiumFeatureModal = ({
           >
             <Text className="text-white text-center font-bold font-kanit">
               Fermer
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={onUpgrade}
+            className="py-3 mt-3 rounded-xl border border-gray-600"
+          >
+            <Text className="text-white text-center font-bold font-kanit">
+              Upgrade
             </Text>
           </Pressable>
         </View>

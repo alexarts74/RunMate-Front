@@ -37,13 +37,13 @@ export function AvailabilitySelect({ availability, handleChange }: Props) {
             className={`px-4 py-2 rounded-full border ${
               availability.includes(option.key)
                 ? "bg-purple border-purple"
-                : "border-gray bg-[#12171b]"
+                : "border-gray bg-background"
             }`}
           >
             <Text
               className={`${
                 availability.includes(option.key)
-                  ? "text-[#12171b]"
+                  ? "text-background"
                   : "text-white"
               }`}
             >

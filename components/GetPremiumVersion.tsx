@@ -15,7 +15,7 @@
 //           shadowRadius: 4,
 //           elevation: 3,
 //         }}
-//         onPress={() => router.push("/")}
+//         onPress={() => router.push("/premium")}
 //       >
 //         <View className="flex-row items-center justify-between">
 //           <View className="flex-1">
@@ -30,7 +30,7 @@
 //             </Text>
 //             <View className="flex-row items-center">
 //               <Text className="text-white/80 text-sm">À partir de </Text>
-//               <Text className="text-purple font-bold text-lg mx-1">4.99€</Text>
+//               <Text className="text-purple font-bold text-lg mx-1">9.99€</Text>
 //               <Text className="text-white/80 text-sm">/mois</Text>
 //             </View>
 //           </View>

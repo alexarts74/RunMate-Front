@@ -5,9 +5,9 @@ import { MatchesProvider } from "@/context/MatchesContext";
 import AuthenticationGuard from "@/components/auth/AuthenticationGuard";
 import { UnreadMessagesProvider } from "@/context/UnreadMessagesContext";
 import { NotificationsProvider } from "@/context/NotificationContext";
+import { StripeContextProvider } from "@/context/StripeContext";
 import * as Notifications from "expo-notifications";
 import { loadFonts } from "../utils/fonts";
-import { IntroScreen } from "@/components/IntroScreen";
 import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -66,18 +66,26 @@ export default function RootLayout() {
           <NotificationsProvider>
             <UnreadMessagesProvider>
               <MatchesProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="index" options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="(auth)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                </Stack>
+                <StripeContextProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen
+                      name="index"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(auth)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(tabs)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(app)"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack>
+                </StripeContextProvider>
               </MatchesProvider>
             </UnreadMessagesProvider>
           </NotificationsProvider>

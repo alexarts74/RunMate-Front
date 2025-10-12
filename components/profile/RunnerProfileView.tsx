@@ -27,16 +27,16 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         <Text className="text-2xl font-bold text-white">Profil Coureur</Text>
         <Pressable
           onPress={() => setIsEditing(true)}
-          className="bg-[#2a3238] p-3 rounded-full"
+          className="bg-background p-3 rounded-full"
         >
-          <Ionicons name="pencil" size={20} color="#8101f7" />
+          <Ionicons name="pencil" size={20} color="#f0c2fe" />
         </Pressable>
       </View>
 
       <View className="flex-row space-x-4">
-        <View className="flex-1 bg-[#1e2429] p-4 rounded-2xl border border-[#2a3238]">
+        <View className="flex-1 bg-background p-4 rounded-2xl border border-[#2a3238]">
           <View className="items-center">
-            <Ionicons name="speedometer-outline" size={24} color="#8101f7" />
+            <Ionicons name="speedometer-outline" size={24} color="#f0c2fe" />
             <Text className="text-white text-sm font-semibold mt-2">
               Allure
             </Text>
@@ -45,9 +45,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             </Text>
           </View>
         </View>
-        <View className="flex-1 bg-[#1e2429] p-4 rounded-2xl border border-[#2a3238]">
+        <View className="flex-1 bg-background p-4 rounded-2xl border border-[#2a3238]">
           <View className="items-center">
-            <Ionicons name="trail-sign-outline" size={24} color="#8101f7" />
+            <Ionicons name="trail-sign-outline" size={24} color="#f0c2fe" />
             <Text className="text-white text-sm font-semibold mt-2">
               Distance
             </Text>
@@ -58,9 +58,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         </View>
       </View>
 
-      <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
+      <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
         <View className="flex-row items-center space-x-3 mb-3">
-          <Ionicons name="trophy-outline" size={24} color="#8101f7" />
+          <Ionicons name="trophy-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-base font-semibold">Objectif</Text>
         </View>
         <Text className="text-white text-lg">
@@ -68,9 +68,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         </Text>
       </View>
 
-      <View className="bg-[#1e2429] p-5 rounded-2xl border border-[#2a3238]">
+      <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
         <View className="flex-row items-center space-x-3 mb-3">
-          <Ionicons name="calendar-outline" size={24} color="#8101f7" />
+          <Ionicons name="calendar-outline" size={24} color="#f0c2fe" />
           <Text className="text-white text-base font-semibold">
             Disponibilités
           </Text>
@@ -78,7 +78,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         <View className="flex-row flex-wrap gap-2">
           {Array.isArray(runner?.availability) ? (
             runner?.availability?.map((day: string) => (
-              <View key={day} className="bg-[#2a3238] px-3 py-1 rounded-full">
+              <View key={day} className="bg-background px-3 py-1 rounded-full">
                 <Text className="text-white capitalize">{day.trim()}</Text>
               </View>
             ))
