@@ -8,16 +8,10 @@ class ApiClient {
   constructor() {
     this.baseUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.API_VERSION}`;
     this.timeout = 10000;
-
-    console.log("🚀 ApiClient initialisé avec:", {
-      baseUrl: this.baseUrl,
-      timeout: this.timeout,
-    });
   }
 
   private async getHeaders() {
     const token = await authStorage.getToken();
-    console.log("Token:", token);
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -30,13 +24,6 @@ class ApiClient {
 
     try {
       const headers = await this.getHeaders();
-
-      console.log("🌐 Requête API:", {
-        url,
-        method: options.method,
-        headers: headers,
-      });
-
       const response = await fetch(url, {
         ...options,
         headers: {
@@ -45,12 +32,6 @@ class ApiClient {
         },
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
-
-      console.log("📡 Réponse API:", {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-      });
 
       if (!response.ok) {
         // Vérifier si la réponse est du HTML (erreur de serveur)

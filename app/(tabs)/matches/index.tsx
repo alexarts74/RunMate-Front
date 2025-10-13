@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, ScrollView, Pressable } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Pressable,
+  Animated,
+  Image,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MatchesSection } from "@/components/matches/MatchesSection";
 import { GroupsSection } from "@/components/group/GroupsSection";
 import { EventsSection } from "@/components/events/EventsSection";
 import { useAuth } from "@/context/AuthContext";
+import { useMatches } from "@/context/MatchesContext";
+import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 const HomepageScreen = () => {
   const { user } = useAuth();
+  const { matches } = useMatches();
+  const { unreadCount } = useUnreadMessages();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -35,96 +47,190 @@ const HomepageScreen = () => {
     return "moon";
   };
 
+  // Animations pour le header dynamique
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [180, 120],
+    extrapolate: "clamp",
+  });
+
+  const infoOpacity = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+
+  const infoTranslateY = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [0, -30],
+    extrapolate: "clamp",
+  });
+
+  // Données pour le défilement d'infos (fausses données pour l'instant)
+  const [infoIndex, setInfoIndex] = useState(0);
+  const weeklyKm = 23; // Fausse donnée
+  const nextEvent = "Trail Mont-Blanc à 18h"; // Fausse donnée
+
+  const infoItems = [
+    { icon: "people", text: `${matches?.length || 0} matches disponibles` },
+    { icon: "calendar", text: nextEvent },
+    { icon: "speedometer", text: `${weeklyKm} km cette semaine` },
+  ];
+
+  // Auto-défilement des infos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setInfoIndex((prev) => (prev + 1) % infoItems.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [infoItems.length]);
+
   return (
     <View className="flex-1 bg-background">
-      {/* Header */}
-      <LinearGradient
-        colors={["#480f47", "#311332"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={{ flex: 0 }}
-      >
-        <SafeAreaView>
-          <View className="px-5 py-5">
-            <View className="flex-row items-center justify-between">
-              <View className="flex-1">
-                <Text className="text-3xl font-kanit-semibold text-white mb-1">
-                  {getGreeting()} {user?.first_name || "Runner"} !
+      {/* Header animé */}
+      <Animated.View style={{ height: headerHeight }}>
+        <LinearGradient
+          colors={["#480f47", "#311332"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{ flex: 1 }}
+        >
+          <SafeAreaView style={{ flex: 1 }}>
+            <View className="px-5 py-4 flex-1">
+              {/* Barre du haut - Profile, Notifications, Logo */}
+              <View className="flex-row items-center justify-between mb-4">
+                {/* Logo à gauche */}
+                <Image
+                  source={require("@/assets/images/run-mate-logo.png")}
+                  className="w-8 h-8"
+                  style={{ resizeMode: "contain" }}
+                />
+
+                {/* Nom de l'app au centre */}
+                <Text className="text-white font-kanit-bold text-2xl">
+                  RunMate
                 </Text>
-                <View className="flex-row items-center">
-                  <Ionicons
-                    name={getWeatherIcon()}
-                    size={16}
-                    color="#f0c2fe"
-                    style={{ marginRight: 6 }}
-                  />
-                  <Text className="text-gray-300 font-kanit text-sm">
-                    Parfait pour courir maintenant
-                  </Text>
+
+                {/* Notifications et Profile à droite */}
+                <View className="flex-row items-center" style={{ gap: 12 }}>
+                  {/* Cloche avec pastille */}
+                  <Pressable
+                    onPress={() => router.push("/messages")}
+                    className="relative"
+                  >
+                    <Ionicons
+                      name="notifications-outline"
+                      size={24}
+                      color="white"
+                    />
+                    {unreadCount > 0 && (
+                      <View
+                        className="absolute -top-1 -right-1 bg-red-500 rounded-full items-center justify-center"
+                        style={{
+                          minWidth: 18,
+                          height: 18,
+                          paddingHorizontal: 4,
+                        }}
+                      >
+                        <Text className="text-white text-xs font-bold">
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </Text>
+                      </View>
+                    )}
+                  </Pressable>
+
+                  {/* Profile rond */}
+                  <Pressable
+                    onPress={() => router.push("/profile")}
+                    className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/20"
+                  >
+                    <Image
+                      source={
+                        user?.profile_image
+                          ? { uri: user.profile_image }
+                          : require("@/assets/images/react-logo.png")
+                      }
+                      className="w-full h-full"
+                      style={{ resizeMode: "cover" }}
+                    />
+                  </Pressable>
                 </View>
               </View>
 
-              <Pressable
-                className="bg-white/10 backdrop-blur-sm rounded-xl py-3 px-4 flex-row items-center"
-                onPress={() => router.push("/create")}
+              {/* Défilement d'infos - disparaît au scroll */}
+              <Animated.View
+                style={{
+                  opacity: infoOpacity,
+                  transform: [{ translateY: infoTranslateY }],
+                }}
+                className="flex-row items-center"
               >
                 <Ionicons
-                  name="play"
+                  name={infoItems[infoIndex].icon as any}
                   size={18}
-                  color="white"
-                  style={{ marginRight: 6 }}
+                  color="#f0c2fe"
+                  style={{ marginRight: 10 }}
                 />
-                <Text className="text-white font-kanit-semibold text-sm">
-                  Run
+                <Text className="text-white font-kanit-medium text-base">
+                  {infoItems[infoIndex].text}
                 </Text>
-              </Pressable>
+              </Animated.View>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+          </SafeAreaView>
+        </LinearGradient>
+      </Animated.View>
 
       {/* Contenu scrollable */}
-      <ScrollView
-        className="flex-1"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
+      <View
+        className="flex-1 bg-background"
+        style={{
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          marginTop: -8,
+          overflow: "hidden",
+        }}
       >
-        {/* Section Matches */}
-        <View className="bg-background">
-          <MatchesSection />
-        </View>
-
-        {/* Séparateur avec titre */}
-        <View className="mx-5 my-4">
-          <View className="flex-row items-center mb-2">
-            <View className="h-px bg-gray-700 flex-1" />
-            {/* <Text className="text-gray-500 text-xs font-kanit px-3">
-              GROUPES DE COURSE
-            </Text> */}
-            <View className="h-px bg-gray-700 flex-1" />
+        <Animated.ScrollView
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40, paddingTop: 16 }}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: false }
+          )}
+          scrollEventThrottle={16}
+        >
+          {/* Section Matches */}
+          <View className="bg-background">
+            <MatchesSection />
           </View>
-        </View>
 
-        {/* Section Groupes */}
-        <GroupsSection />
-
-        {/* Séparateur avec titre */}
-        <View className="mx-5 my-4">
-          <View className="flex-row items-center mb-2">
-            <View className="h-px bg-gray-700 flex-1" />
-            {/* <Text className="text-gray-500 text-xs font-kanit px-3">
-              ÉVÉNEMENTS À VENIR
-            </Text> */}
-            <View className="h-px bg-gray-700 flex-1" />
+          {/* Séparateur avec titre */}
+          <View className="mx-5 my-4">
+            <View className="flex-row items-center mb-2">
+              <View className="h-px bg-gray-700 flex-1" />
+              <View className="h-px bg-gray-700 flex-1" />
+            </View>
           </View>
-        </View>
 
-        {/* Section Events */}
-        <EventsSection />
+          {/* Section Groupes */}
+          <GroupsSection />
 
-        {/* Espace supplémentaire pour laisser voir qu'il y a plus */}
-        <View className="h-32" />
-      </ScrollView>
+          {/* Séparateur avec titre */}
+          <View className="mx-5 my-4">
+            <View className="flex-row items-center mb-2">
+              <View className="h-px bg-gray-700 flex-1" />
+              <View className="h-px bg-gray-700 flex-1" />
+            </View>
+          </View>
+
+          {/* Section Events */}
+          <EventsSection />
+
+          {/* Espace supplémentaire pour laisser voir qu'il y a plus */}
+          <View className="h-32" />
+        </Animated.ScrollView>
+      </View>
     </View>
   );
 };

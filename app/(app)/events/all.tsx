@@ -51,7 +51,9 @@ export default function AllEventsScreen() {
       const response = await eventService.getAllEvents({
         radius: selectedRadius,
       });
-      setEvents(response);
+      // Extraire les événements de la structure {event: {...}}
+      const eventsData = response.map((item: any) => item.event || item);
+      setEvents(eventsData);
     } catch (error) {
       console.error("Erreur lors du chargement des événements:", error);
       setError("Impossible de charger les événements. Veuillez réessayer.");

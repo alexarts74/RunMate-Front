@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Dimensions } from "react-native";
 import { useMatches } from "@/context/MatchesContext";
-import { MatchCard } from "@/components/matches/MatchCard";
+import { MatchCardCompact } from "@/components/matches/MatchCardCompact";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -10,21 +10,22 @@ export function MatchesSection() {
   const { width: screenWidth } = Dimensions.get("window");
   const ITEM_WIDTH = screenWidth * 0.9;
 
-  // Afficher seulement le premier match
-  const firstMatch = matches && matches.length > 0 ? matches[0] : null;
+  // Afficher les 2 premiers matches maximum
+  const displayMatches =
+    matches && matches.length > 0 ? matches.slice(0, 2) : [];
 
   return (
-    <View className="px-5 py-5">
+    <View className="px-5 pb-5 pt-4">
       {/* Header de la section */}
       <View className="flex-row justify-between items-center mb-5">
         <View className="flex-row items-center">
           <View className="w-1 h-6 bg-[#f0c2fe] rounded-full mr-3" />
           <Text className="text-xl font-kanit-semibold text-white">
-            🔥 Match du jour
+            🔥 Vos matches
           </Text>
         </View>
 
-        {matches && matches.length > 1 && (
+        {matches && matches.length > 2 && (
           <Pressable
             onPress={() => router.push("/(app)/matches/all")}
             className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
@@ -43,7 +44,7 @@ export function MatchesSection() {
           <Ionicons name="hourglass-outline" size={40} color="#f0c2fe" />
           <Text className="text-gray-400 mt-2">Chargement...</Text>
         </View>
-      ) : !firstMatch ? (
+      ) : displayMatches.length === 0 ? (
         <View className="bg-[#1e2429] rounded-2xl p-6 items-center border border-gray-700">
           <Ionicons name="search" size={40} color="#f0c2fe" className="mb-3" />
           <Text className="text-white text-center font-kanit mb-2">
@@ -66,8 +67,15 @@ export function MatchesSection() {
           </Pressable>
         </View>
       ) : (
-        <View style={{ width: ITEM_WIDTH, alignSelf: "center" }}>
-          <MatchCard match={firstMatch} />
+        <View style={{ flexDirection: "row", gap: 12 }}>
+          <View style={{ flex: 1 }}>
+            <MatchCardCompact match={displayMatches[0]} />
+          </View>
+          {displayMatches[1] && (
+            <View style={{ flex: 1 }}>
+              <MatchCardCompact match={displayMatches[1]} />
+            </View>
+          )}
         </View>
       )}
     </View>

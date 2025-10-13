@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 
-type MatchCardProps = {
+type MatchCardCompactProps = {
   match: MatchUser;
 };
 
@@ -40,7 +40,7 @@ const safelyFormatArray = (value: any, separator: string = ", "): string => {
   }
 };
 
-export function MatchCard({ match }: MatchCardProps) {
+export function MatchCardCompact({ match }: MatchCardCompactProps) {
   const isChillRunner = match.user.runner_profile.running_type === "chill";
   const actualPace = match.user.runner_profile.actual_pace;
   const runningFrequency = match.user.runner_profile.running_frequency;
@@ -49,7 +49,8 @@ export function MatchCard({ match }: MatchCardProps) {
 
   // Formater runningFrequency si c'est un tableau
   const formatRunningFrequency = () => {
-    return safelyFormatArray(runningFrequency);
+    const formatted = safelyFormatArray(runningFrequency, ", ");
+    return formatted || "Flexible";
   };
 
   return (
@@ -57,13 +58,13 @@ export function MatchCard({ match }: MatchCardProps) {
       onPress={() => router.push(`/runner/${match.user.id}`)}
       className="relative overflow-hidden"
       style={{
-        height: 520,
-        borderRadius: 32,
+        height: 280,
+        borderRadius: 24,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.3,
-        shadowRadius: 24,
-        elevation: 12,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        elevation: 8,
       }}
     >
       {/* Image de fond */}
@@ -84,15 +85,15 @@ export function MatchCard({ match }: MatchCardProps) {
       />
 
       {/* Contenu de la carte */}
-      <View className="flex-1 justify-between p-6">
+      <View className="flex-1 justify-between p-4">
         {/* Header - en haut */}
         <View className="flex-row justify-between items-start">
           {/* Nom et âge - en haut à gauche */}
           <View>
-            <Text className="text-white text-3xl font-kanit-bold mb-1 drop-shadow-lg">
+            <Text className="text-white text-2xl font-kanit-bold mb-1 drop-shadow-lg">
               {match.user.first_name}
             </Text>
-            <Text className="text-white/90 text-xl font-kanit drop-shadow-lg">
+            <Text className="text-white/90 text-lg font-kanit drop-shadow-lg">
               {match.user.age} ans
             </Text>
           </View>
@@ -102,10 +103,10 @@ export function MatchCard({ match }: MatchCardProps) {
             <BlurView
               intensity={30}
               tint="dark"
-              className="px-5 py-3 overflow-hidden"
-              style={{ borderRadius: 20 }}
+              className="px-3 py-2 overflow-hidden"
+              style={{ borderRadius: 16 }}
             >
-              <Text className="text-white text-sm font-kanit-semibold">
+              <Text className="text-white text-xs font-kanit-semibold">
                 {distanceKm} km
               </Text>
             </BlurView>
@@ -113,60 +114,48 @@ export function MatchCard({ match }: MatchCardProps) {
         </View>
 
         {/* Infos en bas - toutes dans un seul conteneur avec flou */}
-        <BlurView
+        {/* <BlurView
           intensity={70}
           tint="dark"
-          className="px-5 py-4 overflow-hidden"
-          style={{ borderRadius: 24 }}
+          className="px-4 py-3 overflow-hidden"
+          style={{ borderRadius: 20 }}
         >
-          <View className="space-y-3">
+          <View style={{ gap: 8 }}>
             {/* Ville */}
-            <View className="flex-row items-center">
-              <Ionicons name="location" size={18} color="#f0c2fe" />
-              <Text className="text-white text-base font-kanit ml-3">
+        {/* <View className="flex-row items-center">
+              <Ionicons name="location" size={14} color="#f0c2fe" />
+              <Text className="text-white text-sm font-kanit ml-2">
                 {match.user.city}
               </Text>
-            </View>
+            </View> */}
 
-            {/* Type de runner avec emoji */}
-            <View className="flex-row items-center">
-              <Text className="text-base font-kanit-semibold text-white">
+        {/* Type de runner avec emoji */}
+        {/* <View className="flex-row items-center">
+              <Text className="text-sm font-kanit-semibold text-white">
                 {isChillRunner ? "🌿 Runner détente" : "⚡ Runner performance"}
               </Text>
-            </View>
+            </View> */}
 
-            {/* Infos clés - plus détaillées pour la version grande */}
-            {isChillRunner ? (
-              runningFrequency && (
-                <View className="flex-row items-center">
-                  <Ionicons name="time" size={18} color="#f0c2fe" />
-                  <Text className="text-white text-base font-kanit ml-3">
-                    {formatRunningFrequency()}
-                  </Text>
-                </View>
-              )
-            ) : (
-              <View className="space-y-2">
-                {actualPace && (
+        {/* Infos clés - max 1 pour la compacité */}
+        {/* {isChillRunner
+              ? runningFrequency && (
                   <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={18} color="#f0c2fe" />
-                    <Text className="text-white text-base font-kanit ml-3">
+                    <Ionicons name="time" size={14} color="#f0c2fe" />
+                    <Text className="text-white text-sm font-kanit ml-2">
+                      {formatRunningFrequency()}
+                    </Text>
+                  </View>
+                )
+              : actualPace && (
+                  <View className="flex-row items-center">
+                    <Ionicons name="speedometer" size={14} color="#f0c2fe" />
+                    <Text className="text-white text-sm font-kanit ml-2">
                       {actualPace} min/km
                     </Text>
                   </View>
-                )}
-                {weeklyDistance && (
-                  <View className="flex-row items-center">
-                    <Ionicons name="footsteps" size={18} color="#f0c2fe" />
-                    <Text className="text-white text-base font-kanit ml-3">
-                      {weeklyDistance} km/semaine
-                    </Text>
-                  </View>
-                )}
-              </View>
-            )}
-          </View>
-        </BlurView>
+                )} */}
+        {/* </View>
+        </BlurView> */}
       </View>
     </Pressable>
   );

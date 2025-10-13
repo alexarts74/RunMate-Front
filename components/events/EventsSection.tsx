@@ -18,8 +18,10 @@ export function EventsSection() {
     setIsLoading(true);
     try {
       const response = await eventService.getAllEvents({ radius: 10 });
+      // Extraire les événements de la structure {event: {...}}
+      const eventsData = response.map((item: any) => item.event || item);
       // Limiter à 2 événements pour l'aperçu
-      setEvents(response.slice(0, 2));
+      setEvents(eventsData.slice(0, 2));
     } catch (error) {
       console.error("Erreur lors du chargement des événements:", error);
     } finally {
@@ -110,10 +112,10 @@ export function EventsSection() {
           </Text>
         </View>
       ) : (
-        <View className="gap-3">
-          {events.map((event) => (
+        <View style={{ gap: 12 }}>
+          {events.map((event, index) => (
             <Pressable
-              key={event.id}
+              key={`event-${event.id}-${index}`}
               className="bg-background rounded-xl p-4 border border-gray-700"
               onPress={() => handleEventPress(event.id)}
             >
@@ -136,7 +138,7 @@ export function EventsSection() {
                 </View>
               </View>
 
-              <View className="flex-row items-center gap-4">
+              <View className="flex-row items-center" style={{ gap: 16 }}>
                 <View className="flex-row items-center">
                   <Ionicons name="people" size={14} color="#f0c2fe" />
                   <Text className="text-gray-300 text-xs ml-1">

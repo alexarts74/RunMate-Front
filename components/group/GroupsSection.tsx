@@ -59,7 +59,7 @@ export function GroupsSection() {
         <View className="flex-row items-center">
           <View className="w-1 h-6 bg-[#f0c2fe] rounded-full mr-3" />
           <Text className="text-xl font-kanit-semibold text-white">
-            👥 Groupes de course
+            Groupes de course
           </Text>
         </View>
 
@@ -114,10 +114,10 @@ export function GroupsSection() {
           </Text>
         </View>
       ) : (
-        <View className="gap-3">
-          {groups.map((group) => (
+        <View style={{ gap: 12 }}>
+          {groups.map((group, index) => (
             <Pressable
-              key={group.id}
+              key={`group-${group.id}-${index}`}
               className="bg-background rounded-xl overflow-hidden border border-gray-700"
               onPress={() => handleGroupPress(group.id)}
             >
