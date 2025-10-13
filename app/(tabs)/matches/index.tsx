@@ -50,7 +50,7 @@ const HomepageScreen = () => {
   // Animations pour le header dynamique
   const headerHeight = scrollY.interpolate({
     inputRange: [0, 100],
-    outputRange: [180, 120],
+    outputRange: [160, 120],
     extrapolate: "clamp",
   });
 
@@ -163,7 +163,7 @@ const HomepageScreen = () => {
                   opacity: infoOpacity,
                   transform: [{ translateY: infoTranslateY }],
                 }}
-                className="flex-row items-center"
+                className="flex-row items-center justify-center flex-1"
               >
                 <Ionicons
                   name={infoItems[infoIndex].icon as any}
