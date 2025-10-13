@@ -18,45 +18,11 @@ export function TabBarIcon({
   ...rest
 }: TabBarIconProps) {
   const IconComponent = (
-    <>
-      {focused ? (
-        <View
-          style={{
-            width: 72,
-            height: 52,
-            borderRadius: 24,
-            backgroundColor: "rgba(255, 255, 255, 0.15)",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 10,
-            marginBottom: 1,
-            paddingVertical: 6,
-            paddingBottom: 16,
-            paddingHorizontal: 8,
-            shadowColor: "rgba(240, 194, 254, 0.2)",
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.6,
-            shadowRadius: 2,
-            elevation: 2,
-          }}
-        >
-          <Ionicons
-            size={24}
-            style={[{ fontFamily: "Kanit" }, style]}
-            {...rest}
-          />
-        </View>
-      ) : (
-        <Ionicons
-          size={24}
-          style={[{ marginBottom: 2, fontFamily: "Kanit" }, style]}
-          {...rest}
-        />
-      )}
-    </>
+    <Ionicons
+      size={24}
+      style={[{ marginBottom: 2, fontFamily: "Kanit" }, style]}
+      {...rest}
+    />
   );
 
   if (onPress) {

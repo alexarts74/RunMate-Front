@@ -1,14 +1,27 @@
 // TabLayout.tsx
 import { Tabs } from "expo-router";
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, StyleSheet, Animated, Dimensions } from "react-native";
 import { BlurView } from "expo-blur";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
 
-function CreateActionButton({ focused }: { focused: boolean }) {
+function CreateActionButton({
+  focused,
+  onPress,
+}: {
+  focused: boolean;
+  onPress?: () => void;
+}) {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+    setModalVisible(true);
+  };
 
   return (
     <>
@@ -16,7 +29,7 @@ function CreateActionButton({ focused }: { focused: boolean }) {
         name="add-circle"
         color={focused ? "#f0c2fe" : "rgba(255, 255, 255, 0.6)"}
         focused={focused}
-        onPress={() => setModalVisible(true)}
+        onPress={handlePress}
       />
       <CreateModal
         visible={modalVisible}
@@ -28,6 +41,66 @@ function CreateActionButton({ focused }: { focused: boolean }) {
 
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
+  const [activeTab, setActiveTab] = useState(0);
+  const [previousTab, setPreviousTab] = useState(0);
+  const indicatorPosition = useRef(new Animated.Value(0)).current;
+  const screenWidth = Dimensions.get("window").width;
+  const tabBarWidth = screenWidth * 0.88;
+  const tabWidth = tabBarWidth / 4;
+
+  useEffect(() => {
+    Animated.spring(indicatorPosition, {
+      toValue: activeTab * tabWidth + (tabWidth - 76) / 2,
+      useNativeDriver: false,
+      tension: 150,
+      friction: 8,
+    }).start();
+  }, [activeTab, indicatorPosition, tabWidth]);
+
+  const tabBarBackground = () => (
+    <View style={StyleSheet.absoluteFill}>
+      <BlurView
+        intensity={25}
+        tint="systemChromeMaterialDark"
+        style={{
+          flex: 1,
+          borderRadius: 28,
+          overflow: "hidden",
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(28, 28, 30, 0.72)",
+            borderRadius: 28,
+            borderWidth: 0.5,
+            borderColor: "rgba(255, 255, 255, 0.18)",
+            position: "relative",
+          }}
+        >
+          <Animated.View
+            style={{
+              position: "absolute",
+              top: 3,
+              left: indicatorPosition,
+              width: 76,
+              height: 52,
+              borderRadius: 27,
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
+              shadowColor: "rgba(240, 194, 254, 0.2)",
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.6,
+              shadowRadius: 2,
+              elevation: 2,
+            }}
+          />
+        </View>
+      </BlurView>
+    </View>
+  );
 
   return (
     <Tabs
@@ -57,29 +130,7 @@ export default function TabLayout() {
           justifyContent: "center",
           alignItems: "center",
         },
-        tabBarBackground: () => (
-          <View style={StyleSheet.absoluteFill}>
-            <BlurView
-              intensity={25}
-              tint="systemChromeMaterialDark"
-              style={{
-                flex: 1,
-                borderRadius: 28,
-                overflow: "hidden",
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: "rgba(28, 28, 30, 0.72)",
-                  borderRadius: 28,
-                  borderWidth: 0.5,
-                  borderColor: "rgba(255, 255, 255, 0.18)",
-                }}
-              />
-            </BlurView>
-          </View>
-        ),
+        tabBarBackground: tabBarBackground,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "600",
@@ -93,24 +144,26 @@ export default function TabLayout() {
         name="matches/index"
         options={{
           title: "Accueil",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
-              color={color}
-              focused={focused}
-            />
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home-outline" color={color} focused={false} />
           ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setPreviousTab(activeTab);
+            setActiveTab(0);
+          },
         }}
       />
       <Tabs.Screen
         name="messages/index"
         options={{
           title: "Messages",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <TabBarIcon
-              name={focused ? "chatbubble-ellipses" : "chatbubbles-outline"}
+              name="chatbubbles-outline"
               color={color}
-              focused={focused}
+              focused={false}
             />
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
@@ -124,12 +177,25 @@ export default function TabLayout() {
             height: 18,
           },
         }}
+        listeners={{
+          tabPress: () => {
+            setPreviousTab(activeTab);
+            setActiveTab(1);
+          },
+        }}
       />
       <Tabs.Screen
         name="create/index"
         options={{
           title: "Create",
-          tabBarIcon: ({ focused }) => <CreateActionButton focused={focused} />,
+          tabBarIcon: () => (
+            <CreateActionButton
+              focused={activeTab === 2}
+              onPress={() => {
+                setActiveTab(2);
+              }}
+            />
+          ),
         }}
         listeners={{
           tabPress: (e) => {
@@ -141,13 +207,19 @@ export default function TabLayout() {
         name="profile/index"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <TabBarIcon
-              name={focused ? "person-circle" : "person-circle-outline"}
+              name="person-circle-outline"
               color={color}
-              focused={focused}
+              focused={false}
             />
           ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setPreviousTab(activeTab);
+            setActiveTab(3);
+          },
         }}
       />
     </Tabs>
