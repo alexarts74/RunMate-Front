@@ -90,7 +90,7 @@ const HomepageScreen = () => {
       {/* Header animé */}
       <Animated.View style={{ height: headerHeight }}>
         <LinearGradient
-          colors={["#480f47", "#311332"]}
+          colors={["#126C52", "#033235"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{ flex: 1 }}
@@ -168,7 +168,7 @@ const HomepageScreen = () => {
                 <Ionicons
                   name={infoItems[infoIndex].icon as any}
                   size={18}
-                  color="#f0c2fe"
+                  color="white"
                   style={{ marginRight: 10 }}
                 />
                 <Text className="text-white font-kanit-medium text-base">

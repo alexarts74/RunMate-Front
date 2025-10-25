@@ -136,7 +136,7 @@ export function MatchesCarousel() {
               onPress={() => router.push("/runner/filters")}
               className="bg-background p-2 rounded-xl flex-row items-center border border-gray-700"
             >
-              <Ionicons name="filter" size={20} color="#f0c2fe" />
+              <Ionicons name="filter" size={20} color="#126C52" />
             </Pressable>
           </View>
         </View>
@@ -153,7 +153,7 @@ export function MatchesCarousel() {
               <Ionicons
                 name="search"
                 size={60}
-                color="#f0c2fe"
+                color="#126C52"
                 className="mb-4"
               />
               <Text className="text-white text-center text-lg font-kanit mb-3">

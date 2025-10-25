@@ -68,7 +68,7 @@ export function SignUpFormStep0({ onNext }: Props) {
           >
             <View className="flex-row items-center mb-2">
               <View className="bg-[#2a3238] p-2.5 rounded-full">
-                <Ionicons name="trophy-outline" size={22} color="#f0c2fe" />
+                <Ionicons name="trophy-outline" size={22} color="#126C52" />
               </View>
               <Text className="text-white text-lg font-kanit-semibold ml-3">
                 Je suis un runner Perf
@@ -82,7 +82,7 @@ export function SignUpFormStep0({ onNext }: Props) {
               <Ionicons
                 name="arrow-forward-circle-outline"
                 size={18}
-                color="#f0c2fe"
+                color="#126C52"
               />
               <Text className="text-purple ml-2 font-kanit-medium text-sm">
                 Choisir ce profil

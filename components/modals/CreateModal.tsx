@@ -70,7 +70,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                         backgroundColor: "rgba(240, 194, 254, 0.2)",
                       }}
                     >
-                      <Ionicons name="calendar" size={24} color="#f0c2fe" />
+                      <Ionicons name="calendar" size={24} color="#126C52" />
                     </View>
                     <View className="ml-3 flex-1">
                       <Text
@@ -110,7 +110,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                         backgroundColor: "rgba(240, 194, 254, 0.2)",
                       }}
                     >
-                      <Ionicons name="people" size={24} color="#f0c2fe" />
+                      <Ionicons name="people" size={24} color="#126C52" />
                     </View>
                     <View className="ml-3 flex-1">
                       <Text

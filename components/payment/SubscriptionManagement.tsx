@@ -146,7 +146,7 @@ export default function SubscriptionManagement() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-background justify-center items-center">
-        <ActivityIndicator size="large" color="#f0c2fe" />
+        <ActivityIndicator size="large" color="#126C52" />
         <Text className="text-white mt-4 font-kanit">
           Chargement des informations...
         </Text>
@@ -175,7 +175,7 @@ export default function SubscriptionManagement() {
             <>
               <View className="flex-row justify-between items-center mb-4">
                 <View className="flex-row items-center">
-                  <Ionicons name="diamond" size={24} color="#f0c2fe" />
+                  <Ionicons name="diamond" size={24} color="#126C52" />
                   <Text className="text-xl font-kanit-semibold text-white ml-2">
                     RunMate Premium
                   </Text>
@@ -268,7 +268,7 @@ export default function SubscriptionManagement() {
               <Ionicons
                 name="diamond-outline"
                 size={40}
-                color="#f0c2fe"
+                color="#126C52"
                 className="mb-4"
               />
               <Text className="text-white text-center font-kanit-semibold text-lg mb-3">

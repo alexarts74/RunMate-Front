@@ -29,14 +29,14 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           onPress={() => setIsEditing(true)}
           className="bg-background p-3 rounded-full"
         >
-          <Ionicons name="pencil" size={20} color="#f0c2fe" />
+          <Ionicons name="pencil" size={20} color="#126C52" />
         </Pressable>
       </View>
 
       <View className="flex-row space-x-4">
         <View className="flex-1 bg-background p-4 rounded-2xl border border-[#2a3238]">
           <View className="items-center">
-            <Ionicons name="speedometer-outline" size={24} color="#f0c2fe" />
+            <Ionicons name="speedometer-outline" size={24} color="#126C52" />
             <Text className="text-white text-sm font-semibold mt-2">
               Allure
             </Text>
@@ -47,7 +47,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         </View>
         <View className="flex-1 bg-background p-4 rounded-2xl border border-[#2a3238]">
           <View className="items-center">
-            <Ionicons name="trail-sign-outline" size={24} color="#f0c2fe" />
+            <Ionicons name="trail-sign-outline" size={24} color="#126C52" />
             <Text className="text-white text-sm font-semibold mt-2">
               Distance
             </Text>
@@ -60,7 +60,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
 
       <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
         <View className="flex-row items-center space-x-3 mb-3">
-          <Ionicons name="trophy-outline" size={24} color="#f0c2fe" />
+          <Ionicons name="trophy-outline" size={24} color="#126C52" />
           <Text className="text-white text-base font-semibold">Objectif</Text>
         </View>
         <Text className="text-white text-lg">
@@ -70,7 +70,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
 
       <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
         <View className="flex-row items-center space-x-3 mb-3">
-          <Ionicons name="calendar-outline" size={24} color="#f0c2fe" />
+          <Ionicons name="calendar-outline" size={24} color="#126C52" />
           <Text className="text-white text-base font-semibold">
             Disponibilités
           </Text>

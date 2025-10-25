@@ -99,7 +99,7 @@ export default function AllGroupsScreen() {
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
-            <Ionicons name="people" size={16} color="#f0c2fe" />
+            <Ionicons name="people" size={16} color="#126C52" />
             <Text className="text-gray-300 text-sm ml-2">
               {item.members_count} membres
             </Text>
@@ -144,7 +144,7 @@ export default function AllGroupsScreen() {
             ListEmptyComponent={() => (
               <View className="flex-1 items-center justify-center px-6 py-10">
                 <View className="bg-background/30 p-8 rounded-full mb-6">
-                  <Ionicons name="fitness" size={60} color="#f0c2fe" />
+                  <Ionicons name="fitness" size={60} color="#126C52" />
                 </View>
                 <Text className="text-white font-kanit text-2xl font-bold text-center mb-3">
                   Aucun groupe trouvé

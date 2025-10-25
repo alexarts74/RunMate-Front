@@ -36,7 +36,7 @@ export default function SettingsSection({
             onPress={item.onToggle}
           >
             <StyledView className="flex-row items-center space-x-3 flex-1">
-              <Ionicons name={item.icon} size={24} color="#f0c2fe" />
+              <Ionicons name={item.icon} size={24} color="#126C52" />
               <StyledView className="flex-1">
                 <StyledText className="text-white font-semibold">
                   {item.title}
@@ -51,7 +51,7 @@ export default function SettingsSection({
             <Switch
               value={item.value}
               onValueChange={item.onToggle}
-              trackColor={{ false: "#2a3238", true: "#f0c2fe" }}
+              trackColor={{ false: "#2a3238", true: "#126C52" }}
               thumbColor="#fff"
             />
           </StyledPressable>

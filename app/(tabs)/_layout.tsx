@@ -27,7 +27,7 @@ function CreateActionButton({
     <>
       <TabBarIcon
         name="add-circle"
-        color={focused ? "#f0c2fe" : "rgba(255, 255, 255, 0.6)"}
+        color={focused ? "#126C52" : "rgba(255, 255, 255, 0.6)"}
         focused={focused}
         onPress={handlePress}
       />
@@ -105,7 +105,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#f0c2fe",
+        tabBarActiveTintColor: "#126C52",
         tabBarInactiveTintColor: "rgba(255, 255, 255, 0.6)",
         headerShown: false,
         tabBarStyle: {
@@ -168,7 +168,7 @@ export default function TabLayout() {
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: "#f0c2fe",
+            backgroundColor: "#126C52",
             color: "#ffffff",
             fontSize: 10,
             fontWeight: "700",

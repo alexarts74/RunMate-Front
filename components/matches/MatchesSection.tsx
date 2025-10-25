@@ -19,7 +19,7 @@ export function MatchesSection() {
       {/* Header de la section */}
       <View className="flex-row justify-between items-center mb-5">
         <View className="flex-row items-center">
-          <View className="w-1 h-6 bg-[#f0c2fe] rounded-full mr-3" />
+          <View className="w-1 h-6 bg-greenLight rounded-full mr-3" />
           <Text className="text-xl font-kanit-semibold text-white">
             🔥 Vos matches
           </Text>
@@ -30,10 +30,10 @@ export function MatchesSection() {
             onPress={() => router.push("/(app)/matches/all")}
             className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
           >
-            <Text className="text-[#f0c2fe] font-kanit text-sm mr-1">
+            <Text className="text-greenLight font-kanit text-sm mr-1">
               Voir tout ({matches.length})
             </Text>
-            <Ionicons name="arrow-forward" size={14} color="#f0c2fe" />
+            <Ionicons name="arrow-forward" size={14} color="#126C52" />
           </Pressable>
         )}
       </View>
@@ -41,12 +41,12 @@ export function MatchesSection() {
       {/* Contenu */}
       {isLoading ? (
         <View className="h-64 bg-[#1e2429] rounded-2xl items-center justify-center">
-          <Ionicons name="hourglass-outline" size={40} color="#f0c2fe" />
+          <Ionicons name="hourglass-outline" size={40} color="#126C52" />
           <Text className="text-gray-400 mt-2">Chargement...</Text>
         </View>
       ) : displayMatches.length === 0 ? (
         <View className="bg-[#1e2429] rounded-2xl p-6 items-center border border-gray-700">
-          <Ionicons name="search" size={40} color="#f0c2fe" className="mb-3" />
+          <Ionicons name="search" size={40} color="#126C52" className="mb-3" />
           <Text className="text-white text-center font-kanit mb-2">
             Aucun match disponible
           </Text>

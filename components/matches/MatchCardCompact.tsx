@@ -123,7 +123,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
           <View style={{ gap: 8 }}>
             {/* Ville */}
         {/* <View className="flex-row items-center">
-              <Ionicons name="location" size={14} color="#f0c2fe" />
+              <Ionicons name="location" size={14} color="#126C52" />
               <Text className="text-white text-sm font-kanit ml-2">
                 {match.user.city}
               </Text>
@@ -140,7 +140,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
         {/* {isChillRunner
               ? runningFrequency && (
                   <View className="flex-row items-center">
-                    <Ionicons name="time" size={14} color="#f0c2fe" />
+                    <Ionicons name="time" size={14} color="#126C52" />
                     <Text className="text-white text-sm font-kanit ml-2">
                       {formatRunningFrequency()}
                     </Text>
@@ -148,7 +148,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
                 )
               : actualPace && (
                   <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={14} color="#f0c2fe" />
+                    <Ionicons name="speedometer" size={14} color="#126C52" />
                     <Text className="text-white text-sm font-kanit ml-2">
                       {actualPace} min/km
                     </Text>

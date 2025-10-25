@@ -50,7 +50,7 @@ export function MultiSelect({
               <Ionicons
                 name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                 size={16}
-                color={isSelected ? "white" : "#f0c2fe"}
+                color={isSelected ? "white" : "#126C52"}
               />
             </Pressable>
           );

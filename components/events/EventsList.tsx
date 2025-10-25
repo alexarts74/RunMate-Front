@@ -201,7 +201,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#f0c2fe"
+              tintColor="#126C52"
             />
           }
         >

@@ -137,7 +137,7 @@ export default function AllEventsScreen() {
     if (events.length === 0) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Ionicons name="calendar-outline" size={60} color="#f0c2fe" />
+          <Ionicons name="calendar-outline" size={60} color="#126C52" />
           <Text className="text-white text-center text-lg mb-2 mt-4 font-kanit">
             Aucun événement disponible
           </Text>
@@ -184,7 +184,7 @@ export default function AllEventsScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#f0c2fe"
+            tintColor="#126C52"
           />
         }
       >

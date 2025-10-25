@@ -107,7 +107,7 @@ export function MatchesDeckSwiper() {
               onPress={() => router.push("/runner/filters")}
               className="bg-background p-2.5 rounded-xl border border-gray-700"
             >
-              <Ionicons name="options-outline" size={20} color="#f0c2fe" />
+              <Ionicons name="options-outline" size={20} color="#126C52" />
             </Pressable>
           </View>
         </View>
@@ -117,7 +117,7 @@ export function MatchesDeckSwiper() {
           <Ionicons
             name="search"
             size={60}
-            color="#f0c2fe"
+            color="#126C52"
             style={{ marginBottom: 16 }}
           />
           <Text className="text-gray-300 text-center text-base font-kanit mb-4">
@@ -157,7 +157,7 @@ export function MatchesDeckSwiper() {
             onPress={() => router.push("/runner/filters")}
             className="bg-background p-2.5 rounded-xl border border-gray-700"
           >
-            <Ionicons name="options-outline" size={20} color="#f0c2fe" />
+            <Ionicons name="options-outline" size={20} color="#126C52" />
           </Pressable>
         </View>
       </View>
@@ -203,8 +203,8 @@ export function MatchesDeckSwiper() {
               title: "PRÉCÉDENT",
               style: {
                 label: {
-                  backgroundColor: "#f0c2fe",
-                  borderColor: "#f0c2fe",
+                  backgroundColor: "#126C52",
+                  borderColor: "#126C52",
                   color: "white",
                   borderWidth: 1,
                   fontSize: 20,
@@ -225,8 +225,8 @@ export function MatchesDeckSwiper() {
               title: "SUIVANT",
               style: {
                 label: {
-                  backgroundColor: "#f0c2fe",
-                  borderColor: "#f0c2fe",
+                  backgroundColor: "#126C52",
+                  borderColor: "#126C52",
                   color: "white",
                   borderWidth: 1,
                   fontSize: 20,

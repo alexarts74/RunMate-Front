@@ -226,7 +226,7 @@ export default function PaymentScreen() {
                   <Ionicons
                     name="checkmark-circle"
                     size={16}
-                    color={selectedPlan.id === plan.id ? "#f0c2fe" : "#6B7280"}
+                    color={selectedPlan.id === plan.id ? "#126C52" : "#6B7280"}
                   />
                   <Text className="text-white ml-2 font-kanit">{feature}</Text>
                 </View>
@@ -340,7 +340,7 @@ export default function PaymentScreen() {
         </Pressable>
 
         <View className="flex-row items-center justify-center mt-4 mb-10">
-          <Ionicons name="lock-closed" size={14} color="#f0c2fe" />
+          <Ionicons name="lock-closed" size={14} color="#126C52" />
           <Text className="text-gray-400 ml-1 font-kanit text-sm">
             Paiement sécurisé via Stripe
           </Text>

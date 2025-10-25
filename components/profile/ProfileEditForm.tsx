@@ -176,7 +176,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             placeholder="Sélectionnez votre genre"
             boxStyles={{
               borderWidth: 1,
-              borderColor: focusedInput === "gender" ? "#f0c2fe" : "#2a3238",
+              borderColor: focusedInput === "gender" ? "#126C52" : "#2a3238",
               borderRadius: 9999,
               padding: 16,
               backgroundColor: "#background",

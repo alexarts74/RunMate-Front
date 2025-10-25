@@ -65,7 +65,7 @@ export function SignUpFormStep1({
           onPress={onBack}
           className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
         >
-          <Ionicons name="arrow-back" size={22} color="#f0c2fe" />
+          <Ionicons name="arrow-back" size={22} color="#126C52" />
         </Pressable>
 
         <View className="flex-1">
@@ -90,7 +90,7 @@ export function SignUpFormStep1({
                   : "border-gray-700"
               }`}
             >
-              <Ionicons name="mail-outline" size={20} color="#f0c2fe" />
+              <Ionicons name="mail-outline" size={20} color="#126C52" />
               <TextInput
                 className="flex-1 text-white ml-3 font-kanit"
                 placeholder="Email"
@@ -120,7 +120,7 @@ export function SignUpFormStep1({
                   : "border-gray-700"
               }`}
             >
-              <Ionicons name="lock-closed-outline" size={20} color="#f0c2fe" />
+              <Ionicons name="lock-closed-outline" size={20} color="#126C52" />
               <TextInput
                 className="flex-1 text-white ml-3 font-kanit"
                 placeholder="Mot de passe"
@@ -154,7 +154,7 @@ export function SignUpFormStep1({
               <Ionicons
                 name="shield-checkmark-outline"
                 size={20}
-                color="#f0c2fe"
+                color="#126C52"
               />
               <TextInput
                 className="flex-1 text-white ml-3 font-kanit"

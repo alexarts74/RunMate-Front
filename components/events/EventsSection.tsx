@@ -55,7 +55,7 @@ export function EventsSection() {
       {/* Header de la section */}
       <View className="flex-row justify-between items-center mb-3">
         <View className="flex-row items-center">
-          <View className="w-1 h-6 bg-[#f0c2fe] rounded-full mr-3" />
+          <View className="w-1 h-6 bg-greenLight rounded-full mr-3" />
           <Text className="text-xl font-kanit-semibold text-white">
             📅 Événements à venir
           </Text>
@@ -65,23 +65,23 @@ export function EventsSection() {
           onPress={handleSeeAll}
           className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
         >
-          <Text className="text-[#f0c2fe] font-kanit text-sm mr-1">
+          <Text className="text-greenLight font-kanit text-sm mr-1">
             Voir tout
           </Text>
-          <Ionicons name="arrow-forward" size={14} color="#f0c2fe" />
+          <Ionicons name="arrow-forward" size={14} color="#126C52" />
         </Pressable>
       </View>
 
       {/* Contenu */}
       {isLoading ? (
         <View className="h-32 bg-background rounded-2xl items-center justify-center border border-gray-700">
-          <Ionicons name="hourglass-outline" size={32} color="#f0c2fe" />
+          <Ionicons name="hourglass-outline" size={32} color="#126C52" />
         </View>
       ) : !user?.is_premium ? (
         <View className="bg-background rounded-2xl p-5 border border-purple/30">
           <View className="flex-row items-center mb-3">
             <View className="bg-purple/20 p-3 rounded-full mr-3">
-              <Ionicons name="calendar" size={24} color="#f0c2fe" />
+              <Ionicons name="calendar" size={24} color="#126C52" />
             </View>
             <View className="flex-1">
               <Text className="text-white font-kanit-semibold text-base mb-1">
@@ -103,7 +103,7 @@ export function EventsSection() {
         </View>
       ) : events.length === 0 ? (
         <View className="bg-background rounded-2xl p-5 items-center border border-gray-700">
-          <Ionicons name="calendar-outline" size={36} color="#f0c2fe" />
+          <Ionicons name="calendar-outline" size={36} color="#126C52" />
           <Text className="text-white text-center font-kanit mt-2 mb-1">
             Aucun événement
           </Text>
@@ -132,7 +132,7 @@ export function EventsSection() {
                   </Text>
                 </View>
                 <View className="bg-purple/20 px-3 py-1 rounded-full">
-                  <Text className="text-[#f0c2fe] text-xs font-kanit-semibold">
+                  <Text className="text-greenLight text-xs font-kanit-semibold">
                     {formatDate(event.start_date)}
                   </Text>
                 </View>
@@ -140,14 +140,14 @@ export function EventsSection() {
 
               <View className="flex-row items-center" style={{ gap: 16 }}>
                 <View className="flex-row items-center">
-                  <Ionicons name="people" size={14} color="#f0c2fe" />
+                  <Ionicons name="people" size={14} color="#126C52" />
                   <Text className="text-gray-300 text-xs ml-1">
                     {event.participants_count || 0}
                   </Text>
                 </View>
                 {event.distance && (
                   <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={14} color="#f0c2fe" />
+                    <Ionicons name="speedometer" size={14} color="#126C52" />
                     <Text className="text-gray-300 text-xs ml-1">
                       {event.distance}km
                     </Text>

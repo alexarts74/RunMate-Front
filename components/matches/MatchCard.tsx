@@ -122,7 +122,7 @@ export function MatchCard({ match }: MatchCardProps) {
           <View className="space-y-3">
             {/* Ville */}
             <View className="flex-row items-center">
-              <Ionicons name="location" size={18} color="#f0c2fe" />
+              <Ionicons name="location" size={18} color="#126C52" />
               <Text className="text-white text-base font-kanit ml-3">
                 {match.user.city}
               </Text>
@@ -139,7 +139,7 @@ export function MatchCard({ match }: MatchCardProps) {
             {isChillRunner ? (
               runningFrequency && (
                 <View className="flex-row items-center">
-                  <Ionicons name="time" size={18} color="#f0c2fe" />
+                  <Ionicons name="time" size={18} color="#126C52" />
                   <Text className="text-white text-base font-kanit ml-3">
                     {formatRunningFrequency()}
                   </Text>
@@ -149,7 +149,7 @@ export function MatchCard({ match }: MatchCardProps) {
               <View className="space-y-2">
                 {actualPace && (
                   <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={18} color="#f0c2fe" />
+                    <Ionicons name="speedometer" size={18} color="#126C52" />
                     <Text className="text-white text-base font-kanit ml-3">
                       {actualPace} min/km
                     </Text>
@@ -157,7 +157,7 @@ export function MatchCard({ match }: MatchCardProps) {
                 )}
                 {weeklyDistance && (
                   <View className="flex-row items-center">
-                    <Ionicons name="footsteps" size={18} color="#f0c2fe" />
+                    <Ionicons name="footsteps" size={18} color="#126C52" />
                     <Text className="text-white text-base font-kanit ml-3">
                       {weeklyDistance} km/semaine
                     </Text>

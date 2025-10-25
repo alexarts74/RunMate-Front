@@ -4,7 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        purple: "#401346",
+        green: "#0F4D3B",
+        greenLight: "#126C52",
+        // purple: "#401346",
         // purple: "#f0c2fe",
         background: "#1b1d21",
         gray: {
