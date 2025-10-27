@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Pressable, Dimensions } from "react-native";
 import { useMatches } from "@/context/MatchesContext";
 import { MatchCardCompact } from "@/components/matches/MatchCardCompact";
@@ -17,23 +17,29 @@ export function MatchesSection() {
   return (
     <View className="px-5 pb-5 pt-4">
       {/* Header de la section */}
-      <View className="flex-row justify-between items-center mb-5">
+      <View className="flex-row justify-between items-center mb-4">
         <View className="flex-row items-center">
-          <View className="w-1 h-6 bg-greenLight rounded-full mr-3" />
-          <Text className="text-xl font-kanit-semibold text-white">
-            🔥 Vos matches
+          <Text className="text-2xl font-kanit-bold text-white mr-2">
+            Vos matches
           </Text>
+          {matches && matches.length > 0 && (
+            <View className="bg-purple/20 px-2 py-0.5 rounded-full">
+              <Text className="text-greenLight font-kanit-semibold text-xs">
+                {matches.length}
+              </Text>
+            </View>
+          )}
         </View>
 
         {matches && matches.length > 2 && (
           <Pressable
             onPress={() => router.push("/(app)/matches/all")}
-            className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
+            className="flex-row items-center bg-greenLight/10 px-3 py-1.5 rounded-lg border border-greenLight/20"
           >
-            <Text className="text-greenLight font-kanit text-sm mr-1">
-              Voir tout ({matches.length})
+            <Text className="text-greenLight font-kanit-semibold text-sm mr-1">
+              Voir tout
             </Text>
-            <Ionicons name="arrow-forward" size={14} color="#126C52" />
+            <Ionicons name="chevron-forward" size={16} color="#126C52" />
           </Pressable>
         )}
       </View>
