@@ -25,24 +25,34 @@ export default function SettingsSection({
   description,
 }: SettingsSectionProps) {
   return (
-    <StyledView className="space-y-4">
-      <StyledView className="bg-background rounded-xl overflow-hidden">
+    <StyledView className="space-y-4 pt-4">
+      <StyledView className="bg-white rounded-2xl overflow-hidden"
+        style={{
+          shadowColor: "#FF6B4A",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
+        }}
+      >
         {items.map((item, index) => (
           <StyledPressable
             key={item.title}
-            className={`flex-row items-center justify-between p-4 ${
-              index !== items.length - 1 ? "border-b border-gray-800" : ""
+            className={`flex-row items-center justify-between p-5 ${
+              index !== items.length - 1 ? "border-b border-gray-100" : ""
             }`}
             onPress={item.onToggle}
           >
-            <StyledView className="flex-row items-center space-x-3 flex-1">
-              <Ionicons name={item.icon} size={24} color="#126C52" />
+            <StyledView className="flex-row items-center space-x-4 flex-1">
+              <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
+                <Ionicons name={item.icon} size={20} color="#FF6B4A" />
+              </View>
               <StyledView className="flex-1">
-                <StyledText className="text-white font-semibold">
+                <StyledText className="text-gray-900 font-kanit-bold">
                   {item.title}
                 </StyledText>
                 {item.description && (
-                  <StyledText className="text-gray-400 text-sm">
+                  <StyledText className="text-gray-500 text-sm font-kanit-medium mt-1">
                     {item.description}
                   </StyledText>
                 )}
@@ -51,15 +61,16 @@ export default function SettingsSection({
             <Switch
               value={item.value}
               onValueChange={item.onToggle}
-              trackColor={{ false: "#2a3238", true: "#126C52" }}
+              trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
               thumbColor="#fff"
+              ios_backgroundColor="#E5E7EB"
             />
           </StyledPressable>
         ))}
       </StyledView>
 
       {description && (
-        <StyledText className="text-gray-400 text-sm px-5">
+        <StyledText className="text-gray-500 text-sm px-6 font-kanit-medium">
           {description}
         </StyledText>
       )}

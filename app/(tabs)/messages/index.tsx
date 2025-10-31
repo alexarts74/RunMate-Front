@@ -1,5 +1,6 @@
 import { View, Text, FlatList, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Conversation } from "@/interface/Conversation";
 import { ConversationItem } from "@/components/messages/ConversationItem";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,7 +33,7 @@ const MessagesScreen = () => {
         return dateB.getTime() - dateA.getTime();
       });
 
-      setConversations(allConversations);
+      setConversations(allConversations as Conversation[]);
     } catch (error) {
       console.error("Erreur lors du chargement des conversations:", error);
     } finally {
@@ -69,12 +70,16 @@ const MessagesScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-background pt-12">
-      <View className="px-4 py-4 border-b border-[#394047] flex-row items-center gap-x-4">
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+      <View className="px-6 pt-4 pb-4 flex-row items-center gap-x-4 border-b border-fond"
+      >
+        <Pressable 
+          onPress={() => router.back()}
+          className="p-2 rounded-full bg-tertiary"
+        >
+          <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
         </Pressable>
-        <Text className="text-white text-2xl font-kanit-semibold">
+        <Text className="text-gray-900 text-2xl font-kanit-bold">
           Messages
         </Text>
       </View>
@@ -82,18 +87,33 @@ const MessagesScreen = () => {
       {isLoading && <LoadingScreen />}
 
       {conversations.length === 0 ? (
-        <View className="flex-1 items-center justify-center px-6">
-          <View className="bg-[#394047]/30 p-8 rounded-full mb-6">
-            <Ionicons name="chatbubbles-outline" size={60} color="#888" />
+        <View className="flex-1 items-center justify-center px-6 bg-fond">
+          <View className="bg-tertiary p-8 rounded-full mb-6"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
+          >
+            <Ionicons name="chatbubbles-outline" size={60} color="#FF6B4A" />
           </View>
-          <Text className="text-white text-2xl font-kanit-semibold text-center mb-3">
+          <Text className="text-gray-900 text-2xl font-kanit-bold text-center mb-3">
             Aucune conversation trouvée
           </Text>
-          <Text className="text-gray-400 text-base font-kanit-regular text-center mb-8">
+          <Text className="text-gray-500 text-base font-kanit-medium text-center mb-8">
             Commencez une conversation avec un utilisateur ou un groupe
           </Text>
           <Pressable
-            className="bg-primary rounded-full px-6 py-3 bg-purple flex-row items-center"
+            className="bg-primary rounded-full px-6 py-3 flex-row items-center"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
             onPress={() => router.push("/")}
           >
             <Ionicons
@@ -102,7 +122,7 @@ const MessagesScreen = () => {
               color="white"
               style={{ marginRight: 8 }}
             />
-            <Text className="text-white text-base font-kanit-semibold">
+            <Text className="text-white text-base font-kanit-bold">
               Trouve ton RunMate
             </Text>
           </Pressable>
@@ -114,9 +134,12 @@ const MessagesScreen = () => {
           keyExtractor={keyExtractor}
           onRefresh={loadConversations}
           refreshing={isLoading}
+          contentContainerStyle={{ paddingBottom: 20, paddingTop: 8, paddingHorizontal: 4 }}
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -4,9 +4,9 @@ import {
   Image,
   ScrollView,
   Pressable,
-  SafeAreaView,
   Animated,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState, useRef } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useMatches } from "@/context/MatchesContext";
@@ -57,28 +57,33 @@ const CollapsibleSection = ({
     <StyledView className="mb-4">
       <StyledPressable
         onPress={toggleSection}
-        className="flex-row items-center justify-between bg-[#1e2429] p-3 rounded-t-xl"
+        className="flex-row items-center justify-between bg-white p-4 rounded-t-2xl border-b border-gray-100"
         style={{
-          borderBottomLeftRadius: isOpen ? 0 : 12,
-          borderBottomRightRadius: isOpen ? 0 : 12,
+          borderBottomLeftRadius: isOpen ? 0 : 16,
+          borderBottomRightRadius: isOpen ? 0 : 16,
+          shadowColor: "#FF6B4A",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
         }}
       >
         <StyledView className="flex-row items-center">
-          <StyledView className="bg-[#2a3238] p-2 rounded-full">
-            <Ionicons name={icon as any} size={18} color="#401346" />
+          <StyledView className="bg-tertiary p-2.5 rounded-xl">
+            <Ionicons name={icon as any} size={18} color="#FF6B4A" />
           </StyledView>
-          <StyledText className="text-white ml-2 font-medium">
+          <StyledText className="text-gray-900 ml-3 font-kanit-bold">
             {title}
           </StyledText>
         </StyledView>
         <StyledAnimatedView style={{ transform: [{ rotate: rotation }] }}>
-          <Ionicons name="chevron-forward" size={20} color="#fff" />
+          <Ionicons name="chevron-forward" size={20} color="#A78BFA" />
         </StyledAnimatedView>
       </StyledPressable>
 
       {isOpen && (
         <StyledAnimatedView
-          className="bg-[#1a1f24] p-3 rounded-b-xl"
+          className="bg-white p-4 rounded-b-2xl border-t border-gray-100"
           style={{
             opacity: animatedController,
             transform: [
@@ -89,6 +94,11 @@ const CollapsibleSection = ({
                 }),
               },
             ],
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 4,
+            elevation: 1,
           }}
         >
           {children}
@@ -169,73 +179,79 @@ export default function RunnerProfileScreen() {
   };
 
   return (
-    <StyledSafeAreaView className="flex-1 bg-[#14141b]">
+    <StyledSafeAreaView className="flex-1 bg-fond" edges={['top']}>
       {/* Contenu scrollable */}
       <StyledScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         {/* Header avec image de profil */}
-        <StyledView className="pt-2 px-5">
+        <StyledView className="pt-4 px-6 bg-white pb-6">
           {/* Header avec bouton retour */}
-          <StyledView className="flex-row items-center mb-4">
+          <StyledView className="flex-row items-center mb-6">
             <StyledPressable
               onPress={() => router.back()}
-              className="p-2 rounded-full"
+              className="p-2 rounded-full bg-tertiary"
             >
-              <Ionicons name="arrow-back" size={24} color="#fff" />
+              <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
             </StyledPressable>
-            <StyledText className="text-xl font-bold text-white ml-2">
+            <StyledText className="text-xl font-kanit-bold text-gray-900 ml-3">
               Profil Runner
             </StyledText>
           </StyledView>
 
           <StyledView className="items-center">
+            <StyledView className="mb-4">
             <StyledImage
               source={
                 runner.profile_image
                   ? { uri: runner.profile_image }
                   : require("@/assets/images/react-logo.png")
               }
-              className="w-32 h-32 rounded-full"
+                className="w-32 h-32 rounded-full border-4 border-primary"
             />
-            <StyledText className="text-2xl font-bold text-white mt-3">
+            </StyledView>
+            <StyledText className="text-3xl font-kanit-bold text-gray-900 mt-2">
               {runner.first_name} {runner.last_name}
             </StyledText>
 
-            <StyledText className="text-lg text-gray-300 mt-1">
+            <StyledText className="text-lg text-gray-600 mt-1 font-kanit-medium">
               {runner.age} ans
             </StyledText>
 
-            <StyledView className="flex-row items-center mt-2">
-              <Ionicons name="location" size={16} color="#9CA3AF" />
-              <StyledText className="text-purple ml-1">
+            <StyledView className="flex-row items-center mt-3">
+              <View className="w-5 h-5 rounded-full bg-tertiary items-center justify-center mr-2">
+                <Ionicons name="location" size={12} color="#A78BFA" />
+              </View>
+              <StyledText className="text-gray-700 font-kanit-medium">
                 {runner.city}, {runner.department}
               </StyledText>
             </StyledView>
 
             {/* Bio */}
             {runner.bio && (
-              <StyledText className="text-gray-300 text-center italic mt-4 px-4">
+              <StyledView className="mt-6 px-4">
+                <StyledText className="text-gray-600 text-center italic font-kanit-medium">
                 "{runner.bio}"
               </StyledText>
+              </StyledView>
             )}
 
             {/* Type de runner - badges */}
-            <StyledView className="flex-row justify-center flex-wrap mt-5">
+            <StyledView className="flex-row justify-center flex-wrap mt-6">
               <StyledView
                 className={`${
                   runner.runner_profile.running_type === "chill"
-                    ? "bg-blue-500/30"
-                    : "bg-red-500/30"
-                } px-3 py-1 rounded-full mr-3`}
+                    ? "bg-tertiary border border-primary"
+                    : "bg-tertiary border border-secondary"
+                } px-4 py-2 rounded-full mr-3`}
               >
                 <StyledText
                   className={`${
                     runner.runner_profile.running_type === "chill"
-                      ? "text-blue-200"
-                      : "text-red-200"
-                  } text-sm font-medium`}
+                      ? "text-primary"
+                      : "text-secondary"
+                  } text-sm font-kanit-bold`}
                 >
                   {runner.runner_profile.running_type === "chill"
                     ? "Runner Chill"
@@ -244,9 +260,9 @@ export default function RunnerProfileScreen() {
               </StyledView>
 
               {runner.runner_profile.flexible && (
-                <StyledView className="bg-green-500/30 px-3 py-1 rounded-full flex-row items-center">
-                  <Ionicons name="leaf-outline" size={16} color="#4ade80" />
-                  <StyledText className="text-green-200 ml-1 text-sm font-medium">
+                <StyledView className="bg-tertiary border border-secondary px-4 py-2 rounded-full flex-row items-center">
+                  <Ionicons name="leaf-outline" size={16} color="#A78BFA" />
+                  <StyledText className="text-secondary ml-2 text-sm font-kanit-bold">
                     Flexible
                   </StyledText>
                 </StyledView>
@@ -255,38 +271,35 @@ export default function RunnerProfileScreen() {
           </StyledView>
         </StyledView>
 
-        {/* Ligne de séparation */}
-        <StyledView className="h-[1px] bg-[#2a3238] my-6 mx-5" />
-
         {/* Sections avec accordéon */}
-        <StyledView className="px-5">
+        <StyledView className="px-6 py-4">
           {/* Statistiques de course - cartes */}
           <CollapsibleSection title="Statistiques" icon="stats-chart-outline">
-            <StyledView className="flex-row justify-between gap-x-2">
+            <StyledView className="flex-row justify-between gap-x-3">
               {/* Allure actuelle - affiché pour tous */}
-              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
-                <StyledView className="bg-[#2a3238] p-2 rounded-full">
-                  <Ionicons name="walk-outline" size={18} color="#401346" />
+              <StyledView className="items-center bg-tertiary p-4 rounded-xl flex-1 border border-gray-200">
+                <StyledView className="bg-white p-2.5 rounded-full mb-2">
+                  <Ionicons name="walk-outline" size={18} color="#FF6B4A" />
                 </StyledView>
-                <StyledText className="text-white text-center mt-1 text-sm">
+                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
                   Pace
                 </StyledText>
-                <StyledText className="text-purple text-base font-bold">
+                <StyledText className="text-primary text-base font-kanit-bold">
                   {runner.runner_profile.actual_pace} min/km
                 </StyledText>
               </StyledView>
 
               {/* Distance - adapté selon le type */}
-              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
-                <StyledView className="bg-[#2a3238] p-2 rounded-full">
-                  <Ionicons name="resize-outline" size={18} color="#401346" />
+              <StyledView className="items-center bg-tertiary p-4 rounded-xl flex-1 border border-gray-200">
+                <StyledView className="bg-white p-2.5 rounded-full mb-2">
+                  <Ionicons name="resize-outline" size={18} color="#A78BFA" />
                 </StyledView>
-                <StyledText className="text-white text-center mt-1 text-sm">
+                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
                   {runner.runner_profile.running_type === "perf"
                     ? "Distance/semaine"
                     : "Distance"}
                 </StyledText>
-                <StyledText className="text-purple text-base font-bold">
+                <StyledText className="text-secondary text-base font-kanit-bold">
                   {runner.runner_profile.running_type === "perf"
                     ? `${runner.runner_profile.weekly_mileage || 0} km/sem`
                     : `${runner.runner_profile.usual_distance || 0} km`}
@@ -294,24 +307,24 @@ export default function RunnerProfileScreen() {
               </StyledView>
 
               {/* Troisième carte adaptée selon le type */}
-              <StyledView className="items-center bg-background p-3 rounded-xl flex-1">
-                <StyledView className="bg-[#2a3238] p-2 rounded-full">
+              <StyledView className="items-center bg-tertiary p-4 rounded-xl flex-1 border border-gray-200">
+                <StyledView className="bg-white p-2.5 rounded-full mb-2">
                   {runner.runner_profile.running_type === "perf" ? (
                     <Ionicons
                       name="speedometer-outline"
                       size={18}
-                      color="#401346"
+                      color="#FF6B4A"
                     />
                   ) : (
-                    <Ionicons name="repeat-outline" size={18} color="#401346" />
+                    <Ionicons name="repeat-outline" size={18} color="#A78BFA" />
                   )}
                 </StyledView>
-                <StyledText className="text-white text-center mt-1 text-sm">
+                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
                   {runner.runner_profile.running_type === "perf"
                     ? "Target Pace"
                     : "Fréquence"}
                 </StyledText>
-                <StyledText className="text-purple text-base font-bold">
+                <StyledText className={`${runner.runner_profile.running_type === "perf" ? "text-primary" : "text-secondary"} text-base font-kanit-bold`}>
                   {runner.runner_profile.running_type === "perf"
                     ? `${runner.runner_profile.target_pace || "N/A"}`
                     : `${
@@ -336,17 +349,19 @@ export default function RunnerProfileScreen() {
                 {/* Objectifs de compétition - pour runners perf */}
                 {competitionGoals && (
                   <StyledView className="mb-4">
-                    <StyledView className="flex-row items-center mb-1">
+                    <StyledView className="flex-row items-center mb-2">
+                      <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                       <Ionicons
                         name="ribbon-outline"
-                        size={18}
-                        color="#401346"
+                          size={16}
+                          color="#FF6B4A"
                       />
-                      <StyledText className="text-white ml-2 font-medium">
+                      </View>
+                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                         Objectifs de compétition
                       </StyledText>
                     </StyledView>
-                    <StyledText className="text-gray-300 ml-6 text-sm">
+                    <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
                       {Array.isArray(competitionGoals)
                         ? competitionGoals.map(formatCompetitionGoal).join(", ")
                         : typeof competitionGoals === "string"
@@ -359,23 +374,25 @@ export default function RunnerProfileScreen() {
                 {/* Jours d'entraînement - pour runners perf */}
                 {Array.isArray(trainingDays) && trainingDays.length > 0 && (
                   <StyledView>
-                    <StyledView className="flex-row items-center mb-1">
+                    <StyledView className="flex-row items-center mb-2">
+                      <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                       <Ionicons
                         name="calendar-outline"
-                        size={18}
-                        color="#401346"
+                          size={16}
+                          color="#A78BFA"
                       />
-                      <StyledText className="text-white ml-2 font-medium">
+                      </View>
+                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                         Jours d'entraînement
                       </StyledText>
                     </StyledView>
-                    <StyledView className="flex-row flex-wrap ml-6">
+                    <StyledView className="flex-row flex-wrap ml-8">
                       {trainingDays.map((day, index) => (
                         <StyledView
                           key={index}
-                          className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                          className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2 mb-2"
                         >
-                          <StyledText className="text-purple text-xs">
+                          <StyledText className="text-primary text-xs font-kanit-bold">
                             {capitalize(day)}
                           </StyledText>
                         </StyledView>
@@ -394,13 +411,15 @@ export default function RunnerProfileScreen() {
               >
                 {/* Objectif */}
                 <StyledView className="mb-4">
-                  <StyledView className="flex-row items-center mb-1">
-                    <Ionicons name="trophy-outline" size={18} color="#401346" />
-                    <StyledText className="text-white ml-2 font-medium">
+                  <StyledView className="flex-row items-center mb-2">
+                    <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
+                      <Ionicons name="trophy-outline" size={16} color="#FF6B4A" />
+                    </View>
+                    <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                       Objectif
                     </StyledText>
                   </StyledView>
-                  <StyledText className="text-gray-300 ml-6 text-sm">
+                  <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
                     {typeof objective === "string"
                       ? objective.charAt(0).toUpperCase() + objective.slice(1)
                       : Array.isArray(objective)
@@ -413,30 +432,32 @@ export default function RunnerProfileScreen() {
 
                 {/* Disponibilités */}
                 <StyledView className="mb-4">
-                  <StyledView className="flex-row items-center mb-1">
+                  <StyledView className="flex-row items-center mb-2">
+                    <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                     <Ionicons
                       name="calendar-outline"
-                      size={18}
-                      color="#401346"
+                        size={16}
+                        color="#A78BFA"
                     />
-                    <StyledText className="text-white ml-2 font-medium">
+                    </View>
+                    <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                       Disponibilités
                     </StyledText>
                   </StyledView>
-                  <StyledView className="flex-row flex-wrap ml-6">
+                  <StyledView className="flex-row flex-wrap ml-8">
                     {Array.isArray(availability) && availability.length > 0 ? (
                       availability.map((day, index) => (
                         <StyledView
                           key={index}
-                          className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                          className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                         >
-                          <StyledText className="text-purple text-xs text-center">
+                          <StyledText className="text-secondary text-xs font-kanit-bold text-center">
                             {capitalize(day)}
                           </StyledText>
                         </StyledView>
                       ))
                     ) : (
-                      <StyledText className="text-gray-400 text-sm">
+                      <StyledText className="text-gray-500 text-sm font-kanit-medium">
                         Aucune disponibilité renseignée
                       </StyledText>
                     )}
@@ -447,23 +468,25 @@ export default function RunnerProfileScreen() {
                 {Array.isArray(preferredTimeOfDay) &&
                   preferredTimeOfDay.length > 0 && (
                     <StyledView>
-                      <StyledView className="flex-row items-center mb-1">
+                      <StyledView className="flex-row items-center mb-2">
+                        <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                         <Ionicons
                           name="time-outline"
-                          size={18}
-                          color="#401346"
+                            size={16}
+                            color="#A78BFA"
                         />
-                        <StyledText className="text-white ml-2 font-medium">
+                        </View>
+                        <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                           Moments préférés
                         </StyledText>
                       </StyledView>
-                      <StyledView className="flex-row flex-wrap ml-6">
+                      <StyledView className="flex-row flex-wrap ml-8">
                         {preferredTimeOfDay.map((time, index) => (
                           <StyledView
                             key={index}
-                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                            className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-purple text-xs">
+                            <StyledText className="text-secondary text-xs font-kanit-bold">
                               {time}
                             </StyledText>
                           </StyledView>
@@ -481,24 +504,26 @@ export default function RunnerProfileScreen() {
                 {/* Préférences Sociales */}
                 {socialPreferences && socialPreferences.length > 0 && (
                   <StyledView className="mb-4">
-                    <StyledView className="flex-row items-center mb-1">
+                    <StyledView className="flex-row items-center mb-2">
+                      <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                       <Ionicons
                         name="people-outline"
-                        size={18}
-                        color="#401346"
+                          size={16}
+                          color="#A78BFA"
                       />
-                      <StyledText className="text-white ml-2 font-medium">
+                      </View>
+                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                         Préférences sociales
                       </StyledText>
                     </StyledView>
-                    <StyledView className="flex-row flex-wrap ml-6">
+                    <StyledView className="flex-row flex-wrap ml-8">
                       {Array.isArray(socialPreferences) &&
                         socialPreferences.map((pref, index) => (
                           <StyledView
                             key={index}
-                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                            className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-purple text-xs">
+                            <StyledText className="text-secondary text-xs font-kanit-bold">
                               {pref}
                             </StyledText>
                           </StyledView>
@@ -510,20 +535,22 @@ export default function RunnerProfileScreen() {
                 {/* Activités après course */}
                 {postRunActivities && postRunActivities.length > 0 && (
                   <StyledView>
-                    <StyledView className="flex-row items-center mb-1">
-                      <Ionicons name="cafe-outline" size={18} color="#401346" />
-                      <StyledText className="text-white ml-2 font-medium">
+                    <StyledView className="flex-row items-center mb-2">
+                      <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
+                        <Ionicons name="cafe-outline" size={16} color="#FF6B4A" />
+                      </View>
+                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                         Après la course
                       </StyledText>
                     </StyledView>
-                    <StyledView className="flex-row flex-wrap ml-6">
+                    <StyledView className="flex-row flex-wrap ml-8">
                       {Array.isArray(postRunActivities) &&
                         postRunActivities.map((activity, index) => (
                           <StyledView
                             key={index}
-                            className="bg-[#2a3238] px-2 py-0.5 rounded-full mr-2 mb-1"
+                            className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-purple text-xs">
+                            <StyledText className="text-primary text-xs font-kanit-bold">
                               {activity}
                             </StyledText>
                           </StyledView>
@@ -542,14 +569,16 @@ export default function RunnerProfileScreen() {
             initiallyOpen={false}
           >
             {/* Dernière activité */}
-            <StyledView className="mb-3">
-              <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="pulse-outline" size={18} color="#401346" />
-                <StyledText className="text-white ml-2 font-medium">
+            <StyledView className="mb-4">
+              <StyledView className="flex-row items-center mb-2">
+                <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
+                  <Ionicons name="pulse-outline" size={16} color="#FF6B4A" />
+                </View>
+                <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                   Dernière activité
                 </StyledText>
               </StyledView>
-              <StyledText className="text-gray-300 ml-6 text-sm">
+              <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
                 {(runner as any).last_active_at
                   ? new Date((runner as any).last_active_at).toLocaleDateString(
                       "fr-FR"
@@ -560,13 +589,15 @@ export default function RunnerProfileScreen() {
 
             {/* Date d'inscription */}
             <StyledView>
-              <StyledView className="flex-row items-center mb-1">
-                <Ionicons name="create-outline" size={18} color="#401346" />
-                <StyledText className="text-white ml-2 font-medium">
+              <StyledView className="flex-row items-center mb-2">
+                <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
+                  <Ionicons name="create-outline" size={16} color="#A78BFA" />
+                </View>
+                <StyledText className="text-gray-900 ml-1 font-kanit-bold">
                   Membre depuis
                 </StyledText>
               </StyledView>
-              <StyledText className="text-gray-300 ml-6 text-sm">
+              <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
                 {(runner as any).created_at
                   ? new Date((runner as any).created_at).toLocaleDateString(
                       "fr-FR"
@@ -579,13 +610,20 @@ export default function RunnerProfileScreen() {
       </StyledScrollView>
 
       {/* Footer fixe */}
-      <StyledView className="absolute bottom-0 left-0 right-0 px-5 py-4 border-t border-gray-800 bg-[#14141b]">
+      <StyledView className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-white border-t border-gray-200">
         <StyledPressable
-          className="bg-purple py-3 rounded-full w-4/5 mb-2 mx-auto flex-row justify-center items-center"
+          className="bg-primary py-4 rounded-full w-full flex-row justify-center items-center"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
           onPress={handleSendMessage}
         >
           <Ionicons name="chatbubble-outline" size={20} color="white" />
-          <StyledText className="text-white font-bold ml-2">
+          <StyledText className="text-white font-kanit-bold ml-2">
             Envoyer un message
           </StyledText>
         </StyledPressable>

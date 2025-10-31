@@ -52,24 +52,34 @@ export function RunnerProfileEditForm({
   };
 
   return (
-    <ScrollView className="space-y-4">
-      <View className="px-5 space-y-6 mt-6">
+    <ScrollView className="space-y-4 bg-fond">
+      <View className="px-6 space-y-6 mt-6">
         <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-2xl font-bold text-white">
+          <Text className="text-2xl font-kanit-bold text-gray-900">
             Modifier Profil Coureur
           </Text>
           <Pressable
             onPress={() => setIsEditing(false)}
-            className="bg-background p-3 rounded-full"
+            className="bg-tertiary p-3 rounded-full"
           >
-            <Ionicons name="close" size={20} color="#126C52" />
+            <Ionicons name="close" size={20} color="#FF6B4A" />
           </Pressable>
         </View>
 
-        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
+        >
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="fitness-outline" size={24} color="#126C52" />
-            <Text className="text-white text-base font-semibold">
+            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
+              <Ionicons name="fitness-outline" size={20} color="#FF6B4A" />
+            </View>
+            <Text className="text-gray-900 text-base font-kanit-bold">
               Performance
             </Text>
           </View>
@@ -80,18 +90,38 @@ export function RunnerProfileEditForm({
           />
         </View>
 
-        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#A78BFA",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
+        >
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="trophy-outline" size={24} color="#126C52" />
-            <Text className="text-white text-base font-semibold">Objectif</Text>
+            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
+              <Ionicons name="trophy-outline" size={20} color="#FF6B4A" />
+            </View>
+            <Text className="text-gray-900 text-base font-kanit-bold">Objectif</Text>
           </View>
           <ObjectiveSelect handleChange={handleChange} />
         </View>
 
-        <View className="bg-background p-5 rounded-2xl border border-[#2a3238]">
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#A78BFA",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
+        >
           <View className="flex-row items-center space-x-3 mb-4">
-            <Ionicons name="calendar-outline" size={24} color="#126C52" />
-            <Text className="text-white text-base font-semibold">
+            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
+              <Ionicons name="calendar-outline" size={20} color="#A78BFA" />
+            </View>
+            <Text className="text-gray-900 text-base font-kanit-bold">
               Disponibilités
             </Text>
           </View>
@@ -103,7 +133,14 @@ export function RunnerProfileEditForm({
 
         <View className="space-y-3 mt-4">
           <Pressable
-            className="bg-purple py-4 rounded-full items-center flex-row justify-center space-x-2"
+            className="bg-primary py-4 rounded-full items-center flex-row justify-center space-x-2"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
             onPress={handleSubmit}
             disabled={loading}
           >
@@ -116,7 +153,7 @@ export function RunnerProfileEditForm({
                   size={20}
                   color="#ffffff"
                 />
-                <Text className="text-white font-semibold">Enregistrer</Text>
+                <Text className="text-white font-kanit-bold">Enregistrer</Text>
               </>
             )}
           </Pressable>

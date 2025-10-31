@@ -1,7 +1,6 @@
 import { View, Text, Pressable, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { BlurView } from "expo-blur";
 import React from "react";
 
 interface CreateModalProps {
@@ -22,146 +21,115 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 bg-black/70 items-center justify-center px-6">
-        <Pressable
-          className="flex-1 w-full items-center justify-center"
-          onPress={onClose}
-        >
-          <Pressable onPress={(e) => e.stopPropagation()}>
-            <View
-              className="rounded-2xl w-[280px] overflow-hidden"
-              style={{
-                backgroundColor: "rgba(40, 40, 45, 0.95)",
-                borderWidth: 1,
-                borderColor: "rgba(255, 255, 255, 0.2)",
-              }}
-            >
-              {/* Header */}
-              <View
-                className="px-5 py-4"
-                style={{
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: "rgba(255, 255, 255, 0.15)",
-                }}
-              >
-                <Text
-                  className="text-xl font-bold text-center"
-                  style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                >
+      <Pressable
+        className="flex-1 bg-black/50 items-center justify-center px-6"
+        onPress={onClose}
+      >
+        <Pressable onPress={(e) => e.stopPropagation()}>
+          <View
+            className="rounded-3xl w-[320px] bg-white overflow-hidden"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.3,
+              shadowRadius: 16,
+              elevation: 10,
+            }}
+          >
+            {/* Header */}
+            <View className="px-6 py-5 bg-white border-b border-gray-100">
+              <View className="flex-row items-center justify-between">
+                <Text className="text-2xl font-kanit-bold text-gray-900">
                   Créer
                 </Text>
-              </View>
-
-              {/* Options */}
-              <View className="px-4 py-4 space-y-2">
-                <Pressable
-                  onPress={() => handleAction("/events/create")}
-                  className="rounded-2xl overflow-hidden active:opacity-80"
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    borderWidth: 0.5,
-                    borderColor: "rgba(255, 255, 255, 0.08)",
-                  }}
-                >
-                  <View className="flex-row items-center p-3">
-                    <View
-                      className="w-12 h-12 rounded-xl items-center justify-center"
-                      style={{
-                        backgroundColor: "rgba(240, 194, 254, 0.2)",
-                      }}
-                    >
-                      <Ionicons name="calendar" size={24} color="#126C52" />
-                    </View>
-                    <View className="ml-3 flex-1">
-                      <Text
-                        className="text-base font-semibold"
-                        style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                      >
-                        Créer un event
-                      </Text>
-                      <Text
-                        className="text-xs opacity-70"
-                        style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                      >
-                        Organisez une course
-                      </Text>
-                    </View>
-                    <Ionicons
-                      name="chevron-forward"
-                      size={16}
-                      color="rgba(255, 255, 255, 0.5)"
-                    />
-                  </View>
-                </Pressable>
-
-                <Pressable
-                  onPress={() => handleAction("/(app)/groups/create")}
-                  className="rounded-2xl overflow-hidden active:opacity-80"
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    borderWidth: 0.5,
-                    borderColor: "rgba(255, 255, 255, 0.08)",
-                  }}
-                >
-                  <View className="flex-row items-center p-3">
-                    <View
-                      className="w-12 h-12 rounded-xl items-center justify-center"
-                      style={{
-                        backgroundColor: "rgba(240, 194, 254, 0.2)",
-                      }}
-                    >
-                      <Ionicons name="people" size={24} color="#126C52" />
-                    </View>
-                    <View className="ml-3 flex-1">
-                      <Text
-                        className="text-base font-semibold"
-                        style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                      >
-                        Créer un groupe
-                      </Text>
-                      <Text
-                        className="text-xs opacity-70"
-                        style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                      >
-                        Rejoignez des coureurs
-                      </Text>
-                    </View>
-                    <Ionicons
-                      name="chevron-forward"
-                      size={16}
-                      color="rgba(255, 255, 255, 0.5)"
-                    />
-                  </View>
-                </Pressable>
-              </View>
-
-              {/* Footer */}
-              <View
-                className="px-4 py-4"
-                style={{
-                  borderTopWidth: 0.5,
-                  borderTopColor: "rgba(255, 255, 255, 0.15)",
-                }}
-              >
                 <Pressable
                   onPress={onClose}
-                  className="py-3 rounded-xl active:opacity-80"
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  }}
+                  className="w-8 h-8 rounded-full bg-tertiary items-center justify-center"
                 >
-                  <Text
-                    className="text-center font-semibold text-base"
-                    style={{ fontFamily: "Kanit", color: "#ffffff" }}
-                  >
-                    Annuler
-                  </Text>
+                  <Ionicons name="close" size={20} color="#FF6B4A" />
                 </Pressable>
               </View>
             </View>
-          </Pressable>
+
+            {/* Options */}
+            <View className="px-5 py-4 bg-fond">
+              <Pressable
+                onPress={() => handleAction("/events/create")}
+                className="bg-white rounded-2xl mb-3 overflow-hidden"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <View className="flex-row items-center p-4">
+                  <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
+                    <Ionicons name="calendar" size={24} color="#FF6B4A" />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-gray-900 font-kanit-bold text-base">
+                      Créer un événement
+                    </Text>
+                    <Text className="text-gray-500 font-kanit-medium text-xs mt-0.5">
+                      Organisez une course
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={18}
+                    color="#A78BFA"
+                  />
+                </View>
+              </Pressable>
+
+              <Pressable
+                onPress={() => handleAction("/(app)/groups/create")}
+                className="bg-white rounded-2xl overflow-hidden"
+                style={{
+                  shadowColor: "#A78BFA",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <View className="flex-row items-center p-4">
+                  <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
+                    <Ionicons name="people" size={24} color="#A78BFA" />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-gray-900 font-kanit-bold text-base">
+                      Créer un groupe
+                    </Text>
+                    <Text className="text-gray-500 font-kanit-medium text-xs mt-0.5">
+                      Rejoignez des coureurs
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={18}
+                    color="#FF6B4A"
+                  />
+                </View>
+              </Pressable>
+            </View>
+
+            {/* Footer */}
+            <View className="px-5 py-4 bg-white border-t border-gray-100">
+              <Pressable
+                onPress={onClose}
+                className="py-3 rounded-xl bg-gray-100"
+              >
+                <Text className="text-center text-gray-700 font-kanit-bold text-base">
+                  Annuler
+                </Text>
+              </Pressable>
+            </View>
+          </View>
         </Pressable>
-      </View>
+      </Pressable>
     </Modal>
   );
 }

@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Animated, Dimensions } from "react-native";
 import { BlurView } from "expo-blur";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
@@ -27,7 +28,7 @@ function CreateActionButton({
     <>
       <TabBarIcon
         name="add-circle"
-        color={focused ? "#126C52" : "rgba(255, 255, 255, 0.6)"}
+        color={focused ? "#FF6B4A" : "rgba(107, 75, 82, 0.5)"}
         focused={focused}
         onPress={handlePress}
       />
@@ -41,6 +42,7 @@ function CreateActionButton({
 
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState(0);
   const indicatorPosition = useRef(new Animated.Value(0)).current;
@@ -60,8 +62,8 @@ export default function TabLayout() {
   const tabBarBackground = () => (
     <View style={StyleSheet.absoluteFill}>
       <BlurView
-        intensity={25}
-        tint="systemChromeMaterialDark"
+        intensity={15}
+        tint="light"
         style={{
           flex: 1,
           borderRadius: 28,
@@ -71,11 +73,11 @@ export default function TabLayout() {
         <View
           style={{
             flex: 1,
-            backgroundColor: "rgba(28, 28, 30, 0.72)",
+            backgroundColor: "rgba(255, 255, 255, 0.85)",
             borderRadius: 28,
-            borderWidth: 0.5,
-            borderColor: "rgba(255, 255, 255, 0.18)",
+            borderWidth: 0,
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <Animated.View
@@ -86,15 +88,15 @@ export default function TabLayout() {
               width: 76,
               height: 52,
               borderRadius: 27,
-              backgroundColor: "rgba(255, 255, 255, 0.15)",
-              shadowColor: "rgba(240, 194, 254, 0.2)",
+              backgroundColor: "rgba(255, 107, 74, 0.2)",
+              shadowColor: "#FF6B4A",
               shadowOffset: {
                 width: 0,
-                height: 1,
+                height: 2,
               },
-              shadowOpacity: 0.6,
-              shadowRadius: 2,
-              elevation: 2,
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 3,
             }}
           />
         </View>
@@ -105,21 +107,23 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#126C52",
-        tabBarInactiveTintColor: "rgba(255, 255, 255, 0.6)",
+        tabBarActiveTintColor: "#FF6B4A",
+        tabBarInactiveTintColor: "rgba(107, 75, 82, 0.5)",
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
-          bottom: 15,
+          bottom: 10,
           marginHorizontal: "6%",
           alignSelf: "center",
           width: "88%",
           maxWidth: "90%",
           backgroundColor: "transparent",
           borderTopWidth: 0,
+          borderBottomWidth: 0,
           height: 60,
-          paddingBottom: 5,
+          paddingBottom: 0,
           paddingTop: 5,
+          marginBottom: 0,
           shadowColor: "transparent",
           shadowOpacity: 0,
           elevation: 0,
@@ -168,7 +172,7 @@ export default function TabLayout() {
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: "#126C52",
+            backgroundColor: "#FF6B4A",
             color: "#ffffff",
             fontSize: 10,
             fontWeight: "700",

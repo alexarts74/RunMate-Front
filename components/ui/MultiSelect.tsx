@@ -25,7 +25,7 @@ export function MultiSelect({
 
   return (
     <View>
-      {label && <Text className="text-white text-sm mb-2">{label}</Text>}
+      {label && <Text className="text-gray-900 text-sm mb-2 font-kanit-bold">{label}</Text>}
       <View className="flex-row flex-wrap gap-2">
         {options.map((option) => {
           const isSelected = selectedValues.includes(option);
@@ -34,23 +34,30 @@ export function MultiSelect({
             <Pressable
               key={option}
               onPress={() => toggleOption(option)}
-              className={`flex-row items-center px-4 py-2 rounded-full border ${
+              className={`flex-row items-center px-4 py-2.5 rounded-full border-2 ${
                 isSelected
-                  ? "bg-purple border-purple"
-                  : "bg-background border-gray-700"
+                  ? "bg-primary border-primary"
+                  : "bg-white border-gray-200"
               }`}
+              style={{
+                shadowColor: isSelected ? "#FF6B4A" : "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: isSelected ? 0.2 : 0.05,
+                shadowRadius: 4,
+                elevation: isSelected ? 3 : 1,
+              }}
             >
               <Text
                 className={`${
-                  isSelected ? "text-white" : "text-white"
-                } font-medium font-kanit mr-2`}
+                  isSelected ? "text-white" : "text-gray-700"
+                } font-kanit-bold text-sm mr-2`}
               >
                 {option}
               </Text>
               <Ionicons
                 name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                 size={16}
-                color={isSelected ? "white" : "#126C52"}
+                color={isSelected ? "white" : "#FF6B4A"}
               />
             </Pressable>
           );

@@ -32,21 +32,40 @@ export function GenderSelect({ value, onChange }: Props) {
         }
         placeholder="Etes-vous ?"
         boxStyles={{
-          backgroundColor: "#1e2429",
-          borderColor: "#374151",
-          padding: 12,
-          borderRadius: 200,
+          backgroundColor: "#ffffff",
+          borderColor: "#E5E7EB",
+          borderWidth: 2,
+          padding: 16,
+          borderRadius: 9999,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.05,
+          shadowRadius: 2,
+          elevation: 1,
         }}
-        inputStyles={{ color: "white" }}
+        inputStyles={{ 
+          color: "#111827",
+          fontFamily: "Kanit-Medium",
+        }}
         dropdownStyles={{
-          backgroundColor: "#1e2429",
-          borderRadius: 12,
+          backgroundColor: "#ffffff",
+          borderRadius: 16,
           marginTop: 4,
-          borderColor: "#374151",
+          borderColor: "#E5E7EB",
+          borderWidth: 2,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 8,
+          elevation: 5,
         }}
-        dropdownTextStyles={{ color: "white" }}
+        dropdownTextStyles={{ 
+          color: "#111827",
+          fontFamily: "Kanit-Medium",
+        }}
         dropdownItemStyles={{
-          borderBottomColor: "#374151",
+          borderBottomColor: "#F3F4F6",
+          borderBottomWidth: 1,
         }}
       />
     </View>

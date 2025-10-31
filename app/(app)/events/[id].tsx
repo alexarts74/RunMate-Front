@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView, Pressable, Alert } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { eventService } from "@/service/api/event";
@@ -125,9 +126,10 @@ export default function EventDetailsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
-      <ScrollView className="flex-1">
-        <View className="relative h-72">
+    <View className="flex-1 bg-fond">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        {/* Image de couverture avec header */}
+        <View className="relative h-64">
           <Image
             source={{
               uri: event.cover_image || "https://via.placeholder.com/400x200",
@@ -135,165 +137,261 @@ export default function EventDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
-          <View className="absolute z-10 top-12 left-4">
-            <Pressable
-              onPress={() => router.back()}
-              className="w-10 h-10 bg-background/50 rounded-full items-center justify-center"
-            >
-              <Ionicons name="arrow-back" size={24} color="#401346" />
-            </Pressable>
-          </View>
+          {/* Overlay gradient */}
+          <View className="absolute inset-0 bg-black/30" />
+          <SafeAreaView className="absolute inset-0" edges={['top']} style={{ position: 'absolute' }}>
+            <View className="flex-row items-center pt-2 pl-4 z-10">
+              <Pressable
+                onPress={() => router.back()}
+                className="w-11 h-11 bg-white/90 rounded-full items-center justify-center"
+                style={{
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <Ionicons name="arrow-back" size={22} color="#FF6B4A" />
+              </Pressable>
+            </View>
+          </SafeAreaView>
         </View>
 
-        <View className="p-6">
-          <Text className="text-white font-bold text-3xl mb-2">
-            {event.name}
-          </Text>
-
-          {countdown.isExpired ? (
-            <Text className="text-red-500 text-sm mb-4">Événement terminé</Text>
-          ) : (
-            <View className="flex-row items-center space-x-1 space-y-2 mb-4">
-              <View className="items-center mt-2.5 mr-2">
-                <Ionicons name="time-outline" size={20} color="#401346" />
-              </View>
-
-              <View className="items-center">
-                <Text className="text-white text-sm">{countdown.days}j</Text>
-              </View>
-              <Text className="text-purple">:</Text>
-              <View className="items-center">
-                <Text className="text-white text-sm">{countdown.hours}h</Text>
-              </View>
+        <View className="px-6 py-6 bg-fond">
+          {/* Titre et badges */}
+          <View className="mb-6">
+            <View className="flex-row items-center mb-3">
+              {event.is_creator && (
+                <View className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2">
+                  <Text className="text-primary font-kanit-bold text-xs">Créateur</Text>
+                </View>
+              )}
+              {event.is_participant && !event.is_creator && (
+                <View className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2">
+                  <Text className="text-secondary font-kanit-bold text-xs">Participant</Text>
+                </View>
+              )}
+              {countdown.isExpired ? (
+                <View className="bg-red-100 border border-red-300 px-3 py-1 rounded-full">
+                  <Text className="text-red-600 font-kanit-bold text-xs">Terminé</Text>
+                </View>
+              ) : (
+                <View className="bg-tertiary border border-secondary px-3 py-1.5 rounded-full flex-row items-center">
+                  <Ionicons name="time-outline" size={14} color="#A78BFA" style={{ marginRight: 4 }} />
+                  <Text className="text-secondary font-kanit-bold text-xs">
+                    {countdown.days}j {countdown.hours}h
+                  </Text>
+                </View>
+              )}
             </View>
-          )}
+            <Text className="text-gray-900 font-kanit-bold text-3xl mb-2">
+              {event.name}
+            </Text>
+          </View>
 
-          <View className="flex-row items-center mb-8 bg-background p-4 rounded-2xl">
+          {/* Carte créateur */}
+          <View className="bg-white p-4 rounded-2xl mb-6 flex-row items-center"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+          >
             <Image
               source={{
                 uri:
                   event.creator.profile_image ||
                   "https://via.placeholder.com/40",
               }}
-              className="w-14 h-14 rounded-full border-2 border-purple"
+              className="w-14 h-14 rounded-full border-2 border-primary"
             />
             <View className="ml-4 flex-1">
-              <Text className="text-white font-semibold text-lg">
+              <Text className="text-gray-900 font-kanit-bold text-base">
                 {event.creator.name}
               </Text>
-              <Text className="text-purple">Créateur</Text>
+              <Text className="text-primary font-kanit-medium text-sm">Créateur</Text>
             </View>
             {user?.id !== event.creator.id && (
               <Pressable
                 onPress={() => router.push(`/chat/${event.creator.id}`)}
-                className="bg-purple px-4 py-2 rounded-full"
+                className="bg-primary px-4 py-2.5 rounded-full"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
               >
-                <Text className="text-white font-semibold">Message</Text>
+                <Text className="text-white font-kanit-bold text-sm">Message</Text>
               </Pressable>
             )}
           </View>
 
-          <View className="space-y-6 mb-8">
-            <View className="flex-row items-center ">
-              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
-                <Ionicons name="calendar" size={20} color="#401346" />
-              </View>
-              <View className="ml-4">
-                <Text className="text-white text-lg">
-                  {formatDate(event.start_date as string)}
-                </Text>
-                <View className="flex-row items-center space-x-2 mt-1">
-                  <Text className="text-white text-sm">
-                    {formatTime(event.start_time)}
+          {/* Informations principales */}
+          <View className="bg-white p-5 rounded-2xl mb-6"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+          >
+            <View className="space-y-4">
+              <View className="flex-row items-center">
+                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
+                  <Ionicons name="calendar" size={20} color="#FF6B4A" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-gray-900 font-kanit-bold text-base">
+                    {formatDate(event.start_date as string)}
                   </Text>
-                  <Text className="text-purple">-</Text>
-                  <Text className="text-white text-sm">
-                    {formatTime(event.end_time)}
-                  </Text>
+                  <View className="flex-row items-center mt-1">
+                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                      {formatTime(event.start_time)}
+                    </Text>
+                    <Text className="text-gray-400 mx-2">-</Text>
+                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                      {formatTime(event.end_time)}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
 
-            <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
-                <Ionicons name="location" size={20} color="#401346" />
-              </View>
-              <Text className="text-white ml-4 text-lg">{event.location}</Text>
-            </View>
-
-            <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-background rounded-full items-center justify-center">
-                <Ionicons name="trending-up" size={20} color="#401346" />
-              </View>
-              <Text className="text-white ml-4 text-lg">
-                {event.distance} km
-              </Text>
-            </View>
-          </View>
-
-          <View className="bg-background p-4 rounded-2xl mb-8">
-            <Text className="text-white text-lg font-bold mb-2">
-              Description
-            </Text>
-            <Text className="text-white leading-6">{event.description}</Text>
-          </View>
-
-          <View className="mb-8">
-            <Text className="text-white text-lg font-bold mb-4">
-              Participants ({event.participants_count})
-            </Text>
-            <View className="flex-row items-center">
               <View className="flex-row items-center">
-                {event.participants?.slice(0, 5).map((participant, index) => (
-                  <View
-                    key={participant.id}
-                    // style={{ marginLeft: index > 0 ? -12 : 0 }}
-                    className="relative"
-                  >
-                    <View className="border-2 border-background rounded-full">
-                      <Image
-                        source={{
-                          uri:
-                            participant.profile_image ||
-                            "https://via.placeholder.com/40",
-                        }}
-                        className="w-10 h-10 rounded-full"
-                      />
-                    </View>
-                    <View className="absolute -bottom-5 left-0 right-0">
-                      <Text
-                        className="text-white text-xs text-center"
-                        numberOfLines={1}
-                      >
-                        {participant.name?.split(" ")[0]}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
+                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
+                  <Ionicons name="location" size={20} color="#A78BFA" />
+                </View>
+                <Text className="text-gray-900 font-kanit-medium text-base flex-1">{event.location}</Text>
               </View>
 
-              {/* Compteur pour les participants supplémentaires */}
-              {event.participants_count > 5 && (
-                <View className="ml-4">
-                  <Text className="text-white text-sm">
-                    +{event.participants_count - 5}
-                  </Text>
+              <View className="flex-row items-center">
+                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
+                  <Ionicons name="trending-up" size={20} color="#FF6B4A" />
+                </View>
+                <Text className="text-gray-900 font-kanit-bold text-base">
+                  {event.distance} km
+                </Text>
+              </View>
+
+              {event.participants_count !== undefined && (
+                <View className="flex-row items-center">
+                  <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
+                    <Ionicons name="people" size={20} color="#A78BFA" />
+                  </View>
+                  <View className="flex-1 flex-row items-center">
+                    <Text className="text-gray-900 font-kanit-bold text-base mr-2">
+                      {event.participants_count}
+                    </Text>
+                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                      participant{event.participants_count > 1 ? 's' : ''}
+                    </Text>
+                    {event.max_participants && (
+                      <Text className="text-gray-400 text-sm ml-1">
+                        / {event.max_participants}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               )}
             </View>
           </View>
+
+          {/* Description */}
+          {event.description && (
+            <View className="bg-white p-5 rounded-2xl mb-6"
+              style={{
+                shadowColor: "#A78BFA",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
+            >
+              <Text className="text-gray-900 font-kanit-bold text-lg mb-3">
+                Description
+              </Text>
+              <Text className="text-gray-600 font-kanit-medium leading-6">{event.description}</Text>
+            </View>
+          )}
+
+          {/* Participants */}
+          {event.participants && event.participants.length > 0 && (
+            <View className="bg-white p-5 rounded-2xl mb-6"
+              style={{
+                shadowColor: "#A78BFA",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
+            >
+              <Text className="text-gray-900 font-kanit-bold text-lg mb-4">
+                Participants ({event.participants_count})
+              </Text>
+              <View className="flex-row items-center flex-wrap">
+                {event.participants.slice(0, 8).map((participant, index) => (
+                  <View
+                    key={participant.id}
+                    className="mr-3 mb-3 items-center"
+                  >
+                    <Image
+                      source={{
+                        uri:
+                          participant.profile_image ||
+                          "https://via.placeholder.com/40",
+                      }}
+                      className="w-12 h-12 rounded-full border-2 border-tertiary"
+                    />
+                    <Text
+                      className="text-gray-600 text-xs font-kanit-medium mt-1 text-center"
+                      numberOfLines={1}
+                      style={{ maxWidth: 60 }}
+                    >
+                      {participant.name?.split(" ")[0]}
+                    </Text>
+                  </View>
+                ))}
+                {event.participants_count > 8 && (
+                  <View className="w-12 h-12 rounded-full bg-tertiary border-2 border-secondary items-center justify-center mr-3 mb-3">
+                    <Text className="text-secondary font-kanit-bold text-xs">
+                      +{event.participants_count - 8}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
 
-      <View className="px-6 pb-8 pt-4 bg-background">
+      {/* Footer avec bouton d'action */}
+      <View className="px-6 pb-6 pt-4 bg-fond border-t border-gray-200">
         <Pressable
           onPress={handleEventAction}
-          className={`py-4 rounded-full ${
-            event.is_participant ? "bg-red-500" : "bg-purple"
+          className={`py-4 rounded-full flex-row items-center justify-center ${
+            event.is_participant ? "bg-red-500" : "bg-primary"
           }`}
+          style={{
+            shadowColor: event.is_participant ? "#EF4444" : "#FF6B4A",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
         >
-          <Text className="text-center text-white font-bold text-base">
-            {event.is_participant ? "Quitter" : "Participer"}
+          <Ionicons 
+            name={event.is_participant ? "exit-outline" : "checkmark-circle"} 
+            size={20} 
+            color="white" 
+            style={{ marginRight: 8 }} 
+          />
+          <Text className="text-center text-white font-kanit-bold text-base">
+            {event.is_participant ? "Quitter l'événement" : "Participer"}
           </Text>
         </Pressable>
       </View>

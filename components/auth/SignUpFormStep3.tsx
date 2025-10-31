@@ -208,26 +208,33 @@ export function SignUpFormStep3({
   };
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-fond px-6">
       <ScrollView showsVerticalScrollIndicator={false} className="mb-32">
         {/* Header */}
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
-            className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-6"
+            className="bg-white p-2.5 rounded-full active:opacity-80"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 3,
+            }}
           >
-            <Ionicons name="arrow-back" size={22} color="#401346" />
+            <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-white text-2xl mr-8 font-kanit-bold text-center">
+            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
               {runnerType === "perf" ? (
                 <>
-                  Runner <Text className="text-purple">Performance</Text> 🏃‍♂️
+                  Runner <Text className="text-primary">Performance</Text> 🏃‍♂️
                 </>
               ) : (
                 <>
-                  Runner <Text className="text-purple">Chill</Text> 🎉
+                  Runner <Text className="text-primary">Chill</Text> 🎉
                 </>
               )}
             </Text>
@@ -235,37 +242,45 @@ export function SignUpFormStep3({
         </View>
 
         {/* Form Content */}
-        <View className="space-y-4 px-4">
+        <View className="space-y-5 mt-4">
           <View className="space-y-4">
             {runnerType === "perf" && (
               <View className="space-y-4">
                 <View>
-                  <View className="flex-row items-center mb-4">
-                    <View className="w-8 items-center">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons
                         name="speedometer-outline"
-                        size={24}
-                        color="#401346"
+                        size={22}
+                        color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Allure habituelle en EF
                     </Text>
                   </View>
                   <Pressable
                     onPress={() => setShowPacePicker(true)}
-                    className={`bg-background flex-row items-center px-6 py-4 rounded-full border ${
-                      errors.actual_pace ? "border-red-500" : "border-gray-700"
+                    className={`bg-white flex-row items-center px-6 py-4 rounded-full border-2 ${
+                      errors.actual_pace ? "border-red-500" : "border-gray-200"
                     }`}
+                    style={{
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.05,
+                      shadowRadius: 2,
+                      elevation: 1,
+                    }}
                   >
-                    <Text className="text-white font-kanit">
+                    <Text className="text-gray-900 font-kanit-medium flex-1">
                       {formData.actual_pace
                         ? `${formData.actual_pace} min/km`
                         : "Sélectionnez votre allure"}
                     </Text>
+                    <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
                   </Pressable>
                   {errors.actual_pace && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
                       {errors.actual_pace}
                     </Text>
                   )}
@@ -277,22 +292,30 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-background w-full p-4">
+                    <View className="bg-white w-full p-4 rounded-t-3xl"
+                      style={{
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: -4 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 8,
+                        elevation: 10,
+                      }}
+                    >
                       <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-white text-lg font-kanit-semibold">
+                        <Text className="text-gray-900 text-lg font-kanit-bold">
                           Sélectionnez votre allure
                         </Text>
                         <Pressable onPress={() => setShowPacePicker(false)}>
-                          <Ionicons name="close" size={24} color="#401346" />
+                          <Ionicons name="close" size={24} color="#FF6B4A" />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
                         {PACE_OPTIONS.map((option) => (
                           <Pressable
                             key={option.value}
-                            className={`flex-row items-center px-4 py-3 border-b border-gray-700 ${
+                            className={`flex-row items-center px-4 py-3 border-b border-gray-100 ${
                               formData.actual_pace === option.value
-                                ? "bg-purple/10"
+                                ? "bg-tertiary"
                                 : ""
                             }`}
                             onPress={() => {
@@ -301,10 +324,10 @@ export function SignUpFormStep3({
                             }}
                           >
                             <Text
-                              className={`text-white font-kanit text-lg ${
+                              className={`font-kanit-medium text-base ${
                                 formData.actual_pace === option.value
-                                  ? "text-purple"
-                                  : ""
+                                  ? "text-primary font-kanit-bold"
+                                  : "text-gray-900"
                               }`}
                             >
                               {option.label}
@@ -317,32 +340,40 @@ export function SignUpFormStep3({
                 </Modal>
 
                 <View>
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#401346"
+                        color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Objectif d'allure
                     </Text>
                   </View>
                   <Pressable
                     onPress={() => setShowTargetPacePicker(true)}
-                    className={`bg-background flex-row items-center px-6 py-4 rounded-full border ${
-                      errors.target_pace ? "border-red-500" : "border-gray-700"
+                    className={`bg-white flex-row items-center px-6 py-4 rounded-full border-2 ${
+                      errors.target_pace ? "border-red-500" : "border-gray-200"
                     }`}
+                    style={{
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.05,
+                      shadowRadius: 2,
+                      elevation: 1,
+                    }}
                   >
-                    <Text className="text-white font-kanit">
+                    <Text className="text-gray-900 font-kanit-medium flex-1">
                       {formData.target_pace
                         ? `${formData.target_pace} min/km`
                         : "Sélectionnez votre objectif d'allure en EF"}
                     </Text>
+                    <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
                   </Pressable>
                   {errors.target_pace && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
                       {errors.target_pace}
                     </Text>
                   )}
@@ -354,24 +385,32 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-background w-full p-4">
+                    <View className="bg-white w-full p-4 rounded-t-3xl"
+                      style={{
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: -4 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 8,
+                        elevation: 10,
+                      }}
+                    >
                       <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-white text-lg font-kanit-semibold">
+                        <Text className="text-gray-900 text-lg font-kanit-bold">
                           Sélectionnez votre objectif d'allure
                         </Text>
                         <Pressable
                           onPress={() => setShowTargetPacePicker(false)}
                         >
-                          <Ionicons name="close" size={24} color="#401346" />
+                          <Ionicons name="close" size={24} color="#FF6B4A" />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
                         {PACE_OPTIONS.map((option) => (
                           <Pressable
                             key={option.value}
-                            className={`flex-row items-center px-4 py-3 border-b border-gray-700 ${
+                            className={`flex-row items-center px-4 py-3 border-b border-gray-100 ${
                               formData.target_pace === option.value
-                                ? "bg-purple/10"
+                                ? "bg-tertiary"
                                 : ""
                             }`}
                             onPress={() => {
@@ -380,10 +419,10 @@ export function SignUpFormStep3({
                             }}
                           >
                             <Text
-                              className={`text-white font-kanit text-lg ${
+                              className={`font-kanit-medium text-base ${
                                 formData.target_pace === option.value
-                                  ? "text-purple"
-                                  : ""
+                                  ? "text-primary font-kanit-bold"
+                                  : "text-gray-900"
                               }`}
                             >
                               {option.label}
@@ -396,27 +435,34 @@ export function SignUpFormStep3({
                 </Modal>
 
                 <View>
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
-                      <Ionicons name="stats-chart" size={22} color="#401346" />
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="stats-chart" size={22} color="#FF6B4A" />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Kilométrage hebdomadaire
                     </Text>
                   </View>
                   <View
-                    className={`flex-row items-center bg-background px-6 py-4 rounded-full border ${
+                    className={`flex-row items-center bg-white px-6 py-4 rounded-full border-2 ${
                       focusedInput === "weekly_mileage"
-                        ? `border-purple ${
+                        ? `border-primary ${
                             errors.weekly_mileage ? "border-red-500" : ""
                           }`
                         : errors.weekly_mileage
                         ? "border-red-500"
-                        : "border-gray-700"
+                        : "border-gray-200"
                     }`}
+                    style={{
+                      shadowColor: focusedInput === "weekly_mileage" && !errors.weekly_mileage ? "#FF6B4A" : "#000",
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: focusedInput === "weekly_mileage" && !errors.weekly_mileage ? 0.15 : 0.05,
+                      shadowRadius: 2,
+                      elevation: 1,
+                    }}
                   >
                     <TextInput
-                      className="flex-1 text-white font-kanit"
+                      className="flex-1 text-gray-900 font-kanit-medium"
                       placeholder="km/semaine"
                       placeholderTextColor="#9CA3AF"
                       value={formData.weekly_mileage}
@@ -425,25 +471,26 @@ export function SignUpFormStep3({
                       }
                       onFocus={() => setFocusedInput("weekly_mileage")}
                       onBlur={() => setFocusedInput(null)}
+                      keyboardType="numeric"
                     />
                   </View>
                   {errors.weekly_mileage && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
                       {errors.weekly_mileage}
                     </Text>
                   )}
                 </View>
 
                 <View className="space-y-4">
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons
                         name="calendar-outline"
                         size={22}
-                        color="#401346"
+                        color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Jours d'entraînement
                     </Text>
                   </View>
@@ -461,15 +508,15 @@ export function SignUpFormStep3({
                     onChange={(values) => handleChange("training_days", values)}
                   />
 
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#401346"
+                        color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Objectifs de compétition
                     </Text>
                   </View>
@@ -509,27 +556,34 @@ export function SignUpFormStep3({
             {runnerType === "chill" && (
               <View className="space-y-4">
                 <View>
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
-                      <Ionicons name="map-outline" size={22} color="#401346" />
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="map-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Distance habituelle / semaine (km)
                     </Text>
                   </View>
                   <View
-                    className={`flex-row items-center bg-background px-6 py-4 rounded-full border ${
+                    className={`flex-row items-center bg-white px-6 py-4 rounded-full border-2 ${
                       focusedInput === "usual_distance"
-                        ? `border-purple ${
+                        ? `border-secondary ${
                             errors.usual_distance ? "border-red-500" : ""
                           }`
                         : errors.usual_distance
                         ? "border-red-500"
-                        : "border-gray-700"
+                        : "border-gray-200"
                     }`}
+                    style={{
+                      shadowColor: focusedInput === "usual_distance" && !errors.usual_distance ? "#A78BFA" : "#000",
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: focusedInput === "usual_distance" && !errors.usual_distance ? 0.15 : 0.05,
+                      shadowRadius: 2,
+                      elevation: 1,
+                    }}
                   >
                     <TextInput
-                      className="flex-1 text-white font-kanit"
+                      className="flex-1 text-gray-900 font-kanit-medium"
                       placeholder="km"
                       placeholderTextColor="#9CA3AF"
                       value={formData.usual_distance}
@@ -538,20 +592,21 @@ export function SignUpFormStep3({
                       }
                       onFocus={() => setFocusedInput("usual_distance")}
                       onBlur={() => setFocusedInput(null)}
+                      keyboardType="numeric"
                     />
                   </View>
                   {errors.usual_distance && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
                       {errors.usual_distance}
                     </Text>
                   )}
                 </View>
                 <View>
-                  <View className="flex-row items-center mb-2">
-                    <View className="w-8 items-center">
-                      <Ionicons name="flag-outline" size={22} color="#401346" />
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="flag-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-white text-sm font-kanit-semibold ml-4">
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
                       Objectif principal
                     </Text>
                   </View>
@@ -561,97 +616,105 @@ export function SignUpFormStep3({
                     onChange={(values) => handleChange("objective", values)}
                   />
                   {errors.objective && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit">
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
                       {errors.objective}
                     </Text>
                   )}
                 </View>
 
-                <View className="flex-row items-center mb-2">
-                  <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#401346" />
+                <View>
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="people-outline" size={22} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                      Préférences sociales
+                    </Text>
                   </View>
-                  <Text className="text-white text-sm font-kanit-semibold ml-4">
-                    Préférences sociales
-                  </Text>
-                </View>
-                <MultiSelect
-                  options={SOCIAL_PREFERENCES.map((pref) => pref.label)}
-                  selectedValues={formData.social_preferences}
-                  onChange={(values) =>
-                    handleChange("social_preferences", values)
-                  }
-                />
-                {errors.social_preferences && (
-                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
-                    {errors.social_preferences}
-                  </Text>
-                )}
-
-                <View className="flex-row items-center mb-2">
-                  <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#401346" />
-                  </View>
-                  <Text className="text-white text-sm font-kanit-semibold ml-4">
-                    Activités post-course
-                  </Text>
-                </View>
-                <MultiSelect
-                  options={POST_RUN_ACTIVITIES.map(
-                    (activity) => activity.label
+                  <MultiSelect
+                    options={SOCIAL_PREFERENCES.map((pref) => pref.label)}
+                    selectedValues={formData.social_preferences}
+                    onChange={(values) =>
+                      handleChange("social_preferences", values)
+                    }
+                  />
+                  {errors.social_preferences && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                      {errors.social_preferences}
+                    </Text>
                   )}
-                  selectedValues={formData.post_run_activities}
-                  onChange={(values) =>
-                    handleChange("post_run_activities", values)
-                  }
-                />
-                {errors.post_run_activities && (
-                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
-                    {errors.post_run_activities}
-                  </Text>
-                )}
-
-                <View className="flex-row items-center mb-2">
-                  <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#401346" />
-                  </View>
-                  <Text className="text-white text-sm font-kanit-semibold ml-4">
-                    Fréquence de course
-                  </Text>
                 </View>
-                <MultiSelect
-                  options={RUNNING_FREQUENCY.map((freq) => freq.label)}
-                  selectedValues={formData.running_frequency}
-                  onChange={(values) =>
-                    handleChange("running_frequency", values)
-                  }
-                />
-                {errors.running_frequency && (
-                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
-                    {errors.running_frequency}
-                  </Text>
-                )}
 
-                <View className="flex-row items-center mb-2">
-                  <View className="w-8 items-center">
-                    <Ionicons name="people-outline" size={22} color="#401346" />
+                <View>
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="cafe-outline" size={22} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                      Activités post-course
+                    </Text>
                   </View>
-                  <Text className="text-white text-sm font-kanit-semibold ml-4">
-                    Préférences de course
-                  </Text>
+                  <MultiSelect
+                    options={POST_RUN_ACTIVITIES.map(
+                      (activity) => activity.label
+                    )}
+                    selectedValues={formData.post_run_activities}
+                    onChange={(values) =>
+                      handleChange("post_run_activities", values)
+                    }
+                  />
+                  {errors.post_run_activities && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                      {errors.post_run_activities}
+                    </Text>
+                  )}
                 </View>
-                <MultiSelect
-                  options={TIME_PREFERENCES.map((time) => time.label)}
-                  selectedValues={formData.preferred_time_of_day}
-                  onChange={(values) =>
-                    handleChange("preferred_time_of_day", values)
-                  }
-                />
-                {errors.preferred_time_of_day && (
-                  <Text className="text-red-500 mt-2 ml-4 font-kanit">
-                    {errors.preferred_time_of_day}
-                  </Text>
-                )}
+
+                <View>
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="repeat-outline" size={22} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                      Fréquence de course
+                    </Text>
+                  </View>
+                  <MultiSelect
+                    options={RUNNING_FREQUENCY.map((freq) => freq.label)}
+                    selectedValues={formData.running_frequency}
+                    onChange={(values) =>
+                      handleChange("running_frequency", values)
+                    }
+                  />
+                  {errors.running_frequency && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                      {errors.running_frequency}
+                    </Text>
+                  )}
+                </View>
+
+                <View>
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="time-outline" size={22} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                      Préférences de course
+                    </Text>
+                  </View>
+                  <MultiSelect
+                    options={TIME_PREFERENCES.map((time) => time.label)}
+                    selectedValues={formData.preferred_time_of_day}
+                    onChange={(values) =>
+                      handleChange("preferred_time_of_day", values)
+                    }
+                  />
+                  {errors.preferred_time_of_day && (
+                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                      {errors.preferred_time_of_day}
+                    </Text>
+                  )}
+                </View>
               </View>
             )}
           </View>
@@ -662,7 +725,7 @@ export function SignUpFormStep3({
       </ScrollView>
 
       {/* Fixed Button at Bottom */}
-      <View className="absolute bottom-0 left-0 right-0 pb-8 pt-4 bg-background border-t border-gray-700">
+      <View className="absolute bottom-0 left-0 right-0 pb-8 pt-4 bg-fond border-t border-gray-200">
         <ActionButton
           onPress={handleSubmit}
           text={"Let's go ! 🎯"}

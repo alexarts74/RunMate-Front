@@ -115,9 +115,9 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-fond">
       <LinearGradient
-        colors={["rgba(129, 1, 247, 0.1)", "transparent"]}
+        colors={["rgba(255, 107, 74, 0.15)", "rgba(167, 139, 250, 0.1)", "transparent"]}
         className="absolute top-0 left-0 right-0 h-96"
       />
 
@@ -136,10 +136,10 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
         }}
       >
         <Text className="text-6xl font-bold font-fredoka mb-4">
-          <Text className="text-purple">Run</Text>
-          <Text className="text-white">Mate</Text>
+          <Text className="text-primary">Run</Text>
+          <Text className="text-gray-900">Mate</Text>
         </Text>
-        <Text className="text-xl text-white text-center font-kanit-semibold px-8">
+        <Text className="text-xl text-gray-700 text-center font-kanit-bold px-8">
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
@@ -168,19 +168,33 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
           }}
         >
           <AnimatedPressable
-            className="bg-purple py-4 rounded-full items-center shadow-lg shadow-purple/30"
+            className="bg-primary py-4 rounded-full items-center"
             onPress={handleLoginPress}
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
           >
-            <Text className="text-base font-semibold text-white font-kanit-semibold">
+            <Text className="text-base font-kanit-bold text-white">
               Se connecter
             </Text>
           </AnimatedPressable>
 
           <AnimatedPressable
-            className="bg-transparent py-4 rounded-full items-center border-2 border-purple"
+            className="bg-white py-4 rounded-full items-center border-2 border-secondary"
             onPress={handleSignupPress}
+            style={{
+              shadowColor: "#A78BFA",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
           >
-            <Text className="text-base font-semibold text-purple font-kanit-semibold">
+            <Text className="text-base font-kanit-bold text-secondary">
               Créer un compte
             </Text>
           </AnimatedPressable>

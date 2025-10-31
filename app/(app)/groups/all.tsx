@@ -5,8 +5,8 @@ import {
   FlatList,
   Image,
   Pressable,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { groupService } from "@/service/api/group";
 import { useRouter } from "expo-router";
@@ -72,12 +72,12 @@ export default function AllGroupsScreen() {
 
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
-      className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"
+      className="bg-white rounded-2xl overflow-hidden mb-4 mx-4"
       style={{
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowColor: "#A78BFA",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
         elevation: 5,
       }}
       onPress={() => handleFeatureAccess(item.id)}
@@ -88,28 +88,30 @@ export default function AllGroupsScreen() {
             ? { uri: item.cover_image }
             : require("@/assets/images/favicon.png")
         }
-        className="w-full h-32"
+        className="w-full h-40"
         style={{ resizeMode: "cover" }}
       />
 
-      <View className="p-4">
-        <Text className="text-white font-kanit-semibold text-lg mb-2">
+      <View className="p-5">
+        <Text className="text-gray-900 font-kanit-bold text-xl mb-3">
           {item.name}
         </Text>
 
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
-            <Ionicons name="people" size={16} color="#126C52" />
-            <Text className="text-gray-300 text-sm ml-2">
+            <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-2">
+              <Ionicons name="people" size={16} color="#A78BFA" />
+            </View>
+            <Text className="text-gray-600 font-kanit-medium text-sm">
               {item.members_count} membres
             </Text>
           </View>
 
           <Pressable
-            className="bg-background px-4 py-2 rounded-lg"
+            className="bg-secondary px-5 py-2.5 rounded-xl"
             onPress={() => handleFeatureAccess(item.id)}
           >
-            <Text className="text-white font-kanit-semibold text-sm">
+            <Text className="text-white font-kanit-bold text-sm">
               Voir le groupe
             </Text>
           </Pressable>
@@ -119,13 +121,13 @@ export default function AllGroupsScreen() {
   );
 
   return (
-    <View className="flex-1 bg-background">
-      <SafeAreaView className="bg-background">
-        <View className="px-5 py-4 flex-row items-center border-b border-gray-700">
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="bg-fond" edges={['top']}>
+        <View className="px-6 py-4 flex-row items-center border-b border-gray-200">
           <Pressable onPress={() => router.back()} className="mr-3">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-2xl font-kanit-semibold text-white">
+          <Text className="text-2xl font-kanit-bold text-gray-900">
             Groupes de course
           </Text>
         </View>
@@ -143,18 +145,25 @@ export default function AllGroupsScreen() {
             contentContainerStyle={{ paddingTop: 16, paddingBottom: 100 }}
             ListEmptyComponent={() => (
               <View className="flex-1 items-center justify-center px-6 py-10">
-                <View className="bg-background/30 p-8 rounded-full mb-6">
-                  <Ionicons name="fitness" size={60} color="#126C52" />
+                <View className="bg-tertiary p-8 rounded-full mb-6">
+                  <Ionicons name="fitness" size={60} color="#A78BFA" />
                 </View>
-                <Text className="text-white font-kanit text-2xl font-bold text-center mb-3">
+                <Text className="text-gray-900 font-kanit-bold text-2xl text-center mb-3">
                   Aucun groupe trouvé
                 </Text>
-                <Text className="text-gray-400 text-base font-kanit text-center mb-8">
+                <Text className="text-gray-500 text-base font-kanit-medium text-center mb-8">
                   Les groupes de course vous permettent de rencontrer d'autres
                   coureurs et de participer à des événements ensemble.
                 </Text>
                 <Pressable
-                  className="bg-purple rounded-full px-6 py-3 flex-row items-center"
+                  className="bg-secondary rounded-full px-6 py-3 flex-row items-center"
+                  style={{
+                    shadowColor: "#A78BFA",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 8,
+                    elevation: 4,
+                  }}
                   onPress={() => router.push("/groups/create")}
                 >
                   <Ionicons
@@ -163,7 +172,7 @@ export default function AllGroupsScreen() {
                     color="white"
                     style={{ marginRight: 8 }}
                   />
-                  <Text className="text-white font-kanit font-semibold">
+                  <Text className="text-white font-kanit-bold">
                     Créer un groupe
                   </Text>
                 </Pressable>

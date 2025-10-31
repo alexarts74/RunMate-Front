@@ -5,8 +5,8 @@ import {
   ScrollView,
   RefreshControl,
   Pressable,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { eventService } from "@/service/api/event";
 import { EventCard } from "@/components/events/EventCard";
 import { Event } from "@/interface/Event";
@@ -80,7 +80,7 @@ export default function AllEventsScreen() {
   }, [user?.is_premium]);
 
   const DistanceFilter = () => (
-    <View className="bg-background py-3">
+    <View className="bg-white py-3 border-b border-gray-200">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -96,14 +96,21 @@ export default function AllEventsScreen() {
               }}
               className={`px-4 py-3 rounded-xl flex-row items-center gap-2 ${
                 radius === item.value
-                  ? "bg-[#1e2429] border border-purple"
-                  : "bg-[#1e2429] border border-[#2a3137]"
+                  ? "bg-primary"
+                  : "bg-tertiary"
               }`}
+              style={{
+                shadowColor: radius === item.value ? "#FF6B4A" : "#A78BFA",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.15,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
             >
               <Text className="text-base">{item.icon}</Text>
               <Text
                 className={`${
-                  radius === item.value ? "text-purple font-bold" : "text-white"
+                  radius === item.value ? "text-white font-kanit-bold" : "text-gray-700 font-kanit-medium"
                 } text-base`}
               >
                 {item.label}
@@ -123,12 +130,19 @@ export default function AllEventsScreen() {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-red-500 text-center mb-4">{error}</Text>
+          <Text className="text-red-500 text-center mb-4 font-kanit-medium">{error}</Text>
           <Pressable
             onPress={() => loadEvents()}
-            className="bg-purple px-6 py-3 rounded-xl"
+            className="bg-primary px-6 py-3 rounded-xl"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
           >
-            <Text className="text-white font-kanit-semibold">Réessayer</Text>
+            <Text className="text-white font-kanit-bold">Réessayer</Text>
           </Pressable>
         </View>
       );
@@ -137,11 +151,13 @@ export default function AllEventsScreen() {
     if (events.length === 0) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Ionicons name="calendar-outline" size={60} color="#126C52" />
-          <Text className="text-white text-center text-lg mb-2 mt-4 font-kanit">
+          <View className="bg-tertiary p-8 rounded-full mb-6">
+            <Ionicons name="calendar-outline" size={60} color="#FF6B4A" />
+          </View>
+          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-kanit-bold">
             Aucun événement disponible
           </Text>
-          <Text className="text-gray-400 text-center">
+          <Text className="text-gray-500 text-center font-kanit-medium">
             {radius === 1000
               ? "Aucun événement n'est disponible pour le moment."
               : `Aucun événement trouvé dans un rayon de ${radius}km.`}
@@ -164,13 +180,13 @@ export default function AllEventsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-background">
-      <SafeAreaView className="bg-background">
-        <View className="px-5 py-4 flex-row items-center border-b border-gray-700">
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="bg-fond" edges={['top']}>
+        <View className="px-6 py-4 flex-row items-center border-b border-gray-200">
           <Pressable onPress={() => router.back()} className="mr-3">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-2xl font-kanit-semibold text-white">
+          <Text className="text-2xl font-kanit-bold text-gray-900">
             Événements
           </Text>
         </View>
@@ -184,7 +200,7 @@ export default function AllEventsScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#126C52"
+            tintColor="#FF6B4A"
           />
         }
       >

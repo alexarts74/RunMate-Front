@@ -89,34 +89,41 @@ export function SignUpFormStep2({
   };
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-fond px-6">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
-            className="bg-[#1e2429] p-1.5 rounded-full border border-gray-700 active:opacity-80 ml-4"
+            className="bg-white p-2.5 rounded-full active:opacity-80"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 3,
+            }}
           >
-            <Ionicons name="arrow-back" size={22} color="#126C52" />
+            <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-white text-2xl mr-8 font-kanit-bold text-center">
+            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
               Dis nous en{"\n"}
-              <Text className="text-purple">plus sur toi</Text>
+              <Text className="text-primary">plus sur toi</Text>
             </Text>
           </View>
         </View>
 
-        <View className="space-y-4 px-4">
-          <View className="space-y-2">
-            <Text className="text-white text-sm font-kanit-semibold pl-2">
+        <View className="space-y-5 mt-4">
+          <View>
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Prénom*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
                 focusedInput === "first_name"
-                  ? "border-purple"
-                  : "border-gray-700"
+                  ? "border-primary"
+                  : "border-gray-200"
               }`}
               placeholder="Prénom"
               placeholderTextColor="#9CA3AF"
@@ -127,23 +134,30 @@ export function SignUpFormStep2({
               onChangeText={(value) => handleChange("first_name", value)}
               onFocus={() => setFocusedInput("first_name")}
               onBlur={() => setFocusedInput(null)}
+              style={{
+                shadowColor: focusedInput === "first_name" ? "#FF6B4A" : "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: focusedInput === "first_name" ? 0.15 : 0.05,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
             />
             {errors.first_name && (
-              <Text className="text-red-500 text-sm pl-2">
+              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">
                 {errors.first_name}
               </Text>
             )}
           </View>
 
-          <View className="space-y-2">
-            <Text className="text-white text-sm font-kanit-semibold pl-2">
+          <View>
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Nom*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
                 focusedInput === "last_name"
-                  ? "border-purple"
-                  : "border-gray-700"
+                  ? "border-primary"
+                  : "border-gray-200"
               }`}
               placeholder="Nom"
               placeholderTextColor="#9CA3AF"
@@ -154,37 +168,51 @@ export function SignUpFormStep2({
               onChangeText={(value) => handleChange("last_name", value)}
               onFocus={() => setFocusedInput("last_name")}
               onBlur={() => setFocusedInput(null)}
+              style={{
+                shadowColor: focusedInput === "last_name" ? "#FF6B4A" : "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: focusedInput === "last_name" ? 0.15 : 0.05,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
             />
             {errors.last_name && (
-              <Text className="text-red-500 text-sm pl-2">
+              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">
                 {errors.last_name}
               </Text>
             )}
           </View>
 
-          <View className="space-y-2">
-            <Text className="text-white text-sm font-kanit-semibold pl-2">
+          <View>
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Âge*
             </Text>
             <TouchableOpacity
               onPress={() => setShowAgePicker(true)}
-              className={`w-full border rounded-full p-4 bg-[#1e2429] ${
-                focusedInput === "age" ? "border-purple" : "border-gray-700"
+              className={`w-full border-2 rounded-full p-4 bg-white ${
+                focusedInput === "age" ? "border-primary" : "border-gray-200"
               }`}
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.05,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
             >
-              <Text className="text-white font-kanit">
+              <Text className="text-gray-900 font-kanit-medium">
                 {formData.age
                   ? `${formData.age} ans`
                   : "Sélectionnez votre âge"}
               </Text>
             </TouchableOpacity>
             {errors.age && (
-              <Text className="text-red-500 text-sm pl-2">{errors.age}</Text>
+              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">{errors.age}</Text>
             )}
           </View>
 
-          <View className="space-y-2">
-            <Text className="text-white text-sm font-kanit-semibold pl-2 pb-2">
+          <View>
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Genre*
             </Text>
             <GenderSelect
@@ -192,17 +220,17 @@ export function SignUpFormStep2({
               onChange={(value) => handleChange("gender", value)}
             />
             {errors.gender && (
-              <Text className="text-red-500 text-sm pl-2">{errors.gender}</Text>
+              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">{errors.gender}</Text>
             )}
           </View>
 
-          <View className="space-y-2">
-            <Text className="text-white text-sm font-kanit-semibold pl-2">
+          <View>
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Bio*
             </Text>
             <TextInput
-              className={`w-full border rounded-full p-4 bg-[#1e2429] text-white font-kanit ${
-                focusedInput === "bio" ? "border-purple" : "border-gray-700"
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+                focusedInput === "bio" ? "border-primary" : "border-gray-200"
               }`}
               placeholder="Parle-nous de toi..."
               placeholderTextColor="#9CA3AF"
@@ -212,34 +240,54 @@ export function SignUpFormStep2({
               onBlur={() => setFocusedInput(null)}
               multiline
               numberOfLines={2}
-              style={{ height: 50, textAlignVertical: "top" }}
+              style={{ 
+                height: 50, 
+                textAlignVertical: "top",
+                shadowColor: focusedInput === "bio" ? "#FF6B4A" : "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: focusedInput === "bio" ? 0.15 : 0.05,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
             />
           </View>
 
-          <View className="space-y-2 mb-8">
-            <Text className="text-white text-sm font-semibold pl-2">
+          <View className="mb-8">
+            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
               Photo de profil*
             </Text>
             <Pressable
               onPress={pickImage}
-              className={`w-full border rounded-2xl p-4 items-center justify-center bg-[#1e2429] ${
+              className={`w-full border-2 rounded-2xl p-6 items-center justify-center bg-white ${
                 focusedInput === "profile_image"
-                  ? "border-purple"
-                  : "border-gray-700"
+                  ? "border-primary"
+                  : "border-gray-200"
               }`}
+              style={{
+                shadowColor: "#FF6B4A",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
             >
               {formData.profile_image ? (
                 <View className="items-center">
                   <Image
                     source={{ uri: formData.profile_image }}
-                    className="w-20 h-20 rounded-full mb-2"
+                    className="w-20 h-20 rounded-full mb-3 border-2 border-primary"
                   />
-                  <Text className="text-white">Changer l'image</Text>
+                  <Text className="text-gray-900 font-kanit-medium">Changer l'image</Text>
                 </View>
               ) : (
-                <Text className="text-white">
-                  Sélectionner une image de profil
-                </Text>
+                <View className="items-center">
+                  <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
+                    <Ionicons name="camera-outline" size={32} color="#FF6B4A" />
+                  </View>
+                  <Text className="text-gray-600 font-kanit-medium">
+                    Sélectionner une image de profil
+                  </Text>
+                </View>
               )}
             </Pressable>
           </View>
@@ -248,7 +296,7 @@ export function SignUpFormStep2({
         <View className="h-32" />
       </ScrollView>
 
-      <View className="absolute bottom-0 left-0 w-full right-0 pb-8 pt-4 bg-background border-t border-gray-700">
+      <View className="absolute bottom-0 left-0 w-full right-0 pb-8 pt-4 bg-fond border-t border-gray-200">
         <ActionButton
           text="Continuer"
           onPress={handleSubmit}
@@ -258,13 +306,21 @@ export function SignUpFormStep2({
 
       <Modal visible={showAgePicker} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-[#1e2429] w-full p-4">
+          <View className="bg-white w-full p-4 rounded-t-3xl"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: -4 },
+              shadowOpacity: 0.2,
+              shadowRadius: 8,
+              elevation: 10,
+            }}
+          >
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-white text-lg  font-semibold">
+              <Text className="text-gray-900 text-lg font-kanit-bold">
                 Sélectionnez votre âge
               </Text>
               <Pressable onPress={() => setShowAgePicker(false)}>
-                <Ionicons name="close" size={24} color="#126C52" />
+                <Ionicons name="close" size={24} color="#FF6B4A" />
               </Pressable>
             </View>
             <Picker
@@ -273,14 +329,14 @@ export function SignUpFormStep2({
                 handleChange("age", itemValue.toString());
                 setShowAgePicker(false);
               }}
-              style={{ color: "#ffffff" }}
+              style={{ color: "#1F2937" }}
             >
               {ageOptions.map((age) => (
                 <Picker.Item
                   key={age}
                   label={`${age} ans`}
                   value={age.toString()}
-                  color="#ffffff"
+                  color="#1F2937"
                 />
               ))}
             </Picker>

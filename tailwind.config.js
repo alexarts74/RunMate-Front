@@ -4,6 +4,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Nouvelles couleurs du redesign
+        primary: "#FF6B4A",
+        secondary: "#A78BFA",
+        tertiary: "#F6F0FA",
+        fond: "#f5faff",
+        // Anciennes couleurs conservées pour compatibilité
         green: "#0F4D3B",
         greenLight: "#126C52",
         // purple: "#401346",

@@ -112,12 +112,12 @@ const ChatPage = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-background"
+      className="flex-1 bg-fond"
     >
       {/* Header */}
-      <View className="flex-row items-center px-4 pt-14 pb-4 bg-background border-b border-[#394047]">
+      <View className="flex-row items-center px-6 pt-4 pb-4 bg-white border-b border-gray-200">
         <Pressable onPress={() => router.back()} className="p-2 mr-3">
-          <Ionicons name="arrow-back" size={24} color="#401346" />
+          <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
         </Pressable>
 
         <Image
@@ -126,31 +126,38 @@ const ChatPage = () => {
               ? { uri: match.user.profile_image }
               : require("@/assets/images/react-logo.png")
           }
-          className="w-10 h-10 rounded-full mr-3"
+          className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
         />
 
-        <Text className="text-white font-kanit text-lg font-bold flex-1">
+        <Text className="text-gray-900 font-kanit-bold text-lg flex-1">
           {match?.user.first_name} {match?.user.last_name}
         </Text>
       </View>
-      <View className="flex-1 pt-4">
+      <View className="flex-1 pt-4 bg-fond">
         <FlatList
           data={messages}
           renderItem={renderMessage}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ padding: 12 }}
         />
-        <View className="p-4 border-t border-[#394047] flex-row items-center">
+        <View className="p-4 border-t border-gray-200 bg-white flex-row items-center">
           <TextInput
             value={newMessage}
             onChangeText={setNewMessage}
             placeholder="Votre message..."
             placeholderTextColor="#9CA3AF"
-            className="flex-1 bg-[#1e2429] text-white rounded-full px-4 py-2 mr-2 font-kanit"
+            className="flex-1 bg-tertiary text-gray-900 rounded-full px-4 py-2 mr-2 font-kanit"
           />
           <Pressable
             onPress={sendMessage}
-            className="bg-purple w-10 h-10 rounded-full items-center justify-center"
+            className="bg-primary w-12 h-12 rounded-full items-center justify-center"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 3,
+            }}
           >
             <Ionicons name="send" size={20} color="#ffffff" />
           </Pressable>

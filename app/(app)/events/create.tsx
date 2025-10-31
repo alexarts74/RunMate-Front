@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -21,7 +22,6 @@ import * as Location from "expo-location";
 import { validateCreateEventForm } from "@/constants/formValidation";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
-import { debounce } from "lodash";
 
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
@@ -72,6 +72,18 @@ export default function CreateEventScreen() {
     }
   }, [user]);
 
+  // Nettoyer les timers au démontage
+  useEffect(() => {
+    return () => {
+      if (geocodeTimerRef.current) {
+        clearTimeout(geocodeTimerRef.current);
+      }
+      if (searchLocationTimerRef.current) {
+        clearTimeout(searchLocationTimerRef.current);
+      }
+    };
+  }, []);
+
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -85,8 +97,15 @@ export default function CreateEventScreen() {
     }
   };
 
-  const geocodeLocation = useCallback(
-    debounce(async (address: string) => {
+  const geocodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchLocationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const geocodeLocation = useCallback((address: string) => {
+    if (geocodeTimerRef.current) {
+      clearTimeout(geocodeTimerRef.current);
+    }
+
+    geocodeTimerRef.current = setTimeout(async () => {
       try {
         const result = await Location.geocodeAsync(address);
         if (result.length > 0) {
@@ -99,17 +118,20 @@ export default function CreateEventScreen() {
       } catch (error) {
         console.error("Erreur de géocodage:", error);
       }
-    }, 1000),
-    []
-  );
+    }, 1000);
+  }, []);
 
-  const searchLocation = useCallback(
-    debounce(async (text: string) => {
-      if (text.length < 3) {
-        setSuggestions([]);
-        return;
-      }
+  const searchLocation = useCallback((text: string) => {
+    if (searchLocationTimerRef.current) {
+      clearTimeout(searchLocationTimerRef.current);
+    }
 
+    if (text.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    searchLocationTimerRef.current = setTimeout(async () => {
       try {
         const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(
           text
@@ -157,9 +179,8 @@ export default function CreateEventScreen() {
         }
         setSuggestions([]);
       }
-    }, 300),
-    []
-  );
+    }, 300);
+  }, []);
 
   const formatAddress = (properties: any) => {
     const parts = [];
@@ -249,43 +270,64 @@ export default function CreateEventScreen() {
   };
 
   return (
-    <View className="flex-1 bg-background pt-8">
-      <View
-        style={[styles.container, showPremiumModal && styles.blurContainer]}
-      >
-        <View className="flex-row items-center p-4 border-b border-gray-700">
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="bg-white" edges={['top']}>
+        <View
+          className="flex-row items-center px-6 py-4 bg-white border-b border-gray-200"
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
+        >
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color="#401346" />
+            <Ionicons name="close" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-white text-xl font-bold">
+          <Text className="text-gray-900 text-xl font-kanit-bold flex-1">
             Créer un événement
           </Text>
         </View>
+      </SafeAreaView>
+      
+      <View
+        style={[styles.container, showPremiumModal && styles.blurContainer]}
+      >
 
-        <ScrollView className="flex-1 p-4">
-          <View className="space-y-4">
+        <ScrollView className="flex-1 px-6 py-4 bg-fond" showsVerticalScrollIndicator={false}>
+          <View className="space-y-5">
             {/* Image de couverture */}
             <View>
               <Pressable
                 onPress={handleImagePick}
-                className="h-40 bg-background rounded-xl items-center justify-center mb-1 border border-gray-700"
+                className="h-48 bg-white rounded-2xl items-center justify-center mb-2 border-2 border-dashed border-gray-300"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 2,
+                }}
               >
                 {formData.cover_image ? (
                   <Image
                     source={{ uri: formData.cover_image }}
-                    className="w-full h-full rounded-xl"
+                    className="w-full h-full rounded-2xl"
                   />
                 ) : (
                   <View className="items-center">
-                    <Ionicons name="image-outline" size={40} color="#687076" />
-                    <Text className="text-[#687076] mt-2">
+                    <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
+                      <Ionicons name="image-outline" size={32} color="#FF6B4A" />
+                    </View>
+                    <Text className="text-gray-600 font-kanit-medium text-base">
                       Ajouter une photo
                     </Text>
                   </View>
                 )}
               </Pressable>
               {errors.cover_image && (
-                <Text className="text-red-500 text-sm">
+                <Text className="text-red-500 text-sm font-kanit-medium mt-1">
                   {errors.cover_image}
                 </Text>
               )}
@@ -293,34 +335,41 @@ export default function CreateEventScreen() {
 
             {/* Nom */}
             <View>
-              <Text className="text-white text-lg mb-2">
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
                 Nom de l'événement
               </Text>
               <TextInput
-                className={`bg-background text-white p-4 rounded-xl border ${
-                  errors.name ? "border-red-500" : "border-gray-700"
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                  errors.name ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: Course matinale"
-                placeholderTextColor="#687076"
+                placeholderTextColor="#9CA3AF"
                 value={formData.name}
                 onChangeText={(text) =>
                   setFormData({ ...formData, name: text })
                 }
+                style={{
+                  shadowColor: errors.name ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               />
               {errors.name && (
-                <Text className="text-red-500 text-sm mt-1">{errors.name}</Text>
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">{errors.name}</Text>
               )}
             </View>
 
             {/* Description */}
             <View>
-              <Text className="text-white text-lg mb-2">Description</Text>
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Description</Text>
               <TextInput
-                className={`bg-background text-white p-4 rounded-xl border ${
-                  errors.description ? "border-red-500" : "border-gray-700"
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                  errors.description ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Décrivez votre événement"
-                placeholderTextColor="#687076"
+                placeholderTextColor="#9CA3AF"
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
@@ -328,9 +377,16 @@ export default function CreateEventScreen() {
                 onChangeText={(text) =>
                   setFormData({ ...formData, description: text })
                 }
+                style={{
+                  shadowColor: errors.description ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               />
               {errors.description && (
-                <Text className="text-red-500 text-sm mt-1">
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
                   {errors.description}
                 </Text>
               )}
@@ -338,19 +394,27 @@ export default function CreateEventScreen() {
 
             {/* Date */}
             <View>
-              <Text className="text-white text-lg mb-2">Date et heure</Text>
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Date et heure</Text>
               <Pressable
                 onPress={() => setShowDatePicker(true)}
-                className={`bg-background p-4 rounded-xl border ${
-                  errors.start_date ? "border-red-500" : "border-gray-700"
+                className={`bg-white p-4 rounded-xl border-2 flex-row items-center justify-between ${
+                  errors.start_date ? "border-red-500" : "border-gray-200"
                 }`}
+                style={{
+                  shadowColor: errors.start_date ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               >
-                <Text className="text-white">
+                <Text className="text-gray-900 font-kanit-medium">
                   {formData.start_date.toLocaleString()}
                 </Text>
+                <Ionicons name="calendar" size={20} color="#FF6B4A" />
               </Pressable>
               {errors.start_date && (
-                <Text className="text-red-500 text-sm mt-1">
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
                   {errors.start_date}
                 </Text>
               )}
@@ -368,8 +432,8 @@ export default function CreateEventScreen() {
 
             {/* Niveau */}
             <View>
-              <Text className="text-white text-lg mb-2">Niveau</Text>
-              <View className="flex-row justify-between flex-wrap gap-2">
+              <Text className="text-gray-900 font-kanit-bold text-base mb-3">Niveau</Text>
+              <View className="flex-row justify-between flex-wrap gap-3">
                 {Object.values(EventLevel)
                   .filter((value) => typeof value === "number")
                   .map((value) => (
@@ -378,15 +442,22 @@ export default function CreateEventScreen() {
                       onPress={() =>
                         setFormData({ ...formData, level: value as EventLevel })
                       }
-                      className={`flex-1 min-w-[45%] px-4 py-3 rounded-xl ${
+                      className={`flex-1 min-w-[45%] px-4 py-3.5 rounded-xl border-2 ${
                         formData.level === value
-                          ? "bg-purple"
-                          : "bg-[#1e2429] border border-gray-700"
+                          ? "bg-primary border-primary"
+                          : "bg-white border-gray-200"
                       }`}
+                      style={{
+                        shadowColor: formData.level === value ? "#FF6B4A" : "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: formData.level === value ? 0.2 : 0.05,
+                        shadowRadius: 4,
+                        elevation: formData.level === value ? 3 : 1,
+                      }}
                     >
                       <Text
-                        className={`text-center font-medium ${
-                          formData.level === value ? "text-white" : "text-white"
+                        className={`text-center font-kanit-bold text-sm ${
+                          formData.level === value ? "text-white" : "text-gray-700"
                         }`}
                       >
                         {EventLevel[value]}
@@ -398,35 +469,50 @@ export default function CreateEventScreen() {
 
             {/* Lieu */}
             <View>
-              <Text className="text-white text-lg mb-2">Lieu</Text>
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Lieu</Text>
               <TextInput
-                className={`bg-background text-white p-4 rounded-xl border ${
-                  errors.location ? "border-red-500" : "border-gray-700"
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                  errors.location ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Rechercher une adresse..."
-                placeholderTextColor="#687076"
+                placeholderTextColor="#9CA3AF"
                 value={formData.location}
                 onChangeText={(text) => {
                   setFormData((prev) => ({ ...prev, location: text }));
                   searchLocation(text);
                 }}
+                style={{
+                  shadowColor: errors.location ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               />
               {errors.location && (
-                <Text className="text-red-500 text-sm mt-1">
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
                   {errors.location}
                 </Text>
               )}
 
               {suggestions.length > 0 && (
-                <View className="bg-background mt-1 rounded-xl overflow-hidden absolute w-full z-10 border border-gray-700">
+                <View className="bg-white mt-2 rounded-xl overflow-hidden border-2 border-gray-200"
+                  style={{
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    elevation: 5,
+                  }}
+                >
                   {suggestions.map((suggestion, index) => (
                     <Pressable
                       key={index}
                       onPress={() => handleSelectLocation(suggestion)}
-                      className="p-4 border-b border-gray-700"
-                      android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
+                      className="p-4 border-b border-gray-100"
+                      android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
                     >
-                      <Text className="text-white">{suggestion.full_name}</Text>
+                      <Text className="text-gray-900 font-kanit-medium">{suggestion.full_name}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -435,21 +521,28 @@ export default function CreateEventScreen() {
 
             {/* Distance */}
             <View>
-              <Text className="text-white text-lg mb-2">Distance (km)</Text>
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Distance (km)</Text>
               <TextInput
-                className={`bg-background text-white p-4 rounded-xl border ${
-                  errors.distance ? "border-red-500" : "border-gray-700"
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                  errors.distance ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: 5"
-                placeholderTextColor="#687076"
+                placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
                 value={formData.distance}
                 onChangeText={(text) =>
                   setFormData({ ...formData, distance: text })
                 }
+                style={{
+                  shadowColor: errors.distance ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               />
               {errors.distance && (
-                <Text className="text-red-500 text-sm mt-1">
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
                   {errors.distance}
                 </Text>
               )}
@@ -457,30 +550,37 @@ export default function CreateEventScreen() {
 
             {/* Nombre max de participants */}
             <View>
-              <Text className="text-white text-lg mb-2">
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
                 Nombre maximum de participants
               </Text>
               <TextInput
-                className={`bg-background text-white p-4 rounded-xl border ${
-                  errors.max_participants ? "border-red-500" : "border-gray-700"
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                  errors.max_participants ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: 10"
-                placeholderTextColor="#687076"
+                placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
                 value={formData.max_participants}
                 onChangeText={(text) =>
                   setFormData({ ...formData, max_participants: text })
                 }
+                style={{
+                  shadowColor: errors.max_participants ? "#EF4444" : "#000",
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 2,
+                  elevation: 1,
+                }}
               />
               {errors.max_participants && (
-                <Text className="text-red-500 text-sm mt-1">
+                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
                   {errors.max_participants}
                 </Text>
               )}
             </View>
 
             <View>
-              <Text className="text-white text-lg mb-2">
+              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
                 Inviter des participants
               </Text>
               <UserSearch
@@ -493,12 +593,19 @@ export default function CreateEventScreen() {
       </View>
 
       {/* Footer */}
-      <View className="p-4 w-[70%] mx-auto mb-2">
+      <View className="px-6 py-4 bg-fond border-t border-gray-200">
         <Pressable
           onPress={handleSubmit}
-          className="bg-purple py-4 px-8 rounded-full active:opacity-90"
+          className="bg-primary py-4 px-8 rounded-full active:opacity-90"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
         >
-          <Text className="text-white text-center font-bold text-lg">
+          <Text className="text-white text-center font-kanit-bold text-lg">
             Créer l'événement
           </Text>
         </Pressable>

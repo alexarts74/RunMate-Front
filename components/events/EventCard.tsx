@@ -14,64 +14,87 @@ export const EventCard = ({
   return (
     <Pressable
       onPress={() => router.push(`/events/${event.id}`)}
-      className="bg-[#1e2429] rounded-xl mb-8 overflow-hidden"
-      android_ripple={{ color: "rgba(255, 255, 255, 0.1)" }} // Effet de ripple sur Android
+      className="bg-white rounded-2xl mb-6 overflow-hidden"
+      style={{
+        shadowColor: "#FF6B4A",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        elevation: 5,
+      }}
+      android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
     >
       {/* Cover Image */}
       <Image
         source={{
           uri: event.cover_image || "https://via.placeholder.com/400x200",
         }}
-        className="w-full h-40"
+        className="w-full h-48"
         style={{ resizeMode: "cover" }}
       />
 
       {/* Content Container */}
-      <View className="p-4">
-        <View className="flex-row justify-between items-center mb-2">
+      <View className="p-5">
+        <View className="flex-row justify-between items-center mb-3">
           {event.is_creator ? (
-            <Text className="text-purple font-bold text-lg mb-2">Créateur</Text>
+            <View className="bg-tertiary border border-primary px-3 py-1 rounded-full">
+              <Text className="text-primary font-kanit-bold text-sm">Créateur</Text>
+            </View>
           ) : event.is_participant ? (
-            <Text className="text-orange-400 font-bold text-lg mb-2">
+            <View className="bg-tertiary border border-secondary px-3 py-1 rounded-full">
+              <Text className="text-secondary font-kanit-bold text-sm">
               Participant
             </Text>
+            </View>
           ) : null}
         </View>
-        <Text className="text-white font-bold text-lg mb-2">{event.name}</Text>
+        <Text className="text-gray-900 font-kanit-bold text-xl mb-4">{event.name}</Text>
 
-        <View className="flex-row items-center mb-2">
-          <Ionicons name="calendar" size={16} color="#126C52" />
-          <Text className="text-white ml-2">
+        <View className="space-y-3 mb-4">
+          <View className="flex-row items-center">
+            <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
+              <Ionicons name="calendar" size={16} color="#FF6B4A" />
+            </View>
+            <Text className="text-gray-700 font-kanit-medium">
             {new Date(event.start_date).toLocaleDateString()}
           </Text>
         </View>
 
-        <Text className="text-white mb-3">
-          {event.description
-            ? event.description.slice(0, 100) + "..."
-            : "Aucune description"}
-        </Text>
-
-        <View className="flex-row justify-between items-center mb-3">
           <View className="flex-row items-center">
-            <Ionicons name="location" size={16} color="#126C52" />
-            <Text className="text-white ml-2">{event.location}</Text>
+            <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
+              <Ionicons name="location" size={16} color="#A78BFA" />
+            </View>
+            <Text className="text-gray-700 font-kanit-medium">{event.location}</Text>
+        </View>
+
+          <View className="flex-row items-center">
+            <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
+              <Ionicons name="trending-up" size={16} color="#FF6B4A" />
+            </View>
+            <Text className="text-gray-700 font-kanit-medium">{event.distance} km</Text>
           </View>
         </View>
 
-        <View className="flex-row justify-between items-center mb-4">
-          <View className="flex-row items-center">
-            <Ionicons name="trending-up" size={16} color="#126C52" />
-            <Text className="text-white ml-2">{event.distance} km</Text>
-          </View>
-        </View>
+        {event.description && (
+          <Text className="text-gray-600 mb-4 font-kanit-medium text-sm">
+            {event.description.slice(0, 100)}
+            {event.description.length > 100 ? "..." : ""}
+          </Text>
+        )}
 
         <Pressable
           onPress={() => router.push(`/events/${event.id}`)}
-          className="bg-purple py-2 rounded-lg"
-          android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }} // Effet de ripple sur Android
+          className="bg-primary py-3 rounded-xl"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            elevation: 3,
+          }}
+          android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
         >
-          <Text className="text-center text-white font-bold">
+          <Text className="text-center text-white font-kanit-bold">
             Voir l'événement
           </Text>
         </Pressable>
