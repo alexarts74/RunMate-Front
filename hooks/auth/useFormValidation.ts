@@ -33,7 +33,7 @@ export const useFormValidation = () => {
       errorMessage = "Email invalide";
     } else if (
       rules.password &&
-      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
+      !/^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(value)
     ) {
       isValid = false;
       errorMessage =
@@ -52,10 +52,16 @@ export const useFormValidation = () => {
       errorMessage = "Valeur invalide";
     }
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: errorMessage,
-    }));
+    // Ne mettre l'erreur que si elle existe, sinon retirer le champ de l'objet errors
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      if (errorMessage) {
+        newErrors[name] = errorMessage;
+      } else {
+        delete newErrors[name];
+      }
+      return newErrors;
+    });
 
     return isValid;
   };
@@ -64,7 +70,6 @@ export const useFormValidation = () => {
     [key: string]: { value: string; rules: ValidationRules };
   }): boolean => {
     let isFormValid = true;
-    const newErrors: ValidationErrors = {};
 
     Object.entries(fields).forEach(([name, { value, rules }]) => {
       if (!validateField(name, value, rules)) {

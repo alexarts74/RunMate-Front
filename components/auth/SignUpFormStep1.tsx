@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Pressable, Image } from "react-native";
+import { View, Text, TextInput, Pressable, Image, KeyboardAvoidingView, Platform } from "react-native";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
 import {
   validateSignUpFormStep1,
@@ -31,13 +31,28 @@ export function SignUpFormStep1({
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
 
+  // Log des erreurs quand elles changent
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.log("❌ Erreurs de validation Step 1 détectées:");
+      console.log("- Email:", formData.email || "vide");
+      console.log("- Password:", formData.password || "vide");
+      console.log("- Password confirmation:", formData.password_confirmation || "vide");
+      console.log("Erreurs complètes:", errors);
+    }
+  }, [errors, formData]);
+
   const handleSubmit = () => {
     clearErrors();
     const isValid = validateForm(validateSignUpFormStep1(formData));
+
     if (!isValid) {
+      console.log("⚠️ Formulaire invalide - en attente des erreurs détaillées...");
       resetErrorsAfterDelay(setErrors);
       return;
     }
+
+    console.log("✅ Validation Step 1 réussie - passage à l'étape suivante");
     onNext();
   };
 
@@ -58,31 +73,35 @@ export function SignUpFormStep1({
   }, [formData]);
 
   return (
-    <View className="flex-1 bg-fond px-6">
-      {/* Header Section */}
-      <View className="h-[15%] mt-8 flex-row items-center">
-        <Pressable
-          onPress={onBack}
-          className="bg-white p-2.5 rounded-full active:opacity-80"
-          style={{
-            shadowColor: "#FF6B4A",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
-            shadowRadius: 4,
-            elevation: 3,
-          }}
-        >
-          <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
-        </Pressable>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <View className="flex-1 bg-fond px-6">
+        {/* Header Section */}
+        <View className="h-[15%] mt-8 flex-row items-center">
+          <Pressable
+            onPress={onBack}
+            className="bg-white p-2.5 rounded-full active:opacity-80"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 3,
+            }}
+          >
+            <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+          </Pressable>
 
-        <View className="flex-1">
-          <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
-            Promis on te{"\n"}
-            <Text className="text-primary">spammera pas !</Text>
-            {" 🙃"}
-          </Text>
+          <View className="flex-1">
+            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
+              Promis on te{"\n"}
+              <Text className="text-primary">spammera pas !</Text>
+              {" 🙃"}
+            </Text>
+          </View>
         </View>
-      </View>
 
       {/* Inputs Section */}
       <View className="flex-1 justify-center -mt-24">
@@ -224,6 +243,7 @@ export function SignUpFormStep1({
           loading={isLoading}
         />
       </View>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

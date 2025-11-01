@@ -8,6 +8,8 @@ import {
   Modal,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
@@ -89,8 +91,12 @@ export function SignUpFormStep2({
   };
 
   return (
-    <View className="flex-1 bg-fond px-6">
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <View className="flex-1 bg-fond px-6">
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
             onPress={onBack}
@@ -240,8 +246,8 @@ export function SignUpFormStep2({
               onBlur={() => setFocusedInput(null)}
               multiline
               numberOfLines={2}
-              style={{ 
-                height: 50, 
+              style={{
+                height: 50,
                 textAlignVertical: "top",
                 shadowColor: focusedInput === "bio" ? "#FF6B4A" : "#000",
                 shadowOffset: { width: 0, height: 1 },
@@ -343,6 +349,7 @@ export function SignUpFormStep2({
           </View>
         </View>
       </Modal>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

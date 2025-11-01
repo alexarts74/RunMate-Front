@@ -10,7 +10,17 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Configure environment variables
+
+   ```bash
+   # Créez un fichier .env avec votre configuration
+   cp .env.example .env
+
+   # Éditez .env et remplacez YOUR_LOCAL_IP par votre adresse IP locale
+   # Pour trouver votre IP locale : ipconfig getifaddr en0 (Mac)
+   ```
+
+3. Start the app
 
    ```bash
     npx expo start

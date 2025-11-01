@@ -117,7 +117,11 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   return (
     <View className="flex-1 bg-fond">
       <LinearGradient
-        colors={["rgba(255, 107, 74, 0.15)", "rgba(167, 139, 250, 0.1)", "transparent"]}
+        colors={[
+          "rgba(255, 107, 74, 0.15)",
+          "rgba(167, 139, 250, 0.1)",
+          "transparent",
+        ]}
         className="absolute top-0 left-0 right-0 h-96"
       />
 

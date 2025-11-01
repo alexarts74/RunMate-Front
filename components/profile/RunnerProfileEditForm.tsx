@@ -5,6 +5,8 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 
@@ -52,7 +54,11 @@ export function RunnerProfileEditForm({
   };
 
   return (
-    <ScrollView className="space-y-4 bg-fond">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <ScrollView className="space-y-4 bg-fond">
       <View className="px-6 space-y-6 mt-6">
         <View className="flex-row justify-between items-center mb-2">
           <Text className="text-2xl font-kanit-bold text-gray-900">
@@ -159,6 +165,7 @@ export function RunnerProfileEditForm({
           </Pressable>
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

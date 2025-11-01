@@ -8,6 +8,8 @@ import {
   Image,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -290,11 +292,12 @@ export default function CreateEventScreen() {
           </Text>
         </View>
       </SafeAreaView>
-      
-      <View
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
         style={[styles.container, showPremiumModal && styles.blurContainer]}
       >
-
         <ScrollView className="flex-1 px-6 py-4 bg-fond" showsVerticalScrollIndicator={false}>
           <View className="space-y-5">
             {/* Image de couverture */}
@@ -590,26 +593,26 @@ export default function CreateEventScreen() {
             </View>
           </View>
         </ScrollView>
-      </View>
 
-      {/* Footer */}
-      <View className="px-6 py-4 bg-fond border-t border-gray-200">
-        <Pressable
-          onPress={handleSubmit}
-          className="bg-primary py-4 px-8 rounded-full active:opacity-90"
-          style={{
-            shadowColor: "#FF6B4A",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-          }}
-        >
-          <Text className="text-white text-center font-kanit-bold text-lg">
-            Créer l'événement
-          </Text>
-        </Pressable>
-      </View>
+        {/* Footer */}
+        <View className="px-6 py-4 bg-fond border-t border-gray-200">
+          <Pressable
+            onPress={handleSubmit}
+            className="bg-primary py-4 px-8 rounded-full active:opacity-90"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
+          >
+            <Text className="text-white text-center font-kanit-bold text-lg">
+              Créer l'événement
+            </Text>
+          </Pressable>
+        </View>
+      </KeyboardAvoidingView>
 
       {/* Modal Premium */}
       <PremiumFeatureModal

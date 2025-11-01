@@ -1,3 +1,6 @@
+// Polyfill pour URL.canParse
+require("./polyfills");
+
 const { getDefaultConfig } = require("expo/metro-config");
 
 module.exports = (() => {

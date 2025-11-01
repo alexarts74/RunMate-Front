@@ -6,6 +6,8 @@ import {
   Text,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
@@ -87,10 +89,14 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   ];
 
   return (
-    <ScrollView
-      className="flex-1 bg-fond px-6 py-6 pt-6"
-      contentContainerStyle={{ paddingBottom: 150 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
     >
+      <ScrollView
+        className="flex-1 bg-fond px-6 py-6 pt-6"
+        contentContainerStyle={{ paddingBottom: 150 }}
+      >
       <Text className="text-2xl font-kanit-bold mb-6 text-gray-900">
         Modifier mon profil
       </Text>
@@ -272,6 +278,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           <Text className="text-gray-700 font-kanit-bold">Annuler</Text>
         </Pressable>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

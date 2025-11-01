@@ -7,6 +7,8 @@ import {
   TextInput,
   Modal,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useFormValidation } from "@/hooks/auth/useFormValidation";
 import {
@@ -185,6 +187,8 @@ export function SignUpFormStep3({
         commonRequiredFields &&
         (runnerType === "perf" ? perfRequiredFields : chillRequiredFields);
 
+      console.log("isValid", isValid);
+      console.log("errors", errors);
       setIsFormValid(isValid);
     };
 
@@ -208,8 +212,12 @@ export function SignUpFormStep3({
   };
 
   return (
-    <View className="flex-1 bg-fond px-6">
-      <ScrollView showsVerticalScrollIndicator={false} className="mb-32">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <View className="flex-1 bg-fond px-6">
+        <ScrollView showsVerticalScrollIndicator={false} className="mb-32">
         {/* Header */}
         <View className="h-[15%] mt-8 flex-row items-center">
           <Pressable
@@ -292,7 +300,8 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-white w-full p-4 rounded-t-3xl"
+                    <View
+                      className="bg-white w-full p-4 rounded-t-3xl"
                       style={{
                         shadowColor: "#000",
                         shadowOffset: { width: 0, height: -4 },
@@ -385,7 +394,8 @@ export function SignUpFormStep3({
                   animationType="slide"
                 >
                   <View className="flex-1 justify-end bg-black/50">
-                    <View className="bg-white w-full p-4 rounded-t-3xl"
+                    <View
+                      className="bg-white w-full p-4 rounded-t-3xl"
                       style={{
                         shadowColor: "#000",
                         shadowOffset: { width: 0, height: -4 },
@@ -454,9 +464,17 @@ export function SignUpFormStep3({
                         : "border-gray-200"
                     }`}
                     style={{
-                      shadowColor: focusedInput === "weekly_mileage" && !errors.weekly_mileage ? "#FF6B4A" : "#000",
+                      shadowColor:
+                        focusedInput === "weekly_mileage" &&
+                        !errors.weekly_mileage
+                          ? "#FF6B4A"
+                          : "#000",
                       shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: focusedInput === "weekly_mileage" && !errors.weekly_mileage ? 0.15 : 0.05,
+                      shadowOpacity:
+                        focusedInput === "weekly_mileage" &&
+                        !errors.weekly_mileage
+                          ? 0.15
+                          : 0.05,
                       shadowRadius: 2,
                       elevation: 1,
                     }}
@@ -575,9 +593,17 @@ export function SignUpFormStep3({
                         : "border-gray-200"
                     }`}
                     style={{
-                      shadowColor: focusedInput === "usual_distance" && !errors.usual_distance ? "#A78BFA" : "#000",
+                      shadowColor:
+                        focusedInput === "usual_distance" &&
+                        !errors.usual_distance
+                          ? "#A78BFA"
+                          : "#000",
                       shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: focusedInput === "usual_distance" && !errors.usual_distance ? 0.15 : 0.05,
+                      shadowOpacity:
+                        focusedInput === "usual_distance" &&
+                        !errors.usual_distance
+                          ? 0.15
+                          : 0.05,
                       shadowRadius: 2,
                       elevation: 1,
                     }}
@@ -625,7 +651,11 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="people-outline" size={22} color="#A78BFA" />
+                      <Ionicons
+                        name="people-outline"
+                        size={22}
+                        color="#A78BFA"
+                      />
                     </View>
                     <Text className="text-gray-900 text-sm font-kanit-bold">
                       Préférences sociales
@@ -673,7 +703,11 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="repeat-outline" size={22} color="#A78BFA" />
+                      <Ionicons
+                        name="repeat-outline"
+                        size={22}
+                        color="#A78BFA"
+                      />
                     </View>
                     <Text className="text-gray-900 text-sm font-kanit-bold">
                       Fréquence de course
@@ -732,6 +766,7 @@ export function SignUpFormStep3({
           loading={isLoading}
         />
       </View>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

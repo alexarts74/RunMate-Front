@@ -55,7 +55,13 @@ export default {
         backgroundColor: "#14141b",
       },
     },
-    plugins: ["expo-router", "expo-image-picker", "expo-location", "expo-font"],
+    plugins: [
+      "expo-router",
+      "expo-image-picker",
+      "expo-location",
+      "expo-font",
+      "expo-web-browser",
+    ],
     experiments: {
       typedRoutes: true,
     },

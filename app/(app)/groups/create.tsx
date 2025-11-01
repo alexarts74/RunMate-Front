@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, Pressable, Text } from "react-native";
+import { View, ScrollView, Pressable, Text, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,18 +27,23 @@ export default function CreateGroupScreen() {
           </Text>
         </View>
       </SafeAreaView>
-      
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="px-6 py-6 bg-fond">
-          {/* Description */}
-          <Text className="text-gray-600 font-kanit-medium text-base mb-6">
-            Créez votre groupe de running et commencez à courir ensemble !
-          </Text>
 
-          {/* Formulaire */}
-          <CreateGroupForm />
-        </View>
-      </ScrollView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <View className="px-6 py-6 bg-fond">
+            {/* Description */}
+            <Text className="text-gray-600 font-kanit-medium text-base mb-6">
+              Créez votre groupe de running et commencez à courir ensemble !
+            </Text>
+
+            {/* Formulaire */}
+            <CreateGroupForm />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
