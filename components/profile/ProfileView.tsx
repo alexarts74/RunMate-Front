@@ -10,6 +10,7 @@ type ProfileViewProps = {
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
   const { user } = useAuth();
 
+  // console.log(user);
   return (
     <ScrollView
       className="flex-1 bg-fond px-6 py-6 pt-6 pb-24"

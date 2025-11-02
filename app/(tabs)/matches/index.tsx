@@ -89,9 +89,6 @@ const HomepageScreen = () => {
               >
                 <Text className="text-white font-kanit-bold text-xs">RM</Text>
                 </LinearGradient>
-                <Text className="text-gray-900 font-kanit-bold text-lg">
-                  RunMate
-                </Text>
             </View>
             
               {/* Actions header */}
@@ -111,7 +108,7 @@ const HomepageScreen = () => {
               </Pressable>
               
               <Pressable
-                onPress={() => router.push("/profile")}
+                onPress={() => router.push("/(tabs)/profile")}
                   className="w-9 h-9 rounded-full overflow-hidden border border-primary"
               >
                 <Image

@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -17,6 +18,7 @@ import { useAuth } from "@/context/AuthContext";
 import { groupMessageService } from "@/service/api/groupMessage";
 import { GroupMessage, GroupInfo, GroupChatData } from "@/interface/Group";
 import { groupService } from "@/service/api/group";
+import { LinearGradient } from "expo-linear-gradient";
 
 const GroupChatPage = () => {
   const { id } = useLocalSearchParams();
@@ -99,179 +101,212 @@ const GroupChatPage = () => {
   };
 
   const renderMessage = ({ item }: { item: GroupMessage }) => (
-    <View className="flex-row items-end mb-2">
+    <View
+      className={`mb-3 ${
+        item.sender.id === user?.id ? "items-end" : "items-start"
+      }`}
+      style={{ paddingHorizontal: 12 }}
+    >
       {item.sender.id !== user?.id && (
-        <Image
-          source={
-            item.sender.profile_image
-              ? { uri: item.sender.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-8 h-8 rounded-full mr-2"
-        />
+        <Text className="text-gray-500 text-xs mb-1 ml-3 font-kanit-medium">
+          {item.sender.first_name}
+        </Text>
       )}
-
-      <View
-        className={`rounded-xl max-w-[75%] ${
-          item.sender.id === user?.id
-            ? "self-end bg-purple ml-auto"
-            : "bg-gray-50"
-        }`}
-      >
+      <View className="flex-row items-end" style={{ maxWidth: "80%" }}>
         {item.sender.id !== user?.id && (
-          <Text className="text-gray-500 text-xs ml-3 mt-1">
-            {item.sender.first_name}
-          </Text>
+          <Image
+            source={
+              item.sender.profile_image
+                ? { uri: item.sender.profile_image }
+                : require("@/assets/images/react-logo.png")
+            }
+            className="w-8 h-8 rounded-full mr-2"
+          />
         )}
-        <View className="p-3">
+        <View
+          className={`p-3 rounded-2xl ${
+            item.sender.id === user?.id
+              ? "bg-primary rounded-br-md"
+              : "bg-white rounded-bl-md border border-gray-200"
+          }`}
+          style={{
+            shadowColor: item.sender.id === user?.id ? "#FF6B4A" : "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
+        >
           <Text
-            className={`${
+            className={`font-kanit-medium ${
               item.sender.id === user?.id ? "text-white" : "text-gray-900"
             }`}
+            style={{ fontSize: 15 }}
           >
             {item.content}
           </Text>
           <Text
-            className={`text-xs mt-1 ${
-              item.sender.id === user?.id ? "text-white/80" : "text-gray-500"
+            className={`text-xs font-kanit mt-1 ${
+              item.sender.id === user?.id ? "text-white/70" : "text-gray-500"
             }`}
           >
-            {new Date(item.created_at).toLocaleTimeString()}
+            {new Date(item.created_at).toLocaleTimeString("fr-FR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </Text>
         </View>
+        {item.sender.id === user?.id && (
+          <Image
+            source={
+              item.sender.profile_image
+                ? { uri: item.sender.profile_image }
+                : require("@/assets/images/react-logo.png")
+            }
+            className="w-8 h-8 rounded-full ml-2"
+          />
+        )}
       </View>
-
-      {item.sender.id === user?.id && (
-        <Image
-          source={
-            item.sender.profile_image
-              ? { uri: item.sender.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-8 h-8 rounded-full ml-2"
-        />
-      )}
     </View>
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-white"
-    >
-      {/* Header */}
-      <View className="flex-row items-center px-4 pt-14 pb-4 bg-white border-b border-gray-200">
-        <Pressable onPress={() => router.back()} className="p-2 mr-3">
-          <Ionicons name="arrow-back" size={24} color="#0a7ea4" />
-        </Pressable>
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="flex-1" edges={['top']} style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
+        >
+          {/* Header */}
+          <View className="px-6 pt-2 pb-4 bg-fond border-b border-gray-200">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center flex-1">
+                <Pressable onPress={() => router.back()} className="p-2 mr-3">
+                  <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+                </Pressable>
+                <Image
+                  source={
+                    groupInfo?.cover_image
+                      ? { uri: groupInfo.cover_image }
+                      : require("@/assets/images/react-logo.png")
+                  }
+                  className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
+                />
+                <Text className="text-gray-900 text-lg font-kanit-bold flex-1">
+                  {groupInfo?.name}
+                </Text>
+                <Pressable
+                  onPress={() => setShowMembersModal(true)}
+                  className="p-2 ml-2"
+                >
+                  <Ionicons name="people" size={24} color="#FF6B4A" />
+                </Pressable>
+              </View>
+            </View>
+          </View>
 
-        <View className="flex-row items-center flex-1">
-          <Image
-            source={
-              groupInfo?.cover_image
-                ? { uri: groupInfo.cover_image }
-                : require("@/assets/images/react-logo.png")
-            }
-            className="w-10 h-10 rounded-full mr-2"
-          />
-          <Text className="text-gray-900 text-lg font-bold flex-1">
-            {groupInfo?.name}
-          </Text>
-          <Pressable
-            onPress={() => setShowMembersModal(true)}
-            className="flex-row items-center"
-          >
-            <Ionicons name="people" size={24} color="#0a7ea4" />
-          </Pressable>
-        </View>
-      </View>
-
-      <View className="flex-1 pt-4 bg-white">
-        <FlatList
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{
-            padding: 12,
-            flexGrow: 1,
-            justifyContent: "flex-end",
-          }}
-          inverted={false}
-          onRefresh={loadMessages}
-          refreshing={false}
-          showsVerticalScrollIndicator={true}
-          ref={flatListRef}
-          onContentSizeChange={() => {
-            if (flatListRef.current) {
-              flatListRef.current.scrollToEnd({ animated: false });
-            }
-          }}
-          onLayout={() => {
-            if (flatListRef.current) {
-              flatListRef.current.scrollToEnd({ animated: false });
-            }
-          }}
-        />
-        <View className="p-4 border-t border-gray-200 flex-row items-center bg-white">
-          <TextInput
-            value={newMessage}
-            onChangeText={setNewMessage}
-            placeholder="Votre message..."
-            placeholderTextColor="#9CA3AF"
-            className="flex-1 bg-gray-50 text-gray-900 rounded-full px-4 py-2 mr-2"
-          />
-          <Pressable
-            onPress={sendMessage}
-            className="bg-purple w-10 h-10 rounded-full items-center justify-center"
-          >
-            <Ionicons name="send" size={20} color="white" />
-          </Pressable>
-        </View>
-      </View>
-
-      {/* Modal des membres */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showMembersModal}
-        onRequestClose={() => setShowMembersModal(false)}
-      >
-        <View className="flex-1 bg-black/50 justify-end">
-          <View className="bg-white rounded-t-3xl h-3/4 p-4">
-            <View className="flex-row justify-between items-center mb-6">
-              <Text className="text-gray-900 text-xl font-bold">
-                Membres ({groupInfo?.members.length})
-              </Text>
-              <Pressable onPress={() => setShowMembersModal(false)}>
-                <Ionicons name="close" size={24} color="#0a7ea4" />
+          <View className="flex-1 bg-fond">
+            <FlatList
+              data={messages}
+              renderItem={renderMessage}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={{
+                paddingVertical: 12,
+                flexGrow: 1,
+                justifyContent: "flex-end",
+              }}
+              inverted={false}
+              onRefresh={loadMessages}
+              refreshing={false}
+              showsVerticalScrollIndicator={false}
+              ref={flatListRef}
+              onContentSizeChange={() => {
+                if (flatListRef.current) {
+                  flatListRef.current.scrollToEnd({ animated: false });
+                }
+              }}
+              onLayout={() => {
+                if (flatListRef.current) {
+                  flatListRef.current.scrollToEnd({ animated: false });
+                }
+              }}
+            />
+            <View className="px-4 pb-4 pt-3 bg-fond flex-row items-center">
+              <View className="flex-1 bg-white rounded-full border border-gray-200 px-4 py-2 mr-3">
+                <TextInput
+                  value={newMessage}
+                  onChangeText={setNewMessage}
+                  placeholder="Votre message..."
+                  placeholderTextColor="#9CA3AF"
+                  className="text-gray-900 font-kanit"
+                  style={{ fontSize: 15 }}
+                  multiline
+                  maxLength={500}
+                />
+              </View>
+              <Pressable
+                onPress={sendMessage}
+                className="bg-primary w-12 h-12 rounded-full items-center justify-center"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <Ionicons name="send" size={20} color="#ffffff" />
               </Pressable>
             </View>
-            <FlatList
-              data={groupInfo?.members}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <View className="flex-row items-center p-4 border-b border-gray-200">
-                  <Image
-                    source={
-                      item.profile_image
-                        ? { uri: item.profile_image }
-                        : require("@/assets/images/react-logo.png")
-                    }
-                    className="w-12 h-12 rounded-full mr-3"
-                  />
-                  <View className="flex-1">
-                    <Text className="text-gray-900 font-bold">{item.name}</Text>
-                    {item.is_admin && (
-                      <Text className="text-purple text-sm">Admin</Text>
-                    )}
-                  </View>
-                </View>
-              )}
-            />
           </View>
-        </View>
-      </Modal>
-    </KeyboardAvoidingView>
+
+          {/* Modal des membres */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showMembersModal}
+            onRequestClose={() => setShowMembersModal(false)}
+          >
+            <View className="flex-1 bg-black/50 justify-end">
+              <View className="bg-white rounded-t-3xl h-3/4 p-6">
+                <View className="flex-row justify-between items-center mb-6">
+                  <Text className="text-gray-900 text-xl font-kanit-bold">
+                    Membres ({groupInfo?.members.length})
+                  </Text>
+                  <Pressable onPress={() => setShowMembersModal(false)} className="p-2">
+                    <Ionicons name="close" size={24} color="#FF6B4A" />
+                  </Pressable>
+                </View>
+                <FlatList
+                  data={groupInfo?.members}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => (
+                    <View className="flex-row items-center p-4 border-b border-gray-100">
+                      <Image
+                        source={
+                          item.profile_image
+                            ? { uri: item.profile_image }
+                            : require("@/assets/images/react-logo.png")
+                        }
+                        className="w-12 h-12 rounded-full mr-3 border-2 border-primary"
+                      />
+                      <View className="flex-1">
+                        <Text className="text-gray-900 font-kanit-bold">{item.name}</Text>
+                        {item.is_admin && (
+                          <View className="bg-primary px-2 py-0.5 rounded-full self-start mt-1">
+                            <Text className="text-white text-xs font-kanit-bold">Admin</Text>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  )}
+                />
+              </View>
+            </View>
+          </Modal>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 };
 

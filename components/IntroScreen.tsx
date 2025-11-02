@@ -160,9 +160,6 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
         <Text className="text-2xl text-gray-800 text-center font-kanit-bold mb-3 px-4">
           Trouvez votre partenaire de course idéal
         </Text>
-        <Text className="text-base text-gray-600 text-center font-kanit px-4">
-          Rejoignez une communauté passionnée de runners
-        </Text>
       </Animated.View>
 
       {/* Animation Lottie centrée - Positionnée au milieu */}

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable } from "react-native";
+import { View, Text, FlatList, Pressable, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Conversation } from "@/interface/Conversation";
@@ -8,8 +8,13 @@ import { router, useFocusEffect } from "expo-router";
 import { directMessageService } from "@/service/api/message";
 import { groupMessageService } from "@/service/api/groupMessage";
 import LoadingScreen from "@/components/LoadingScreen";
+import { LinearGradient } from "expo-linear-gradient";
+import { useAuth } from "@/context/AuthContext";
+import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 
 const MessagesScreen = () => {
+  const { user } = useAuth();
+  const { unreadCount } = useUnreadMessages();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -70,24 +75,61 @@ const MessagesScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-      <View className="px-6 pt-4 pb-4 flex-row items-center gap-x-4 border-b border-fond"
-      >
-        <Pressable 
-          onPress={() => router.back()}
-          className="p-2 rounded-full bg-tertiary"
-        >
-          <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
-        </Pressable>
-        <Text className="text-gray-900 text-2xl font-kanit-bold">
-          Messages
-        </Text>
-      </View>
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="flex-1" edges={['top']} style={{ flex: 1 }}>
+        {/* Header simplifié */}
+        <View className="px-6 pt-2 pb-4">
+          <View className="flex-row items-center justify-between">
+            {/* Logo moderne */}
+            <View className="flex-row items-center">
+              <LinearGradient
+                colors={["#FF6B4A", "#A78BFA"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                className="w-9 h-9 rounded-xl items-center justify-center mr-2"
+              >
+                <Text className="text-white font-kanit-bold text-xs">RM</Text>
+              </LinearGradient>
+            </View>
+            
+            {/* Actions header */}
+            <View className="flex-row items-center" style={{ gap: 12 }}>
+              <Pressable
+                onPress={() => router.push("/messages")}
+                className="relative"
+              >
+                <Ionicons name="notifications-outline" size={22} color="#FF6B4A" />
+                {unreadCount > 0 && (
+                  <View className="absolute -top-1 -right-1 bg-primary rounded-full w-4 h-4 items-center justify-center border-2 border-fond">
+                    <Text className="text-white text-xs font-kanit-bold">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+              
+              <Pressable
+                onPress={() => router.push("/(tabs)/profile")}
+                className="w-9 h-9 rounded-full overflow-hidden border border-primary"
+              >
+                <Image
+                  source={
+                    user?.profile_image
+                      ? { uri: user.profile_image }
+                      : require("@/assets/images/react-logo.png")
+                  }
+                  className="w-full h-full"
+                  style={{ resizeMode: "cover" }}
+                />
+              </Pressable>
+            </View>
+          </View>
+        </View>
 
       {isLoading && <LoadingScreen />}
 
       {conversations.length === 0 ? (
-        <View className="flex-1 items-center justify-center px-6 bg-fond">
+        <View className="flex-1 items-center justify-center px-6">
           <View className="bg-tertiary p-8 rounded-full mb-6"
             style={{
               shadowColor: "#FF6B4A",
@@ -139,7 +181,8 @@ const MessagesScreen = () => {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 };
 

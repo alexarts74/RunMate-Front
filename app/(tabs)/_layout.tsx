@@ -1,5 +1,5 @@
 // TabLayout.tsx
-import { Tabs } from "expo-router";
+import { Tabs, useSegments } from "expo-router";
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Animated, Dimensions } from "react-native";
 import { BlurView } from "expo-blur";
@@ -43,12 +43,27 @@ function CreateActionButton({
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
   const insets = useSafeAreaInsets();
+  const segments = useSegments();
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState(0);
   const indicatorPosition = useRef(new Animated.Value(0)).current;
   const screenWidth = Dimensions.get("window").width;
   const tabBarWidth = screenWidth * 0.88;
   const tabWidth = tabBarWidth / 4;
+
+  // Détecter automatiquement l'onglet actif basé sur les segments de route
+  useEffect(() => {
+    const currentPath = segments.join("/");
+    if (currentPath.includes("profile")) {
+      setActiveTab(3);
+    } else if (currentPath.includes("messages")) {
+      setActiveTab(1);
+    } else if (currentPath.includes("create")) {
+      setActiveTab(2);
+    } else if (currentPath.includes("matches") || currentPath === "") {
+      setActiveTab(0);
+    }
+  }, [segments]);
 
   useEffect(() => {
     Animated.spring(indicatorPosition, {

@@ -9,6 +9,7 @@ import {
   Platform,
   Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -17,6 +18,7 @@ import { directMessageService } from "@/service/api/message";
 import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
@@ -86,84 +88,117 @@ const ChatPage = () => {
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View
-      className={`p-3 rounded-xl max-w-[85%] mb-2 ${
-        item.sender_id === user?.id
-          ? "bg-purple self-end"
-          : "bg-[#1e2429] self-start"
+      className={`mb-3 ${
+        item.sender_id === user?.id ? "items-end" : "items-start"
       }`}
+      style={{ paddingHorizontal: 12 }}
     >
-      <Text
-        className={`mb-2 font-kanit ${
-          item.sender_id === user?.id ? "text-white" : "text-white"
+      <View
+        className={`p-3 rounded-2xl max-w-[80%] ${
+          item.sender_id === user?.id
+            ? "bg-primary rounded-br-md"
+            : "bg-white rounded-bl-md border border-gray-200"
         }`}
+        style={{
+          shadowColor: item.sender_id === user?.id ? "#FF6B4A" : "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
+        }}
       >
-        {item.content}
-      </Text>
-      <Text
-        className={`text-xs font-kanit ${
-          item.sender_id === user?.id ? "text-gray-200" : "text-gray-400"
-        }`}
-      >
-        {new Date(item.created_at).toLocaleTimeString()}
-      </Text>
+        <Text
+          className={`font-kanit-medium ${
+            item.sender_id === user?.id ? "text-white" : "text-gray-900"
+          }`}
+          style={{ fontSize: 15 }}
+        >
+          {item.content}
+        </Text>
+        <Text
+          className={`text-xs font-kanit mt-1 ${
+            item.sender_id === user?.id ? "text-white/70" : "text-gray-500"
+          }`}
+        >
+          {new Date(item.created_at).toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </Text>
+      </View>
     </View>
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-fond"
-    >
-      {/* Header */}
-      <View className="flex-row items-center px-6 pt-4 pb-4 bg-white border-b border-gray-200">
-        <Pressable onPress={() => router.back()} className="p-2 mr-3">
-          <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
-        </Pressable>
+    <View className="flex-1 bg-fond">
+      <SafeAreaView className="flex-1" edges={['top']} style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
+        >
+          {/* Header */}
+          <View className="px-6 pt-2 pb-4 bg-fond border-b border-gray-200">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center flex-1">
+                <Pressable onPress={() => router.back()} className="p-2 mr-3">
+                  <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+                </Pressable>
+                <Image
+                  source={
+                    match?.user.profile_image
+                      ? { uri: match.user.profile_image }
+                      : require("@/assets/images/react-logo.png")
+                  }
+                  className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
+                />
+                <Text className="text-gray-900 font-kanit-bold text-lg flex-1">
+                  {match?.user.first_name} {match?.user.last_name}
+                </Text>
+              </View>
+            </View>
+          </View>
 
-        <Image
-          source={
-            match?.user.profile_image
-              ? { uri: match.user.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
-        />
-
-        <Text className="text-gray-900 font-kanit-bold text-lg flex-1">
-          {match?.user.first_name} {match?.user.last_name}
-        </Text>
-      </View>
-      <View className="flex-1 pt-4 bg-fond">
-        <FlatList
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ padding: 12 }}
-        />
-        <View className="p-4 border-t border-gray-200 bg-white flex-row items-center">
-          <TextInput
-            value={newMessage}
-            onChangeText={setNewMessage}
-            placeholder="Votre message..."
-            placeholderTextColor="#9CA3AF"
-            className="flex-1 bg-tertiary text-gray-900 rounded-full px-4 py-2 mr-2 font-kanit"
-          />
-          <Pressable
-            onPress={sendMessage}
-            className="bg-primary w-12 h-12 rounded-full items-center justify-center"
-            style={{
-              shadowColor: "#FF6B4A",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 3,
-            }}
-          >
-            <Ionicons name="send" size={20} color="#ffffff" />
-          </Pressable>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+          <View className="flex-1 bg-fond">
+            <FlatList
+              data={messages}
+              renderItem={renderMessage}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={{ paddingVertical: 12 }}
+              showsVerticalScrollIndicator={false}
+              inverted={false}
+            />
+            
+            <View className="px-4 pb-4 pt-3 bg-fond flex-row items-center">
+              <View className="flex-1 bg-white rounded-full border border-gray-200 px-4 py-2 mr-3">
+                <TextInput
+                  value={newMessage}
+                  onChangeText={setNewMessage}
+                  placeholder="Votre message..."
+                  placeholderTextColor="#9CA3AF"
+                  className="text-gray-900 font-kanit"
+                  style={{ fontSize: 15 }}
+                  multiline
+                  maxLength={500}
+                />
+              </View>
+              <Pressable
+                onPress={sendMessage}
+                className="bg-primary w-12 h-12 rounded-full items-center justify-center"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4,
+                  elevation: 3,
+                }}
+              >
+                <Ionicons name="send" size={20} color="#ffffff" />
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 };
 
