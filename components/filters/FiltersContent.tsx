@@ -61,15 +61,25 @@ export function FiltersContent() {
   };
 
   return (
-    <View className="flex-1 bg-background p-4">
+    <View className="flex-1 bg-fond px-6 pt-6 pb-24">
       {/* Filtres d'âge */}
-      <View className="mb-8">
-        <View className="flex-row items-center mb-4">
-          <Ionicons name="person-outline" size={24} color="#126C52" />
-          <Text className="text-white text-lg ml-2">Âge</Text>
+      <View className="mb-6">
+        <View className="flex-row items-center mb-3">
+          <View className="bg-primary/10 p-2 rounded-xl mr-3">
+            <Ionicons name="person-outline" size={20} color="#FF6B4A" />
+          </View>
+          <Text className="text-gray-900 text-lg font-kanit-bold">Âge</Text>
         </View>
-        <View className="bg-background p-4 rounded-xl border border-gray-700">
-          <Text className="text-white mb-2">
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          <Text className="text-gray-900 mb-3 font-kanit-bold text-base">
             Entre {filters.age_min} et {filters.age_max} ans
           </Text>
           <MultiSlider
@@ -86,38 +96,49 @@ export function FiltersContent() {
             step={1}
             sliderLength={280}
             selectedStyle={{
-              backgroundColor: "#126C52",
+              backgroundColor: "#FF6B4A",
             }}
             unselectedStyle={{
-              backgroundColor: "#394047",
+              backgroundColor: "#E5E7EB",
             }}
             containerStyle={{
               height: 40,
               alignItems: "center",
             }}
             markerStyle={{
-              backgroundColor: "#126C52",
-              height: 20,
-              width: 20,
+              backgroundColor: "#FF6B4A",
+              height: 24,
+              width: 24,
+              borderRadius: 12,
             }}
             trackStyle={{
               height: 4,
             }}
           />
-          <View className="flex-row justify-between mt-2">
-            <Text className="text-white">18 ans</Text>
-            <Text className="text-white">70 ans</Text>
+          <View className="flex-row justify-between mt-3">
+            <Text className="text-gray-500 text-sm font-kanit-medium">18 ans</Text>
+            <Text className="text-gray-500 text-sm font-kanit-medium">80 ans</Text>
           </View>
         </View>
       </View>
       {/* Type de runner */}
-      <View className="mb-8">
-        <View className="flex-row items-center mb-4">
-          <Ionicons name="fitness-outline" size={24} color="#126C52" />
-          <Text className="text-white text-lg ml-2">Type de runner</Text>
+      <View className="mb-6">
+        <View className="flex-row items-center mb-3">
+          <View className="bg-secondary/10 p-2 rounded-xl mr-3">
+            <Ionicons name="fitness-outline" size={20} color="#A78BFA" />
+          </View>
+          <Text className="text-gray-900 text-lg font-kanit-bold">Type de runner</Text>
         </View>
-        <View className="bg-background p-4 rounded-xl border border-gray-700">
-          <View className="flex-row justify-between">
+        <View className="bg-white p-4 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#A78BFA",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          <View className="flex-row justify-between" style={{ gap: 12 }}>
             {runningTypeOptions.map((option) => (
               <Pressable
                 key={option.value}
@@ -127,17 +148,24 @@ export function FiltersContent() {
                     running_type: option.value,
                   }))
                 }
-                className={`flex-1 mx-1 py-2 rounded-lg ${
+                className={`flex-1 py-3 rounded-xl ${
                   filters.running_type === option.value
-                    ? "bg-purple"
-                    : "bg-[#2a3238]"
+                    ? "bg-secondary"
+                    : "bg-gray-100"
                 }`}
+                style={{
+                  shadowColor: filters.running_type === option.value ? "#A78BFA" : "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: filters.running_type === option.value ? 0.2 : 0.05,
+                  shadowRadius: 4,
+                  elevation: filters.running_type === option.value ? 3 : 1,
+                }}
               >
                 <Text
-                  className={`text-center ${
+                  className={`text-center font-kanit-bold text-base ${
                     filters.running_type === option.value
-                      ? "text-white font-semibold"
-                      : "text-gray-400"
+                      ? "text-white"
+                      : "text-gray-600"
                   }`}
                 >
                   {option.label}
@@ -148,30 +176,49 @@ export function FiltersContent() {
         </View>
       </View>
       {/* Filtre de genre */}
-      <View className="mb-8">
-        <View className="flex-row items-center mb-4">
-          <Ionicons name="male-female-outline" size={24} color="#126C52" />
-          <Text className="text-white text-lg ml-2">Genre</Text>
+      <View className="mb-6">
+        <View className="flex-row items-center mb-3">
+          <View className="bg-primary/10 p-2 rounded-xl mr-3">
+            <Ionicons name="male-female-outline" size={20} color="#FF6B4A" />
+          </View>
+          <Text className="text-gray-900 text-lg font-kanit-bold">Genre</Text>
         </View>
         <Pressable
           onPress={() => setShowGenderModal(true)}
-          className="bg-background p-4 rounded-xl border border-gray-700 flex-row justify-between items-center"
+          className="bg-white p-4 rounded-2xl border border-gray-200 flex-row justify-between items-center"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
         >
-          <Text className="text-white">
+          <Text className="text-gray-900 font-kanit-medium">
             {genderOptions.find((opt) => opt.value === filters.gender)?.label ||
               "Sélectionner"}
           </Text>
-          <Ionicons name="chevron-down" size={20} color="#126C52" />
+          <Ionicons name="chevron-down" size={20} color="#FF6B4A" />
         </Pressable>
       </View>
       {/* Filtre de distance */}
-      <View className="mb-8">
-        <View className="flex-row items-center mb-4">
-          <Ionicons name="location-outline" size={24} color="#126C52" />
-          <Text className="text-white text-lg ml-2">Distance maximale</Text>
+      <View className="mb-6">
+        <View className="flex-row items-center mb-3">
+          <View className="bg-primary/10 p-2 rounded-xl mr-3">
+            <Ionicons name="location-outline" size={20} color="#FF6B4A" />
+          </View>
+          <Text className="text-gray-900 text-lg font-kanit-bold">Distance maximale</Text>
         </View>
-        <View className="bg-background p-4 rounded-xl border border-gray-700">
-          <Text className="text-white mb-2">{filters.distance} km</Text>
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#FF6B4A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          <Text className="text-gray-900 mb-3 font-kanit-bold text-base">{filters.distance} km</Text>
           <Slider
             value={filters.distance}
             onValueChange={(value: number) =>
@@ -180,42 +227,53 @@ export function FiltersContent() {
             minimumValue={1}
             maximumValue={100}
             step={1}
-            minimumTrackTintColor="#126C52"
-            maximumTrackTintColor="#394047"
-            thumbTintColor="#126C52"
+            minimumTrackTintColor="#FF6B4A"
+            maximumTrackTintColor="#E5E7EB"
+            thumbTintColor="#FF6B4A"
           />
-          <View className="flex-row justify-between mt-2">
-            <Text className="text-white">1 km</Text>
-            <Text className="text-white">100 km</Text>
+          <View className="flex-row justify-between mt-3">
+            <Text className="text-gray-500 text-sm font-kanit-medium">1 km</Text>
+            <Text className="text-gray-500 text-sm font-kanit-medium">100 km</Text>
           </View>
         </View>
       </View>
       {/* Filtres de compatibilité */}
-      <View className="mb-12">
-        <View className="flex-row items-center mb-4">
-          <Ionicons name="fitness-outline" size={24} color="#126C52" />
-          <Text className="text-white text-lg ml-2">
+      <View className="mb-8">
+        <View className="flex-row items-center mb-3">
+          <View className="bg-secondary/10 p-2 rounded-xl mr-3">
+            <Ionicons name="star-outline" size={20} color="#A78BFA" />
+          </View>
+          <Text className="text-gray-900 text-lg font-kanit-bold">
             Critères de compatibilité
           </Text>
         </View>
-        <View className="bg-background p-4 rounded-xl border border-gray-700 space-y-6">
+        <View className="bg-white p-5 rounded-2xl border border-gray-200"
+          style={{
+            shadowColor: "#A78BFA",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
           {/* Critères communs */}
-          <View className="flex-row justify-between mb-2 items-center">
-            <Text className="text-white">Rythme similaire</Text>
+          <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
+            <Text className="text-gray-900 font-kanit-medium flex-1">Rythme similaire</Text>
             <Switch
               value={filters.filter_pace}
               onValueChange={(value) =>
                 setFilters((prev) => ({ ...prev, filter_pace: value }))
               }
-              trackColor={{ false: "#394047", true: "#126C52" }}
+              trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+              thumbColor="#FFFFFF"
             />
           </View>
 
           {/* Critères spécifiques selon le type */}
           {filters.running_type === "perf" ? (
             <>
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-white">
+              <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
+                <Text className="text-gray-900 font-kanit-medium flex-1">
                   Objectifs de compétition similaires
                 </Text>
                 <Switch
@@ -226,11 +284,12 @@ export function FiltersContent() {
                       filter_competition_goals: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#126C52" }}
+                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  thumbColor="#FFFFFF"
                 />
               </View>
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-white">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-gray-900 font-kanit-medium flex-1">
                   Jours d'entraînement similaires
                 </Text>
                 <Switch
@@ -241,14 +300,15 @@ export function FiltersContent() {
                       filter_training_days: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#126C52" }}
+                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  thumbColor="#FFFFFF"
                 />
               </View>
             </>
           ) : (
             <>
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-white">Disponibilités similaires</Text>
+              <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
+                <Text className="text-gray-900 font-kanit-medium flex-1">Disponibilités similaires</Text>
                 <Switch
                   value={filters.filter_availability}
                   onValueChange={(value) =>
@@ -257,11 +317,12 @@ export function FiltersContent() {
                       filter_availability: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#126C52" }}
+                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  thumbColor="#FFFFFF"
                 />
               </View>
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-white font-kanit-light">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-gray-900 font-kanit-medium flex-1">
                   Préférences sociales similaires
                 </Text>
                 <Switch
@@ -272,7 +333,8 @@ export function FiltersContent() {
                       filter_social_preferences: value,
                     }))
                   }
-                  trackColor={{ false: "#394047", true: "#126C52" }}
+                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  thumbColor="#FFFFFF"
                 />
               </View>
             </>
@@ -282,29 +344,41 @@ export function FiltersContent() {
       {/* Modals */}
       <Modal visible={showGenderModal} transparent={true} animationType="slide">
         <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-background rounded-t-3xl p-6">
-            <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-white text-xl">Sélectionner le genre</Text>
-              <Pressable onPress={() => setShowGenderModal(false)}>
-                <Ionicons name="close" size={24} color="#126C52" />
+          <View className="bg-white rounded-t-3xl p-6"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: -4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 16,
+              elevation: 16,
+            }}
+          >
+            <View className="flex-row justify-between items-center mb-6">
+              <Text className="text-gray-900 text-xl font-kanit-bold">Sélectionner le genre</Text>
+              <Pressable 
+                onPress={() => setShowGenderModal(false)}
+                className="bg-gray-100 p-2 rounded-full"
+              >
+                <Ionicons name="close" size={20} color="#FF6B4A" />
               </Pressable>
             </View>
-            {genderOptions.map((option) => (
+            {genderOptions.map((option, index) => (
               <TouchableOpacity
                 key={option.value}
                 onPress={() => {
                   setFilters((prev) => ({ ...prev, gender: option.value }));
                   setShowGenderModal(false);
                 }}
-                className={`p-4 border-b border-gray-700 ${
-                  filters.gender === option.value ? "bg-background" : ""
-                }`}
+                className={`p-4 ${index !== genderOptions.length - 1 ? 'border-b border-gray-100' : ''}`}
+                style={{
+                  backgroundColor: filters.gender === option.value ? 'rgba(255, 107, 74, 0.1)' : 'transparent',
+                }}
               >
                 <Text
-                  className={`${
+                  className={`font-kanit-medium text-base ${
                     filters.gender === option.value
-                      ? "text-purple"
-                      : "text-white"
+                      ? "text-primary font-kanit-bold"
+                      : "text-gray-900"
                   }`}
                 >
                   {option.label}

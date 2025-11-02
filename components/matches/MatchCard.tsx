@@ -55,118 +55,159 @@ export function MatchCard({ match }: MatchCardProps) {
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
-      className="relative overflow-hidden"
+      className="relative overflow-hidden rounded-3xl"
       style={{
-        height: 520,
-        borderRadius: 32,
+        height: 550,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.3,
-        shadowRadius: 24,
-        elevation: 12,
+        shadowOpacity: 0.2,
+        shadowRadius: 32,
+        elevation: 16,
+        borderWidth: 1.5,
+        borderColor: '#FF6B4A',
       }}
     >
-      {/* Image de fond */}
-      <Image
-        source={
-          match.user.profile_image
-            ? { uri: match.user.profile_image }
-            : require("@/assets/images/react-logo.png")
-        }
-        className="absolute w-full h-full"
-        style={{ resizeMode: "cover" }}
-      />
-
-      {/* Gradient léger pour le texte en bas */}
+      {/* Fond avec léger gradient pour plus de profondeur */}
       <LinearGradient
-        colors={["transparent", "transparent", "rgba(0,0,0,0.3)"]}
-        className="absolute bottom-0 left-0 right-0 h-1/4"
+        colors={['#FFFFFF', '#FEFEFE', '#FCFCFC']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          borderRadius: 32,
+        }}
       />
 
-      {/* Contenu de la carte */}
-      <View className="flex-1 justify-between p-6">
-        {/* Header - en haut */}
-        <View className="flex-row justify-between items-start">
-          {/* Nom et âge - en haut à gauche */}
-          <View>
-            <Text className="text-white text-3xl font-kanit-bold mb-1 drop-shadow-lg">
-              {match.user.first_name}
-            </Text>
-            <Text className="text-white/90 text-xl font-kanit drop-shadow-lg">
-              {match.user.age} ans
-            </Text>
-          </View>
-
-          {/* Distance - en haut à droite */}
-          {distanceKm && (
-            <BlurView
-              intensity={30}
-              tint="dark"
-              className="px-5 py-3 overflow-hidden"
-              style={{ borderRadius: 20 }}
+      {/* Image avec effet de flou pour qu'elle ressorte */}
+      <View className="absolute top-5 left-4 right-4" style={{ height: '62%' }}>
+        <View
+          style={{
+            borderRadius: 24,
+            borderWidth: 1.5,
+            borderColor: '#FF6B4A',
+            overflow: 'hidden',
+            height: '100%',
+            shadowColor: '#FF6B4A',
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.25,
+            shadowRadius: 16,
+            elevation: 8,
+          }}
+        >
+          <Image
+            source={
+              match.user.profile_image
+                ? { uri: match.user.profile_image }
+                : require("@/assets/images/react-logo.png")
+            }
+            className="absolute w-full h-full"
+            style={{ 
+              resizeMode: "cover",
+            }}
+          />
+          {/* Gradient pour créer un effet de profondeur subtil */}
+          <LinearGradient
+            colors={["rgba(255, 255, 255, 0.1)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.15)"]}
+            className="absolute inset-0"
+            style={{
+              borderRadius: 22.5,
+            }}
+          />
+          {/* Effet de flou subtil pour faire ressortir l'image */}
+          <BlurView
+            intensity={30}
+            tint="light"
+            className="absolute inset-0"
+            style={{
+              borderRadius: 22.5,
+            }}
+          />
+        </View>
+        
+        {/* Distance - en haut à droite */}
+        {distanceKm && (
+          <View className="absolute top-2 right-2 z-10">
+            <View
+              className="px-3 py-1.5 overflow-hidden"
+              style={{ 
+                borderRadius: 12,
+                backgroundColor: '#10B981',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 4,
+              }}
             >
-              <Text className="text-white text-sm font-kanit-semibold">
+              <Text className="text-white text-xs font-kanit-bold">
                 {distanceKm} km
               </Text>
-            </BlurView>
-          )}
-        </View>
+            </View>
+          </View>
+        )}
+      </View>
 
-        {/* Infos en bas - toutes dans un seul conteneur avec flou */}
-        <BlurView
-          intensity={70}
-          tint="dark"
-          className="px-5 py-4 overflow-hidden"
-          style={{ borderRadius: 24 }}
+      {/* Section infos en bas avec fond blanc élégant */}
+      <View className="absolute bottom-0 left-0 right-0" style={{ height: '35%', borderBottomLeftRadius: 32, borderBottomRightRadius: 32 }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#FFFFFF',
+            padding: 20,
+            paddingTop: 20,
+            borderBottomLeftRadius: 32,
+            borderBottomRightRadius: 32,
+          }}
         >
-          <View className="space-y-3">
-            {/* Ville */}
-            <View className="flex-row items-center">
-              <Ionicons name="location" size={18} color="#126C52" />
-              <Text className="text-white text-base font-kanit ml-3">
+          <View className="flex-row justify-between items-start h-full">
+            {/* Colonne de gauche - Prénom et âge */}
+            <View className="flex-1">
+              <Text className="text-gray-900 text-2xl font-kanit-bold mb-1">
+                {match.user.first_name}
+              </Text>
+              <Text className="text-gray-600 text-base font-kanit-medium">
+                {match.user.age} ans
+              </Text>
+            </View>
+
+            {/* Colonne de droite - Infos supplémentaires */}
+            <View className="flex-1 items-end">
+              <Text className="text-gray-900 text-sm font-kanit-medium mb-1.5 text-right">
                 {match.user.city}
               </Text>
-            </View>
-
-            {/* Type de runner avec emoji */}
-            <View className="flex-row items-center">
-              <Text className="text-base font-kanit-semibold text-white">
-                {isChillRunner ? "🌿 Runner détente" : "⚡ Runner performance"}
-              </Text>
-            </View>
-
-            {/* Infos clés - plus détaillées pour la version grande */}
-            {isChillRunner ? (
-              runningFrequency && (
-                <View className="flex-row items-center">
-                  <Ionicons name="time" size={18} color="#126C52" />
-                  <Text className="text-white text-base font-kanit ml-3">
+              <View 
+                className="px-3 py-1 rounded-full mb-1.5"
+                style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)' }}
+              >
+                <Text className="text-primary text-xs font-kanit-bold">
+                  {isChillRunner ? "Runner du dimanche" : "Runner performance"}
+                </Text>
+              </View>
+              {isChillRunner ? (
+                runningFrequency && (
+                  <Text className="text-gray-700 text-sm font-kanit-medium text-right">
                     {formatRunningFrequency()}
                   </Text>
-                </View>
-              )
-            ) : (
-              <View className="space-y-2">
-                {actualPace && (
-                  <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={18} color="#126C52" />
-                    <Text className="text-white text-base font-kanit ml-3">
+                )
+              ) : (
+                <>
+                  {actualPace && (
+                    <Text className="text-gray-900 text-sm font-kanit-bold text-right mb-1">
                       {actualPace} min/km
                     </Text>
-                  </View>
-                )}
-                {weeklyDistance && (
-                  <View className="flex-row items-center">
-                    <Ionicons name="footsteps" size={18} color="#126C52" />
-                    <Text className="text-white text-base font-kanit ml-3">
+                  )}
+                  {weeklyDistance && (
+                    <Text className="text-gray-600 text-xs font-kanit-medium text-right">
                       {weeklyDistance} km/semaine
                     </Text>
-                  </View>
-                )}
-              </View>
-            )}
+                  )}
+                </>
+              )}
+            </View>
           </View>
-        </BlurView>
+        </View>
       </View>
     </Pressable>
   );

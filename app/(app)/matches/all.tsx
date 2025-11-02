@@ -256,33 +256,33 @@ export default function AllMatchesScreen() {
               </View>
             )}
 
-            {/* Boutons de navigation */}
+            {/* Boutons de navigation - en bas de la carte */}
             {matches && matches.length > 1 && (
-              <View className="absolute top-1/2 left-0 right-0 flex-row justify-between px-4 z-10"
-                style={{ transform: [{ translateY: -24 }] }}
-              >
+              <View className="absolute bottom-20 left-0 right-0 flex-row justify-between px-6 z-20">
+                {/* Flèche gauche */}
                 <Pressable
                   onPress={goToPrevious}
-                  className="bg-white p-4 rounded-full"
+                  className="bg-white p-3 rounded-full"
                   style={{
                     shadowColor: "#FF6B4A",
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.3,
                     shadowRadius: 8,
-                    elevation: 5,
+                    elevation: 8,
                   }}
                 >
                   <Ionicons name="chevron-back" size={24} color="#FF6B4A" />
                 </Pressable>
+                {/* Flèche droite */}
                 <Pressable
                   onPress={goToNext}
-                  className="bg-white p-4 rounded-full"
+                  className="bg-white p-3 rounded-full"
                   style={{
                     shadowColor: "#FF6B4A",
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.3,
                     shadowRadius: 8,
-                    elevation: 5,
+                    elevation: 8,
                   }}
                 >
                   <Ionicons name="chevron-forward" size={24} color="#FF6B4A" />
@@ -366,23 +366,6 @@ export default function AllMatchesScreen() {
                   >
                     <Ionicons name="chatbubble-ellipses" size={20} color="white" style={{ marginRight: 8 }} />
                     <Text className="text-white font-kanit-bold">Message</Text>
-                  </Pressable>
-
-                  {/* Bouton Plus d'options */}
-                  <Pressable
-                    onPress={() => {
-                      // Action pour plus d'options (share, favorite, etc.)
-                    }}
-                    className="bg-white px-4 py-3 rounded-2xl ml-2"
-                    style={{
-                      shadowColor: "#A78BFA",
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.2,
-                      shadowRadius: 4,
-                      elevation: 3,
-                    }}
-                  >
-                    <Ionicons name="ellipsis-horizontal" size={20} color="#A78BFA" />
                   </Pressable>
                 </View>
               </View>
