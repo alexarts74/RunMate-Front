@@ -1,4 +1,4 @@
-import { GroupInfoCreate } from "@/interface/Group";
+import { GroupInfoCreate, JoinRequest } from "@/interface/Group";
 import { apiClient } from "./client";
 
 class GroupService {
@@ -18,6 +18,30 @@ class GroupService {
     }
   }
 
+  // Nouvel endpoint pour découvrir les groupes
+  async discoverGroups(query?: string) {
+    try {
+      const params = query ? { search: query } : {};
+      const response = await apiClient.get("/running_groups/discover", { params });
+      
+      if (Array.isArray(response)) {
+        return response;
+      }
+      // Gestion des différents formats de réponse possibles
+      if (response.data && Array.isArray(response.data)) {
+        return response.data;
+      }
+      if (response.groups && Array.isArray(response.groups)) {
+        return response.groups;
+      }
+      return [];
+    } catch (error) {
+      console.error("Erreur lors de la recherche des groupes:", error);
+      // Pour le dev, si l'endpoint n'existe pas encore, on retourne un tableau vide sans crasher
+      return [];
+    }
+  }
+
   async createGroup(data: GroupInfoCreate) {
     try {
       const response = await apiClient.post("/running_groups", data);
@@ -31,30 +55,92 @@ class GroupService {
   async getGroupById(id: string) {
     try {
       const response = await apiClient.get(`/running_groups/${id}`);
-      return response;
+      // L'API retourne l'objet directement selon la doc
+      return response; // ou response.data si l'intercepteur axios ne le fait pas déjà
     } catch (error) {
       console.error("Erreur détaillée:", error);
       throw error;
     }
   }
 
-  async joinGroup(groupId: string) {
+  // USER: Demander à rejoindre
+  async requestToJoin(groupId: string) {
     try {
       const response = await apiClient.post(
-        `/running_groups/${groupId}/join`,
+        `/running_groups/${groupId}/request_to_join`,
         {}
       );
       return response;
     } catch (error: any) {
       if (error.message?.includes("422")) {
-        throw new Error("Vous êtes déjà membre de ce groupe");
+        throw new Error("Vous avez déjà envoyé une demande ou êtes déjà membre.");
       }
       throw new Error(
-        "Impossible de rejoindre le groupe. Veuillez réessayer plus tard."
+        "Impossible d'envoyer la demande. Veuillez réessayer plus tard."
       );
     }
   }
 
+  // USER: Quitter le groupe
+  async leaveGroup(groupId: string) {
+    try {
+      const response = await apiClient.delete(
+        `/running_groups/${groupId}/leave`
+      );
+      return response;
+    } catch (error: any) {
+      if (error.message?.includes("422")) {
+        // Cas spécifique : seul admin restant
+        throw new Error("Vous ne pouvez pas quitter le groupe car vous êtes le seul administrateur.");
+      }
+      throw new Error("Impossible de quitter le groupe");
+    }
+  }
+
+  // ADMIN: Récupérer les demandes en attente
+  async getPendingRequests(groupId: string): Promise<{ requests: JoinRequest[] }> {
+    try {
+      const response = await apiClient.get(
+        `/running_groups/${groupId}/pending_requests`
+      );
+      return response; 
+    } catch (error) {
+      console.error("Erreur récupération demandes:", error);
+      return { requests: [] };
+    }
+  }
+
+  // ADMIN: Accepter une demande
+  async acceptRequest(groupId: string, userId: number) {
+    try {
+      const response = await apiClient.post(
+        `/running_groups/${groupId}/accept_request`,
+        { user_id: userId }
+      );
+      return response;
+    } catch (error) {
+      throw new Error("Impossible d'accepter la demande");
+    }
+  }
+
+  // ADMIN: Refuser une demande
+  async declineRequest(groupId: string, userId: number) {
+    try {
+      // Note: DELETE request with body requires generic config in axios usually, 
+      // or passing data property explicitly depending on client setup.
+      // Assuming apiClient handles it or we pass { data: { user_id } }
+      const response = await apiClient.delete(
+        `/running_groups/${groupId}/decline_request`,
+        { data: { user_id: userId } }
+      );
+      return response;
+    } catch (error) {
+      throw new Error("Impossible de refuser la demande");
+    }
+  }
+
+  // DEPRECATED or OLD methods kept for backward compat if needed temporarily, 
+  // but updated to match new logic if possible.
   async getGroupMembers(groupId: string) {
     try {
       const response = await apiClient.get(`/running_groups/${groupId}`);
@@ -77,20 +163,6 @@ class GroupService {
         throw new Error("Vous participez déjà à cet événement");
       }
       throw new Error("Impossible de rejoindre l'événement");
-    }
-  }
-
-  async leaveGroup(groupId: string) {
-    try {
-      const response = await apiClient.delete(
-        `/running_groups/${groupId}/leave`
-      );
-      return response;
-    } catch (error: any) {
-      if (error.message?.includes("422")) {
-        throw new Error("Vous n'êtes pas membre de ce groupe");
-      }
-      throw new Error("Impossible de quitter le groupe");
     }
   }
 }

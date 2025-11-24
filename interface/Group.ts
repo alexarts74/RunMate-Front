@@ -1,17 +1,35 @@
 export interface GroupMember {
   id: number;
-  name: string;
+  first_name: string; // Changed from name to match API user object usually
+  last_name?: string;
   profile_image: string;
-  is_admin: boolean;
+  is_admin?: boolean;
 }
 
 export interface GroupInfo {
   id: number;
-  first_name: string;
-  name?: string;
-  members: GroupMember[];
-  total_members: number;
+  name: string;
+  description: string; // Added
+  members_count: number; // Renamed from total_members if needed, but keeping consistent with API doc
   cover_image: string;
+  is_admin?: boolean; // New
+  is_member?: boolean; // New
+  can_join?: boolean; // New
+  has_pending_request?: boolean; // New
+  pending_requests_count?: number; // New
+  last_message?: {
+    // New based on API list response
+    id: number;
+    content: string;
+    created_at: string;
+    sender: {
+      id: number;
+      first_name: string;
+      last_name?: string;
+      profile_image: string;
+    };
+  };
+  members?: GroupMember[];
 }
 
 export interface GroupInfoCreate {
@@ -38,7 +56,20 @@ export interface GroupChatData {
   messages: GroupMessage[];
 }
 
-// Pour la liste des groupes
+// Pour la liste des demandes d'adhésion (Admin)
+export interface JoinRequest {
+  id: number;
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    profile_image: string;
+  };
+  message: string;
+  created_at: string;
+}
+
+// Pour la liste des groupes (compatibilité existante + API)
 export interface GroupConversation {
   id: number;
   type: "group";

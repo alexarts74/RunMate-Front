@@ -289,7 +289,7 @@ const HomepageScreen = () => {
                         </Text>
                         
                         {/* Distance si disponible */}
-                        {item.distance_km && (
+                        {!!item.distance_km && (
                           <View className="flex-row items-center">
                             <Ionicons name="location" size={14} color="#FF6B4A" />
                             <Text className="text-white/90 text-xs font-kanit-medium ml-1 drop-shadow-lg">

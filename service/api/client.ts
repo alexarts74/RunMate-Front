@@ -184,13 +184,17 @@ class ApiClient {
     }
   }
 
-  async delete(endpoint: string) {
+  async delete(endpoint: string, config?: { data?: any }) {
     const headers = await this.getHeaders();
     const url = `${this.baseUrl}${endpoint}`;
-    const response = await this.fetchWithTimeout(url, {
+    const options: RequestInit = {
       headers,
       method: "DELETE",
-    });
+    };
+    if (config?.data) {
+      options.body = JSON.stringify(config.data);
+    }
+    const response = await this.fetchWithTimeout(url, options);
     return await response.json();
   }
 }

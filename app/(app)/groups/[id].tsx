@@ -1,90 +1,117 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Image, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { groupService } from "@/service/api/group";
 import LoadingScreen from "@/components/LoadingScreen";
-
-type GroupDetails = {
-  id: string;
-  name: string;
-  description: string;
-  members_count: number;
-  cover_image: string | null;
-  creator: {
-    id: number;
-    name: string;
-    profile_image: string;
-  };
-  is_member: boolean;
-  is_admin: boolean;
-  upcoming_events: Array<{
-    id: number;
-    date: string;
-    title: string;
-    distance: number;
-  }>;
-  members?: Array<{
-    id: number;
-    first_name: string;
-    last_name: string;
-    profile_image: string;
-  }>;
-};
+import { GroupInfo, JoinRequest } from "@/interface/Group";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function GroupDetailsScreen() {
   const { id } = useLocalSearchParams();
-  const [group, setGroup] = useState<GroupDetails | null>(null);
+  const insets = useSafeAreaInsets();
+  const [group, setGroup] = useState<GroupInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isJoining, setIsJoining] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  
+  // Admin State
+  const [pendingRequests, setPendingRequests] = useState<JoinRequest[]>([]);
+  const [showRequests, setShowRequests] = useState(false);
+
+  const fetchGroupData = async () => {
+    try {
+      const groupData: any = await groupService.getGroupById(id as string);
+      setGroup(groupData);
+
+      if (groupData.is_admin) {
+        fetchPendingRequests();
+      }
+    } catch (error) {
+      console.error("Erreur:", error);
+      Alert.alert("Erreur", "Impossible de charger les détails du groupe");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchPendingRequests = async () => {
+    try {
+      const response = await groupService.getPendingRequests(id as string);
+      setPendingRequests(response.requests || []);
+    } catch (error) {
+      console.error("Erreur chargement demandes:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const [groupData] = await Promise.all([
-          groupService.getGroupById(id as string),
-        ]);
-        setGroup(groupData);
-      } catch (error) {
-        console.error("Erreur:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchGroupData();
   }, [id]);
 
-  const handleJoinGroup = async () => {
-    setIsJoining(true);
+  const handleRequestToJoin = async () => {
+    setIsActionLoading(true);
     try {
-      await groupService.joinGroup(id as string);
-      Alert.alert("Succès", "Vous avez rejoint le groupe avec succès !");
-      const updatedGroup = await groupService.getGroupById(id as string);
-      setGroup(updatedGroup);
+      await groupService.requestToJoin(id as string);
+      Alert.alert("Succès", "Votre demande a été envoyée aux administrateurs.");
+      fetchGroupData();
     } catch (error: any) {
-      Alert.alert(
-        "Information",
-        error.message || "Impossible de rejoindre le groupe"
-      );
+      Alert.alert("Information", error.message);
     } finally {
-      setIsJoining(false);
+      setIsActionLoading(false);
     }
   };
 
   const handleLeaveGroup = async () => {
+    Alert.alert(
+      "Quitter le groupe",
+      "Êtes-vous sûr de vouloir quitter ce groupe ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Quitter",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              setIsActionLoading(true);
+              await groupService.leaveGroup(id as string);
+              Alert.alert("Succès", "Vous avez quitté le groupe.");
+              router.back();
+            } catch (error: any) {
+              Alert.alert("Erreur", error.message);
+            } finally {
+              setIsActionLoading(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleAcceptRequest = async (reqId: number, userId: number) => {
     try {
-      setIsLeaving(true);
-      const updatedGroup = await groupService.leaveGroup(id as string);
-      Alert.alert("Succès", "Vous avez quitté le groupe avec succès");
-      setGroup(updatedGroup);
-      router.back();
-    } catch (error: any) {
-      Alert.alert("Erreur", error.message || "Impossible de quitter le groupe");
-    } finally {
-      setIsLeaving(false);
+      await groupService.acceptRequest(id as string, userId);
+      setPendingRequests((prev) => prev.filter((r) => r.id !== reqId));
+      fetchGroupData();
+      Alert.alert("Succès", "Membre accepté !");
+    } catch (error) {
+      Alert.alert("Erreur", "Impossible d'accepter la demande");
+    }
+  };
+
+  const handleDeclineRequest = async (reqId: number, userId: number) => {
+    try {
+      await groupService.declineRequest(id as string, userId);
+      setPendingRequests((prev) => prev.filter((r) => r.id !== reqId));
+      Alert.alert("Succès", "Demande refusée");
+    } catch (error) {
+      Alert.alert("Erreur", "Impossible de refuser la demande");
     }
   };
 
@@ -94,17 +121,20 @@ export default function GroupDetailsScreen() {
 
   if (!group) {
     return (
-      <View className="flex-1 bg-background items-center justify-center">
-        <Text className="text-white">Groupe non trouvé</Text>
+      <View className="flex-1 bg-fond items-center justify-center">
+        <Text className="text-gray-900">Groupe non trouvé</Text>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-background">
-      <ScrollView>
-        {/* Image de couverture et infos de base */}
-        <View className="relative h-64">
+    <View className="flex-1 bg-fond">
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+        {/* Header Image avec gradient overlay */}
+        <View className="relative h-72">
           <Image
             source={
               group.cover_image
@@ -114,54 +144,174 @@ export default function GroupDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
-          {/* Bouton de retour */}
+          
+          {/* Gradient overlay */}
+          <View 
+            className="absolute inset-0"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            }}
+          />
+          
+          {/* Back button */}
           <Pressable
             onPress={() => router.back()}
-            className="absolute top-12 left-4 bg-black/30 p-2 rounded-full"
+            className="absolute left-4 bg-white/90 p-3 rounded-full"
+            style={{ top: insets.top + 8 }}
           >
-            <Ionicons name="arrow-back" size={24} color="white" />
+            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
           </Pressable>
-        </View>
 
-        {/* Contenu principal */}
-        <View className="p-5">
-          {/* Info du groupe */}
-          <View className="mb-6">
-            <Text className="text-2xl font-bold text-white mb-2">
+          {/* Titre et membres sur l'image */}
+          <View className="absolute bottom-0 left-0 right-0 p-6">
+            <Text className="text-white font-kanit-bold text-3xl mb-2">
               {group.name}
             </Text>
-          </View>
-
-          {/* Autres informations du groupe */}
-          <View className="mb-6">
-            <Text className="text-white font-bold text-lg mb-2">
-              Description
-            </Text>
-            <Text className="text-white">{group.description}</Text>
-          </View>
-
-          {/* Membres */}
-          <View>
-            <View className="flex-row flex-wrap">
-              {group.members?.map((member) => (
-                <View key={member.id} className="mr-2 mb-2">
-                  <Image
-                    source={
-                      member.profile_image
-                        ? { uri: member.profile_image }
-                        : require("@/assets/images/favicon.png")
-                    }
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <Text className="text-white text-center text-xs mt-1">
-                    {member.first_name} {member.last_name}
-                  </Text>
-                </View>
-              ))}
+            <View className="flex-row items-center">
+              <View className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full flex-row items-center">
+                <Ionicons name="people" size={16} color="white" />
+                <Text className="text-white font-kanit-medium text-sm ml-2">
+                  {group.members_count} membres
+                </Text>
+              </View>
             </View>
           </View>
-          {group.is_member && (
-            <View className="px-5 py-4">
+        </View>
+
+        <View className="px-4 pt-6">
+          {/* Description Card */}
+          {group.description && (
+            <View className="bg-white rounded-2xl p-5 mb-4" style={{
+              shadowColor: "#A78BFA",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              elevation: 3,
+            }}>
+              <View className="flex-row items-center mb-3">
+                <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
+                  <Ionicons name="information-circle" size={20} color="#A78BFA" />
+                </View>
+                <Text className="text-gray-900 font-kanit-bold text-lg">
+                  À propos
+                </Text>
+              </View>
+              <Text className="text-gray-600 font-kanit leading-6">
+                {group.description}
+              </Text>
+            </View>
+          )}
+
+          {/* ADMIN SECTION */}
+          {group.is_admin && (
+            <View className="mb-4">
+              <Pressable
+                onPress={() => setShowRequests(!showRequests)}
+                className="bg-white rounded-2xl p-5 flex-row items-center justify-between"
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}
+              >
+                <View className="flex-row items-center flex-1">
+                  <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
+                    <Ionicons name="people-outline" size={20} color="#FF6B4A" />
+                  </View>
+                  <Text className="text-gray-900 font-kanit-bold text-base">
+                    Demandes d'adhésion
+                  </Text>
+                </View>
+                <View className="flex-row items-center">
+                  {pendingRequests.length > 0 && (
+                    <View className="bg-red-500 px-2.5 py-1 rounded-full mr-3">
+                      <Text className="text-white text-xs font-kanit-bold">
+                        {pendingRequests.length}
+                      </Text>
+                    </View>
+                  )}
+                  <Ionicons
+                    name={showRequests ? "chevron-up" : "chevron-down"}
+                    size={24}
+                    color="#A78BFA"
+                  />
+                </View>
+              </Pressable>
+
+              {showRequests && (
+                <View className="mt-3 bg-white rounded-2xl overflow-hidden" style={{
+                  shadowColor: "#A78BFA",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 2,
+                }}>
+                  {pendingRequests.length === 0 ? (
+                    <View className="p-8 items-center">
+                      <View className="bg-tertiary p-4 rounded-full mb-3">
+                        <Ionicons name="checkmark-circle" size={40} color="#A78BFA" />
+                      </View>
+                      <Text className="text-gray-500 font-kanit text-center">
+                        Aucune demande en attente
+                      </Text>
+                    </View>
+                  ) : (
+                    pendingRequests.map((req, index) => (
+                      <View
+                        key={req.id}
+                        className={`flex-row items-center p-4 ${
+                          index !== pendingRequests.length - 1 ? 'border-b border-gray-100' : ''
+                        }`}
+                      >
+                        <Image
+                          source={
+                            req.user.profile_image
+                              ? { uri: req.user.profile_image }
+                              : require("@/assets/images/favicon.png")
+                          }
+                          className="w-12 h-12 rounded-full mr-3"
+                        />
+                        <View className="flex-1">
+                          <Text className="text-gray-900 font-kanit-bold">
+                            {req.user.first_name} {req.user.last_name}
+                          </Text>
+                          {req.message && (
+                            <Text
+                              className="text-gray-500 font-kanit text-xs mt-0.5"
+                              numberOfLines={1}
+                            >
+                              {req.message}
+                            </Text>
+                          )}
+                        </View>
+                        <View className="flex-row ml-2">
+                          <TouchableOpacity
+                            onPress={() => handleDeclineRequest(req.id, req.user.id)}
+                            className="bg-red-50 p-2.5 rounded-full mr-2"
+                          >
+                            <Ionicons name="close" size={20} color="#EF4444" />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleAcceptRequest(req.id, req.user.id)}
+                            className="bg-green-50 p-2.5 rounded-full"
+                          >
+                            <Ionicons name="checkmark" size={20} color="#10B981" />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    ))
+                  )}
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* MEMBER VIEW */}
+          {group.is_member ? (
+            <>
+              {/* Chat Button */}
               <Pressable
                 onPress={() => {
                   router.push({
@@ -170,70 +320,153 @@ export default function GroupDetailsScreen() {
                       id: id as string,
                       type: "group",
                       name: group.name,
-                      image:
-                        group.cover_image || "https://via.placeholder.com/32",
+                      image: group.cover_image || "https://via.placeholder.com/32",
                     },
                   });
                 }}
-                className="flex-row items-center bg-[#1e2429] p-4 rounded-2xl border border-[#2a3238]"
+                className="bg-gradient-to-r from-secondary to-primary rounded-2xl p-5 flex-row items-center mb-4"
+                style={{
+                  shadowColor: "#A78BFA",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 8,
+                  elevation: 5,
+                }}
               >
-                <View className="relative">
-                  <Image
-                    source={{
-                      uri:
-                        group.cover_image || "https://via.placeholder.com/32",
-                    }}
-                    className="w-12 h-12 rounded-xl"
-                  />
-                  <View className="absolute -bottom-1 -right-1 bg-purple w-4 h-4 rounded-full border-2 border-[#12171b]" />
+                <View className="w-14 h-14 bg-white/20 rounded-xl items-center justify-center mr-4">
+                  <Ionicons name="chatbubbles" size={28} color="white" />
                 </View>
-
-                <View className="flex-1 ml-4">
-                  <View className="flex-row items-center space-x-2">
-                    <Text className="text-white font-semibold text-base flex-1">
-                      Conversation du groupe
-                    </Text>
-                    <Ionicons
-                      name="chatbubble-ellipses"
-                      size={20}
-                      color="#b9f144"
-                    />
-                  </View>
-                  <Text className="text-gray-400 text-sm mt-1">
-                    {group.members_count} membres actifs
+                <View className="flex-1">
+                  <Text className="text-white font-kanit-bold text-lg mb-0.5">
+                    Conversation du groupe
+                  </Text>
+                  <Text className="text-white/80 font-kanit text-sm">
+                    Rejoindre le chat
                   </Text>
                 </View>
+                <Ionicons name="chevron-forward" size={24} color="white" />
               </Pressable>
+
+              {/* Members List */}
+              {group.members && group.members.length > 0 && (
+                <View className="bg-white rounded-2xl p-5 mb-4" style={{
+                  shadowColor: "#A78BFA",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}>
+                  <View className="flex-row items-center mb-4">
+                    <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
+                      <Ionicons name="people" size={20} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 font-kanit-bold text-lg">
+                      Membres ({group.members.length})
+                    </Text>
+                  </View>
+                  <View className="flex-row flex-wrap -mx-2">
+                    {group.members.map((member) => (
+                      <View key={member.id} className="w-1/4 px-2 mb-4 items-center">
+                        <Image
+                          source={
+                            member.profile_image
+                              ? { uri: member.profile_image }
+                              : require("@/assets/images/favicon.png")
+                          }
+                          className="w-16 h-16 rounded-full mb-2"
+                          style={{
+                            borderWidth: 2,
+                            borderColor: '#E9D5FF',
+                          }}
+                        />
+                        <Text
+                          className="text-gray-900 font-kanit text-center text-xs"
+                          numberOfLines={1}
+                        >
+                          {member.first_name}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </>
+          ) : (
+            /* NON-MEMBER VIEW */
+            <View className="bg-white rounded-2xl p-8 items-center mb-4" style={{
+              shadowColor: "#A78BFA",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              elevation: 3,
+            }}>
+              <View className="bg-tertiary p-6 rounded-full mb-4">
+                <Ionicons name="lock-closed" size={48} color="#A78BFA" />
+              </View>
+              <Text className="text-gray-900 font-kanit-bold text-xl text-center mb-2">
+                Groupe Privé
+              </Text>
+              <Text className="text-gray-500 font-kanit text-center leading-6">
+                Rejoignez ce groupe pour voir les membres et participer aux discussions.
+              </Text>
             </View>
           )}
         </View>
       </ScrollView>
 
-      {/* Bouton Rejoindre/Quitter */}
-
-      <View className="px-5 py-3 mb-2 border-t border-[#2a3238]">
+      {/* Footer Action Button */}
+      <View 
+        className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-4"
+        style={{ 
+          paddingBottom: Math.max(insets.bottom, 16) + 16,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 10,
+        }}
+      >
         {group.is_member ? (
           <Pressable
             onPress={handleLeaveGroup}
-            disabled={isLeaving}
-            className={`bg-red-500 py-3 rounded-full w-48 self-center ${
-              isLeaving ? "opacity-50" : ""
+            disabled={isActionLoading}
+            className={`w-full bg-red-50 border-2 border-red-500 py-4 rounded-xl flex-row justify-center items-center ${
+              isActionLoading ? "opacity-50" : ""
             }`}
           >
-            <Text className="text-center text-white font-semibold text-sm">
-              {isLeaving ? "En cours..." : "Quitter le groupe"}
+            <Ionicons name="exit-outline" size={20} color="#EF4444" style={{ marginRight: 8 }} />
+            <Text className="text-red-500 font-kanit-bold text-base">
+              {isActionLoading ? "Chargement..." : "Quitter le groupe"}
             </Text>
           </Pressable>
+        ) : group.has_pending_request ? (
+          <View className="w-full bg-gray-100 py-4 rounded-xl flex-row justify-center items-center">
+            <Ionicons
+              name="time-outline"
+              size={20}
+              color="#6B7280"
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-gray-600 font-kanit-bold text-base">Demande envoyée</Text>
+          </View>
         ) : (
           <Pressable
-            onPress={handleJoinGroup}
-            disabled={isJoining}
-            className={`bg-purple py-3 rounded-full w-48 self-center ${
-              isJoining ? "opacity-50" : ""
+            onPress={handleRequestToJoin}
+            disabled={isActionLoading || !group.can_join}
+            className={`w-full bg-secondary py-4 rounded-xl flex-row justify-center items-center ${
+              isActionLoading ? "opacity-50" : ""
             }`}
+            style={{
+              shadowColor: "#A78BFA",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 5,
+            }}
           >
-            <Text className="text-center text-white font-semibold text-sm">
-              {isJoining ? "En cours..." : "Rejoindre le groupe"}
+            <Ionicons name="person-add" size={20} color="white" style={{ marginRight: 8 }} />
+            <Text className="text-white font-kanit-bold text-base">
+              {isActionLoading ? "Envoi..." : "Demander à rejoindre"}
             </Text>
           </Pressable>
         )}
