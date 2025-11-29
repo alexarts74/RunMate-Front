@@ -65,6 +65,15 @@ const HomepageScreen = () => {
       route: "/(app)/events/all",
       bgIcon: "calendar-circle",
     },
+    {
+      id: "races",
+      title: "Courses",
+      subtitle: "Découvrir les courses",
+      icon: "trophy",
+      gradient: ["#F59E0B", "#FBBF24"],
+      route: "/(app)/races/all",
+      bgIcon: "trophy",
+    },
   ];
 
   return (
