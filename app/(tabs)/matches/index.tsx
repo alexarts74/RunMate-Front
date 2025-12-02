@@ -319,8 +319,15 @@ const HomepageScreen = () => {
             <View className="flex-row" style={{ gap: 12 }}>
               <Pressable
                 onPress={() => router.push("/runner/filters")}
-                className="flex-1 bg-white rounded-2xl px-5 py-4 flex-row items-center justify-center"
+                className={user?.user_type === "organizer" ? "flex-1" : "flex-1"}
                 style={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 16,
+                  paddingHorizontal: 20,
+                  paddingVertical: 16,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   shadowColor: "#FF6B4A",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.1,
@@ -339,27 +346,29 @@ const HomepageScreen = () => {
                 </Text>
               </Pressable>
               
-              <Pressable
-                onPress={() => router.push("/(app)/events/create")}
-                className="flex-1 bg-white rounded-2xl px-5 py-4 flex-row items-center justify-center"
-                style={{
-                  shadowColor: "#A78BFA",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 8,
-                  elevation: 4,
-                }}
-              >
-                <View 
-                  className="w-10 h-10 rounded-xl items-center justify-center mr-3"
-                  style={{ backgroundColor: "#F6F0FA" }}
+              {user?.user_type === "organizer" && (
+                <Pressable
+                  onPress={() => router.push("/(app)/events/create")}
+                  className="flex-1 bg-white rounded-2xl px-5 py-4 flex-row items-center justify-center"
+                  style={{
+                    shadowColor: "#A78BFA",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 8,
+                    elevation: 4,
+                  }}
                 >
-                  <Ionicons name="add-circle" size={20} color="#A78BFA" />
-                </View>
-                <Text className="text-gray-800 font-nunito-bold text-base">
-                  Créer
-                </Text>
-              </Pressable>
+                  <View 
+                    className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                    style={{ backgroundColor: "#F6F0FA" }}
+                  >
+                    <Ionicons name="add-circle" size={20} color="#A78BFA" />
+                  </View>
+                  <Text className="text-gray-800 font-nunito-bold text-base">
+                    Créer
+                  </Text>
+                </Pressable>
+              )}
             </View>
           </View>
         </ScrollView>

@@ -46,9 +46,19 @@ class GroupService {
     try {
       const response = await apiClient.post("/running_groups", data);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        throw new Error(
+          "Seuls les organisateurs peuvent créer des groupes. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité."
+        );
+      }
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Erreur lors de la création du groupe";
+      throw new Error(errorMessage);
       console.error("Erreur lors de la création du groupe:", error);
-      throw error;
     }
   }
 

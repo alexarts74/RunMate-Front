@@ -3,7 +3,6 @@ import { View, Text, Image, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MatchUser } from "@/interface/Matches";
 import { LinearGradient } from "expo-linear-gradient";
-import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 
 type MatchCardProps = {
@@ -55,93 +54,73 @@ export function MatchCard({ match }: MatchCardProps) {
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
-      className="relative overflow-hidden rounded-3xl"
+      className="relative overflow-hidden"
       style={{
-        height: 550,
+        height: 460,
+        borderRadius: 32,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.2,
-        shadowRadius: 32,
-        elevation: 16,
-        borderWidth: 1.5,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.15,
+        shadowRadius: 24,
+        elevation: 12,
+        borderWidth: 2,
         borderColor: '#FF6B4A',
+        backgroundColor: '#FFFFFF',
       }}
     >
-      {/* Fond avec léger gradient pour plus de profondeur */}
-      <LinearGradient
-        colors={['#FFFFFF', '#FEFEFE', '#FCFCFC']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          borderRadius: 32,
-        }}
-      />
-
-      {/* Image avec effet de flou pour qu'elle ressorte */}
-      <View className="absolute top-5 left-4 right-4" style={{ height: '62%' }}>
-        <View
-          style={{
-            borderRadius: 24,
-            borderWidth: 1.5,
-            borderColor: '#FF6B4A',
-            overflow: 'hidden',
+      {/* Image principale - Grande et imposante */}
+      <View style={{ height: '70%', position: 'relative' }}>
+        <Image
+          source={
+            match.user.profile_image
+              ? { uri: match.user.profile_image }
+              : require("@/assets/images/react-logo.png")
+          }
+          style={{ 
+            width: '100%',
             height: '100%',
-            shadowColor: '#FF6B4A',
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.25,
-            shadowRadius: 16,
-            elevation: 8,
+            resizeMode: "cover",
           }}
-        >
-          <Image
-            source={
-              match.user.profile_image
-                ? { uri: match.user.profile_image }
-                : require("@/assets/images/react-logo.png")
-            }
-            className="absolute w-full h-full"
-            style={{ 
-              resizeMode: "cover",
-            }}
-          />
-          {/* Gradient pour créer un effet de profondeur subtil */}
-          <LinearGradient
-            colors={["rgba(255, 255, 255, 0.1)", "rgba(0, 0, 0, 0.05)", "rgba(0, 0, 0, 0.15)"]}
-            className="absolute inset-0"
-            style={{
-              borderRadius: 22.5,
-            }}
-          />
-          {/* Effet de flou subtil pour faire ressortir l'image */}
-          <BlurView
-            intensity={30}
-            tint="light"
-            className="absolute inset-0"
-            style={{
-              borderRadius: 22.5,
-            }}
-          />
-        </View>
+        />
         
-        {/* Distance - en haut à droite */}
-        {distanceKm && (
-          <View className="absolute top-2 right-2 z-10">
+        {/* Gradient subtil en bas de l'image */}
+        <LinearGradient
+          colors={["transparent", "rgba(0, 0, 0, 0.3)"]}
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 100,
+          }}
+        />
+
+        {/* Badge distance - en haut à droite */}
+        {distanceKm !== null && distanceKm !== undefined && (
+          <View style={{ 
+            position: 'absolute',
+            top: 16,
+            right: 16,
+          }}>
             <View
-              className="px-3 py-1.5 overflow-hidden"
               style={{ 
-                borderRadius: 12,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 20,
                 backgroundColor: '#10B981',
                 shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
+                shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.3,
-                shadowRadius: 4,
-                elevation: 4,
+                shadowRadius: 8,
+                elevation: 6,
               }}
             >
-              <Text className="text-white text-xs font-nunito-bold">
+              <Text style={{ 
+                color: '#FFFFFF',
+                fontSize: 14,
+                fontWeight: '700',
+                fontFamily: 'Nunito-Bold'
+              }}>
                 {distanceKm} km
               </Text>
             </View>
@@ -149,63 +128,103 @@ export function MatchCard({ match }: MatchCardProps) {
         )}
       </View>
 
-      {/* Section infos en bas avec fond blanc élégant */}
-      <View className="absolute bottom-0 left-0 right-0" style={{ height: '35%', borderBottomLeftRadius: 32, borderBottomRightRadius: 32 }}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#FFFFFF',
-            padding: 20,
-            paddingTop: 20,
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-          }}
-        >
-          <View className="flex-row justify-between items-start h-full">
-            {/* Colonne de gauche - Prénom et âge */}
-            <View className="flex-1">
-              <Text className="text-gray-900 text-2xl font-nunito-extrabold mb-1">
-                {match.user.first_name}
-              </Text>
-              <Text className="text-gray-600 text-base font-nunito-medium">
-                {match.user.age} ans
-              </Text>
-            </View>
+      {/* Section infos en bas - Clean et aérée */}
+      <View style={{ 
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 14,
+        paddingBottom: 10,
+        backgroundColor: '#FFFFFF',
+      }}>
+        {/* Nom et ville */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ 
+              fontSize: 26,
+              fontWeight: '800',
+              color: '#1F2937',
+              fontFamily: 'Nunito-ExtraBold',
+              marginBottom: 1,
+            }}>
+              {match.user.first_name}
+            </Text>
+            <Text style={{ 
+              fontSize: 14,
+              color: '#6B7280',
+              fontFamily: 'Nunito-Medium',
+            }}>
+              {match.user.age} ans
+            </Text>
+          </View>
 
-            {/* Colonne de droite - Infos supplémentaires */}
-            <View className="flex-1 items-end">
-              <Text className="text-gray-900 text-sm font-nunito-medium mb-1.5 text-right">
-                {match.user.city}
-              </Text>
-              <View 
-                className="px-3 py-1 rounded-full mb-1.5"
-                style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)' }}
-              >
-                <Text className="text-primary text-xs font-nunito-bold">
-                  {isChillRunner ? "Runner du dimanche" : "Runner performance"}
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={{ 
+              fontSize: 13,
+              color: '#374151',
+              fontFamily: 'Nunito-SemiBold',
+              marginBottom: 3,
+            }}>
+              {match.user.city}
+            </Text>
+          </View>
+        </View>
+
+        {/* Tags et infos running */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View 
+            style={{ 
+              paddingHorizontal: 14,
+              paddingVertical: 6,
+              borderRadius: 20,
+              backgroundColor: 'rgba(255, 107, 74, 0.12)',
+            }}
+          >
+            <Text style={{ 
+              color: '#FF6B4A',
+              fontSize: 12,
+              fontWeight: '700',
+              fontFamily: 'Nunito-Bold',
+            }}>
+              {isChillRunner ? "Runner du dimanche" : "Runner performance"}
+            </Text>
+          </View>
+
+          {/* Infos selon le type de runner */}
+          <View style={{ alignItems: 'flex-end' }}>
+            {isChillRunner ? (
+              runningFrequency && (
+                <Text style={{ 
+                  fontSize: 13,
+                  color: '#4B5563',
+                  fontFamily: 'Nunito-Medium',
+                }}>
+                  {formatRunningFrequency()}
                 </Text>
-              </View>
-              {isChillRunner ? (
-                runningFrequency && (
-                  <Text className="text-gray-700 text-sm font-nunito-medium text-right">
-                    {formatRunningFrequency()}
+              )
+            ) : (
+              <>
+                {actualPace && (
+                  <Text style={{ 
+                    fontSize: 14,
+                    fontWeight: '700',
+                    color: '#1F2937',
+                    fontFamily: 'Nunito-Bold',
+                  }}>
+                    {actualPace} min/km
                   </Text>
-                )
-              ) : (
-                <>
-                  {actualPace && (
-                    <Text className="text-gray-900 text-sm font-nunito-bold text-right mb-1">
-                      {actualPace} min/km
-                    </Text>
-                  )}
-                  {weeklyDistance && (
-                    <Text className="text-gray-600 text-xs font-nunito-medium text-right">
-                      {weeklyDistance} km/semaine
-                    </Text>
-                  )}
-                </>
-              )}
-            </View>
+                )}
+                {weeklyDistance && (
+                  <Text style={{ 
+                    fontSize: 12,
+                    color: '#6B7280',
+                    fontFamily: 'Nunito-Medium',
+                    marginTop: 2,
+                  }}>
+                    {weeklyDistance} km/semaine
+                  </Text>
+                )}
+              </>
+            )}
           </View>
         </View>
       </View>

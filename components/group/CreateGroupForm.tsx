@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { UserSearch } from "@/components/UserSearch";
 import User from "@/interface/User";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@/context/AuthContext";
 
 interface CreateGroupForm {
   name: string;
@@ -25,6 +26,7 @@ interface CreateGroupForm {
 }
 
 export function CreateGroupForm() {
+  const { user } = useAuth();
   const [form, setForm] = useState<CreateGroupForm>({
     name: "",
     description: "",
@@ -36,6 +38,22 @@ export function CreateGroupForm() {
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Vérifier si l'utilisateur est organisateur
+  useEffect(() => {
+    if (user?.user_type !== "organizer") {
+      Alert.alert(
+        "Accès restreint",
+        "Seuls les organisateurs peuvent créer des groupes. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité.",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    }
+  }, [user]);
 
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -79,8 +97,10 @@ export function CreateGroupForm() {
       await groupService.createGroup(groupData);
       Alert.alert("Succès", "Groupe créé avec succès");
       router.back();
-    } catch (error) {
-      Alert.alert("Erreur", "Impossible de créer le groupe");
+    } catch (error: any) {
+      const errorMessage =
+        error.message || "Impossible de créer le groupe";
+      Alert.alert("Erreur", errorMessage);
     } finally {
       setIsLoading(false);
     }

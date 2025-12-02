@@ -1,11 +1,30 @@
-import React from "react";
-import { View, ScrollView, Pressable, Text, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useEffect } from "react";
+import { View, ScrollView, Pressable, Text, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { CreateGroupForm } from "@/components/group/CreateGroupForm";
+import { useAuth } from "@/context/AuthContext";
 
 export default function CreateGroupScreen() {
+  const { user } = useAuth();
+
+  // Vérifier si l'utilisateur est organisateur
+  useEffect(() => {
+    if (user?.user_type !== "organizer") {
+      Alert.alert(
+        "Accès restreint",
+        "Seuls les organisateurs peuvent créer des groupes. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité.",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    }
+  }, [user]);
+
   return (
     <View className="flex-1 bg-fond">
       <SafeAreaView className="bg-white" edges={['top']}>

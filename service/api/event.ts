@@ -53,8 +53,16 @@ class EventService {
       const response = await apiClient.post("/events", { event: eventData });
       return response;
     } catch (error: any) {
+      if (error.response?.status === 403) {
+        throw new Error(
+          "Seuls les organisateurs peuvent créer des événements. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité."
+        );
+      }
       const errorMessage =
-        error.message || "Erreur lors de la création de l'événement";
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Erreur lors de la création de l'événement";
       throw new Error(errorMessage);
     }
   }

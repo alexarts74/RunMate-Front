@@ -24,6 +24,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserWithRunnerProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Fonction pour s'assurer que user_type a une valeur par défaut
+  const ensureUserType = (userData: any) => {
+    if (userData && !userData.user_type) {
+      return { ...userData, user_type: "runner" };
+    }
+    return userData;
+  };
+
   const checkAuth = async () => {
     try {
       const token = await authStorage.getToken();
@@ -72,19 +80,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await authStorage.storeToken(userData.authentication_token);
       console.log("Token:", userData.authentication_token);
-      await authStorage.storeUser(userData.user);
+      const userWithType = ensureUserType(userData.user);
+      await authStorage.storeUser(userWithType);
       await authStorage.getToken();
       console.log("Token in storage:", await authStorage.getToken());
 
-      setUser(userData.user);
+      setUser(userWithType);
       setIsAuthenticated(true);
 
       try {
         const completeUserData = await authService.getCurrentUser();
 
         if (completeUserData) {
-          await authStorage.storeUser(completeUserData);
-          setUser(completeUserData);
+          const userWithType = ensureUserType(completeUserData);
+          await authStorage.storeUser(userWithType);
+          setUser(userWithType);
         }
       } catch (error) {
         console.error(
@@ -121,9 +131,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const response = await authService.updateUserProfile(userData);
-      await authStorage.storeUser(response.user);
+      const userWithType = ensureUserType(response.user);
+      await authStorage.storeUser(userWithType);
       await authStorage.storeToken(response.authentication_token);
-      setUser(response.user);
+      setUser(userWithType);
       await authStorage.getUser();
 
       return response;
@@ -144,15 +155,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const storedUser = await authStorage.getUser();
       if (storedUser) {
-        setUser(storedUser);
+        const userWithType = ensureUserType(storedUser);
+        setUser(userWithType);
         setIsAuthenticated(true);
       }
 
       // Mise à jour avec l'API
       const freshUserData = await authService.getCurrentUser();
       if (freshUserData) {
-        await authStorage.storeUser(freshUserData);
-        setUser(freshUserData);
+        const userWithType = ensureUserType(freshUserData);
+        await authStorage.storeUser(userWithType);
+        setUser(userWithType);
         setIsAuthenticated(true);
       }
     } catch (error: any) {
@@ -178,8 +191,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const updateUserSubscriptionPlan = async (userData: User) => {
     try {
       const response = await authService.updateUserSubscriptionPlan(userData);
-      await authStorage.storeUser(response.user);
-      setUser(response.user);
+      const userWithType = ensureUserType(response.user);
+      await authStorage.storeUser(userWithType);
+      setUser(userWithType);
     } catch (error) {
       console.error("Erreur dans updateUserProfile:", error);
       throw error;

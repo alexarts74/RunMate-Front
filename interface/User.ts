@@ -15,6 +15,7 @@ interface User {
   updated_at: string;
   location: string | null;
   is_premium: boolean;
+  user_type: "runner" | "organizer";
 }
 
 export interface UserWithRunnerProfile extends User {
@@ -35,6 +36,29 @@ export interface RunnerProfile {
   post_run_activities: string[];
   running_frequency: string[];
   preferred_time_of_day: string[];
+}
+
+export interface OrganizerProfile {
+  id: number;
+  organization_name: string;
+  organization_type: "association" | "club_sportif" | "entreprise" | "collectif" | "autre";
+  description: string | null;
+  website: string | null;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  city: string;
+  department: string;
+  postcode: string | null;
+  country: string;
+  latitude: number | null;
+  longitude: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserWithOrganizerProfile extends User {
+  organizer_profile?: OrganizerProfile;
 }
 
 export default User;

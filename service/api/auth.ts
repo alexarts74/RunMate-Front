@@ -18,7 +18,8 @@ export const authService = {
     postcode: string;
     latitude: number;
     longitude: number;
-    running_type: string;
+    running_type?: string;
+    user_type: "runner" | "organizer";
   }) {
     return await apiClient.post("/users/sign_up", { user: userData });
   },

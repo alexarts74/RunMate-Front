@@ -67,6 +67,22 @@ export default function CreateEventScreen() {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { user } = useAuth();
 
+  // Vérifier si l'utilisateur est organisateur
+  useEffect(() => {
+    if (user?.user_type !== "organizer") {
+      Alert.alert(
+        "Accès restreint",
+        "Seuls les organisateurs peuvent créer des événements. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité.",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    }
+  }, [user]);
+
   // Vérifier si l'utilisateur est premium dès le chargement
   useEffect(() => {
     if (!(user && "is_premium" in user && user.is_premium)) {
@@ -257,12 +273,12 @@ export default function CreateEventScreen() {
       };
       await eventService.createEvent(eventData);
       router.back();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de la création de l'événement:", error);
-      Alert.alert(
-        "Erreur",
-        "Une erreur est survenue lors de la création de l'événement"
-      );
+      const errorMessage =
+        error.message ||
+        "Une erreur est survenue lors de la création de l'événement";
+      Alert.alert("Erreur", errorMessage);
     }
   };
 

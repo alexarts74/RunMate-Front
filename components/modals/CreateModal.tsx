@@ -2,6 +2,7 @@ import { View, Text, Pressable, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
+import { useAuth } from "@/context/AuthContext";
 
 interface CreateModalProps {
   visible: boolean;
@@ -9,6 +10,9 @@ interface CreateModalProps {
 }
 
 export function CreateModal({ visible, onClose }: CreateModalProps) {
+  const { user } = useAuth();
+  const isOrganizer = user?.user_type === "organizer";
+
   const handleAction = (route: string) => {
     onClose();
     router.push(route as any);
@@ -53,67 +57,85 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
 
             {/* Options */}
             <View className="px-5 py-4 bg-fond">
-              <Pressable
-                onPress={() => handleAction("/events/create")}
-                className="bg-white rounded-2xl mb-3 overflow-hidden"
-                style={{
-                  shadowColor: "#FF6B4A",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 4,
-                  elevation: 3,
-                }}
-              >
-                <View className="flex-row items-center p-4">
-                  <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="calendar" size={24} color="#FF6B4A" />
-                  </View>
-                  <View className="flex-1">
-                    <Text className="text-gray-900 font-nunito-bold text-base">
-                      Créer un événement
-                    </Text>
-                    <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
-                      Organisez une course
-                    </Text>
-                  </View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={18}
-                    color="#A78BFA"
-                  />
-                </View>
-              </Pressable>
+              {isOrganizer ? (
+                <>
+                  <Pressable
+                    onPress={() => handleAction("/events/create")}
+                    className="bg-white rounded-2xl mb-3 overflow-hidden"
+                    style={{
+                      shadowColor: "#FF6B4A",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.15,
+                      shadowRadius: 4,
+                      elevation: 3,
+                    }}
+                  >
+                    <View className="flex-row items-center p-4">
+                      <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
+                        <Ionicons name="calendar" size={24} color="#FF6B4A" />
+                      </View>
+                      <View className="flex-1">
+                        <Text className="text-gray-900 font-nunito-bold text-base">
+                          Créer un événement
+                        </Text>
+                        <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
+                          Organisez une course
+                        </Text>
+                      </View>
+                      <Ionicons
+                        name="chevron-forward"
+                        size={18}
+                        color="#A78BFA"
+                      />
+                    </View>
+                  </Pressable>
 
-              <Pressable
-                onPress={() => handleAction("/(app)/groups/create")}
-                className="bg-white rounded-2xl overflow-hidden"
-                style={{
-                  shadowColor: "#A78BFA",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 4,
-                  elevation: 3,
-                }}
-              >
-                <View className="flex-row items-center p-4">
-                  <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="people" size={24} color="#A78BFA" />
-                  </View>
-                  <View className="flex-1">
-                    <Text className="text-gray-900 font-nunito-bold text-base">
-                      Créer un groupe
+                  <Pressable
+                    onPress={() => handleAction("/(app)/groups/create")}
+                    className="bg-white rounded-2xl overflow-hidden"
+                    style={{
+                      shadowColor: "#A78BFA",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.15,
+                      shadowRadius: 4,
+                      elevation: 3,
+                    }}
+                  >
+                    <View className="flex-row items-center p-4">
+                      <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
+                        <Ionicons name="people" size={24} color="#A78BFA" />
+                      </View>
+                      <View className="flex-1">
+                        <Text className="text-gray-900 font-nunito-bold text-base">
+                          Créer un groupe
+                        </Text>
+                        <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
+                          Rejoignez des coureurs
+                        </Text>
+                      </View>
+                      <Ionicons
+                        name="chevron-forward"
+                        size={18}
+                        color="#FF6B4A"
+                      />
+                    </View>
+                  </Pressable>
+                </>
+              ) : (
+                <View className="bg-white rounded-2xl p-6">
+                  <View className="items-center">
+                    <View className="w-16 h-16 rounded-full bg-tertiary items-center justify-center mb-4">
+                      <Ionicons name="lock-closed" size={32} color="#A78BFA" />
+                    </View>
+                    <Text className="text-gray-900 font-nunito-bold text-lg mb-2 text-center">
+                      Fonctionnalité réservée aux organisateurs
                     </Text>
-                    <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
-                      Rejoignez des coureurs
+                    <Text className="text-gray-600 font-nunito-medium text-sm text-center">
+                      Seuls les organisateurs peuvent créer des événements et des groupes. Créez un compte organisateur pour accéder à ces fonctionnalités.
                     </Text>
                   </View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={18}
-                    color="#FF6B4A"
-                  />
                 </View>
-              </Pressable>
+              )}
             </View>
 
             {/* Footer */}
