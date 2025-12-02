@@ -157,7 +157,7 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
           <Text className="text-gray-900">Mate</Text>
         </Text>
         
-        <Text className="text-2xl text-gray-800 text-center font-kanit-bold mb-3 px-4">
+        <Text className="text-2xl text-gray-800 text-center font-nunito-bold mb-3 px-4">
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
@@ -207,7 +207,7 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
               style={styles.buttonInner}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text className="text-lg font-kanit-bold text-white mr-2">
+                <Text className="text-lg font-nunito-bold text-white mr-2">
                   Se connecter
                 </Text>
                 <Text style={{ fontSize: 18, color: "white" }}>→</Text>
@@ -220,16 +220,16 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
             onPress={handleSignupPress}
             style={[styles.secondaryButton, styles.buttonShadowSecondary]}
           >
-            <Text className="text-lg font-kanit-bold text-secondary">
+            <Text className="text-lg font-nunito-bold text-secondary">
               Créer un compte
             </Text>
           </AnimatedPressable>
 
           {/* Texte d'accès rapide */}
-          <Text className="text-sm text-gray-500 text-center font-kanit mt-4">
+          <Text className="text-sm text-gray-500 text-center font-nunito mt-4">
             Déjà un compte ?{" "}
             <Text 
-              className="text-primary font-kanit-bold"
+              className="text-primary font-nunito-bold"
               onPress={handleLoginPress}
             >
               Se connecter

@@ -71,12 +71,12 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
     if (availabilityArray && availabilityArray.length > 0) {
       return availabilityArray.map((day: string) => (
         <View key={day} className="bg-tertiary border border-secondary px-3 py-1 rounded-full">
-          <Text className="text-secondary font-kanit-bold text-xs">{formatDay(day.trim())}</Text>
+          <Text className="text-secondary font-nunito-bold text-xs">{formatDay(day.trim())}</Text>
         </View>
       ));
     }
     
-    return <Text className="text-gray-500 font-kanit-medium">Aucune disponibilité</Text>;
+    return <Text className="text-gray-500 font-nunito-medium">Aucune disponibilité</Text>;
   };
 
   // Rendu d'une section générique avec titre et icône
@@ -104,7 +104,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
           <Ionicons name={icon as any} size={20} color={iconColor} />
         </View>
-        <Text className="text-gray-900 text-base font-kanit-bold flex-1" numberOfLines={1}>
+        <Text className="text-gray-900 text-base font-nunito-bold flex-1" numberOfLines={1}>
           {title}
         </Text>
       </View>
@@ -117,14 +117,14 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
   // Rendu d'une liste de badges
   const renderBadges = (items: string[], emptyMessage: string = "Aucun") => {
     if (!items || items.length === 0) {
-      return <Text className="text-gray-500 font-kanit-medium text-sm">{emptyMessage}</Text>;
+      return <Text className="text-gray-500 font-nunito-medium text-sm">{emptyMessage}</Text>;
     }
     
     return (
       <View className="flex-row flex-wrap" style={{ gap: 8 }}>
         {items.map((item: string, index: number) => (
           <View key={index} className="bg-tertiary border border-secondary px-3 py-1.5 rounded-full">
-            <Text className="text-secondary font-kanit-bold text-xs">{item}</Text>
+            <Text className="text-secondary font-nunito-bold text-xs">{item}</Text>
           </View>
         ))}
       </View>
@@ -143,10 +143,10 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
       <View className="space-y-6">
         <View className="flex-row justify-between items-center mb-2">
           <View className="flex-row items-center space-x-3">
-            <Text className="text-2xl font-kanit-bold text-gray-900">Profil Coureur</Text>
+            <Text className="text-2xl font-nunito-extrabold text-gray-900">Profil Coureur</Text>
             {runner?.running_type && (
               <View className="bg-primary px-3 py-1 rounded-full">
-                <Text className="text-white font-kanit-bold text-xs uppercase">
+                <Text className="text-white font-nunito-bold text-xs uppercase">
                   {runner.running_type === 'perf' ? 'Performance' : 'Chill'}
                 </Text>
               </View>
@@ -185,10 +185,10 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
                 <Ionicons name="speedometer-outline" size={24} color="#FF6B4A" />
               </View>
-              <Text className="text-gray-600 text-sm font-kanit-medium mt-1">
+              <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Allure actuelle
               </Text>
-              <Text className="text-primary text-lg mt-1 font-kanit-bold">
+              <Text className="text-primary text-lg mt-1 font-nunito-bold">
                 {runner.actual_pace} min/km
               </Text>
             </View>
@@ -211,10 +211,10 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
                 <Ionicons name="flag-outline" size={24} color="#A78BFA" />
               </View>
-              <Text className="text-gray-600 text-sm font-kanit-medium mt-1">
+              <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Allure cible
               </Text>
-              <Text className="text-secondary text-lg mt-1 font-kanit-bold">
+              <Text className="text-secondary text-lg mt-1 font-nunito-bold">
                 {runner.target_pace} min/km
               </Text>
             </View>
@@ -237,10 +237,10 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
                 <Ionicons name="trail-sign-outline" size={24} color="#A78BFA" />
               </View>
-              <Text className="text-gray-600 text-sm font-kanit-medium mt-1">
+              <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Distance habituelle
               </Text>
-              <Text className="text-secondary text-lg mt-1 font-kanit-bold">
+              <Text className="text-secondary text-lg mt-1 font-nunito-bold">
                 {runner.usual_distance} km
               </Text>
             </View>
@@ -263,10 +263,10 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
                 <Ionicons name="stats-chart-outline" size={24} color="#FF6B4A" />
               </View>
-              <Text className="text-gray-600 text-sm font-kanit-medium mt-1">
+              <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Kilométrage hebdo
               </Text>
-              <Text className="text-primary text-lg mt-1 font-kanit-bold">
+              <Text className="text-primary text-lg mt-1 font-nunito-bold">
                 {runner.weekly_mileage} km
               </Text>
             </View>
@@ -286,7 +286,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="flex-row flex-wrap gap-2">
                 {runner.objective.map((obj: string, index: number) => (
                   <View key={index} className="bg-tertiary border border-secondary px-3 py-1 rounded-full">
-                    <Text className="text-secondary font-kanit-bold text-xs">
+                    <Text className="text-secondary font-nunito-bold text-xs">
                       {formatPerformanceObjective(obj)}
                     </Text>
                   </View>
@@ -297,7 +297,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <View className="flex-row flex-wrap gap-2">
                 {runner.objective.map((obj: string, index: number) => (
                   <View key={index} className="bg-tertiary border border-secondary px-3 py-1 rounded-full">
-                    <Text className="text-secondary font-kanit-bold text-xs">
+                    <Text className="text-secondary font-nunito-bold text-xs">
                       {formatChillObjective(obj)}
                     </Text>
                   </View>
@@ -305,7 +305,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               </View>
             )}
             {(!runner?.objective || (Array.isArray(runner.objective) && runner.objective.length === 0)) && (
-              <Text className="text-gray-500 font-kanit-medium">Aucun objectif défini</Text>
+              <Text className="text-gray-500 font-nunito-medium">Aucun objectif défini</Text>
             )}
           </>,
           "#FF6B4A"
@@ -328,7 +328,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             "Objectifs de compétition",
             "medal-outline",
             "#FF6B4A",
-            <Text className="text-gray-700 text-base font-kanit-medium">
+            <Text className="text-gray-700 text-base font-nunito-medium">
               {runner.competition_goals}
             </Text>,
             "#FF6B4A"
@@ -352,7 +352,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             "Fréquence de course",
             "repeat-outline",
             "#A78BFA",
-            <Text className="text-gray-700 text-base font-kanit-medium">
+            <Text className="text-gray-700 text-base font-nunito-medium">
               {runner.running_frequency}
             </Text>,
             "#A78BFA"

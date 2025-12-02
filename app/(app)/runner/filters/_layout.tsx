@@ -36,7 +36,7 @@ export default function FilterScreen() {
               >
                 <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
               </Pressable>
-              <Text className="text-2xl font-kanit-bold text-gray-900">Filtres</Text>
+              <Text className="text-2xl font-nunito-extrabold text-gray-900">Filtres</Text>
             </View>
           </View>
           <View className="pb-8">

@@ -79,7 +79,7 @@ export function ConversationItem({
             className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary border-2 border-white items-center justify-center"
             style={{ minWidth: 20, minHeight: 20 }}
           >
-            <Text className="text-white text-[10px] font-kanit-bold" style={{ fontSize: 9 }}>
+            <Text className="text-white text-[10px] font-nunito-bold" style={{ fontSize: 9 }}>
               {conversation.unread_messages > 9 ? "9+" : conversation.unread_messages}
             </Text>
           </View>
@@ -88,7 +88,7 @@ export function ConversationItem({
       <View className="flex-1 flex-shrink mr-2">
         <View className="flex-row justify-between items-center mb-1">
           <Text 
-            className="text-gray-900 font-kanit-bold flex-1 mr-2" 
+            className="text-gray-900 font-nunito-bold flex-1 mr-2" 
             numberOfLines={1}
             style={{ fontSize: 15 }}
           >
@@ -98,7 +98,7 @@ export function ConversationItem({
           </Text>
           {conversation?.last_message?.created_at && (
             <Text 
-              className="text-gray-500 shrink-0 font-kanit-medium"
+              className="text-gray-500 shrink-0 font-nunito-medium"
               style={{ fontSize: 11 }}
             >
               {formatDistanceToNow(
@@ -116,8 +116,8 @@ export function ConversationItem({
           <Text
             className={`flex-1 mr-2 ${
               conversation.unread_messages > 0
-                ? "text-gray-900 font-kanit-bold"
-                : "text-gray-600 font-kanit-medium"
+                ? "text-gray-900 font-nunito-bold"
+                : "text-gray-600 font-nunito-medium"
             }`}
             numberOfLines={1}
             style={{ fontSize: 13 }}

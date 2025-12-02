@@ -21,7 +21,7 @@ export function SignUpFormStep0({ onNext }: Props) {
     <SafeAreaView className="flex-1 bg-fond">
       <View className="flex-1 px-6">
         <View className="mt-8 mb-4">
-          <Text className="text-gray-900 text-2xl font-kanit-bold text-center">
+          <Text className="text-gray-900 text-2xl font-nunito-extrabold text-center">
             Quel type de
             <Text className="text-primary"> runner</Text> {"\n"}es tu ?
           </Text>
@@ -43,11 +43,11 @@ export function SignUpFormStep0({ onNext }: Props) {
                 <View className="bg-tertiary p-3 rounded-xl">
                   <Ionicons name="leaf-outline" size={24} color="#A78BFA" />
                 </View>
-                <Text className="text-gray-900 text-lg font-kanit-bold ml-3">
+                <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
                   Je suis un runner Chill
                 </Text>
               </View>
-              <Text className="text-gray-600 text-sm leading-5 font-kanit-medium mb-3">
+              <Text className="text-gray-600 text-sm leading-5 font-nunito-medium mb-3">
                 Je cours pour le plaisir, la santé et la socialisation. Je ne
                 suis pas focalisé sur la performance.
               </Text>
@@ -57,7 +57,7 @@ export function SignUpFormStep0({ onNext }: Props) {
                   size={18}
                   color="#A78BFA"
                 />
-                <Text className="text-secondary ml-2 font-kanit-medium text-sm">
+                <Text className="text-secondary ml-2 font-nunito-medium text-sm">
                   Choisir ce profil
                 </Text>
               </View>
@@ -78,11 +78,11 @@ export function SignUpFormStep0({ onNext }: Props) {
                 <View className="bg-tertiary p-3 rounded-xl">
                   <Ionicons name="trophy-outline" size={24} color="#FF6B4A" />
                 </View>
-                <Text className="text-gray-900 text-lg font-kanit-bold ml-3">
+                <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
                   Je suis un runner Perf
                 </Text>
               </View>
-              <Text className="text-gray-600 text-sm leading-5 font-kanit-medium mb-3">
+              <Text className="text-gray-600 text-sm leading-5 font-nunito-medium mb-3">
                 Je cours pour la performance, avec des objectifs précis et un
                 plan d'entraînement structuré.
               </Text>
@@ -92,14 +92,14 @@ export function SignUpFormStep0({ onNext }: Props) {
                   size={18}
                   color="#FF6B4A"
                 />
-                <Text className="text-primary ml-2 font-kanit-medium text-sm">
+                <Text className="text-primary ml-2 font-nunito-medium text-sm">
                   Choisir ce profil
                 </Text>
               </View>
             </Pressable>
 
             <View className="mt-6">
-              <Text className="text-gray-900 text-base font-kanit-bold mb-4">
+              <Text className="text-gray-900 text-base font-nunito-bold mb-4">
                 Option supplémentaire
               </Text>
               <Pressable
@@ -128,10 +128,10 @@ export function SignUpFormStep0({ onNext }: Props) {
                     )}
                   </View>
                   <View className="flex-1">
-                    <Text className="text-gray-900 text-base font-kanit-bold">
+                    <Text className="text-gray-900 text-base font-nunito-bold">
                       Je suis flexible
                     </Text>
-                    <Text className="text-gray-600 text-sm leading-5 mt-1 font-kanit-medium">
+                    <Text className="text-gray-600 text-sm leading-5 mt-1 font-nunito-medium">
                       Je peux m'adapter aux objectifs, et entrainements de mes
                       partenaires.
                     </Text>
@@ -157,7 +157,7 @@ export function SignUpFormStep0({ onNext }: Props) {
         >
           <View className="flex-row items-center justify-center">
             <Ionicons name="arrow-back" size={18} color="#FF6B4A" />
-            <Text className="text-primary ml-2 font-kanit-bold text-base">
+            <Text className="text-primary ml-2 font-nunito-bold text-base">
               Retour
             </Text>
           </View>

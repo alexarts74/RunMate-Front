@@ -20,7 +20,7 @@ export function TabBarIcon({
   const IconComponent = (
     <Ionicons
       size={24}
-      style={[{ marginBottom: 2, fontFamily: "Kanit" }, style]}
+      style={[{ marginBottom: 2, fontFamily: "Nunito-Regular" }, style]}
       {...rest}
     />
   );

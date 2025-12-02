@@ -61,7 +61,7 @@ export function RunnerProfileEditForm({
       <ScrollView className="space-y-4 bg-fond">
       <View className="px-6 space-y-6 mt-6">
         <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-2xl font-kanit-bold text-gray-900">
+          <Text className="text-2xl font-nunito-extrabold text-gray-900">
             Modifier Profil Coureur
           </Text>
           <Pressable
@@ -85,7 +85,7 @@ export function RunnerProfileEditForm({
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
               <Ionicons name="fitness-outline" size={20} color="#FF6B4A" />
             </View>
-            <Text className="text-gray-900 text-base font-kanit-bold">
+            <Text className="text-gray-900 text-base font-nunito-bold">
               Performance
             </Text>
           </View>
@@ -109,7 +109,7 @@ export function RunnerProfileEditForm({
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
               <Ionicons name="trophy-outline" size={20} color="#FF6B4A" />
             </View>
-            <Text className="text-gray-900 text-base font-kanit-bold">Objectif</Text>
+            <Text className="text-gray-900 text-base font-nunito-bold">Objectif</Text>
           </View>
           <ObjectiveSelect handleChange={handleChange} />
         </View>
@@ -127,7 +127,7 @@ export function RunnerProfileEditForm({
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
               <Ionicons name="calendar-outline" size={20} color="#A78BFA" />
             </View>
-            <Text className="text-gray-900 text-base font-kanit-bold">
+            <Text className="text-gray-900 text-base font-nunito-bold">
               Disponibilités
             </Text>
           </View>
@@ -159,7 +159,7 @@ export function RunnerProfileEditForm({
                   size={20}
                   color="#ffffff"
                 />
-                <Text className="text-white font-kanit-bold">Enregistrer</Text>
+                <Text className="text-white font-nunito-bold">Enregistrer</Text>
               </>
             )}
           </Pressable>

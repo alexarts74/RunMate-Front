@@ -88,7 +88,7 @@ const MessagesScreen = () => {
                 end={{ x: 1, y: 1 }}
                 className="w-9 h-9 rounded-xl items-center justify-center mr-2"
               >
-                <Text className="text-white font-kanit-bold text-xs">RM</Text>
+                <Text className="text-white font-nunito-bold text-xs">RM</Text>
               </LinearGradient>
             </View>
             
@@ -101,7 +101,7 @@ const MessagesScreen = () => {
                 <Ionicons name="notifications-outline" size={22} color="#FF6B4A" />
                 {unreadCount > 0 && (
                   <View className="absolute -top-1 -right-1 bg-primary rounded-full w-4 h-4 items-center justify-center border-2 border-fond">
-                    <Text className="text-white text-xs font-kanit-bold">
+                    <Text className="text-white text-xs font-nunito-bold">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </Text>
                   </View>
@@ -141,10 +141,10 @@ const MessagesScreen = () => {
           >
             <Ionicons name="chatbubbles-outline" size={60} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-2xl font-kanit-bold text-center mb-3">
+          <Text className="text-gray-900 text-2xl font-nunito-extrabold text-center mb-3">
             Aucune conversation trouvée
           </Text>
-          <Text className="text-gray-500 text-base font-kanit-medium text-center mb-8">
+          <Text className="text-gray-500 text-base font-nunito-medium text-center mb-8">
             Commencez une conversation avec un utilisateur ou un groupe
           </Text>
           <Pressable
@@ -164,7 +164,7 @@ const MessagesScreen = () => {
               color="white"
               style={{ marginRight: 8 }}
             />
-            <Text className="text-white text-base font-kanit-bold">
+            <Text className="text-white text-base font-nunito-bold">
               Trouve ton RunMate
             </Text>
           </Pressable>

@@ -38,24 +38,24 @@ export const EventCard = ({
         <View className="flex-row justify-between items-center mb-3">
           {event.is_creator ? (
             <View className="bg-tertiary border border-primary px-3 py-1 rounded-full">
-              <Text className="text-primary font-kanit-bold text-sm">Créateur</Text>
+              <Text className="text-primary font-nunito-bold text-sm">Créateur</Text>
             </View>
           ) : event.is_participant ? (
             <View className="bg-tertiary border border-secondary px-3 py-1 rounded-full">
-              <Text className="text-secondary font-kanit-bold text-sm">
+              <Text className="text-secondary font-nunito-bold text-sm">
               Participant
             </Text>
             </View>
           ) : null}
         </View>
-        <Text className="text-gray-900 font-kanit-bold text-xl mb-4">{event.name}</Text>
+        <Text className="text-gray-900 font-nunito-extrabold text-xl mb-4">{event.name}</Text>
 
         <View className="space-y-3 mb-4">
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
               <Ionicons name="calendar" size={16} color="#FF6B4A" />
             </View>
-            <Text className="text-gray-700 font-kanit-medium">
+            <Text className="text-gray-700 font-nunito-medium">
             {new Date(event.start_date).toLocaleDateString()}
           </Text>
         </View>
@@ -64,19 +64,19 @@ export const EventCard = ({
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
               <Ionicons name="location" size={16} color="#A78BFA" />
             </View>
-            <Text className="text-gray-700 font-kanit-medium">{event.location}</Text>
+            <Text className="text-gray-700 font-nunito-medium">{event.location}</Text>
         </View>
 
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
               <Ionicons name="trending-up" size={16} color="#FF6B4A" />
             </View>
-            <Text className="text-gray-700 font-kanit-medium">{event.distance} km</Text>
+            <Text className="text-gray-700 font-nunito-medium">{event.distance} km</Text>
           </View>
         </View>
 
         {event.description && (
-          <Text className="text-gray-600 mb-4 font-kanit-medium text-sm">
+          <Text className="text-gray-600 mb-4 font-nunito-medium text-sm">
             {event.description.slice(0, 100)}
             {event.description.length > 100 ? "..." : ""}
           </Text>
@@ -94,7 +94,7 @@ export const EventCard = ({
           }}
           android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
         >
-          <Text className="text-center text-white font-kanit-bold">
+          <Text className="text-center text-white font-nunito-bold">
             Voir l'événement
           </Text>
         </Pressable>

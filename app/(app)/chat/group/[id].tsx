@@ -108,7 +108,7 @@ const GroupChatPage = () => {
       style={{ paddingHorizontal: 12 }}
     >
       {item.sender.id !== user?.id && (
-        <Text className="text-gray-500 text-xs mb-1 ml-3 font-kanit-medium">
+        <Text className="text-gray-500 text-xs mb-1 ml-3 font-nunito-medium">
           {item.sender.first_name}
         </Text>
       )}
@@ -138,7 +138,7 @@ const GroupChatPage = () => {
           }}
         >
           <Text
-            className={`font-kanit-medium ${
+            className={`font-nunito-medium ${
               item.sender.id === user?.id ? "text-white" : "text-gray-900"
             }`}
             style={{ fontSize: 15 }}
@@ -146,7 +146,7 @@ const GroupChatPage = () => {
             {item.content}
           </Text>
           <Text
-            className={`text-xs font-kanit mt-1 ${
+            className={`text-xs font-nunito mt-1 ${
               item.sender.id === user?.id ? "text-white/70" : "text-gray-500"
             }`}
           >
@@ -192,7 +192,7 @@ const GroupChatPage = () => {
                   }
                   className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
                 />
-                <Text className="text-gray-900 text-lg font-kanit-bold flex-1">
+                <Text className="text-gray-900 text-lg font-nunito-bold flex-1">
                   {groupInfo?.name}
                 </Text>
                 <Pressable
@@ -238,7 +238,7 @@ const GroupChatPage = () => {
                   onChangeText={setNewMessage}
                   placeholder="Votre message..."
                   placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 font-kanit"
+                  className="text-gray-900 font-nunito"
                   style={{ fontSize: 15 }}
                   multiline
                   maxLength={500}
@@ -270,7 +270,7 @@ const GroupChatPage = () => {
             <View className="flex-1 bg-black/50 justify-end">
               <View className="bg-white rounded-t-3xl h-3/4 p-6">
                 <View className="flex-row justify-between items-center mb-6">
-                  <Text className="text-gray-900 text-xl font-kanit-bold">
+                  <Text className="text-gray-900 text-xl font-nunito-extrabold">
                     Membres ({groupInfo?.members.length})
                   </Text>
                   <Pressable onPress={() => setShowMembersModal(false)} className="p-2">
@@ -291,10 +291,10 @@ const GroupChatPage = () => {
                         className="w-12 h-12 rounded-full mr-3 border-2 border-primary"
                       />
                       <View className="flex-1">
-                        <Text className="text-gray-900 font-kanit-bold">{item.name}</Text>
+                        <Text className="text-gray-900 font-nunito-bold">{item.name}</Text>
                         {item.is_admin && (
                           <View className="bg-primary px-2 py-0.5 rounded-full self-start mt-1">
-                            <Text className="text-white text-xs font-kanit-bold">Admin</Text>
+                            <Text className="text-white text-xs font-nunito-bold">Admin</Text>
                           </View>
                         )}
                       </View>

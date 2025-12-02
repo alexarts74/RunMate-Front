@@ -122,7 +122,7 @@ export default function AllGroupsScreen() {
 
       <View className="p-5">
         <View className="flex-row justify-between items-start mb-3">
-          <Text className="text-gray-900 font-kanit-bold text-xl flex-1 mr-2">
+          <Text className="text-gray-900 font-nunito-bold text-xl flex-1 mr-2">
             {item.name}
           </Text>
           {item.is_admin && (item.pending_requests_count || 0) > 0 && (
@@ -139,7 +139,7 @@ export default function AllGroupsScreen() {
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-2">
               <Ionicons name="people" size={16} color="#A78BFA" />
             </View>
-            <Text className="text-gray-600 font-kanit-medium text-sm">
+            <Text className="text-gray-600 font-nunito-medium text-sm">
               {item.members_count} membres
             </Text>
           </View>
@@ -148,7 +148,7 @@ export default function AllGroupsScreen() {
             className="bg-secondary px-5 py-2.5 rounded-xl"
             onPress={() => handleFeatureAccess(item.id.toString())}
           >
-            <Text className="text-white font-kanit-bold text-sm">
+            <Text className="text-white font-nunito-bold text-sm">
               Voir le groupe
             </Text>
           </Pressable>
@@ -180,7 +180,7 @@ export default function AllGroupsScreen() {
       />
 
       <View className="p-5">
-        <Text className="text-gray-900 font-kanit-bold text-xl mb-2">
+        <Text className="text-gray-900 font-nunito-bold text-xl mb-2">
           {item.name}
         </Text>
         
@@ -195,7 +195,7 @@ export default function AllGroupsScreen() {
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-2">
               <Ionicons name="people" size={16} color="#A78BFA" />
             </View>
-            <Text className="text-gray-600 font-kanit-medium text-sm">
+            <Text className="text-gray-600 font-nunito-medium text-sm">
               {item.members_count} membres
             </Text>
           </View>
@@ -204,7 +204,7 @@ export default function AllGroupsScreen() {
             className={`px-5 py-2.5 rounded-xl ${item.is_member ? 'bg-gray-200' : 'bg-secondary'}`}
             onPress={() => router.push(`/groups/${item.id.toString()}`)}
           >
-            <Text className={`${item.is_member ? 'text-gray-600' : 'text-white'} font-kanit-bold text-sm`}>
+            <Text className={`${item.is_member ? 'text-gray-600' : 'text-white'} font-nunito-bold text-sm`}>
               {item.is_member ? "Voir" : "Découvrir"}
             </Text>
           </Pressable>
@@ -218,10 +218,10 @@ export default function AllGroupsScreen() {
       <View className="bg-tertiary p-8 rounded-full mb-6">
         <Ionicons name="fitness" size={60} color="#A78BFA" />
       </View>
-      <Text className="text-gray-900 font-kanit-bold text-2xl text-center mb-3">
+      <Text className="text-gray-900 font-nunito-bold text-2xl text-center mb-3">
         Aucun groupe trouvé
       </Text>
-      <Text className="text-gray-500 text-base font-kanit-medium text-center mb-8">
+      <Text className="text-gray-500 text-base font-nunito-medium text-center mb-8">
         Les groupes de course vous permettent de rencontrer d'autres
         coureurs et de participer à des événements ensemble.
       </Text>
@@ -243,7 +243,7 @@ export default function AllGroupsScreen() {
             color="white"
             style={{ marginRight: 8 }}
           />
-          <Text className="text-white font-kanit-bold">
+          <Text className="text-white font-nunito-bold">
             Créer
           </Text>
         </Pressable>
@@ -258,7 +258,7 @@ export default function AllGroupsScreen() {
             color="#A78BFA"
             style={{ marginRight: 8 }}
           />
-          <Text className="text-secondary font-kanit-bold">
+          <Text className="text-secondary font-nunito-bold">
             Explorer
           </Text>
         </Pressable>
@@ -271,10 +271,10 @@ export default function AllGroupsScreen() {
       <View className="bg-tertiary p-8 rounded-full mb-6">
         <Ionicons name="search" size={60} color="#A78BFA" />
       </View>
-      <Text className="text-gray-900 font-kanit-bold text-2xl text-center mb-3">
+      <Text className="text-gray-900 font-nunito-bold text-2xl text-center mb-3">
         Aucun groupe trouvé
       </Text>
-      <Text className="text-gray-500 text-base font-kanit-medium text-center">
+      <Text className="text-gray-500 text-base font-nunito-medium text-center">
         Essayez une autre recherche ou créez votre propre groupe !
       </Text>
     </View>
@@ -288,7 +288,7 @@ export default function AllGroupsScreen() {
           <Pressable onPress={() => router.back()} className="mr-3">
             <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-2xl font-kanit-bold text-gray-900">
+          <Text className="text-2xl font-nunito-extrabold text-gray-900">
             Groupes de course
           </Text>
         </View>
@@ -313,7 +313,7 @@ export default function AllGroupsScreen() {
             }
           >
             <Text
-              className={`text-center font-kanit-bold ${
+              className={`text-center font-nunito-bold ${
                 activeTab === "my-groups" ? "text-white" : "text-gray-600"
               }`}
             >
@@ -339,7 +339,7 @@ export default function AllGroupsScreen() {
             }
           >
             <Text
-              className={`text-center font-kanit-bold ${
+              className={`text-center font-nunito-bold ${
                 activeTab === "discover" ? "text-white" : "text-gray-600"
               }`}
             >
@@ -354,7 +354,7 @@ export default function AllGroupsScreen() {
             <View className="bg-white flex-row items-center px-4 py-3 rounded-xl border border-gray-200">
               <Ionicons name="search" size={20} color="#9CA3AF" />
               <TextInput
-                className="flex-1 ml-3 font-kanit text-gray-900"
+                className="flex-1 ml-3 font-nunito text-gray-900"
                 placeholder="Rechercher un groupe..."
                 value={searchQuery}
                 onChangeText={handleSearch}

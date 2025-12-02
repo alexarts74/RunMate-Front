@@ -154,7 +154,7 @@ export default function TabLayout() {
           fontSize: 11,
           fontWeight: "600",
           marginTop: -2,
-          fontFamily: "Kanit",
+          fontFamily: "Nunito-Regular",
           textAlign: "center",
         },
       }}

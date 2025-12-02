@@ -19,12 +19,12 @@ export function MatchesSection() {
       {/* Header de la section */}
       <View className="flex-row justify-between items-center mb-4">
         <View className="flex-row items-center">
-          <Text className="text-2xl font-kanit-bold text-white mr-2">
+          <Text className="text-2xl font-nunito-extrabold text-white mr-2">
             Vos matches
           </Text>
           {matches && matches.length > 0 && (
             <View className="bg-purple/20 px-2 py-0.5 rounded-full">
-              <Text className="text-greenLight font-kanit-semibold text-xs">
+              <Text className="text-greenLight font-nunito-semibold text-xs">
                 {matches.length}
               </Text>
             </View>
@@ -36,7 +36,7 @@ export function MatchesSection() {
             onPress={() => router.push("/(app)/matches/all")}
             className="flex-row items-center bg-greenLight/10 px-3 py-1.5 rounded-lg border border-greenLight/20"
           >
-            <Text className="text-greenLight font-kanit-semibold text-sm mr-1">
+            <Text className="text-greenLight font-nunito-semibold text-sm mr-1">
               Voir tout
             </Text>
             <Ionicons name="chevron-forward" size={16} color="#126C52" />
@@ -53,7 +53,7 @@ export function MatchesSection() {
       ) : displayMatches.length === 0 ? (
         <View className="bg-[#1e2429] rounded-2xl p-6 items-center border border-gray-700">
           <Ionicons name="search" size={40} color="#126C52" className="mb-3" />
-          <Text className="text-white text-center font-kanit mb-2">
+          <Text className="text-white text-center font-nunito mb-2">
             Aucun match disponible
           </Text>
           <Text className="text-gray-400 text-center text-sm mb-4">
@@ -69,7 +69,7 @@ export function MatchesSection() {
               color="white"
               style={{ marginRight: 6 }}
             />
-            <Text className="text-white font-kanit text-sm">Filtres</Text>
+            <Text className="text-white font-nunito text-sm">Filtres</Text>
           </Pressable>
         </View>
       ) : (

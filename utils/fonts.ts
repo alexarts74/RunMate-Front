@@ -3,13 +3,13 @@ import * as Font from "expo-font";
 export const loadFonts = async () => {
   await Font.loadAsync({
     Fredoka: require("../assets/fonts/Fredoka/Fredoka.ttf"),
-    "Kanit-Thin": require("../assets/fonts/Kanit/Kanit-Thin.ttf"),
-    "Kanit-Light": require("../assets/fonts/Kanit/Kanit-Light.ttf"),
-    "Kanit-Regular": require("../assets/fonts/Kanit/Kanit-Regular.ttf"),
-    "Kanit-Medium": require("../assets/fonts/Kanit/Kanit-Medium.ttf"),
-    "Kanit-SemiBold": require("../assets/fonts/Kanit/Kanit-SemiBold.ttf"),
-    "Kanit-Bold": require("../assets/fonts/Kanit/Kanit-Bold.ttf"),
-    "Kanit-ExtraBold": require("../assets/fonts/Kanit/Kanit-ExtraBold.ttf"),
-    "Kanit-Black": require("../assets/fonts/Kanit/Kanit-Black.ttf"),
+    "Nunito-ExtraLight": require("../assets/fonts/Nunito Font/static/Nunito-ExtraLight.ttf"),
+    "Nunito-Light": require("../assets/fonts/Nunito Font/static/Nunito-Light.ttf"),
+    "Nunito-Regular": require("../assets/fonts/Nunito Font/static/Nunito-Regular.ttf"),
+    "Nunito-Medium": require("../assets/fonts/Nunito Font/static/Nunito-Medium.ttf"),
+    "Nunito-SemiBold": require("../assets/fonts/Nunito Font/static/Nunito-SemiBold.ttf"),
+    "Nunito-Bold": require("../assets/fonts/Nunito Font/static/Nunito-Bold.ttf"),
+    "Nunito-ExtraBold": require("../assets/fonts/Nunito Font/static/Nunito-ExtraBold.ttf"),
+    "Nunito-Black": require("../assets/fonts/Nunito Font/static/Nunito-Black.ttf"),
   });
 };

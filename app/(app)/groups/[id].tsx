@@ -164,13 +164,13 @@ export default function GroupDetailsScreen() {
 
           {/* Titre et membres sur l'image */}
           <View className="absolute bottom-0 left-0 right-0 p-6">
-            <Text className="text-white font-kanit-bold text-3xl mb-2">
+            <Text className="text-white font-nunito-bold text-3xl mb-2">
               {group.name}
             </Text>
             <View className="flex-row items-center">
               <View className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full flex-row items-center">
                 <Ionicons name="people" size={16} color="white" />
-                <Text className="text-white font-kanit-medium text-sm ml-2">
+                <Text className="text-white font-nunito-medium text-sm ml-2">
                   {group.members_count} membres
                 </Text>
               </View>
@@ -192,11 +192,11 @@ export default function GroupDetailsScreen() {
                 <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
                   <Ionicons name="information-circle" size={20} color="#A78BFA" />
                 </View>
-                <Text className="text-gray-900 font-kanit-bold text-lg">
+                <Text className="text-gray-900 font-nunito-bold text-lg">
                   À propos
                 </Text>
               </View>
-              <Text className="text-gray-600 font-kanit leading-6">
+              <Text className="text-gray-600 font-nunito leading-6">
                 {group.description}
               </Text>
             </View>
@@ -220,14 +220,14 @@ export default function GroupDetailsScreen() {
                   <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
                     <Ionicons name="people-outline" size={20} color="#FF6B4A" />
                   </View>
-                  <Text className="text-gray-900 font-kanit-bold text-base">
+                  <Text className="text-gray-900 font-nunito-bold text-base">
                     Demandes d'adhésion
                   </Text>
                 </View>
                 <View className="flex-row items-center">
                   {pendingRequests.length > 0 && (
                     <View className="bg-red-500 px-2.5 py-1 rounded-full mr-3">
-                      <Text className="text-white text-xs font-kanit-bold">
+                      <Text className="text-white text-xs font-nunito-bold">
                         {pendingRequests.length}
                       </Text>
                     </View>
@@ -253,7 +253,7 @@ export default function GroupDetailsScreen() {
                       <View className="bg-tertiary p-4 rounded-full mb-3">
                         <Ionicons name="checkmark-circle" size={40} color="#A78BFA" />
                       </View>
-                      <Text className="text-gray-500 font-kanit text-center">
+                      <Text className="text-gray-500 font-nunito text-center">
                         Aucune demande en attente
                       </Text>
                     </View>
@@ -274,12 +274,12 @@ export default function GroupDetailsScreen() {
                           className="w-12 h-12 rounded-full mr-3"
                         />
                         <View className="flex-1">
-                          <Text className="text-gray-900 font-kanit-bold">
+                          <Text className="text-gray-900 font-nunito-bold">
                             {req.user.first_name} {req.user.last_name}
                           </Text>
                           {req.message && (
                             <Text
-                              className="text-gray-500 font-kanit text-xs mt-0.5"
+                              className="text-gray-500 font-nunito text-xs mt-0.5"
                               numberOfLines={1}
                             >
                               {req.message}
@@ -337,10 +337,10 @@ export default function GroupDetailsScreen() {
                   <Ionicons name="chatbubbles" size={28} color="white" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-white font-kanit-bold text-lg mb-0.5">
+                  <Text className="text-white font-nunito-bold text-lg mb-0.5">
                     Conversation du groupe
                   </Text>
-                  <Text className="text-white/80 font-kanit text-sm">
+                  <Text className="text-white/80 font-nunito text-sm">
                     Rejoindre le chat
                   </Text>
                 </View>
@@ -360,7 +360,7 @@ export default function GroupDetailsScreen() {
                     <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="people" size={20} color="#A78BFA" />
                     </View>
-                    <Text className="text-gray-900 font-kanit-bold text-lg">
+                    <Text className="text-gray-900 font-nunito-bold text-lg">
                       Membres ({group.members.length})
                     </Text>
                   </View>
@@ -380,7 +380,7 @@ export default function GroupDetailsScreen() {
                           }}
                         />
                         <Text
-                          className="text-gray-900 font-kanit text-center text-xs"
+                          className="text-gray-900 font-nunito text-center text-xs"
                           numberOfLines={1}
                         >
                           {member.first_name}
@@ -403,10 +403,10 @@ export default function GroupDetailsScreen() {
               <View className="bg-tertiary p-6 rounded-full mb-4">
                 <Ionicons name="lock-closed" size={48} color="#A78BFA" />
               </View>
-              <Text className="text-gray-900 font-kanit-bold text-xl text-center mb-2">
+              <Text className="text-gray-900 font-nunito-bold text-xl text-center mb-2">
                 Groupe Privé
               </Text>
-              <Text className="text-gray-500 font-kanit text-center leading-6">
+              <Text className="text-gray-500 font-nunito text-center leading-6">
                 Rejoignez ce groupe pour voir les membres et participer aux discussions.
               </Text>
             </View>
@@ -435,7 +435,7 @@ export default function GroupDetailsScreen() {
             }`}
           >
             <Ionicons name="exit-outline" size={20} color="#EF4444" style={{ marginRight: 8 }} />
-            <Text className="text-red-500 font-kanit-bold text-base">
+            <Text className="text-red-500 font-nunito-bold text-base">
               {isActionLoading ? "Chargement..." : "Quitter le groupe"}
             </Text>
           </Pressable>
@@ -447,7 +447,7 @@ export default function GroupDetailsScreen() {
               color="#6B7280"
               style={{ marginRight: 8 }}
             />
-            <Text className="text-gray-600 font-kanit-bold text-base">Demande envoyée</Text>
+            <Text className="text-gray-600 font-nunito-bold text-base">Demande envoyée</Text>
           </View>
         ) : (
           <Pressable
@@ -465,7 +465,7 @@ export default function GroupDetailsScreen() {
             }}
           >
             <Ionicons name="person-add" size={20} color="white" style={{ marginRight: 8 }} />
-            <Text className="text-white font-kanit-bold text-base">
+            <Text className="text-white font-nunito-bold text-base">
               {isActionLoading ? "Envoi..." : "Demander à rejoindre"}
             </Text>
           </Pressable>

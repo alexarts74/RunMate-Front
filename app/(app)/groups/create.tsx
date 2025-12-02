@@ -22,7 +22,7 @@ export default function CreateGroupScreen() {
           <Pressable onPress={() => router.back()} className="mr-4">
             <Ionicons name="close" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-gray-900 text-xl font-kanit-bold flex-1">
+          <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
             Créer un groupe
           </Text>
         </View>
@@ -35,7 +35,7 @@ export default function CreateGroupScreen() {
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="px-6 py-6 bg-fond">
             {/* Description */}
-            <Text className="text-gray-600 font-kanit-medium text-base mb-6">
+            <Text className="text-gray-600 font-nunito-medium text-base mb-6">
               Créez votre groupe de running et commencez à courir ensemble !
             </Text>
 

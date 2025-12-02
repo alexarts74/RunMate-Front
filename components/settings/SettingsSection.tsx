@@ -48,11 +48,11 @@ export default function SettingsSection({
                 <Ionicons name={item.icon} size={20} color="#FF6B4A" />
               </View>
               <StyledView className="flex-1">
-                <StyledText className="text-gray-900 font-kanit-bold">
+                <StyledText className="text-gray-900 font-nunito-bold">
                   {item.title}
                 </StyledText>
                 {item.description && (
-                  <StyledText className="text-gray-500 text-sm font-kanit-medium mt-1">
+                  <StyledText className="text-gray-500 text-sm font-nunito-medium mt-1">
                     {item.description}
                   </StyledText>
                 )}
@@ -70,7 +70,7 @@ export default function SettingsSection({
       </StyledView>
 
       {description && (
-        <StyledText className="text-gray-500 text-sm px-6 font-kanit-medium">
+        <StyledText className="text-gray-500 text-sm px-6 font-nunito-medium">
           {description}
         </StyledText>
       )}

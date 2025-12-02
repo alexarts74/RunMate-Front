@@ -128,19 +128,19 @@ export default function AllMatchesScreen() {
                 <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
               </Pressable>
               <View className="flex-1">
-                <Text className="text-2xl font-kanit-bold text-gray-900">
+                <Text className="text-2xl font-nunito-extrabold text-gray-900">
                   Tous vos matches
                 </Text>
                 {matches && matches.length > 0 && (
                   <View className="flex-row items-center mt-1.5">
                     <View className="bg-tertiary px-3 py-1 rounded-full mr-2">
-                      <Text className="text-primary text-xs font-kanit-bold">
+                      <Text className="text-primary text-xs font-nunito-bold">
                         {matches.length} match{matches.length > 1 ? 'es' : ''}
                       </Text>
                     </View>
                     <View className="flex-row items-center">
                       <Ionicons name="flame" size={14} color="#FF6B4A" style={{ marginRight: 4 }} />
-                      <Text className="text-gray-500 text-xs font-kanit-medium">
+                      <Text className="text-gray-500 text-xs font-nunito-medium">
                         {matches.filter(m => m.score && m.score > 80).length} premium
                       </Text>
                     </View>
@@ -186,10 +186,10 @@ export default function AllMatchesScreen() {
                 color="#FF6B4A"
               />
             </View>
-            <Text className="text-gray-900 text-center text-xl font-kanit-bold mb-3">
+            <Text className="text-gray-900 text-center text-xl font-nunito-extrabold mb-3">
               Aucun match trouvé
             </Text>
-            <Text className="text-gray-500 text-center text-base font-kanit-medium mb-8 px-4">
+            <Text className="text-gray-500 text-center text-base font-nunito-medium mb-8 px-4">
               Nous n'avons pas trouvé de coureurs correspondant à vos critères actuels. Essayez d'élargir vos critères de recherche.
             </Text>
             <Pressable
@@ -209,7 +209,7 @@ export default function AllMatchesScreen() {
                 color="white"
                 style={{ marginRight: 8 }}
               />
-              <Text className="text-white font-kanit-bold">
+              <Text className="text-white font-nunito-bold">
                 Ajuster les filtres
               </Text>
             </Pressable>
@@ -229,7 +229,7 @@ export default function AllMatchesScreen() {
                   }}
                 >
                   <Ionicons name="person" size={16} color="#FF6B4A" style={{ marginRight: 6 }} />
-                  <Text className="text-gray-900 font-kanit-bold text-sm">
+                  <Text className="text-gray-900 font-nunito-bold text-sm">
                     {activeIndex + 1} / {matches.length}
                   </Text>
                 </View>
@@ -249,7 +249,7 @@ export default function AllMatchesScreen() {
                   }}
                 >
                   <Ionicons name="heart" size={16} color="#FF6B4A" style={{ marginRight: 4 }} />
-                  <Text className="text-primary font-kanit-bold text-sm">
+                  <Text className="text-primary font-nunito-bold text-sm">
                     {Math.round(matches[activeIndex].score || 0)}% match
                   </Text>
                 </View>
@@ -349,7 +349,7 @@ export default function AllMatchesScreen() {
                     }}
                   >
                     <Ionicons name="person-outline" size={20} color="#FF6B4A" style={{ marginRight: 8 }} />
-                    <Text className="text-primary font-kanit-bold">Profil</Text>
+                    <Text className="text-primary font-nunito-bold">Profil</Text>
                   </Pressable>
 
                   {/* Bouton Message */}
@@ -365,7 +365,7 @@ export default function AllMatchesScreen() {
                     }}
                   >
                     <Ionicons name="chatbubble-ellipses" size={20} color="white" style={{ marginRight: 8 }} />
-                    <Text className="text-white font-kanit-bold">Message</Text>
+                    <Text className="text-white font-nunito-bold">Message</Text>
                   </Pressable>
                 </View>
               </View>

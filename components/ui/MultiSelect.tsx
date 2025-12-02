@@ -25,7 +25,7 @@ export function MultiSelect({
 
   return (
     <View>
-      {label && <Text className="text-gray-900 text-sm mb-2 font-kanit-bold">{label}</Text>}
+      {label && <Text className="text-gray-900 text-sm mb-2 font-nunito-bold">{label}</Text>}
       <View className="flex-row flex-wrap gap-2">
         {options.map((option) => {
           const isSelected = selectedValues.includes(option);
@@ -50,7 +50,7 @@ export function MultiSelect({
               <Text
                 className={`${
                   isSelected ? "text-white" : "text-gray-700"
-                } font-kanit-bold text-sm mr-2`}
+                } font-nunito-bold text-sm mr-2`}
               >
                 {option}
               </Text>

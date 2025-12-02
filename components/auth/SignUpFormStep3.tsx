@@ -235,7 +235,7 @@ export function SignUpFormStep3({
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
+            <Text className="text-gray-900 text-2xl mr-8 font-nunito-bold text-center">
               {runnerType === "perf" ? (
                 <>
                   Runner <Text className="text-primary">Performance</Text> 🏃‍♂️
@@ -263,7 +263,7 @@ export function SignUpFormStep3({
                         color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Allure habituelle en EF
                     </Text>
                   </View>
@@ -280,7 +280,7 @@ export function SignUpFormStep3({
                       elevation: 1,
                     }}
                   >
-                    <Text className="text-gray-900 font-kanit-medium flex-1">
+                    <Text className="text-gray-900 font-nunito-medium flex-1">
                       {formData.actual_pace
                         ? `${formData.actual_pace} min/km`
                         : "Sélectionnez votre allure"}
@@ -288,7 +288,7 @@ export function SignUpFormStep3({
                     <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
                   </Pressable>
                   {errors.actual_pace && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.actual_pace}
                     </Text>
                   )}
@@ -311,7 +311,7 @@ export function SignUpFormStep3({
                       }}
                     >
                       <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-gray-900 text-lg font-kanit-bold">
+                        <Text className="text-gray-900 text-lg font-nunito-bold">
                           Sélectionnez votre allure
                         </Text>
                         <Pressable onPress={() => setShowPacePicker(false)}>
@@ -333,9 +333,9 @@ export function SignUpFormStep3({
                             }}
                           >
                             <Text
-                              className={`font-kanit-medium text-base ${
+                              className={`font-nunito-medium text-base ${
                                 formData.actual_pace === option.value
-                                  ? "text-primary font-kanit-bold"
+                                  ? "text-primary font-nunito-bold"
                                   : "text-gray-900"
                               }`}
                             >
@@ -357,7 +357,7 @@ export function SignUpFormStep3({
                         color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Objectif d'allure
                     </Text>
                   </View>
@@ -374,7 +374,7 @@ export function SignUpFormStep3({
                       elevation: 1,
                     }}
                   >
-                    <Text className="text-gray-900 font-kanit-medium flex-1">
+                    <Text className="text-gray-900 font-nunito-medium flex-1">
                       {formData.target_pace
                         ? `${formData.target_pace} min/km`
                         : "Sélectionnez votre objectif d'allure en EF"}
@@ -382,7 +382,7 @@ export function SignUpFormStep3({
                     <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
                   </Pressable>
                   {errors.target_pace && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.target_pace}
                     </Text>
                   )}
@@ -405,7 +405,7 @@ export function SignUpFormStep3({
                       }}
                     >
                       <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-gray-900 text-lg font-kanit-bold">
+                        <Text className="text-gray-900 text-lg font-nunito-bold">
                           Sélectionnez votre objectif d'allure
                         </Text>
                         <Pressable
@@ -429,9 +429,9 @@ export function SignUpFormStep3({
                             }}
                           >
                             <Text
-                              className={`font-kanit-medium text-base ${
+                              className={`font-nunito-medium text-base ${
                                 formData.target_pace === option.value
-                                  ? "text-primary font-kanit-bold"
+                                  ? "text-primary font-nunito-bold"
                                   : "text-gray-900"
                               }`}
                             >
@@ -449,7 +449,7 @@ export function SignUpFormStep3({
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="stats-chart" size={22} color="#FF6B4A" />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Kilométrage hebdomadaire
                     </Text>
                   </View>
@@ -480,7 +480,7 @@ export function SignUpFormStep3({
                     }}
                   >
                     <TextInput
-                      className="flex-1 text-gray-900 font-kanit-medium"
+                      className="flex-1 text-gray-900 font-nunito-medium"
                       placeholder="km/semaine"
                       placeholderTextColor="#9CA3AF"
                       value={formData.weekly_mileage}
@@ -493,7 +493,7 @@ export function SignUpFormStep3({
                     />
                   </View>
                   {errors.weekly_mileage && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.weekly_mileage}
                     </Text>
                   )}
@@ -508,7 +508,7 @@ export function SignUpFormStep3({
                         color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Jours d'entraînement
                     </Text>
                   </View>
@@ -534,7 +534,7 @@ export function SignUpFormStep3({
                         color="#FF6B4A"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Objectifs de compétition
                     </Text>
                   </View>
@@ -578,7 +578,7 @@ export function SignUpFormStep3({
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="map-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Distance habituelle / semaine (km)
                     </Text>
                   </View>
@@ -609,7 +609,7 @@ export function SignUpFormStep3({
                     }}
                   >
                     <TextInput
-                      className="flex-1 text-gray-900 font-kanit-medium"
+                      className="flex-1 text-gray-900 font-nunito-medium"
                       placeholder="km"
                       placeholderTextColor="#9CA3AF"
                       value={formData.usual_distance}
@@ -622,7 +622,7 @@ export function SignUpFormStep3({
                     />
                   </View>
                   {errors.usual_distance && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.usual_distance}
                     </Text>
                   )}
@@ -632,7 +632,7 @@ export function SignUpFormStep3({
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="flag-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Objectif principal
                     </Text>
                   </View>
@@ -642,7 +642,7 @@ export function SignUpFormStep3({
                     onChange={(values) => handleChange("objective", values)}
                   />
                   {errors.objective && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.objective}
                     </Text>
                   )}
@@ -657,7 +657,7 @@ export function SignUpFormStep3({
                         color="#A78BFA"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Préférences sociales
                     </Text>
                   </View>
@@ -669,7 +669,7 @@ export function SignUpFormStep3({
                     }
                   />
                   {errors.social_preferences && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.social_preferences}
                     </Text>
                   )}
@@ -680,7 +680,7 @@ export function SignUpFormStep3({
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="cafe-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Activités post-course
                     </Text>
                   </View>
@@ -694,7 +694,7 @@ export function SignUpFormStep3({
                     }
                   />
                   {errors.post_run_activities && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.post_run_activities}
                     </Text>
                   )}
@@ -709,7 +709,7 @@ export function SignUpFormStep3({
                         color="#A78BFA"
                       />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Fréquence de course
                     </Text>
                   </View>
@@ -721,7 +721,7 @@ export function SignUpFormStep3({
                     }
                   />
                   {errors.running_frequency && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.running_frequency}
                     </Text>
                   )}
@@ -732,7 +732,7 @@ export function SignUpFormStep3({
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
                       <Ionicons name="time-outline" size={22} color="#A78BFA" />
                     </View>
-                    <Text className="text-gray-900 text-sm font-kanit-bold">
+                    <Text className="text-gray-900 text-sm font-nunito-bold">
                       Préférences de course
                     </Text>
                   </View>
@@ -744,7 +744,7 @@ export function SignUpFormStep3({
                     }
                   />
                   {errors.preferred_time_of_day && (
-                    <Text className="text-red-500 mt-2 ml-4 font-kanit-medium text-sm">
+                    <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
                       {errors.preferred_time_of_day}
                     </Text>
                   )}

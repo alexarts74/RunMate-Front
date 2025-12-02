@@ -97,7 +97,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         className="flex-1 bg-fond px-6 py-6 pt-6"
         contentContainerStyle={{ paddingBottom: 150 }}
       >
-      <Text className="text-2xl font-kanit-bold mb-6 text-gray-900">
+      <Text className="text-2xl font-nunito-extrabold mb-6 text-gray-900">
         Modifier mon profil
       </Text>
 
@@ -110,16 +110,16 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           }
           className="w-32 h-32 rounded-full border-4 border-primary"
         />
-        <Text className="text-primary mt-3 font-kanit-bold">Changer la photo</Text>
+        <Text className="text-primary mt-3 font-nunito-bold">Changer la photo</Text>
       </Pressable>
 
       <View className="space-y-4">
         <View>
-          <Text className="text-gray-700 text-sm font-kanit-bold pl-2 mb-2">
+          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
             Prénom
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
               focusedInput === "first_name"
                 ? "border-primary"
                 : "border-gray-200"
@@ -141,11 +141,11 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         </View>
 
         <View>
-          <Text className="text-gray-700 text-sm font-kanit-bold pl-2 mb-2">
+          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
             Nom
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
               focusedInput === "last_name"
                 ? "border-primary"
                 : "border-gray-200"
@@ -167,11 +167,11 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         </View>
 
         <View>
-          <Text className="text-gray-700 text-sm font-kanit-bold pl-2 mb-2">
+          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
             Âge
           </Text>
           <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
               focusedInput === "age" ? "border-primary" : "border-gray-200"
             }`}
             placeholder="Âge"
@@ -192,7 +192,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         </View>
 
         <View>
-          <Text className="text-gray-700 text-sm font-kanit-bold pl-2 mb-2">
+          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
             Genre
           </Text>
           <SelectList
@@ -215,18 +215,18 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
               backgroundColor: "#ffffff",
               marginTop: 4,
             }}
-            inputStyles={{ color: "#111827", fontFamily: "Kanit-Medium" }}
-            dropdownTextStyles={{ color: "#111827", fontFamily: "Kanit-Medium" }}
+            inputStyles={{ color: "#111827", fontFamily: "Nunito-Medium" }}
+            dropdownTextStyles={{ color: "#111827", fontFamily: "Nunito-Medium" }}
             search={false}
           />
         </View>
 
         <View>
-          <Text className="text-gray-700 text-sm font-kanit-bold pl-2 mb-2">
+          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
             Bio
           </Text>
           <TextInput
-            className={`w-full border rounded-2xl p-4 bg-white text-gray-900 font-kanit-medium ${
+            className={`w-full border rounded-2xl p-4 bg-white text-gray-900 font-nunito-medium ${
               focusedInput === "bio" ? "border-primary" : "border-gray-200"
             }`}
             placeholder="Bio"
@@ -249,7 +249,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
       </View>
 
       {error ? (
-        <Text className="text-red-500 text-center mt-4 font-kanit-medium">{error}</Text>
+        <Text className="text-red-500 text-center mt-4 font-nunito-medium">{error}</Text>
       ) : null}
 
       <View className="space-y-3 mt-6">
@@ -268,14 +268,14 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
           {loading ? (
             <ActivityIndicator color="#ffffff" />
           ) : (
-            <Text className="text-white font-kanit-bold">Enregistrer</Text>
+            <Text className="text-white font-nunito-bold">Enregistrer</Text>
           )}
         </Pressable>
         <Pressable
           className="bg-white border-2 border-gray-300 py-4 rounded-full items-center"
           onPress={() => setIsEditing(false)}
         >
-          <Text className="text-gray-700 font-kanit-bold">Annuler</Text>
+          <Text className="text-gray-700 font-nunito-bold">Annuler</Text>
         </Pressable>
       </View>
       </ScrollView>

@@ -141,7 +141,7 @@ export function MatchCard({ match }: MatchCardProps) {
                 elevation: 4,
               }}
             >
-              <Text className="text-white text-xs font-kanit-bold">
+              <Text className="text-white text-xs font-nunito-bold">
                 {distanceKm} km
               </Text>
             </View>
@@ -164,42 +164,42 @@ export function MatchCard({ match }: MatchCardProps) {
           <View className="flex-row justify-between items-start h-full">
             {/* Colonne de gauche - Prénom et âge */}
             <View className="flex-1">
-              <Text className="text-gray-900 text-2xl font-kanit-bold mb-1">
+              <Text className="text-gray-900 text-2xl font-nunito-extrabold mb-1">
                 {match.user.first_name}
               </Text>
-              <Text className="text-gray-600 text-base font-kanit-medium">
+              <Text className="text-gray-600 text-base font-nunito-medium">
                 {match.user.age} ans
               </Text>
             </View>
 
             {/* Colonne de droite - Infos supplémentaires */}
             <View className="flex-1 items-end">
-              <Text className="text-gray-900 text-sm font-kanit-medium mb-1.5 text-right">
+              <Text className="text-gray-900 text-sm font-nunito-medium mb-1.5 text-right">
                 {match.user.city}
               </Text>
               <View 
                 className="px-3 py-1 rounded-full mb-1.5"
                 style={{ backgroundColor: 'rgba(255, 107, 74, 0.1)' }}
               >
-                <Text className="text-primary text-xs font-kanit-bold">
+                <Text className="text-primary text-xs font-nunito-bold">
                   {isChillRunner ? "Runner du dimanche" : "Runner performance"}
                 </Text>
               </View>
               {isChillRunner ? (
                 runningFrequency && (
-                  <Text className="text-gray-700 text-sm font-kanit-medium text-right">
+                  <Text className="text-gray-700 text-sm font-nunito-medium text-right">
                     {formatRunningFrequency()}
                   </Text>
                 )
               ) : (
                 <>
                   {actualPace && (
-                    <Text className="text-gray-900 text-sm font-kanit-bold text-right mb-1">
+                    <Text className="text-gray-900 text-sm font-nunito-bold text-right mb-1">
                       {actualPace} min/km
                     </Text>
                   )}
                   {weeklyDistance && (
-                    <Text className="text-gray-600 text-xs font-kanit-medium text-right">
+                    <Text className="text-gray-600 text-xs font-nunito-medium text-right">
                       {weeklyDistance} km/semaine
                     </Text>
                   )}

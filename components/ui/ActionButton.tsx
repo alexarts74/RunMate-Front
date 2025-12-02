@@ -36,7 +36,7 @@ export function ActionButton({
       >
         <View className="flex-row justify-center items-center">
           <Text
-            className={`text-white font-kanit-bold text-base ${textClassName}`}
+            className={`text-white font-nunito-bold text-base ${textClassName}`}
           >
             {loading ? "Chargement..." : text}
           </Text>

@@ -58,7 +58,7 @@ export function GroupsSection() {
       <View className="flex-row justify-between items-center mb-3">
         <View className="flex-row items-center">
           <View className="w-1 h-6 bg-greenLight rounded-full mr-3" />
-          <Text className="text-xl font-kanit-semibold text-white">
+          <Text className="text-xl font-nunito-semibold text-white">
             Groupes de course
           </Text>
         </View>
@@ -67,7 +67,7 @@ export function GroupsSection() {
           onPress={handleSeeAll}
           className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
         >
-          <Text className="text-greenLight font-kanit text-sm mr-1">
+          <Text className="text-greenLight font-nunito text-sm mr-1">
             Voir tout
           </Text>
           <Ionicons name="arrow-forward" size={14} color="#126C52" />
@@ -86,7 +86,7 @@ export function GroupsSection() {
               <Ionicons name="people" size={24} color="#126C52" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-kanit-semibold text-base mb-1">
+              <Text className="text-white font-nunito-semibold text-base mb-1">
                 Rejoignez des groupes
               </Text>
               <Text className="text-gray-400 text-xs">
@@ -98,7 +98,7 @@ export function GroupsSection() {
             onPress={() => router.push("/premium")}
             className="bg-purple rounded-xl py-3 items-center"
           >
-            <Text className="text-white font-kanit-semibold">
+            <Text className="text-white font-nunito-semibold">
               Débloquer Premium
             </Text>
           </Pressable>
@@ -106,7 +106,7 @@ export function GroupsSection() {
       ) : groups.length === 0 ? (
         <View className="bg-background rounded-2xl p-5 items-center border border-gray-700">
           <Ionicons name="people-outline" size={36} color="#126C52" />
-          <Text className="text-white text-center font-kanit mt-2 mb-1">
+          <Text className="text-white text-center font-nunito mt-2 mb-1">
             Aucun groupe
           </Text>
           <Text className="text-gray-400 text-center text-sm">
@@ -131,7 +131,7 @@ export function GroupsSection() {
                 style={{ resizeMode: "cover" }}
               />
               <View className="p-3">
-                <Text className="text-white font-kanit-semibold text-base mb-2">
+                <Text className="text-white font-nunito-semibold text-base mb-2">
                   {group.name}
                 </Text>
                 <View className="flex-row items-center">

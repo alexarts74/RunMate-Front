@@ -31,10 +31,10 @@ export const PremiumFeatureModal = ({
         <View className="bg-[#1e2429] rounded-2xl p-6 w-full max-w-sm border border-purple/30">
           <View className="items-center mb-4">
             <Ionicons name="star" size={48} color="#126C52" />
-            <Text className="text-white text-xl font-bold mt-2 font-kanit">
+            <Text className="text-white text-xl font-bold mt-2 font-nunito">
               {title}
             </Text>
-            <Text className="text-gray-400 text-center mt-2 font-kanit">
+            <Text className="text-gray-400 text-center mt-2 font-nunito">
               {description}
             </Text>
           </View>
@@ -43,7 +43,7 @@ export const PremiumFeatureModal = ({
             onPress={onClose}
             className="py-3 mt-3 rounded-xl border border-gray-600"
           >
-            <Text className="text-white text-center font-bold font-kanit">
+            <Text className="text-white text-center font-bold font-nunito">
               Fermer
             </Text>
           </Pressable>
@@ -51,7 +51,7 @@ export const PremiumFeatureModal = ({
             onPress={onUpgrade}
             className="py-3 mt-3 rounded-xl border border-gray-600"
           >
-            <Text className="text-white text-center font-bold font-kanit">
+            <Text className="text-white text-center font-bold font-nunito">
               Upgrade
             </Text>
           </Pressable>

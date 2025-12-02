@@ -96,7 +96,7 @@ const HomepageScreen = () => {
                   end={{ x: 1, y: 1 }}
                   className="w-9 h-9 rounded-xl items-center justify-center mr-2"
               >
-                <Text className="text-white font-kanit-bold text-xs">RM</Text>
+                <Text className="text-white font-nunito-bold text-xs">RM</Text>
                 </LinearGradient>
             </View>
             
@@ -109,7 +109,7 @@ const HomepageScreen = () => {
                   <Ionicons name="notifications-outline" size={22} color="#FF6B4A" />
                 {unreadCount > 0 && (
                     <View className="absolute -top-1 -right-1 bg-primary rounded-full w-4 h-4 items-center justify-center border-2 border-fond">
-                      <Text className="text-white text-xs font-kanit-bold">
+                      <Text className="text-white text-xs font-nunito-bold">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </Text>
                   </View>
@@ -162,10 +162,10 @@ const HomepageScreen = () => {
                       {/* Header de la carte */}
                       <View className="flex-row items-start justify-between">
                     <View className="flex-1">
-                          <Text className="text-white font-kanit-bold text-xl mb-1">
+                          <Text className="text-white font-nunito-extrabold text-xl mb-1">
                         {section.title}
                       </Text>
-                          <Text className="text-white font-kanit-medium text-sm">
+                          <Text className="text-white font-nunito-medium text-sm">
                         {section.subtitle}
                       </Text>
                     </View>
@@ -186,7 +186,7 @@ const HomepageScreen = () => {
                       {/* Footer de la carte */}
                       <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center">
-                          <Text className="text-white/80 font-kanit-medium text-xs">
+                          <Text className="text-white/80 font-nunito-medium text-xs">
                             Découvrir
                           </Text>
                           <Ionicons 
@@ -224,10 +224,10 @@ const HomepageScreen = () => {
           {recommendedProfiles.length > 0 && (
             <View className="mb-6">
               <View className="px-6 mb-4">
-                <Text className="text-gray-900 font-kanit-bold text-xl mb-1">
+                <Text className="text-gray-900 font-nunito-extrabold text-xl mb-1">
                   Profils recommandés
                 </Text>
-                <Text className="text-gray-500 font-kanit-medium text-sm">
+                <Text className="text-gray-500 font-nunito-medium text-sm">
                   Basé sur votre compatibilité
                 </Text>
               </View>
@@ -279,7 +279,7 @@ const HomepageScreen = () => {
                         >
                           <View className="flex-row items-center">
                             <Ionicons name="star" size={12} color="#FFD700" />
-                            <Text className="text-white text-xs font-kanit-bold ml-1">
+                            <Text className="text-white text-xs font-nunito-bold ml-1">
                               {Math.round(item.score)}%
                             </Text>
                           </View>
@@ -290,10 +290,10 @@ const HomepageScreen = () => {
                     {/* Contenu */}
                     <View className="flex-1 justify-end p-4">
                       <View>
-                        <Text className="text-white font-kanit-bold text-2xl mb-1 drop-shadow-lg">
+                        <Text className="text-white font-nunito-bold text-2xl mb-1 drop-shadow-lg">
                           {item.user.first_name}
                         </Text>
-                        <Text className="text-white/90 font-kanit-medium text-base mb-2 drop-shadow-lg">
+                        <Text className="text-white/90 font-nunito-medium text-base mb-2 drop-shadow-lg">
                           {item.user.age} ans • {item.user.city}
                         </Text>
                         
@@ -301,7 +301,7 @@ const HomepageScreen = () => {
                         {!!item.distance_km && (
                           <View className="flex-row items-center">
                             <Ionicons name="location" size={14} color="#FF6B4A" />
-                            <Text className="text-white/90 text-xs font-kanit-medium ml-1 drop-shadow-lg">
+                            <Text className="text-white/90 text-xs font-nunito-medium ml-1 drop-shadow-lg">
                               {item.distance_km} km
                             </Text>
                           </View>
@@ -334,7 +334,7 @@ const HomepageScreen = () => {
                 >
                   <Ionicons name="search" size={20} color="#FF6B4A" />
                 </View>
-                <Text className="text-gray-800 font-kanit-bold text-base">
+                <Text className="text-gray-800 font-nunito-bold text-base">
                   Rechercher
                 </Text>
               </Pressable>
@@ -356,7 +356,7 @@ const HomepageScreen = () => {
                 >
                   <Ionicons name="add-circle" size={20} color="#A78BFA" />
                 </View>
-                <Text className="text-gray-800 font-kanit-bold text-base">
+                <Text className="text-gray-800 font-nunito-bold text-base">
                   Créer
                 </Text>
               </Pressable>

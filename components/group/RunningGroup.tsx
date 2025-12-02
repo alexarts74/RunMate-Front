@@ -146,10 +146,10 @@ const RunningGroup = () => {
                 <View className="bg-background/30 p-8 rounded-full mb-6">
                   <Ionicons name="fitness" size={60} color="#126C52" />
                 </View>
-                <Text className="text-white font-kanit text-2xl font-bold text-center mb-3">
+                <Text className="text-white font-nunito text-2xl font-bold text-center mb-3">
                   Aucun groupe trouvé
                 </Text>
-                <Text className="text-gray-400 text-base font-kanit text-center mb-8">
+                <Text className="text-gray-400 text-base font-nunito text-center mb-8">
                   Les groupes de course vous permettent de rencontrer d'autres
                   coureurs et de participer à des événements ensemble.
                 </Text>
@@ -163,7 +163,7 @@ const RunningGroup = () => {
                     color="white"
                     style={{ marginRight: 8 }}
                   />
-                  <Text className="text-white font-kanit font-semibold">
+                  <Text className="text-white font-nunito font-semibold">
                     Explorer les groupes
                   </Text>
                 </Pressable>

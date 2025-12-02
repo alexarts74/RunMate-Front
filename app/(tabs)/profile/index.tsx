@@ -60,7 +60,7 @@ export default function ProfileScreen() {
                   >
                     <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
                   </Pressable>
-                  <Text className="text-xl font-kanit-bold text-gray-900 ml-2">
+                  <Text className="text-xl font-nunito-extrabold text-gray-900 ml-2">
                     Notifications
                   </Text>
                 </View>
@@ -77,7 +77,7 @@ export default function ProfileScreen() {
                   >
                     <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
                   </Pressable>
-                  <Text className="text-xl font-kanit-bold text-gray-900 ml-2">
+                  <Text className="text-xl font-nunito-extrabold text-gray-900 ml-2">
                     Confidentialité
                   </Text>
                 </View>
@@ -87,7 +87,7 @@ export default function ProfileScreen() {
           default:
             return (
               <View className="px-5 space-y-4 pt-6">
-                <Text className="text-2xl font-kanit-bold text-gray-900 mb-6">
+                <Text className="text-2xl font-nunito-extrabold text-gray-900 mb-6">
                   Paramètres
                 </Text>
 
@@ -110,7 +110,7 @@ export default function ProfileScreen() {
                         color="#FF6B4A"
                     />
                     </View>
-                    <Text className="text-gray-900 font-kanit-bold">
+                    <Text className="text-gray-900 font-nunito-bold">
                       Notifications
                     </Text>
                   </View>
@@ -136,7 +136,7 @@ export default function ProfileScreen() {
                         color="#A78BFA"
                     />
                     </View>
-                    <Text className="text-gray-900 font-kanit-bold">
+                    <Text className="text-gray-900 font-nunito-bold">
                       Confidentialité
                     </Text>
                   </View>
@@ -161,7 +161,7 @@ export default function ProfileScreen() {
                         color="#FF6B4A"
                     />
                     </View>
-                    <Text className="text-gray-900 font-kanit-bold">Aide</Text>
+                    <Text className="text-gray-900 font-nunito-bold">Aide</Text>
                   </View>
                   <Ionicons name="chevron-forward" size={20} color="#A78BFA" />
                 </Pressable>
@@ -178,7 +178,7 @@ export default function ProfileScreen() {
                     }}
                     onPress={logout}
                   >
-                    <Text className="text-white font-kanit-bold">
+                    <Text className="text-white font-nunito-bold">
                       Se déconnecter
                     </Text>
                   </Pressable>
@@ -186,7 +186,7 @@ export default function ProfileScreen() {
                     className="bg-white border-2 border-red-500 py-4 rounded-full items-center"
                     onPress={handleDeleteAccount}
                   >
-                    <Text className="text-red-500 font-kanit-bold">
+                    <Text className="text-red-500 font-nunito-bold">
                       Supprimer le compte
                     </Text>
                   </Pressable>
@@ -210,7 +210,7 @@ export default function ProfileScreen() {
             activeTab === "profile" ? "bg-primary" : "bg-tertiary"
           }`}
         >
-          <Text className={`font-kanit-bold ${activeTab === "profile" ? "text-white" : "text-gray-700"}`}>Profil</Text>
+          <Text className={`font-nunito-bold ${activeTab === "profile" ? "text-white" : "text-gray-700"}`}>Profil</Text>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -222,7 +222,7 @@ export default function ProfileScreen() {
             activeTab === "runner" ? "bg-primary" : "bg-tertiary"
           }`}
         >
-          <Text className={`font-kanit-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
+          <Text className={`font-nunito-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -234,7 +234,7 @@ export default function ProfileScreen() {
             activeTab === "settings" ? "bg-primary" : "bg-tertiary"
           }`}
         >
-          <Text className={`font-kanit-bold ${activeTab === "settings" ? "text-white" : "text-gray-700"}`}>Réglages</Text>
+          <Text className={`font-nunito-bold ${activeTab === "settings" ? "text-white" : "text-gray-700"}`}>Réglages</Text>
         </Pressable>
       </View>
 

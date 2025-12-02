@@ -122,11 +122,11 @@ export const RacesFilters = ({
                     <Ionicons name="filter" size={20} color="#FF6B4A" />
                   </View>
                   <View>
-                    <Text className="text-gray-900 text-2xl font-kanit-bold">
+                    <Text className="text-gray-900 text-2xl font-nunito-extrabold">
                       Filtres
                     </Text>
                     {activeFiltersCount > 0 && (
-                      <Text className="text-primary text-sm font-kanit-medium">
+                      <Text className="text-primary text-sm font-nunito-medium">
                         {activeFiltersCount} filtre{activeFiltersCount > 1 ? "s" : ""} actif{activeFiltersCount > 1 ? "s" : ""}
                       </Text>
                     )}
@@ -149,7 +149,7 @@ export const RacesFilters = ({
               <View className="px-6 py-4">
                 {/* Recherche par localisation */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-kanit-bold text-base mb-3">
+                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
                     Rechercher par localisation
                   </Text>
                   <View className="flex-row items-center bg-tertiary rounded-xl px-4 py-3">
@@ -158,7 +158,7 @@ export const RacesFilters = ({
                       placeholder="Ex: Paris, Lyon..."
                       value={searchLocation}
                       onChangeText={setSearchLocation}
-                      className="flex-1 ml-3 text-gray-900 font-kanit-medium"
+                      className="flex-1 ml-3 text-gray-900 font-nunito-medium"
                       placeholderTextColor="#9CA3AF"
                     />
                     {searchLocation.length > 0 && (
@@ -171,7 +171,7 @@ export const RacesFilters = ({
 
                 {/* Filtre par date */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-kanit-bold text-base mb-3">
+                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
                     Date
                   </Text>
                   <View className="flex-row gap-3">
@@ -195,7 +195,7 @@ export const RacesFilters = ({
                         style={{ marginRight: 8 }}
                       />
                       <Text
-                        className={`font-kanit-bold text-sm ${
+                        className={`font-nunito-bold text-sm ${
                           showFutureOnly ? "text-white" : "text-gray-700"
                         }`}
                       >
@@ -222,7 +222,7 @@ export const RacesFilters = ({
                         style={{ marginRight: 8 }}
                       />
                       <Text
-                        className={`font-kanit-bold text-sm ${
+                        className={`font-nunito-bold text-sm ${
                           !showFutureOnly ? "text-white" : "text-gray-700"
                         }`}
                       >
@@ -234,7 +234,7 @@ export const RacesFilters = ({
 
                 {/* Filtre par distance */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-kanit-bold text-base mb-3">
+                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
                     Distance
                   </Text>
                   <View className="flex-row flex-wrap" style={{ gap: 10 }}>
@@ -260,7 +260,7 @@ export const RacesFilters = ({
                       >
                         <Text className="text-base mr-2">{distance.icon}</Text>
                         <Text
-                          className={`font-kanit-bold text-sm ${
+                          className={`font-nunito-bold text-sm ${
                             selectedDistance === distance.value
                               ? "text-white"
                               : "text-gray-700"
@@ -276,7 +276,7 @@ export const RacesFilters = ({
                 {/* Filtre par localisation/pays */}
                 {availableCountries.length > 0 && (
                   <View className="mb-6">
-                    <Text className="text-gray-900 font-kanit-bold text-base mb-3">
+                    <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
                       Localisation
                     </Text>
                     <ScrollView
@@ -299,7 +299,7 @@ export const RacesFilters = ({
                         }}
                       >
                         <Text
-                          className={`font-kanit-bold text-sm ${
+                          className={`font-nunito-bold text-sm ${
                             selectedCountry === null
                               ? "text-white"
                               : "text-gray-700"
@@ -327,7 +327,7 @@ export const RacesFilters = ({
                           }}
                         >
                           <Text
-                            className={`font-kanit-bold text-sm ${
+                            className={`font-nunito-bold text-sm ${
                               selectedCountry === country
                                 ? "text-white"
                                 : "text-gray-700"
@@ -358,7 +358,7 @@ export const RacesFilters = ({
                       elevation: 2,
                     }}
                   >
-                    <Text className="text-center text-primary font-kanit-bold">
+                    <Text className="text-center text-primary font-nunito-bold">
                       Effacer
                     </Text>
                   </Pressable>
@@ -374,7 +374,7 @@ export const RacesFilters = ({
                     elevation: 4,
                   }}
                 >
-                  <Text className="text-center text-white font-kanit-bold">
+                  <Text className="text-center text-white font-nunito-bold">
                     Appliquer ({activeFiltersCount})
                   </Text>
                 </Pressable>

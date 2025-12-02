@@ -287,7 +287,7 @@ export default function CreateEventScreen() {
           <Pressable onPress={() => router.back()} className="mr-4">
             <Ionicons name="close" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-gray-900 text-xl font-kanit-bold flex-1">
+          <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
             Créer un événement
           </Text>
         </View>
@@ -323,14 +323,14 @@ export default function CreateEventScreen() {
                     <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
                       <Ionicons name="image-outline" size={32} color="#FF6B4A" />
                     </View>
-                    <Text className="text-gray-600 font-kanit-medium text-base">
+                    <Text className="text-gray-600 font-nunito-medium text-base">
                       Ajouter une photo
                     </Text>
                   </View>
                 )}
               </Pressable>
               {errors.cover_image && (
-                <Text className="text-red-500 text-sm font-kanit-medium mt-1">
+                <Text className="text-red-500 text-sm font-nunito-medium mt-1">
                   {errors.cover_image}
                 </Text>
               )}
@@ -338,11 +338,11 @@ export default function CreateEventScreen() {
 
             {/* Nom */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
                 Nom de l'événement
               </Text>
               <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
                   errors.name ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: Course matinale"
@@ -360,15 +360,15 @@ export default function CreateEventScreen() {
                 }}
               />
               {errors.name && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">{errors.name}</Text>
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">{errors.name}</Text>
               )}
             </View>
 
             {/* Description */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Description</Text>
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Description</Text>
               <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
                   errors.description ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Décrivez votre événement"
@@ -389,7 +389,7 @@ export default function CreateEventScreen() {
                 }}
               />
               {errors.description && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
                   {errors.description}
                 </Text>
               )}
@@ -397,7 +397,7 @@ export default function CreateEventScreen() {
 
             {/* Date */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Date et heure</Text>
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Date et heure</Text>
               <Pressable
                 onPress={() => setShowDatePicker(true)}
                 className={`bg-white p-4 rounded-xl border-2 flex-row items-center justify-between ${
@@ -411,13 +411,13 @@ export default function CreateEventScreen() {
                   elevation: 1,
                 }}
               >
-                <Text className="text-gray-900 font-kanit-medium">
+                <Text className="text-gray-900 font-nunito-medium">
                   {formData.start_date.toLocaleString()}
                 </Text>
                 <Ionicons name="calendar" size={20} color="#FF6B4A" />
               </Pressable>
               {errors.start_date && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
                   {errors.start_date}
                 </Text>
               )}
@@ -435,7 +435,7 @@ export default function CreateEventScreen() {
 
             {/* Niveau */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-3">Niveau</Text>
+              <Text className="text-gray-900 font-nunito-bold text-base mb-3">Niveau</Text>
               <View className="flex-row justify-between flex-wrap gap-3">
                 {Object.values(EventLevel)
                   .filter((value) => typeof value === "number")
@@ -459,7 +459,7 @@ export default function CreateEventScreen() {
                       }}
                     >
                       <Text
-                        className={`text-center font-kanit-bold text-sm ${
+                        className={`text-center font-nunito-bold text-sm ${
                           formData.level === value ? "text-white" : "text-gray-700"
                         }`}
                       >
@@ -472,9 +472,9 @@ export default function CreateEventScreen() {
 
             {/* Lieu */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Lieu</Text>
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Lieu</Text>
               <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
                   errors.location ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Rechercher une adresse..."
@@ -493,7 +493,7 @@ export default function CreateEventScreen() {
                 }}
               />
               {errors.location && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
                   {errors.location}
                 </Text>
               )}
@@ -515,7 +515,7 @@ export default function CreateEventScreen() {
                       className="p-4 border-b border-gray-100"
                       android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
                     >
-                      <Text className="text-gray-900 font-kanit-medium">{suggestion.full_name}</Text>
+                      <Text className="text-gray-900 font-nunito-medium">{suggestion.full_name}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -524,9 +524,9 @@ export default function CreateEventScreen() {
 
             {/* Distance */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">Distance (km)</Text>
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Distance (km)</Text>
               <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
                   errors.distance ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: 5"
@@ -545,7 +545,7 @@ export default function CreateEventScreen() {
                 }}
               />
               {errors.distance && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
                   {errors.distance}
                 </Text>
               )}
@@ -553,11 +553,11 @@ export default function CreateEventScreen() {
 
             {/* Nombre max de participants */}
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
                 Nombre maximum de participants
               </Text>
               <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-kanit-medium ${
+                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
                   errors.max_participants ? "border-red-500" : "border-gray-200"
                 }`}
                 placeholder="Ex: 10"
@@ -576,14 +576,14 @@ export default function CreateEventScreen() {
                 }}
               />
               {errors.max_participants && (
-                <Text className="text-red-500 text-sm mt-1 font-kanit-medium">
+                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
                   {errors.max_participants}
                 </Text>
               )}
             </View>
 
             <View>
-              <Text className="text-gray-900 font-kanit-bold text-base mb-2">
+              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
                 Inviter des participants
               </Text>
               <UserSearch
@@ -607,7 +607,7 @@ export default function CreateEventScreen() {
               elevation: 4,
             }}
           >
-            <Text className="text-white text-center font-kanit-bold text-lg">
+            <Text className="text-white text-center font-nunito-bold text-lg">
               Créer l'événement
             </Text>
           </Pressable>

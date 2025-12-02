@@ -127,7 +127,7 @@ export function MatchesCarousel() {
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
               <View className="w-1 h-6 bg-purple rounded-full mr-3" />
-              <Text className="text-2xl font-kanit-semibold text-white">
+              <Text className="text-2xl font-nunito-semibold text-white">
                 Vos matches
               </Text>
             </View>
@@ -156,7 +156,7 @@ export function MatchesCarousel() {
                 color="#126C52"
                 className="mb-4"
               />
-              <Text className="text-white text-center text-lg font-kanit mb-3">
+              <Text className="text-white text-center text-lg font-nunito mb-3">
                 Nous n'avons pas trouvé de coureurs correspondant à vos critères
                 actuels. Essayez d'élargir vos critères de recherche.
               </Text>
@@ -171,7 +171,7 @@ export function MatchesCarousel() {
                 color="white"
                 style={{ marginRight: 8 }}
               />
-              <Text className="text-white font-kanit font-semibold">
+              <Text className="text-white font-nunito font-semibold">
                 Élargir la recherche
               </Text>
             </Pressable>

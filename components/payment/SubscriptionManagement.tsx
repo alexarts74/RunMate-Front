@@ -147,7 +147,7 @@ export default function SubscriptionManagement() {
     return (
       <View className="flex-1 bg-background justify-center items-center">
         <ActivityIndicator size="large" color="#126C52" />
-        <Text className="text-white mt-4 font-kanit">
+        <Text className="text-white mt-4 font-nunito">
           Chargement des informations...
         </Text>
       </View>
@@ -164,7 +164,7 @@ export default function SubscriptionManagement() {
           >
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </Pressable>
-          <Text className="text-2xl font-kanit-semibold text-white">
+          <Text className="text-2xl font-nunito-semibold text-white">
             Mon abonnement
           </Text>
         </View>
@@ -176,7 +176,7 @@ export default function SubscriptionManagement() {
               <View className="flex-row justify-between items-center mb-4">
                 <View className="flex-row items-center">
                   <Ionicons name="diamond" size={24} color="#126C52" />
-                  <Text className="text-xl font-kanit-semibold text-white ml-2">
+                  <Text className="text-xl font-nunito-semibold text-white ml-2">
                     RunMate Premium
                   </Text>
                 </View>
@@ -188,7 +188,7 @@ export default function SubscriptionManagement() {
                   }`}
                 >
                   <Text
-                    className={`text-xs font-kanit-bold ${
+                    className={`text-xs font-nunito-bold ${
                       subscription.status === "active"
                         ? "text-green-500"
                         : "text-yellow-500"
@@ -206,10 +206,10 @@ export default function SubscriptionManagement() {
               </View>
 
               <View className="mb-4">
-                <Text className="text-white font-kanit-semibold mb-1">
+                <Text className="text-white font-nunito-semibold mb-1">
                   Forfait
                 </Text>
-                <Text className="text-gray-300 font-kanit">
+                <Text className="text-gray-300 font-nunito">
                   {subscription.plan.name} -{" "}
                   {formatCurrency(subscription.plan.amount)} /{" "}
                   {subscription.plan.interval === "month" ? "mois" : "an"}
@@ -217,7 +217,7 @@ export default function SubscriptionManagement() {
               </View>
 
               <View className="mb-4">
-                <Text className="text-white font-kanit-semibold mb-1">
+                <Text className="text-white font-nunito-semibold mb-1">
                   Moyen de paiement
                 </Text>
                 <View className="flex-row items-center">
@@ -232,7 +232,7 @@ export default function SubscriptionManagement() {
                     size={16}
                     color="#fff"
                   />
-                  <Text className="text-gray-300 font-kanit ml-2">
+                  <Text className="text-gray-300 font-nunito ml-2">
                     {subscription.paymentMethod?.brand.toUpperCase()} ****{" "}
                     {subscription.paymentMethod?.last4}
                   </Text>
@@ -240,10 +240,10 @@ export default function SubscriptionManagement() {
               </View>
 
               <View className="mb-4">
-                <Text className="text-white font-kanit-semibold mb-1">
+                <Text className="text-white font-nunito-semibold mb-1">
                   Prochain renouvellement
                 </Text>
-                <Text className="text-gray-300 font-kanit">
+                <Text className="text-gray-300 font-nunito">
                   {subscription.cancelAtPeriodEnd
                     ? `Se termine le ${formatDate(
                         subscription.currentPeriodEnd
@@ -257,7 +257,7 @@ export default function SubscriptionManagement() {
                   onPress={handleCancelSubscription}
                   className="bg-background py-3 rounded-xl items-center mt-2"
                 >
-                  <Text className="text-white font-kanit">
+                  <Text className="text-white font-nunito">
                     Annuler l'abonnement
                   </Text>
                 </Pressable>
@@ -271,17 +271,17 @@ export default function SubscriptionManagement() {
                 color="#126C52"
                 className="mb-4"
               />
-              <Text className="text-white text-center font-kanit-semibold text-lg mb-3">
+              <Text className="text-white text-center font-nunito-semibold text-lg mb-3">
                 Vous n'avez pas d'abonnement actif
               </Text>
-              <Text className="text-gray-300 text-center font-kanit mb-5">
+              <Text className="text-gray-300 text-center font-nunito mb-5">
                 Découvrez tous les avantages de RunMate Premium
               </Text>
               <Pressable
                 onPress={() => router.push("/premium")}
                 className="bg-purple px-6 py-3 rounded-xl"
               >
-                <Text className="text-white font-kanit-bold">
+                <Text className="text-white font-nunito-bold">
                   Devenir Premium
                 </Text>
               </Pressable>
@@ -292,7 +292,7 @@ export default function SubscriptionManagement() {
         {/* Historique de paiements */}
         {paymentHistory.length > 0 && (
           <View className="mb-10">
-            <Text className="text-xl font-kanit-semibold text-white mb-4">
+            <Text className="text-xl font-nunito-semibold text-white mb-4">
               Historique des paiements
             </Text>
 
@@ -307,16 +307,16 @@ export default function SubscriptionManagement() {
                   }`}
                 >
                   <View>
-                    <Text className="text-white font-kanit mb-1">
+                    <Text className="text-white font-nunito mb-1">
                       {payment.description}
                     </Text>
-                    <Text className="text-gray-400 font-kanit text-xs">
+                    <Text className="text-gray-400 font-nunito text-xs">
                       {formatDate(payment.date)}
                     </Text>
                   </View>
                   <View className="flex-row items-center">
                     <Text
-                      className={`font-kanit-semibold mr-2 ${
+                      className={`font-nunito-semibold mr-2 ${
                         payment.status === "succeeded"
                           ? "text-white"
                           : payment.status === "pending"

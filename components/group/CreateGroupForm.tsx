@@ -90,7 +90,7 @@ export function CreateGroupForm() {
     <View className="flex-1">
       <View className="space-y-5">
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Image de couverture</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Image de couverture</Text>
           <Pressable
             onPress={handleImagePick}
             className="bg-white rounded-2xl overflow-hidden h-48 items-center justify-center border-2 border-dashed border-gray-300"
@@ -113,7 +113,7 @@ export function CreateGroupForm() {
                 <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
                   <Ionicons name="image-outline" size={32} color="#A78BFA" />
                 </View>
-                <Text className="text-gray-600 font-kanit-medium text-base">
+                <Text className="text-gray-600 font-nunito-medium text-base">
                   Ajouter une image de couverture
                 </Text>
               </View>
@@ -122,9 +122,9 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Nom du groupe</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Nom du groupe</Text>
           <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-kanit-medium"
+            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
             placeholder="Ex: Coureurs du dimanche"
             placeholderTextColor="#9CA3AF"
             value={form.name}
@@ -140,9 +140,9 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Description</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Description</Text>
           <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-kanit-medium"
+            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
             placeholder="Décrivez votre groupe"
             placeholderTextColor="#9CA3AF"
             multiline
@@ -161,9 +161,9 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Localisation</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Localisation</Text>
           <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-kanit-medium"
+            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
             placeholder="Ex: Paris, France"
             placeholderTextColor="#9CA3AF"
             value={form.location}
@@ -179,9 +179,9 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Niveau</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Niveau</Text>
           <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-kanit-medium"
+            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
             placeholder="Ex: Débutant, Intermédiaire, Avancé"
             placeholderTextColor="#9CA3AF"
             value={form.level}
@@ -197,9 +197,9 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Nombre de membres</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Nombre de membres</Text>
           <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-kanit-medium"
+            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
             placeholder="Ex: 10"
             placeholderTextColor="#9CA3AF"
             value={form.max_members.toString()}
@@ -218,7 +218,7 @@ export function CreateGroupForm() {
         </View>
 
         <View>
-          <Text className="text-gray-900 font-kanit-bold text-base mb-2">Inviter des membres</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Inviter des membres</Text>
           <UserSearch
             onSelectUser={handleUserSelect}
             selectedUsers={selectedUsers}
@@ -239,7 +239,7 @@ export function CreateGroupForm() {
             elevation: 4,
           }}
         >
-          <Text className="text-white text-center font-kanit-bold text-lg">
+          <Text className="text-white text-center font-nunito-bold text-lg">
             {isLoading ? "Création..." : "Créer le groupe"}
           </Text>
         </Pressable>

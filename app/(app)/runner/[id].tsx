@@ -72,7 +72,7 @@ const CollapsibleSection = ({
           <StyledView className="bg-tertiary p-2.5 rounded-xl">
             <Ionicons name={icon as any} size={18} color="#FF6B4A" />
           </StyledView>
-          <StyledText className="text-gray-900 ml-3 font-kanit-bold">
+          <StyledText className="text-gray-900 ml-3 font-nunito-bold">
             {title}
           </StyledText>
         </StyledView>
@@ -195,7 +195,7 @@ export default function RunnerProfileScreen() {
             >
               <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
             </StyledPressable>
-            <StyledText className="text-xl font-kanit-bold text-gray-900 ml-3">
+            <StyledText className="text-xl font-nunito-extrabold text-gray-900 ml-3">
               Profil Runner
             </StyledText>
           </StyledView>
@@ -211,11 +211,11 @@ export default function RunnerProfileScreen() {
                 className="w-32 h-32 rounded-full border-4 border-primary"
             />
             </StyledView>
-            <StyledText className="text-3xl font-kanit-bold text-gray-900 mt-2">
+            <StyledText className="text-3xl font-nunito-extrabold text-gray-900 mt-2">
               {runner.first_name} {runner.last_name}
             </StyledText>
 
-            <StyledText className="text-lg text-gray-600 mt-1 font-kanit-medium">
+            <StyledText className="text-lg text-gray-600 mt-1 font-nunito-medium">
               {runner.age} ans
             </StyledText>
 
@@ -223,7 +223,7 @@ export default function RunnerProfileScreen() {
               <View className="w-5 h-5 rounded-full bg-tertiary items-center justify-center mr-2">
                 <Ionicons name="location" size={12} color="#A78BFA" />
               </View>
-              <StyledText className="text-gray-700 font-kanit-medium">
+              <StyledText className="text-gray-700 font-nunito-medium">
                 {runner.city}, {runner.department}
               </StyledText>
             </StyledView>
@@ -231,7 +231,7 @@ export default function RunnerProfileScreen() {
             {/* Bio */}
             {runner.bio && (
               <StyledView className="mt-6 px-4">
-                <StyledText className="text-gray-600 text-center italic font-kanit-medium">
+                <StyledText className="text-gray-600 text-center italic font-nunito-medium">
                 "{runner.bio}"
               </StyledText>
               </StyledView>
@@ -251,7 +251,7 @@ export default function RunnerProfileScreen() {
                     runner.runner_profile.running_type === "chill"
                       ? "text-primary"
                       : "text-secondary"
-                  } text-sm font-kanit-bold`}
+                  } text-sm font-nunito-bold`}
                 >
                   {runner.runner_profile.running_type === "chill"
                     ? "Runner Chill"
@@ -262,7 +262,7 @@ export default function RunnerProfileScreen() {
               {runner.runner_profile.flexible && (
                 <StyledView className="bg-tertiary border border-secondary px-4 py-2 rounded-full flex-row items-center">
                   <Ionicons name="leaf-outline" size={16} color="#A78BFA" />
-                  <StyledText className="text-secondary ml-2 text-sm font-kanit-bold">
+                  <StyledText className="text-secondary ml-2 text-sm font-nunito-bold">
                     Flexible
                   </StyledText>
                 </StyledView>
@@ -281,10 +281,10 @@ export default function RunnerProfileScreen() {
                 <StyledView className="bg-white p-2.5 rounded-full mb-2">
                   <Ionicons name="walk-outline" size={18} color="#FF6B4A" />
                 </StyledView>
-                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
+                <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
                   Pace
                 </StyledText>
-                <StyledText className="text-primary text-base font-kanit-bold">
+                <StyledText className="text-primary text-base font-nunito-bold">
                   {runner.runner_profile.actual_pace} min/km
                 </StyledText>
               </StyledView>
@@ -294,12 +294,12 @@ export default function RunnerProfileScreen() {
                 <StyledView className="bg-white p-2.5 rounded-full mb-2">
                   <Ionicons name="resize-outline" size={18} color="#A78BFA" />
                 </StyledView>
-                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
+                <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
                   {runner.runner_profile.running_type === "perf"
                     ? "Distance/semaine"
                     : "Distance"}
                 </StyledText>
-                <StyledText className="text-secondary text-base font-kanit-bold">
+                <StyledText className="text-secondary text-base font-nunito-bold">
                   {runner.runner_profile.running_type === "perf"
                     ? `${runner.runner_profile.weekly_mileage || 0} km/sem`
                     : `${runner.runner_profile.usual_distance || 0} km`}
@@ -319,12 +319,12 @@ export default function RunnerProfileScreen() {
                     <Ionicons name="repeat-outline" size={18} color="#A78BFA" />
                   )}
                 </StyledView>
-                <StyledText className="text-gray-600 text-center text-xs font-kanit-medium mb-1">
+                <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
                   {runner.runner_profile.running_type === "perf"
                     ? "Target Pace"
                     : "Fréquence"}
                 </StyledText>
-                <StyledText className={`${runner.runner_profile.running_type === "perf" ? "text-primary" : "text-secondary"} text-base font-kanit-bold`}>
+                <StyledText className={`${runner.runner_profile.running_type === "perf" ? "text-primary" : "text-secondary"} text-base font-nunito-bold`}>
                   {runner.runner_profile.running_type === "perf"
                     ? `${runner.runner_profile.target_pace || "N/A"}`
                     : `${
@@ -357,11 +357,11 @@ export default function RunnerProfileScreen() {
                           color="#FF6B4A"
                       />
                       </View>
-                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                      <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                         Objectifs de compétition
                       </StyledText>
                     </StyledView>
-                    <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
+                    <StyledText className="text-gray-600 ml-8 text-sm font-nunito-medium">
                       {Array.isArray(competitionGoals)
                         ? competitionGoals.map(formatCompetitionGoal).join(", ")
                         : typeof competitionGoals === "string"
@@ -382,7 +382,7 @@ export default function RunnerProfileScreen() {
                           color="#A78BFA"
                       />
                       </View>
-                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                      <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                         Jours d'entraînement
                       </StyledText>
                     </StyledView>
@@ -392,7 +392,7 @@ export default function RunnerProfileScreen() {
                           key={index}
                           className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2 mb-2"
                         >
-                          <StyledText className="text-primary text-xs font-kanit-bold">
+                          <StyledText className="text-primary text-xs font-nunito-bold">
                             {capitalize(day)}
                           </StyledText>
                         </StyledView>
@@ -415,11 +415,11 @@ export default function RunnerProfileScreen() {
                     <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                       <Ionicons name="trophy-outline" size={16} color="#FF6B4A" />
                     </View>
-                    <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                    <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                       Objectif
                     </StyledText>
                   </StyledView>
-                  <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
+                  <StyledText className="text-gray-600 ml-8 text-sm font-nunito-medium">
                     {typeof objective === "string"
                       ? objective.charAt(0).toUpperCase() + objective.slice(1)
                       : Array.isArray(objective)
@@ -440,7 +440,7 @@ export default function RunnerProfileScreen() {
                         color="#A78BFA"
                     />
                     </View>
-                    <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                    <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                       Disponibilités
                     </StyledText>
                   </StyledView>
@@ -451,13 +451,13 @@ export default function RunnerProfileScreen() {
                           key={index}
                           className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                         >
-                          <StyledText className="text-secondary text-xs font-kanit-bold text-center">
+                          <StyledText className="text-secondary text-xs font-nunito-bold text-center">
                             {capitalize(day)}
                           </StyledText>
                         </StyledView>
                       ))
                     ) : (
-                      <StyledText className="text-gray-500 text-sm font-kanit-medium">
+                      <StyledText className="text-gray-500 text-sm font-nunito-medium">
                         Aucune disponibilité renseignée
                       </StyledText>
                     )}
@@ -476,7 +476,7 @@ export default function RunnerProfileScreen() {
                             color="#A78BFA"
                         />
                         </View>
-                        <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                        <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                           Moments préférés
                         </StyledText>
                       </StyledView>
@@ -486,7 +486,7 @@ export default function RunnerProfileScreen() {
                             key={index}
                             className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-secondary text-xs font-kanit-bold">
+                            <StyledText className="text-secondary text-xs font-nunito-bold">
                               {time}
                             </StyledText>
                           </StyledView>
@@ -512,7 +512,7 @@ export default function RunnerProfileScreen() {
                           color="#A78BFA"
                       />
                       </View>
-                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                      <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                         Préférences sociales
                       </StyledText>
                     </StyledView>
@@ -523,7 +523,7 @@ export default function RunnerProfileScreen() {
                             key={index}
                             className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-secondary text-xs font-kanit-bold">
+                            <StyledText className="text-secondary text-xs font-nunito-bold">
                               {pref}
                             </StyledText>
                           </StyledView>
@@ -539,7 +539,7 @@ export default function RunnerProfileScreen() {
                       <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                         <Ionicons name="cafe-outline" size={16} color="#FF6B4A" />
                       </View>
-                      <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                      <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                         Après la course
                       </StyledText>
                     </StyledView>
@@ -550,7 +550,7 @@ export default function RunnerProfileScreen() {
                             key={index}
                             className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2 mb-2"
                           >
-                            <StyledText className="text-primary text-xs font-kanit-bold">
+                            <StyledText className="text-primary text-xs font-nunito-bold">
                               {activity}
                             </StyledText>
                           </StyledView>
@@ -574,11 +574,11 @@ export default function RunnerProfileScreen() {
                 <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                   <Ionicons name="pulse-outline" size={16} color="#FF6B4A" />
                 </View>
-                <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                   Dernière activité
                 </StyledText>
               </StyledView>
-              <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
+              <StyledText className="text-gray-600 ml-8 text-sm font-nunito-medium">
                 {(runner as any).last_active_at
                   ? new Date((runner as any).last_active_at).toLocaleDateString(
                       "fr-FR"
@@ -593,11 +593,11 @@ export default function RunnerProfileScreen() {
                 <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
                   <Ionicons name="create-outline" size={16} color="#A78BFA" />
                 </View>
-                <StyledText className="text-gray-900 ml-1 font-kanit-bold">
+                <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                   Membre depuis
                 </StyledText>
               </StyledView>
-              <StyledText className="text-gray-600 ml-8 text-sm font-kanit-medium">
+              <StyledText className="text-gray-600 ml-8 text-sm font-nunito-medium">
                 {(runner as any).created_at
                   ? new Date((runner as any).created_at).toLocaleDateString(
                       "fr-FR"
@@ -623,7 +623,7 @@ export default function RunnerProfileScreen() {
           onPress={handleSendMessage}
         >
           <Ionicons name="chatbubble-outline" size={20} color="white" />
-          <StyledText className="text-white font-kanit-bold ml-2">
+          <StyledText className="text-white font-nunito-bold ml-2">
             Envoyer un message
           </StyledText>
         </StyledPressable>

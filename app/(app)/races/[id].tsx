@@ -149,7 +149,7 @@ export default function RaceDetailsScreen() {
                       color="#DC2626"
                       style={{ marginRight: 6 }}
                     />
-                    <Text className="text-red-600 font-kanit-bold text-sm">
+                    <Text className="text-red-600 font-nunito-bold text-sm">
                       Course terminée
                     </Text>
                   </View>
@@ -162,19 +162,19 @@ export default function RaceDetailsScreen() {
                     color="#A78BFA"
                     style={{ marginRight: 6 }}
                   />
-                  <Text className="text-secondary font-kanit-bold text-sm">
+                  <Text className="text-secondary font-nunito-bold text-sm">
                     Dans {countdown.days} jour{countdown.days > 1 ? "s" : ""}
                   </Text>
                 </View>
               )}
             </View>
-            <Text className="text-gray-900 font-kanit-bold text-3xl mb-3">
+            <Text className="text-gray-900 font-nunito-black text-3xl mb-3">
               {race.name}
             </Text>
             {race.distances && race.distances.length > 0 && (
               <View className="flex-row items-center mb-2">
                 <Ionicons name="trophy" size={18} color="#F59E0B" />
-                <Text className="text-gray-600 font-kanit-medium text-sm ml-2">
+                <Text className="text-gray-600 font-nunito-medium text-sm ml-2">
                   {race.distances.length} distance{race.distances.length > 1 ? "s" : ""} disponible{race.distances.length > 1 ? "s" : ""}
                 </Text>
               </View>
@@ -192,7 +192,7 @@ export default function RaceDetailsScreen() {
               elevation: 2,
             }}
           >
-            <Text className="text-gray-900 font-kanit-bold text-lg mb-4">
+            <Text className="text-gray-900 font-nunito-extrabold text-lg mb-4">
               Informations de la course
             </Text>
             <View className="space-y-4">
@@ -201,10 +201,10 @@ export default function RaceDetailsScreen() {
                   <Ionicons name="calendar" size={22} color="#FF6B4A" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-500 font-kanit-medium text-xs mb-1">
+                  <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
                     Date de la course
                   </Text>
-                  <Text className="text-gray-900 font-kanit-bold text-base">
+                  <Text className="text-gray-900 font-nunito-bold text-base">
                     {formatDate(race.start_date)}
                   </Text>
                 </View>
@@ -217,10 +217,10 @@ export default function RaceDetailsScreen() {
                   <Ionicons name="location" size={22} color="#A78BFA" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-500 font-kanit-medium text-xs mb-1">
+                  <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
                     Localisation
                   </Text>
-                  <Text className="text-gray-900 font-kanit-bold text-base">
+                  <Text className="text-gray-900 font-nunito-bold text-base">
                     {race.location}
                   </Text>
                 </View>
@@ -235,7 +235,7 @@ export default function RaceDetailsScreen() {
                       <Ionicons name="flag" size={22} color="#FF6B4A" />
                     </View>
                     <View className="flex-1">
-                      <Text className="text-gray-500 font-kanit-medium text-xs mb-2">
+                      <Text className="text-gray-900 font-nunito-extrabold text-sm mb-2">
                         Distances disponibles
                       </Text>
                       <View className="flex-row flex-wrap" style={{ gap: 8 }}>
@@ -251,7 +251,7 @@ export default function RaceDetailsScreen() {
                               elevation: 2,
                             }}
                           >
-                            <Text className="text-white font-kanit-bold text-sm">
+                            <Text className="text-white font-nunito-bold text-sm">
                               {formatDistance(distance)}
                             </Text>
                           </View>
@@ -276,10 +276,10 @@ export default function RaceDetailsScreen() {
                 elevation: 2,
               }}
             >
-              <Text className="text-gray-900 font-kanit-bold text-lg mb-3">
+              <Text className="text-gray-900 font-nunito-extrabold text-lg mb-3">
                 Description
               </Text>
-              <Text className="text-gray-600 font-kanit-medium leading-6">
+              <Text className="text-gray-600 font-nunito-medium leading-6">
                 {race.description}
               </Text>
             </View>

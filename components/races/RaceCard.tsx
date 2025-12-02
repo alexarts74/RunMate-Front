@@ -72,14 +72,14 @@ export const RaceCard = ({ race }: { race: Race }) => {
                 color="#A78BFA"
                 style={{ marginRight: 4 }}
               />
-              <Text className="text-secondary font-kanit-bold text-xs">
+              <Text className="text-secondary font-nunito-bold text-xs">
                 Dans {daysUntil} jour{daysUntil > 1 ? "s" : ""}
               </Text>
             </View>
           </View>
         )}
 
-        <Text className="text-gray-900 font-kanit-bold text-xl mb-4">
+        <Text className="text-gray-900 font-nunito-extrabold text-xl mb-4">
           {race.name}
         </Text>
 
@@ -88,7 +88,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
               <Ionicons name="calendar" size={16} color="#FF6B4A" />
             </View>
-            <Text className="text-gray-700 font-kanit-medium">
+            <Text className="text-gray-700 font-nunito-medium">
               {formatDate(race.start_date)}
             </Text>
           </View>
@@ -97,7 +97,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
               <Ionicons name="location" size={16} color="#A78BFA" />
             </View>
-            <Text className="text-gray-700 font-kanit-medium flex-1">
+            <Text className="text-gray-700 font-nunito-medium flex-1">
               {race.location}
             </Text>
           </View>
@@ -114,7 +114,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
                     key={index}
                     className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-lg"
                   >
-                    <Text className="text-primary font-kanit-bold text-xs">
+                    <Text className="text-primary font-nunito-bold text-xs">
                       {formatDistance(distance)}
                     </Text>
                   </View>
@@ -125,7 +125,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
         </View>
 
         {race.description && (
-          <Text className="text-gray-600 mb-4 font-kanit-medium text-sm leading-5">
+          <Text className="text-gray-600 mb-4 font-nunito-medium text-sm leading-5">
             {race.description.slice(0, 120)}
             {race.description.length > 120 ? "..." : ""}
           </Text>
@@ -143,7 +143,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
           }}
           android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
         >
-          <Text className="text-center text-white font-kanit-bold">
+          <Text className="text-center text-white font-nunito-bold">
             Voir les détails
           </Text>
         </Pressable>

@@ -73,7 +73,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
       >
         <Ionicons name="search" size={20} color="#FF6B4A" style={{ marginRight: 8 }} />
         <TextInput
-          className="flex-1 text-gray-900 p-4 font-kanit-medium"
+          className="flex-1 text-gray-900 p-4 font-nunito-medium"
           placeholder="Rechercher des participants..."
           placeholderTextColor="#9CA3AF"
           value={searchQuery}
@@ -126,7 +126,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                     source={{ uri: item.profile_image }}
                     className="w-10 h-10 rounded-full border border-gray-200"
                   />
-                  <Text className="text-gray-900 ml-3 font-kanit-medium">
+                  <Text className="text-gray-900 ml-3 font-nunito-medium">
                     {item.first_name} {item.last_name}
                   </Text>
                 </Pressable>
@@ -138,7 +138,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
 
       {selectedUsers.length > 0 && (
         <View className="mt-4">
-          <Text className="text-gray-900 font-kanit-bold text-base mb-3">Participants invités</Text>
+          <Text className="text-gray-900 font-nunito-bold text-base mb-3">Participants invités</Text>
           <View className="flex-row flex-wrap gap-2">
             {selectedUsers.map((user) => (
               <View
@@ -156,7 +156,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                   source={{ uri: user.profile_image }}
                   className="w-6 h-6 rounded-full border border-gray-200"
                 />
-                <Text className="text-gray-700 mx-2 font-kanit-medium text-sm">{user.first_name}</Text>
+                <Text className="text-gray-700 mx-2 font-nunito-medium text-sm">{user.first_name}</Text>
                 <Pressable onPress={() => onSelectUser(user)}>
                   <Ionicons name="close-circle" size={18} color="#FF6B4A" />
                 </Pressable>

@@ -90,10 +90,10 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
         <View className="flex-row justify-between items-start">
           {/* Nom et âge - en haut à gauche */}
           <View>
-            <Text className="text-white text-2xl font-kanit-bold mb-1 drop-shadow-lg">
+            <Text className="text-white text-2xl font-nunito-extrabold mb-1 drop-shadow-lg">
               {match.user.first_name}
             </Text>
-            <Text className="text-white/90 text-lg font-kanit drop-shadow-lg">
+            <Text className="text-white/90 text-lg font-nunito drop-shadow-lg">
               {match.user.age} ans
             </Text>
           </View>
@@ -106,7 +106,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
               className="px-3 py-2 overflow-hidden"
               style={{ borderRadius: 16 }}
             >
-              <Text className="text-white text-xs font-kanit-semibold">
+              <Text className="text-white text-xs font-nunito-semibold">
                 {distanceKm} km
               </Text>
             </BlurView>
@@ -124,14 +124,14 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
             {/* Ville */}
         {/* <View className="flex-row items-center">
               <Ionicons name="location" size={14} color="#126C52" />
-              <Text className="text-white text-sm font-kanit ml-2">
+              <Text className="text-white text-sm font-nunito ml-2">
                 {match.user.city}
               </Text>
             </View> */}
 
         {/* Type de runner avec emoji */}
         {/* <View className="flex-row items-center">
-              <Text className="text-sm font-kanit-semibold text-white">
+              <Text className="text-sm font-nunito-semibold text-white">
                 {isChillRunner ? "🌿 Runner détente" : "⚡ Runner performance"}
               </Text>
             </View> */}
@@ -141,7 +141,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
               ? runningFrequency && (
                   <View className="flex-row items-center">
                     <Ionicons name="time" size={14} color="#126C52" />
-                    <Text className="text-white text-sm font-kanit ml-2">
+                    <Text className="text-white text-sm font-nunito ml-2">
                       {formatRunningFrequency()}
                     </Text>
                   </View>
@@ -149,7 +149,7 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
               : actualPace && (
                   <View className="flex-row items-center">
                     <Ionicons name="speedometer" size={14} color="#126C52" />
-                    <Text className="text-white text-sm font-kanit ml-2">
+                    <Text className="text-white text-sm font-nunito ml-2">
                       {actualPace} min/km
                     </Text>
                   </View>

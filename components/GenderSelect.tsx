@@ -45,7 +45,7 @@ export function GenderSelect({ value, onChange }: Props) {
         }}
         inputStyles={{ 
           color: "#111827",
-          fontFamily: "Kanit-Medium",
+          fontFamily: "Nunito-Medium",
         }}
         dropdownStyles={{
           backgroundColor: "#ffffff",
@@ -61,7 +61,7 @@ export function GenderSelect({ value, onChange }: Props) {
         }}
         dropdownTextStyles={{ 
           color: "#111827",
-          fontFamily: "Kanit-Medium",
+          fontFamily: "Nunito-Medium",
         }}
         dropdownItemStyles={{
           borderBottomColor: "#F3F4F6",

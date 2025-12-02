@@ -39,7 +39,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
             {/* Header */}
             <View className="px-6 py-5 bg-white border-b border-gray-100">
               <View className="flex-row items-center justify-between">
-                <Text className="text-2xl font-kanit-bold text-gray-900">
+                <Text className="text-2xl font-nunito-extrabold text-gray-900">
                   Créer
                 </Text>
                 <Pressable
@@ -69,10 +69,10 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                     <Ionicons name="calendar" size={24} color="#FF6B4A" />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-gray-900 font-kanit-bold text-base">
+                    <Text className="text-gray-900 font-nunito-bold text-base">
                       Créer un événement
                     </Text>
-                    <Text className="text-gray-500 font-kanit-medium text-xs mt-0.5">
+                    <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
                       Organisez une course
                     </Text>
                   </View>
@@ -100,10 +100,10 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                     <Ionicons name="people" size={24} color="#A78BFA" />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-gray-900 font-kanit-bold text-base">
+                    <Text className="text-gray-900 font-nunito-bold text-base">
                       Créer un groupe
                     </Text>
-                    <Text className="text-gray-500 font-kanit-medium text-xs mt-0.5">
+                    <Text className="text-gray-500 font-nunito-medium text-xs mt-0.5">
                       Rejoignez des coureurs
                     </Text>
                   </View>
@@ -122,7 +122,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                 onPress={onClose}
                 className="py-3 rounded-xl bg-gray-100"
               >
-                <Text className="text-center text-gray-700 font-kanit-bold text-base">
+                <Text className="text-center text-gray-700 font-nunito-bold text-base">
                   Annuler
                 </Text>
               </Pressable>

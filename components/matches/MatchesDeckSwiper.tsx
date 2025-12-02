@@ -98,7 +98,7 @@ export function MatchesDeckSwiper() {
         <View className="px-5 pt-6 pb-3">
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
-              <Text className="text-2xl font-kanit-semibold text-white">
+              <Text className="text-2xl font-nunito-semibold text-white">
                 Vos matches
               </Text>
             </View>
@@ -120,7 +120,7 @@ export function MatchesDeckSwiper() {
             color="#126C52"
             style={{ marginBottom: 16 }}
           />
-          <Text className="text-gray-300 text-center text-base font-kanit mb-4">
+          <Text className="text-gray-300 text-center text-base font-nunito mb-4">
             Aucun coureur ne correspond à vos critères actuels.
           </Text>
           <Pressable
@@ -128,7 +128,7 @@ export function MatchesDeckSwiper() {
             className="bg-purple rounded-xl px-6 py-3 flex-row items-center"
           >
             <Ionicons name="locate" size={18} color="white" />
-            <Text className="text-white font-kanit-semibold ml-2">
+            <Text className="text-white font-nunito-semibold ml-2">
               Élargir la recherche
             </Text>
           </Pressable>
@@ -143,11 +143,11 @@ export function MatchesDeckSwiper() {
       <View className="px-5 pt-6 pb-3">
         <View className="flex-row justify-between items-center">
           <View className="flex-row items-center">
-            <Text className="text-2xl font-kanit-semibold text-white">
+            <Text className="text-2xl font-nunito-semibold text-white">
               Vos matches
             </Text>
             <View className="bg-purple/20 px-2.5 py-1 rounded-full ml-3">
-              <Text className="text-purple text-sm font-kanit-semibold">
+              <Text className="text-purple text-sm font-nunito-semibold">
                 {matches.length}
               </Text>
             </View>

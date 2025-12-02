@@ -56,7 +56,7 @@ export function EventsSection() {
       <View className="flex-row justify-between items-center mb-3">
         <View className="flex-row items-center">
           <View className="w-1 h-6 bg-greenLight rounded-full mr-3" />
-          <Text className="text-xl font-kanit-semibold text-white">
+          <Text className="text-xl font-nunito-semibold text-white">
             📅 Événements à venir
           </Text>
         </View>
@@ -65,7 +65,7 @@ export function EventsSection() {
           onPress={handleSeeAll}
           className="flex-row items-center bg-purple/10 px-3 py-1 rounded-full"
         >
-          <Text className="text-greenLight font-kanit text-sm mr-1">
+          <Text className="text-greenLight font-nunito text-sm mr-1">
             Voir tout
           </Text>
           <Ionicons name="arrow-forward" size={14} color="#126C52" />
@@ -84,7 +84,7 @@ export function EventsSection() {
               <Ionicons name="calendar" size={24} color="#126C52" />
             </View>
             <View className="flex-1">
-              <Text className="text-white font-kanit-semibold text-base mb-1">
+              <Text className="text-white font-nunito-semibold text-base mb-1">
                 Participez à des événements
               </Text>
               <Text className="text-gray-400 text-xs">
@@ -96,7 +96,7 @@ export function EventsSection() {
             onPress={() => router.push("/premium")}
             className="bg-purple rounded-xl py-3 items-center"
           >
-            <Text className="text-white font-kanit-semibold">
+            <Text className="text-white font-nunito-semibold">
               Débloquer Premium
             </Text>
           </Pressable>
@@ -104,7 +104,7 @@ export function EventsSection() {
       ) : events.length === 0 ? (
         <View className="bg-background rounded-2xl p-5 items-center border border-gray-700">
           <Ionicons name="calendar-outline" size={36} color="#126C52" />
-          <Text className="text-white text-center font-kanit mt-2 mb-1">
+          <Text className="text-white text-center font-nunito mt-2 mb-1">
             Aucun événement
           </Text>
           <Text className="text-gray-400 text-center text-sm">
@@ -122,7 +122,7 @@ export function EventsSection() {
               <View className="flex-row items-start justify-between mb-2">
                 <View className="flex-1 mr-3">
                   <Text
-                    className="text-white font-kanit-semibold text-base mb-1"
+                    className="text-white font-nunito-semibold text-base mb-1"
                     numberOfLines={1}
                   >
                     {event.name}
@@ -132,7 +132,7 @@ export function EventsSection() {
                   </Text>
                 </View>
                 <View className="bg-purple/20 px-3 py-1 rounded-full">
-                  <Text className="text-greenLight text-xs font-kanit-semibold">
+                  <Text className="text-greenLight text-xs font-nunito-semibold">
                     {formatDate(event.start_date)}
                   </Text>
                 </View>

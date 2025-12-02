@@ -68,7 +68,7 @@ export function FiltersContent() {
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
             <Ionicons name="person-outline" size={20} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-lg font-kanit-bold">Âge</Text>
+          <Text className="text-gray-900 text-lg font-nunito-bold">Âge</Text>
         </View>
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
@@ -79,7 +79,7 @@ export function FiltersContent() {
             elevation: 3,
           }}
         >
-          <Text className="text-gray-900 mb-3 font-kanit-bold text-base">
+          <Text className="text-gray-900 mb-3 font-nunito-bold text-base">
             Entre {filters.age_min} et {filters.age_max} ans
           </Text>
           <MultiSlider
@@ -116,8 +116,8 @@ export function FiltersContent() {
             }}
           />
           <View className="flex-row justify-between mt-3">
-            <Text className="text-gray-500 text-sm font-kanit-medium">18 ans</Text>
-            <Text className="text-gray-500 text-sm font-kanit-medium">80 ans</Text>
+            <Text className="text-gray-500 text-sm font-nunito-medium">18 ans</Text>
+            <Text className="text-gray-500 text-sm font-nunito-medium">80 ans</Text>
           </View>
         </View>
       </View>
@@ -127,7 +127,7 @@ export function FiltersContent() {
           <View className="bg-secondary/10 p-2 rounded-xl mr-3">
             <Ionicons name="fitness-outline" size={20} color="#A78BFA" />
           </View>
-          <Text className="text-gray-900 text-lg font-kanit-bold">Type de runner</Text>
+          <Text className="text-gray-900 text-lg font-nunito-bold">Type de runner</Text>
         </View>
         <View className="bg-white p-4 rounded-2xl border border-gray-200"
           style={{
@@ -162,7 +162,7 @@ export function FiltersContent() {
                 }}
               >
                 <Text
-                  className={`text-center font-kanit-bold text-base ${
+                  className={`text-center font-nunito-bold text-base ${
                     filters.running_type === option.value
                       ? "text-white"
                       : "text-gray-600"
@@ -181,7 +181,7 @@ export function FiltersContent() {
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
             <Ionicons name="male-female-outline" size={20} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-lg font-kanit-bold">Genre</Text>
+          <Text className="text-gray-900 text-lg font-nunito-bold">Genre</Text>
         </View>
         <Pressable
           onPress={() => setShowGenderModal(true)}
@@ -194,7 +194,7 @@ export function FiltersContent() {
             elevation: 3,
           }}
         >
-          <Text className="text-gray-900 font-kanit-medium">
+          <Text className="text-gray-900 font-nunito-medium">
             {genderOptions.find((opt) => opt.value === filters.gender)?.label ||
               "Sélectionner"}
           </Text>
@@ -207,7 +207,7 @@ export function FiltersContent() {
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
             <Ionicons name="location-outline" size={20} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-lg font-kanit-bold">Distance maximale</Text>
+          <Text className="text-gray-900 text-lg font-nunito-bold">Distance maximale</Text>
         </View>
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
@@ -218,7 +218,7 @@ export function FiltersContent() {
             elevation: 3,
           }}
         >
-          <Text className="text-gray-900 mb-3 font-kanit-bold text-base">{filters.distance} km</Text>
+          <Text className="text-gray-900 mb-3 font-nunito-bold text-base">{filters.distance} km</Text>
           <Slider
             value={filters.distance}
             onValueChange={(value: number) =>
@@ -232,8 +232,8 @@ export function FiltersContent() {
             thumbTintColor="#FF6B4A"
           />
           <View className="flex-row justify-between mt-3">
-            <Text className="text-gray-500 text-sm font-kanit-medium">1 km</Text>
-            <Text className="text-gray-500 text-sm font-kanit-medium">100 km</Text>
+            <Text className="text-gray-500 text-sm font-nunito-medium">1 km</Text>
+            <Text className="text-gray-500 text-sm font-nunito-medium">100 km</Text>
           </View>
         </View>
       </View>
@@ -243,7 +243,7 @@ export function FiltersContent() {
           <View className="bg-secondary/10 p-2 rounded-xl mr-3">
             <Ionicons name="star-outline" size={20} color="#A78BFA" />
           </View>
-          <Text className="text-gray-900 text-lg font-kanit-bold">
+          <Text className="text-gray-900 text-lg font-nunito-bold">
             Critères de compatibilité
           </Text>
         </View>
@@ -258,7 +258,7 @@ export function FiltersContent() {
         >
           {/* Critères communs */}
           <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
-            <Text className="text-gray-900 font-kanit-medium flex-1">Rythme similaire</Text>
+            <Text className="text-gray-900 font-nunito-medium flex-1">Rythme similaire</Text>
             <Switch
               value={filters.filter_pace}
               onValueChange={(value) =>
@@ -273,7 +273,7 @@ export function FiltersContent() {
           {filters.running_type === "perf" ? (
             <>
               <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
-                <Text className="text-gray-900 font-kanit-medium flex-1">
+                <Text className="text-gray-900 font-nunito-medium flex-1">
                   Objectifs de compétition similaires
                 </Text>
                 <Switch
@@ -289,7 +289,7 @@ export function FiltersContent() {
                 />
               </View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-gray-900 font-kanit-medium flex-1">
+                <Text className="text-gray-900 font-nunito-medium flex-1">
                   Jours d'entraînement similaires
                 </Text>
                 <Switch
@@ -308,7 +308,7 @@ export function FiltersContent() {
           ) : (
             <>
               <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-100">
-                <Text className="text-gray-900 font-kanit-medium flex-1">Disponibilités similaires</Text>
+                <Text className="text-gray-900 font-nunito-medium flex-1">Disponibilités similaires</Text>
                 <Switch
                   value={filters.filter_availability}
                   onValueChange={(value) =>
@@ -322,7 +322,7 @@ export function FiltersContent() {
                 />
               </View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-gray-900 font-kanit-medium flex-1">
+                <Text className="text-gray-900 font-nunito-medium flex-1">
                   Préférences sociales similaires
                 </Text>
                 <Switch
@@ -354,7 +354,7 @@ export function FiltersContent() {
             }}
           >
             <View className="flex-row justify-between items-center mb-6">
-              <Text className="text-gray-900 text-xl font-kanit-bold">Sélectionner le genre</Text>
+              <Text className="text-gray-900 text-xl font-nunito-extrabold">Sélectionner le genre</Text>
               <Pressable 
                 onPress={() => setShowGenderModal(false)}
                 className="bg-gray-100 p-2 rounded-full"
@@ -375,9 +375,9 @@ export function FiltersContent() {
                 }}
               >
                 <Text
-                  className={`font-kanit-medium text-base ${
+                  className={`font-nunito-medium text-base ${
                     filters.gender === option.value
-                      ? "text-primary font-kanit-bold"
+                      ? "text-primary font-nunito-bold"
                       : "text-gray-900"
                   }`}
                 >

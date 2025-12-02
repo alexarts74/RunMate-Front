@@ -110,7 +110,7 @@ export default function AllEventsScreen() {
               <Text className="text-base">{item.icon}</Text>
               <Text
                 className={`${
-                  radius === item.value ? "text-white font-kanit-bold" : "text-gray-700 font-kanit-medium"
+                  radius === item.value ? "text-white font-nunito-bold" : "text-gray-700 font-nunito-medium"
                 } text-base`}
               >
                 {item.label}
@@ -130,7 +130,7 @@ export default function AllEventsScreen() {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-red-500 text-center mb-4 font-kanit-medium">{error}</Text>
+          <Text className="text-red-500 text-center mb-4 font-nunito-medium">{error}</Text>
           <Pressable
             onPress={() => loadEvents()}
             className="bg-primary px-6 py-3 rounded-xl"
@@ -142,7 +142,7 @@ export default function AllEventsScreen() {
               elevation: 4,
             }}
           >
-            <Text className="text-white font-kanit-bold">Réessayer</Text>
+            <Text className="text-white font-nunito-bold">Réessayer</Text>
           </Pressable>
         </View>
       );
@@ -154,10 +154,10 @@ export default function AllEventsScreen() {
           <View className="bg-tertiary p-8 rounded-full mb-6">
             <Ionicons name="calendar-outline" size={60} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-kanit-bold">
+          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-nunito-bold">
             Aucun événement disponible
           </Text>
-          <Text className="text-gray-500 text-center font-kanit-medium">
+          <Text className="text-gray-500 text-center font-nunito-medium">
             {radius === 1000
               ? "Aucun événement n'est disponible pour le moment."
               : `Aucun événement trouvé dans un rayon de ${radius}km.`}
@@ -186,7 +186,7 @@ export default function AllEventsScreen() {
           <Pressable onPress={() => router.back()} className="mr-3">
             <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
           </Pressable>
-          <Text className="text-2xl font-kanit-bold text-gray-900">
+          <Text className="text-2xl font-nunito-extrabold text-gray-900">
             Événements
           </Text>
         </View>

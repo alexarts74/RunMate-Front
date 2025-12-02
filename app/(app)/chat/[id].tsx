@@ -108,7 +108,7 @@ const ChatPage = () => {
         }}
       >
         <Text
-          className={`font-kanit-medium ${
+          className={`font-nunito-medium ${
             item.sender_id === user?.id ? "text-white" : "text-gray-900"
           }`}
           style={{ fontSize: 15 }}
@@ -116,7 +116,7 @@ const ChatPage = () => {
           {item.content}
         </Text>
         <Text
-          className={`text-xs font-kanit mt-1 ${
+          className={`text-xs font-nunito mt-1 ${
             item.sender_id === user?.id ? "text-white/70" : "text-gray-500"
           }`}
         >
@@ -151,7 +151,7 @@ const ChatPage = () => {
                   }
                   className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
                 />
-                <Text className="text-gray-900 font-kanit-bold text-lg flex-1">
+                <Text className="text-gray-900 font-nunito-bold text-lg flex-1">
                   {match?.user.first_name} {match?.user.last_name}
                 </Text>
               </View>
@@ -175,7 +175,7 @@ const ChatPage = () => {
                   onChangeText={setNewMessage}
                   placeholder="Votre message..."
                   placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 font-kanit"
+                  className="text-gray-900 font-nunito"
                   style={{ fontSize: 15 }}
                   multiline
                   maxLength={500}

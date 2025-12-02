@@ -142,7 +142,7 @@ export default function AllRacesScreen() {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-red-500 text-center mb-4 font-kanit-medium">
+          <Text className="text-red-500 text-center mb-4 font-nunito-medium">
             {error}
           </Text>
           <Pressable
@@ -156,7 +156,7 @@ export default function AllRacesScreen() {
               elevation: 4,
             }}
           >
-            <Text className="text-white font-kanit-bold">Réessayer</Text>
+            <Text className="text-white font-nunito-bold">Réessayer</Text>
           </Pressable>
         </View>
       );
@@ -168,10 +168,10 @@ export default function AllRacesScreen() {
           <View className="bg-tertiary p-8 rounded-full mb-6">
             <Ionicons name="trophy-outline" size={60} color="#FF6B4A" />
           </View>
-          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-kanit-bold">
+          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-nunito-bold">
             Aucune course disponible
           </Text>
-          <Text className="text-gray-500 text-center font-kanit-medium">
+          <Text className="text-gray-500 text-center font-nunito-medium">
             {locationFilter || selectedCountry || selectedDistance !== null
               ? "Aucune course ne correspond à vos critères de recherche."
               : "Aucune course n'est disponible pour le moment."}
@@ -181,7 +181,7 @@ export default function AllRacesScreen() {
               onPress={clearAllFilters}
               className="mt-4 bg-primary px-6 py-3 rounded-xl"
             >
-              <Text className="text-white font-kanit-bold">
+              <Text className="text-white font-nunito-bold">
                 Réinitialiser les filtres
               </Text>
             </Pressable>
@@ -207,7 +207,7 @@ export default function AllRacesScreen() {
             <Pressable onPress={() => router.back()} className="mr-3">
               <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
             </Pressable>
-            <Text className="text-2xl font-kanit-bold text-gray-900">
+            <Text className="text-2xl font-nunito-extrabold text-gray-900">
               Courses
             </Text>
           </View>
@@ -234,7 +234,7 @@ export default function AllRacesScreen() {
                 style={{ marginRight: 6 }}
               />
               <Text
-                className={`font-kanit-bold text-sm ${
+                className={`font-nunito-bold text-sm ${
                   activeFiltersCount > 0 ? "text-white" : "text-gray-700"
                 }`}
               >
@@ -242,7 +242,7 @@ export default function AllRacesScreen() {
               </Text>
               {activeFiltersCount > 0 && (
                 <View className="ml-2 bg-white/30 px-2 py-0.5 rounded-full">
-                  <Text className="text-white font-kanit-bold text-xs">
+                  <Text className="text-white font-nunito-bold text-xs">
                     {activeFiltersCount}
                   </Text>
                 </View>
@@ -262,7 +262,7 @@ export default function AllRacesScreen() {
               value={searchLocation}
               onChangeText={setSearchLocation}
               onSubmitEditing={handleSearch}
-              className="flex-1 ml-2 text-gray-900 font-kanit-medium"
+              className="flex-1 ml-2 text-gray-900 font-nunito-medium"
               placeholderTextColor="#9CA3AF"
             />
             {searchLocation.length > 0 && (
@@ -278,7 +278,7 @@ export default function AllRacesScreen() {
           <View className="mt-3 flex-row items-center flex-wrap" style={{ gap: 8 }}>
             {locationFilter && (
               <View className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full flex-row items-center">
-                <Text className="text-primary font-kanit-medium text-xs">
+                <Text className="text-primary font-nunito-medium text-xs">
                   {locationFilter}
                 </Text>
                 <Pressable
@@ -294,7 +294,7 @@ export default function AllRacesScreen() {
             )}
             {selectedCountry && (
               <View className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full flex-row items-center">
-                <Text className="text-primary font-kanit-medium text-xs">
+                <Text className="text-primary font-nunito-medium text-xs">
                   {selectedCountry}
                 </Text>
                 <Pressable
@@ -307,7 +307,7 @@ export default function AllRacesScreen() {
             )}
             {selectedDistance !== null && (
               <View className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full flex-row items-center">
-                <Text className="text-primary font-kanit-medium text-xs">
+                <Text className="text-primary font-nunito-medium text-xs">
                   {selectedDistance === 42.195
                     ? "Marathon"
                     : selectedDistance === 21.0975
@@ -328,7 +328,7 @@ export default function AllRacesScreen() {
             )}
             {!showFutureOnly && (
               <View className="bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full flex-row items-center">
-                <Text className="text-primary font-kanit-medium text-xs">
+                <Text className="text-primary font-nunito-medium text-xs">
                   Toutes dates
                 </Text>
                 <Pressable
@@ -343,7 +343,7 @@ export default function AllRacesScreen() {
               onPress={clearAllFilters}
               className="bg-gray-200 px-3 py-1.5 rounded-full"
             >
-              <Text className="text-gray-700 font-kanit-bold text-xs">
+              <Text className="text-gray-700 font-nunito-bold text-xs">
                 Tout effacer
               </Text>
             </Pressable>
@@ -353,7 +353,7 @@ export default function AllRacesScreen() {
         {/* Compteur de résultats */}
         {races.length > 0 && (
           <View className="mt-3">
-            <Text className="text-gray-500 font-kanit-medium text-sm">
+            <Text className="text-gray-500 font-nunito-medium text-sm">
               {races.length} course{races.length > 1 ? "s" : ""} trouvée{races.length > 1 ? "s" : ""}
             </Text>
           </View>

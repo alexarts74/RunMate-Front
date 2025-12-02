@@ -113,7 +113,7 @@ export function SignUpFormStep2({
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
+            <Text className="text-gray-900 text-2xl mr-8 font-nunito-bold text-center">
               Dis nous en{"\n"}
               <Text className="text-primary">plus sur toi</Text>
             </Text>
@@ -122,11 +122,11 @@ export function SignUpFormStep2({
 
         <View className="space-y-5 mt-4">
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Prénom*
             </Text>
             <TextInput
-              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
                 focusedInput === "first_name"
                   ? "border-primary"
                   : "border-gray-200"
@@ -149,18 +149,18 @@ export function SignUpFormStep2({
               }}
             />
             {errors.first_name && (
-              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">
+              <Text className="text-red-500 text-sm mt-1.5 font-nunito-medium">
                 {errors.first_name}
               </Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Nom*
             </Text>
             <TextInput
-              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
                 focusedInput === "last_name"
                   ? "border-primary"
                   : "border-gray-200"
@@ -183,14 +183,14 @@ export function SignUpFormStep2({
               }}
             />
             {errors.last_name && (
-              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">
+              <Text className="text-red-500 text-sm mt-1.5 font-nunito-medium">
                 {errors.last_name}
               </Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Âge*
             </Text>
             <TouchableOpacity
@@ -206,19 +206,19 @@ export function SignUpFormStep2({
                 elevation: 1,
               }}
             >
-              <Text className="text-gray-900 font-kanit-medium">
+              <Text className="text-gray-900 font-nunito-medium">
                 {formData.age
                   ? `${formData.age} ans`
                   : "Sélectionnez votre âge"}
               </Text>
             </TouchableOpacity>
             {errors.age && (
-              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">{errors.age}</Text>
+              <Text className="text-red-500 text-sm mt-1.5 font-nunito-medium">{errors.age}</Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Genre*
             </Text>
             <GenderSelect
@@ -226,16 +226,16 @@ export function SignUpFormStep2({
               onChange={(value) => handleChange("gender", value)}
             />
             {errors.gender && (
-              <Text className="text-red-500 text-sm mt-1.5 font-kanit-medium">{errors.gender}</Text>
+              <Text className="text-red-500 text-sm mt-1.5 font-nunito-medium">{errors.gender}</Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Bio*
             </Text>
             <TextInput
-              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-kanit-medium ${
+              className={`w-full border-2 rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
                 focusedInput === "bio" ? "border-primary" : "border-gray-200"
               }`}
               placeholder="Parle-nous de toi..."
@@ -259,7 +259,7 @@ export function SignUpFormStep2({
           </View>
 
           <View className="mb-8">
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Photo de profil*
             </Text>
             <Pressable
@@ -283,14 +283,14 @@ export function SignUpFormStep2({
                     source={{ uri: formData.profile_image }}
                     className="w-20 h-20 rounded-full mb-3 border-2 border-primary"
                   />
-                  <Text className="text-gray-900 font-kanit-medium">Changer l'image</Text>
+                  <Text className="text-gray-900 font-nunito-medium">Changer l'image</Text>
                 </View>
               ) : (
                 <View className="items-center">
                   <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
                     <Ionicons name="camera-outline" size={32} color="#FF6B4A" />
                   </View>
-                  <Text className="text-gray-600 font-kanit-medium">
+                  <Text className="text-gray-600 font-nunito-medium">
                     Sélectionner une image de profil
                   </Text>
                 </View>
@@ -322,7 +322,7 @@ export function SignUpFormStep2({
             }}
           >
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-gray-900 text-lg font-kanit-bold">
+              <Text className="text-gray-900 text-lg font-nunito-bold">
                 Sélectionnez votre âge
               </Text>
               <Pressable onPress={() => setShowAgePicker(false)}>

@@ -164,28 +164,28 @@ export default function EventDetailsScreen() {
             <View className="flex-row items-center mb-3">
               {event.is_creator && (
                 <View className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2">
-                  <Text className="text-primary font-kanit-bold text-xs">Créateur</Text>
+                  <Text className="text-primary font-nunito-bold text-xs">Créateur</Text>
                 </View>
               )}
               {event.is_participant && !event.is_creator && (
                 <View className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2">
-                  <Text className="text-secondary font-kanit-bold text-xs">Participant</Text>
+                  <Text className="text-secondary font-nunito-bold text-xs">Participant</Text>
                 </View>
               )}
               {countdown.isExpired ? (
                 <View className="bg-red-100 border border-red-300 px-3 py-1 rounded-full">
-                  <Text className="text-red-600 font-kanit-bold text-xs">Terminé</Text>
+                  <Text className="text-red-600 font-nunito-bold text-xs">Terminé</Text>
                 </View>
               ) : (
                 <View className="bg-tertiary border border-secondary px-3 py-1.5 rounded-full flex-row items-center">
                   <Ionicons name="time-outline" size={14} color="#A78BFA" style={{ marginRight: 4 }} />
-                  <Text className="text-secondary font-kanit-bold text-xs">
+                  <Text className="text-secondary font-nunito-bold text-xs">
                     {countdown.days}j {countdown.hours}h
                   </Text>
                 </View>
               )}
             </View>
-            <Text className="text-gray-900 font-kanit-bold text-3xl mb-2">
+            <Text className="text-gray-900 font-nunito-bold text-3xl mb-2">
               {event.name}
             </Text>
           </View>
@@ -209,10 +209,10 @@ export default function EventDetailsScreen() {
               className="w-14 h-14 rounded-full border-2 border-primary"
             />
             <View className="ml-4 flex-1">
-              <Text className="text-gray-900 font-kanit-bold text-base">
+              <Text className="text-gray-900 font-nunito-bold text-base">
                 {event.creator.name}
               </Text>
-              <Text className="text-primary font-kanit-medium text-sm">Créateur</Text>
+              <Text className="text-primary font-nunito-medium text-sm">Créateur</Text>
             </View>
             {user?.id !== event.creator.id && (
               <Pressable
@@ -226,7 +226,7 @@ export default function EventDetailsScreen() {
                   elevation: 3,
                 }}
               >
-                <Text className="text-white font-kanit-bold text-sm">Message</Text>
+                <Text className="text-white font-nunito-bold text-sm">Message</Text>
               </Pressable>
             )}
           </View>
@@ -247,15 +247,15 @@ export default function EventDetailsScreen() {
                   <Ionicons name="calendar" size={20} color="#FF6B4A" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-900 font-kanit-bold text-base">
+                  <Text className="text-gray-900 font-nunito-bold text-base">
                     {formatDate(event.start_date as string)}
                   </Text>
                   <View className="flex-row items-center mt-1">
-                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                    <Text className="text-gray-600 font-nunito-medium text-sm">
                       {formatTime(event.start_time)}
                     </Text>
                     <Text className="text-gray-400 mx-2">-</Text>
-                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                    <Text className="text-gray-600 font-nunito-medium text-sm">
                       {formatTime(event.end_time)}
                     </Text>
                   </View>
@@ -266,14 +266,14 @@ export default function EventDetailsScreen() {
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
                   <Ionicons name="location" size={20} color="#A78BFA" />
                 </View>
-                <Text className="text-gray-900 font-kanit-medium text-base flex-1">{event.location}</Text>
+                <Text className="text-gray-900 font-nunito-medium text-base flex-1">{event.location}</Text>
               </View>
 
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
                   <Ionicons name="trending-up" size={20} color="#FF6B4A" />
                 </View>
-                <Text className="text-gray-900 font-kanit-bold text-base">
+                <Text className="text-gray-900 font-nunito-bold text-base">
                   {event.distance} km
                 </Text>
               </View>
@@ -284,10 +284,10 @@ export default function EventDetailsScreen() {
                     <Ionicons name="people" size={20} color="#A78BFA" />
                   </View>
                   <View className="flex-1 flex-row items-center">
-                    <Text className="text-gray-900 font-kanit-bold text-base mr-2">
+                    <Text className="text-gray-900 font-nunito-bold text-base mr-2">
                       {event.participants_count}
                     </Text>
-                    <Text className="text-gray-600 font-kanit-medium text-sm">
+                    <Text className="text-gray-600 font-nunito-medium text-sm">
                       participant{event.participants_count > 1 ? 's' : ''}
                     </Text>
                     {event.max_participants && (
@@ -312,10 +312,10 @@ export default function EventDetailsScreen() {
                 elevation: 2,
               }}
             >
-              <Text className="text-gray-900 font-kanit-bold text-lg mb-3">
+              <Text className="text-gray-900 font-nunito-bold text-lg mb-3">
                 Description
               </Text>
-              <Text className="text-gray-600 font-kanit-medium leading-6">{event.description}</Text>
+              <Text className="text-gray-600 font-nunito-medium leading-6">{event.description}</Text>
             </View>
           )}
 
@@ -330,7 +330,7 @@ export default function EventDetailsScreen() {
                 elevation: 2,
               }}
             >
-              <Text className="text-gray-900 font-kanit-bold text-lg mb-4">
+              <Text className="text-gray-900 font-nunito-bold text-lg mb-4">
                 Participants ({event.participants_count})
               </Text>
               <View className="flex-row items-center flex-wrap">
@@ -348,7 +348,7 @@ export default function EventDetailsScreen() {
                       className="w-12 h-12 rounded-full border-2 border-tertiary"
                     />
                     <Text
-                      className="text-gray-600 text-xs font-kanit-medium mt-1 text-center"
+                      className="text-gray-600 text-xs font-nunito-medium mt-1 text-center"
                       numberOfLines={1}
                       style={{ maxWidth: 60 }}
                     >
@@ -358,7 +358,7 @@ export default function EventDetailsScreen() {
                 ))}
                 {event.participants_count > 8 && (
                   <View className="w-12 h-12 rounded-full bg-tertiary border-2 border-secondary items-center justify-center mr-3 mb-3">
-                    <Text className="text-secondary font-kanit-bold text-xs">
+                    <Text className="text-secondary font-nunito-bold text-xs">
                       +{event.participants_count - 8}
                     </Text>
                   </View>
@@ -390,7 +390,7 @@ export default function EventDetailsScreen() {
             color="white" 
             style={{ marginRight: 8 }} 
           />
-          <Text className="text-center text-white font-kanit-bold text-base">
+          <Text className="text-center text-white font-nunito-bold text-base">
             {event.is_participant ? "Quitter l'événement" : "Participer"}
           </Text>
         </Pressable>

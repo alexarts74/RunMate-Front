@@ -95,7 +95,7 @@ export function SignUpFormStep1({
           </Pressable>
 
           <View className="flex-1">
-            <Text className="text-gray-900 text-2xl mr-8 font-kanit-bold text-center">
+            <Text className="text-gray-900 text-2xl mr-8 font-nunito-bold text-center">
               Promis on te{"\n"}
               <Text className="text-primary">spammera pas !</Text>
               {" 🙃"}
@@ -107,7 +107,7 @@ export function SignUpFormStep1({
       <View className="flex-1 justify-center -mt-24">
         <View className="w-full space-y-5">
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Email*
             </Text>
             <View
@@ -128,7 +128,7 @@ export function SignUpFormStep1({
             >
               <Ionicons name="mail-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
               <TextInput
-                className="flex-1 text-gray-900 font-kanit-medium"
+                className="flex-1 text-gray-900 font-nunito-medium"
                 placeholder="Email"
                 placeholderTextColor="#9CA3AF"
                 value={formData.email}
@@ -140,14 +140,14 @@ export function SignUpFormStep1({
               />
             </View>
             {errors.email && (
-              <Text className="text-red-500 mt-1.5 ml-4 font-kanit-medium text-sm">
+              <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
                 {errors.email}
               </Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Mot de passe*
             </Text>
             <View
@@ -168,7 +168,7 @@ export function SignUpFormStep1({
             >
               <Ionicons name="lock-closed-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
               <TextInput
-                className="flex-1 text-gray-900 font-kanit-medium"
+                className="flex-1 text-gray-900 font-nunito-medium"
                 placeholder="Mot de passe"
                 placeholderTextColor="#9CA3AF"
                 value={formData.password}
@@ -179,14 +179,14 @@ export function SignUpFormStep1({
               />
             </View>
             {errors.password && (
-              <Text className="text-red-500 mt-1.5 ml-4 font-kanit-medium text-sm">
+              <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
                 {errors.password}
               </Text>
             )}
           </View>
 
           <View>
-            <Text className="text-gray-900 text-sm font-kanit-bold mb-2">
+            <Text className="text-gray-900 text-sm font-nunito-bold mb-2">
               Confirmer le mot de passe*
             </Text>
             <View
@@ -214,7 +214,7 @@ export function SignUpFormStep1({
                 style={{ marginRight: 12 }}
               />
               <TextInput
-                className="flex-1 text-gray-900 font-kanit-medium"
+                className="flex-1 text-gray-900 font-nunito-medium"
                 placeholder="Confirmer le mot de passe"
                 placeholderTextColor="#9CA3AF"
                 value={formData.password_confirmation}
@@ -227,7 +227,7 @@ export function SignUpFormStep1({
               />
             </View>
             {errors.password_confirmation && (
-              <Text className="text-red-500 mt-1.5 ml-4 font-kanit-medium text-sm">
+              <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
                 {errors.password_confirmation}
               </Text>
             )}

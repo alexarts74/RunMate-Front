@@ -185,12 +185,12 @@ export default function PaymentScreen() {
           >
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </Pressable>
-          <Text className="text-2xl font-kanit-semibold text-center text-white">
+          <Text className="text-2xl font-nunito-semibold text-center text-white">
             RunMate Premium
           </Text>
         </View>
 
-        <Text className="text-white mb-5 font-kanit">
+        <Text className="text-white mb-5 font-nunito">
           Devenez Premium et accédez à toutes les fonctionnalités de RunMate
         </Text>
 
@@ -207,17 +207,17 @@ export default function PaymentScreen() {
               }`}
             >
               <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-lg font-kanit-semibold text-white">
+                <Text className="text-lg font-nunito-semibold text-white">
                   {plan.name}
                 </Text>
                 <View className="flex-row items-center">
-                  <Text className="text-lg font-kanit-bold text-white">
+                  <Text className="text-lg font-nunito-bold text-white">
                     {plan.price}
                   </Text>
                 </View>
               </View>
 
-              <Text className="text-gray-300 mb-3 font-kanit">
+              <Text className="text-gray-300 mb-3 font-nunito">
                 {plan.description}
               </Text>
 
@@ -228,13 +228,13 @@ export default function PaymentScreen() {
                     size={16}
                     color={selectedPlan.id === plan.id ? "#126C52" : "#6B7280"}
                   />
-                  <Text className="text-white ml-2 font-kanit">{feature}</Text>
+                  <Text className="text-white ml-2 font-nunito">{feature}</Text>
                 </View>
               ))}
 
               {index === 0 && (
                 <View className="absolute -top-2 -right-2 bg-purple px-2 py-1 rounded-md">
-                  <Text className="text-xs font-kanit-bold text-white">
+                  <Text className="text-xs font-nunito-bold text-white">
                     Populaire
                   </Text>
                 </View>
@@ -242,7 +242,7 @@ export default function PaymentScreen() {
 
               {index === 1 && (
                 <View className="absolute -top-2 -right-2 bg-purple px-2 py-1 rounded-md">
-                  <Text className="text-xs font-kanit-bold text-white">
+                  <Text className="text-xs font-nunito-bold text-white">
                     Économisez 17%
                   </Text>
                 </View>
@@ -252,14 +252,14 @@ export default function PaymentScreen() {
         </View>
 
         {/* Zone de saisie de carte bancaire personnalisée */}
-        <Text className="text-white mb-4 font-kanit-semibold">
+        <Text className="text-white mb-4 font-nunito-semibold">
           Informations de paiement
         </Text>
 
         <View className="bg-background rounded-xl p-4 mb-8">
           {/* Numéro de carte */}
           <View className="mb-4">
-            <Text className="text-white mb-2 font-kanit">Numéro de carte</Text>
+            <Text className="text-white mb-2 font-nunito">Numéro de carte</Text>
             <TextInput
               className="bg-background text-white rounded-md p-2"
               placeholder="4242 4242 4242 4242"
@@ -276,7 +276,7 @@ export default function PaymentScreen() {
           {/* Date d'expiration et CVC côte à côte */}
           <View className="flex-row items-center">
             <View className="flex-1 mr-2">
-              <Text className="text-white mb-2 font-kanit">Mois (MM)</Text>
+              <Text className="text-white mb-2 font-nunito">Mois (MM)</Text>
               <TextInput
                 className="bg-background text-white rounded-md p-2"
                 placeholder="MM"
@@ -289,7 +289,7 @@ export default function PaymentScreen() {
             </View>
 
             <View className="flex-1 mr-2">
-              <Text className="text-white mb-2 font-kanit">Année (AA)</Text>
+              <Text className="text-white mb-2 font-nunito">Année (AA)</Text>
               <TextInput
                 className="bg-background text-white rounded-md p-2"
                 placeholder="AA"
@@ -302,7 +302,7 @@ export default function PaymentScreen() {
             </View>
 
             <View className="flex-1">
-              <Text className="text-white mb-2 font-kanit">CVC</Text>
+              <Text className="text-white mb-2 font-nunito">CVC</Text>
               <TextInput
                 className="bg-background text-white rounded-md p-2"
                 placeholder="123"
@@ -318,7 +318,7 @@ export default function PaymentScreen() {
         </View>
 
         {/* Instructions de test */}
-        <Text className="text-gray-400 text-xs mb-4 font-kanit">
+        <Text className="text-gray-400 text-xs mb-4 font-nunito">
           Pour tester, utilisez le numéro 4242 4242 4242 4242, une date future
           (01/25), et un code CVC quelconque (123).
         </Text>
@@ -333,7 +333,7 @@ export default function PaymentScreen() {
           {isProcessing || isLoading ? (
             <ActivityIndicator color="#ffffff" />
           ) : (
-            <Text className="text-white font-kanit-bold text-lg">
+            <Text className="text-white font-nunito-bold text-lg">
               Payer {selectedPlan.price}
             </Text>
           )}
@@ -341,7 +341,7 @@ export default function PaymentScreen() {
 
         <View className="flex-row items-center justify-center mt-4 mb-10">
           <Ionicons name="lock-closed" size={14} color="#126C52" />
-          <Text className="text-gray-400 ml-1 font-kanit text-sm">
+          <Text className="text-gray-400 ml-1 font-nunito text-sm">
             Paiement sécurisé via Stripe
           </Text>
         </View>

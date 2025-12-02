@@ -85,10 +85,10 @@ export default function LoginForm() {
             <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
           </Pressable>
           <View className="flex-1 items-center justify-center">
-            <Text className="text-3xl font-kanit-bold text-gray-900 text-center">
+            <Text className="text-3xl font-nunito-extrabold text-gray-900 text-center">
               Content de te
             </Text>
-            <Text className="text-3xl font-kanit-bold text-primary text-center">
+            <Text className="text-3xl font-nunito-extrabold text-primary text-center">
               revoir ! 👋
             </Text>
           </View>
@@ -97,7 +97,7 @@ export default function LoginForm() {
         <View className="flex-1 justify-center">
           <View className="space-y-5">
             <View>
-              <Text className="text-gray-900 text-sm font-kanit-bold pl-2 mb-2">
+              <Text className="text-gray-900 text-sm font-nunito-bold pl-2 mb-2">
                 Email*
               </Text>
               <View
@@ -118,7 +118,7 @@ export default function LoginForm() {
               >
                 <Ionicons name="mail-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
                 <TextInput
-                  className="flex-1 text-gray-900 font-kanit-medium"
+                  className="flex-1 text-gray-900 font-nunito-medium"
                   placeholder="Email"
                   placeholderTextColor="#9CA3AF"
                   value={formData.email}
@@ -130,14 +130,14 @@ export default function LoginForm() {
                 />
               </View>
               {errors.email && (
-                <Text className="text-red-500 mt-1.5 ml-4 font-kanit-medium text-sm">
+                <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
                   {errors.email}
                 </Text>
               )}
             </View>
 
             <View>
-              <Text className="text-gray-900 text-sm font-kanit-bold pl-2 mb-2">
+              <Text className="text-gray-900 text-sm font-nunito-bold pl-2 mb-2">
                 Mot de passe*
               </Text>
               <View
@@ -158,7 +158,7 @@ export default function LoginForm() {
               >
                 <Ionicons name="lock-closed-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
                 <TextInput
-                  className="flex-1 text-gray-900 font-kanit-medium"
+                  className="flex-1 text-gray-900 font-nunito-medium"
                   placeholder="Mot de passe"
                   placeholderTextColor="#9CA3AF"
                   value={formData.password}
@@ -169,14 +169,14 @@ export default function LoginForm() {
                 />
               </View>
               {errors.password && (
-                <Text className="text-red-500 mt-1.5 ml-4 font-kanit-medium text-sm">
+                <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
                   {errors.password}
                 </Text>
               )}
             </View>
 
             {errors.general && (
-              <Text className="text-red-500 text-center mt-2 font-kanit-medium text-sm">
+              <Text className="text-red-500 text-center mt-2 font-nunito-medium text-sm">
                 {errors.general}
               </Text>
             )}
@@ -200,7 +200,7 @@ export default function LoginForm() {
           {loading ? (
             <ActivityIndicator color="#ffffff" />
           ) : (
-            <Text className="text-base font-kanit-bold text-white text-center">
+            <Text className="text-base font-nunito-bold text-white text-center">
               Se connecter
             </Text>
           )}
