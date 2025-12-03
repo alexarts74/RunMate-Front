@@ -306,9 +306,11 @@ export default function SignUpForm() {
         };
 
         try {
-          await organizerProfileService.createProfile(organizerProfileData);
+          console.log("🏢 [SignUpForm] Création profil organisateur avec:", organizerProfileData);
+          const createdProfile = await organizerProfileService.createProfile(organizerProfileData);
+          console.log("🏢 [SignUpForm] Profil organisateur créé:", createdProfile);
         } catch (error) {
-          console.error("Erreur lors de la création du profil organisateur:", error);
+          console.error("❌ [SignUpForm] Erreur lors de la création du profil organisateur:", error);
           // On continue même si le profil n'a pas pu être créé, l'utilisateur pourra le faire plus tard
         }
       }

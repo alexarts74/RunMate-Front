@@ -137,6 +137,9 @@ export function SignUpFormStep1({
                 onBlur={() => setFocusedInput(null)}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                selectionColor="#FF6B4A"
+                editable={true}
+                style={{ color: "#111827" }}
               />
             </View>
             {errors.email && (
@@ -176,6 +179,9 @@ export function SignUpFormStep1({
                 onFocus={() => setFocusedInput("password")}
                 onBlur={() => setFocusedInput(null)}
                 secureTextEntry
+                selectionColor="#FF6B4A"
+                editable={true}
+                style={{ color: "#111827" }}
               />
             </View>
             {errors.password && (
@@ -224,6 +230,9 @@ export function SignUpFormStep1({
                 onFocus={() => setFocusedInput("password_confirmation")}
                 onBlur={() => setFocusedInput(null)}
                 secureTextEntry
+                selectionColor="#FF6B4A"
+                editable={true}
+                style={{ color: "#111827" }}
               />
             </View>
             {errors.password_confirmation && (

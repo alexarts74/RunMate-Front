@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
+import { OrganizerProfileView } from "./OrganizerProfileView";
 
 type ProfileViewProps = {
   setIsEditing: (value: boolean) => void;
@@ -10,7 +11,12 @@ type ProfileViewProps = {
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
   const { user } = useAuth();
 
-  // console.log(user);
+  // Si l'utilisateur est un organisateur, afficher le profil organisateur
+  if (user?.user_type === "organizer") {
+    return <OrganizerProfileView setIsEditing={setIsEditing} />;
+  }
+
+  // Sinon, afficher le profil runner classique
   return (
     <ScrollView
       className="flex-1 bg-fond px-6 py-6 pt-6 pb-24"

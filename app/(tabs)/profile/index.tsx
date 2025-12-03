@@ -17,7 +17,7 @@ export default function ProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
   const [isEditing, setIsEditing] = useState(false);
   const [activeSettings, setActiveSettings] = useState<SettingsType>("main");
-  const { logout, deleteAccount } = useAuth();
+  const { logout, deleteAccount, user } = useAuth();
 
   const handleDeleteAccount = () => {
     Alert.alert(
@@ -43,6 +43,10 @@ export default function ProfileScreen() {
           <ProfileView setIsEditing={setIsEditing} />
         );
       case "runner":
+        // Si l'utilisateur est un organisateur, rediriger vers le profil
+        if (isOrganizer) {
+          return <ProfileView setIsEditing={setIsEditing} />;
+        }
         return isEditing ? (
           <RunnerProfileEditForm setIsEditing={setIsEditing} />
         ) : (
@@ -197,9 +201,11 @@ export default function ProfileScreen() {
     }
   };
 
+  const isOrganizer = user?.user_type === "organizer";
+
   return (
     <View className="flex-1 bg-fond">
-      <View className="flex-row justify-around py-4 px-5 border-b border-gray-200 mt-12">
+      <View className={`flex-row ${isOrganizer ? "justify-around" : "justify-around"} py-4 px-5 border-b border-gray-200 mt-12`}>
         <Pressable
           onPress={() => {
             setActiveTab("profile");
@@ -210,20 +216,24 @@ export default function ProfileScreen() {
             activeTab === "profile" ? "bg-primary" : "bg-tertiary"
           }`}
         >
-          <Text className={`font-nunito-bold ${activeTab === "profile" ? "text-white" : "text-gray-700"}`}>Profil</Text>
+          <Text className={`font-nunito-bold ${activeTab === "profile" ? "text-white" : "text-gray-700"}`}>
+            {isOrganizer ? "Organisation" : "Profil"}
+          </Text>
         </Pressable>
-        <Pressable
-          onPress={() => {
-            setActiveTab("runner");
-            setIsEditing(false);
-            setActiveSettings("main");
-          }}
-          className={`px-4 py-2 rounded-full ${
-            activeTab === "runner" ? "bg-primary" : "bg-tertiary"
-          }`}
-        >
-          <Text className={`font-nunito-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
-        </Pressable>
+        {!isOrganizer && (
+          <Pressable
+            onPress={() => {
+              setActiveTab("runner");
+              setIsEditing(false);
+              setActiveSettings("main");
+            }}
+            className={`px-4 py-2 rounded-full ${
+              activeTab === "runner" ? "bg-primary" : "bg-tertiary"
+            }`}
+          >
+            <Text className={`font-nunito-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
+          </Pressable>
+        )}
         <Pressable
           onPress={() => {
             setActiveTab("settings");

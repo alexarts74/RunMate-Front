@@ -17,9 +17,15 @@ import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { MatchUser } from "@/interface/Matches";
+import { OrganizerHomepage } from "@/components/organizer/OrganizerHomepage";
 
 const HomepageScreen = () => {
   const { user } = useAuth();
+
+  // Afficher la page d'accueil organisateur si l'utilisateur est un organisateur
+  if (user?.user_type === "organizer") {
+    return <OrganizerHomepage />;
+  }
   const { matches } = useMatches();
   const { unreadCount } = useUnreadMessages();
   const { width: screenWidth } = Dimensions.get("window");

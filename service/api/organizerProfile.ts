@@ -16,14 +16,23 @@ export interface CreateOrganizerProfileData {
 }
 
 class OrganizerProfileService {
-  async getProfile(): Promise<OrganizerProfile> {
+  async getProfile(): Promise<OrganizerProfile | null> {
     try {
       const response = await apiClient.get("/organizer_profiles");
-      return response.profile;
+      console.log("🏢 [organizerProfileService.getProfile] Réponse brute:", response);
+      return response.profile || response.data?.profile;
     } catch (error: any) {
+      const message: string | undefined = error?.message;
+
+      if (error.response?.status === 404 || message?.includes("404")) {
+        console.log("Profil organisateur non trouvé (404), retour null");
+        return null;
+      }
+
       if (error.response?.status === 403) {
         throw new Error("Cette action est réservée aux organisateurs");
       }
+
       console.error("Erreur lors de la récupération du profil organisateur:", error);
       throw error;
     }
@@ -31,10 +40,12 @@ class OrganizerProfileService {
 
   async createProfile(profileData: CreateOrganizerProfileData): Promise<OrganizerProfile> {
     try {
+      console.log("🏢 [organizerProfileService.createProfile] Payload envoyé:", profileData);
       const response = await apiClient.post("/organizer_profiles", {
         organizer_profile: profileData,
       });
-      return response.profile;
+      console.log("🏢 [organizerProfileService.createProfile] Réponse brute:", response);
+      return response.profile || response.data?.profile || response;
     } catch (error: any) {
       if (error.response?.status === 403) {
         throw new Error("Cette action est réservée aux organisateurs");

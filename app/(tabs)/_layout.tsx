@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
+import { useAuth } from "@/context/AuthContext";
 
 function CreateActionButton({
   focused,
@@ -42,6 +43,7 @@ function CreateActionButton({
 
 export default function TabLayout() {
   const { unreadCount } = useUnreadMessages();
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const segments = useSegments();
   const [activeTab, setActiveTab] = useState(0);
@@ -49,21 +51,25 @@ export default function TabLayout() {
   const indicatorPosition = useRef(new Animated.Value(0)).current;
   const screenWidth = Dimensions.get("window").width;
   const tabBarWidth = screenWidth * 0.88;
-  const tabWidth = tabBarWidth / 4;
+  const isOrganizer = user?.user_type === "organizer";
+  const numberOfTabs = isOrganizer ? 4 : 3;
+  const tabWidth = tabBarWidth / numberOfTabs;
 
   // Détecter automatiquement l'onglet actif basé sur les segments de route
   useEffect(() => {
     const currentPath = segments.join("/");
     if (currentPath.includes("profile")) {
-      setActiveTab(3);
+      setActiveTab(isOrganizer ? 3 : 2);
     } else if (currentPath.includes("messages")) {
       setActiveTab(1);
     } else if (currentPath.includes("create")) {
-      setActiveTab(2);
+      if (isOrganizer) {
+        setActiveTab(2);
+      }
     } else if (currentPath.includes("matches") || currentPath === "") {
       setActiveTab(0);
     }
-  }, [segments]);
+  }, [segments, isOrganizer]);
 
   useEffect(() => {
     Animated.spring(indicatorPosition, {
@@ -215,6 +221,7 @@ export default function TabLayout() {
               }}
             />
           ),
+          href: isOrganizer ? "/create" : null, // Masquer l'onglet pour les runners
         }}
         listeners={{
           tabPress: (e) => {
@@ -237,7 +244,7 @@ export default function TabLayout() {
         listeners={{
           tabPress: () => {
             setPreviousTab(activeTab);
-            setActiveTab(3);
+            setActiveTab(isOrganizer ? 3 : 2);
           },
         }}
       />
