@@ -12,10 +12,17 @@ class ApiClient {
 
   private async getHeaders() {
     const token = await authStorage.getToken();
-    return {
+    console.log("🔑 [apiClient.getHeaders] Token récupéré:", token ? "Token présent" : "Token manquant");
+    const headers = {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
+    console.log("🔑 [apiClient.getHeaders] Headers générés:", {
+      hasContentType: !!headers["Content-Type"],
+      hasAuthorization: !!headers["Authorization"],
+      authorizationValue: headers["Authorization"] ? "Bearer ***" : "non défini",
+    });
+    return headers;
   }
 
   private async fetchWithTimeout(url: string, options: RequestInit) {
@@ -24,12 +31,18 @@ class ApiClient {
 
     try {
       const headers = await this.getHeaders();
+      const finalHeaders = {
+        ...options.headers,
+        ...headers,
+      };
+      console.log("🌐 [apiClient.fetchWithTimeout] Headers finaux envoyés:", {
+        hasAuthorization: !!finalHeaders["Authorization"],
+        authorizationValue: finalHeaders["Authorization"] ? "Bearer ***" : "non défini",
+        allHeaders: Object.keys(finalHeaders),
+      });
       const response = await fetch(url, {
         ...options,
-        headers: {
-          ...options.headers,
-          ...headers,
-        },
+        headers: finalHeaders,
         signal: controller.signal,
       }).finally(() => clearTimeout(timeoutId));
 
@@ -69,17 +82,14 @@ class ApiClient {
 
   async post(endpoint: string, data: any) {
     try {
-      const headers = await this.getHeaders();
       const url = `${this.baseUrl}${endpoint}`;
-      console.log("URL complète:", url);
-      console.log("Base URL:", this.baseUrl);
-      console.log("Endpoint:", endpoint);
-      console.log("Headers:", headers);
-      console.log("Data:", data);
+      console.log("📤 [apiClient.post] Requête POST:", {
+        url,
+        endpoint,
+      });
 
       const response = await this.fetchWithTimeout(url, {
         method: "POST",
-        headers,
         body: JSON.stringify(data),
       });
 

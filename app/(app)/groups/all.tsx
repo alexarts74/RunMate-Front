@@ -31,7 +31,8 @@ export default function AllGroupsScreen() {
   const { user } = useAuth();
 
   const handleFeatureAccess = (groupId: string) => {
-    if (user?.is_premium) {
+    // Les organisateurs ont accès gratuitement
+    if (user?.user_type === "organizer" || user?.is_premium) {
       router.push(`/groups/${groupId}`);
       return true;
     } else {
@@ -41,7 +42,8 @@ export default function AllGroupsScreen() {
   };
 
   const fetchMyGroups = async () => {
-    if (!user?.is_premium) {
+    // Les organisateurs ont accès gratuitement
+    if (user?.user_type !== "organizer" && !user?.is_premium) {
       setShowPremiumModal(true);
       return;
     }
@@ -80,11 +82,12 @@ export default function AllGroupsScreen() {
   }, [activeTab]);
 
   useEffect(() => {
-    if (user?.is_premium && activeTab === "my-groups") {
+    // Les organisateurs ont accès gratuitement
+    if ((user?.user_type === "organizer" || user?.is_premium) && activeTab === "my-groups") {
       setShowPremiumModal(false);
       fetchMyGroups();
     }
-  }, [user?.is_premium]);
+  }, [user?.is_premium, user?.user_type]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);

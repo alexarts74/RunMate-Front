@@ -49,13 +49,17 @@ export default function LoginForm() {
       setLoading(true);
       const userData = await authService.login(formData);
       await login(userData);
-      await authService.getCurrentUser();
+      const currentUser = await authService.getCurrentUser();
 
       // Enregistrer les notifications après la connexion
       await registerForPushNotifications();
 
-      const matchesData = await matchesService.getMatches();
-      setMatches(matchesData);
+      // Ne charger les matches que pour les runners
+      if (userData.user?.user_type === "runner" || currentUser?.user_type === "runner") {
+        const matchesData = await matchesService.getMatches();
+        setMatches(matchesData);
+      }
+      
       router.replace("/(tabs)/matches");
     } catch (err) {
       console.error("Erreur connexion:", err);

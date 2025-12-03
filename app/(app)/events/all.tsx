@@ -35,6 +35,10 @@ export default function AllEventsScreen() {
   const router = useRouter();
 
   const handleFeatureAccess = () => {
+    // Les organisateurs ont accès gratuitement
+    if (user?.user_type === "organizer") {
+      return true;
+    }
     if (!(user && "is_premium" in user && user.is_premium)) {
       setShowPremiumModal(true);
       return false;
@@ -73,11 +77,12 @@ export default function AllEventsScreen() {
   }, []);
 
   useEffect(() => {
-    if (user?.is_premium) {
+    // Les organisateurs ont accès gratuitement
+    if (user?.user_type === "organizer" || user?.is_premium) {
       setShowPremiumModal(false);
       loadEvents();
     }
-  }, [user?.is_premium]);
+  }, [user?.is_premium, user?.user_type]);
 
   const DistanceFilter = () => (
     <View className="bg-white py-3 border-b border-gray-200">

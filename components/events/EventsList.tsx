@@ -41,6 +41,10 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   const isPremiumFeature = eventsType === "my";
 
   const handleFeatureAccess = () => {
+    // Les organisateurs ont accès gratuitement
+    if (user?.user_type === "organizer") {
+      return true;
+    }
     if (
       isPremiumFeature &&
       !(user && "is_premium" in user && user.is_premium)

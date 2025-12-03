@@ -83,8 +83,14 @@ export default function CreateEventScreen() {
     }
   }, [user]);
 
-  // Vérifier si l'utilisateur est premium dès le chargement
+  // Vérifier si l'utilisateur est premium dès le chargement (sauf pour les organisateurs)
   useEffect(() => {
+    // Les organisateurs peuvent créer des événements gratuitement
+    if (user?.user_type === "organizer") {
+      setShowPremiumModal(false);
+      return;
+    }
+    // Pour les runners, vérifier le statut premium
     if (!(user && "is_premium" in user && user.is_premium)) {
       setShowPremiumModal(true);
     }

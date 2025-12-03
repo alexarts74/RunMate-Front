@@ -79,11 +79,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       await authStorage.storeToken(userData.authentication_token);
-      console.log("Token:", userData.authentication_token);
+      console.log("🔑 [AuthContext.login] Token stocké:", userData.authentication_token ? "Token présent" : "Token manquant");
       const userWithType = ensureUserType(userData.user);
       await authStorage.storeUser(userWithType);
-      await authStorage.getToken();
-      console.log("Token in storage:", await authStorage.getToken());
+      const storedToken = await authStorage.getToken();
+      console.log("🔑 [AuthContext.login] Token vérifié dans storage:", storedToken ? "Token présent" : "Token manquant");
+      console.log("🔑 [AuthContext.login] Type utilisateur:", userWithType.user_type);
 
       setUser(userWithType);
       setIsAuthenticated(true);
@@ -118,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await authStorage.removeAuth();
       setUser(null);
       setIsAuthenticated(false);
-      router.replace("/login");
+      router.replace("/(auth)/login");
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
       throw error;
@@ -171,7 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       if (error?.status === 401) {
         await cleanStorage();
-        router.replace("/login");
+        router.replace("/(auth)/login");
         return;
       }
       console.error("Erreur getUser:", error);
@@ -211,7 +212,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Erreur initAuth:", error);
         await cleanStorage();
-        router.replace("/login");
+        router.replace("/(auth)/login");
       }
     };
 
