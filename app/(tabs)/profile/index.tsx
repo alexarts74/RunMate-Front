@@ -221,18 +221,18 @@ export default function ProfileScreen() {
           </Text>
         </Pressable>
         {!isOrganizer && (
-          <Pressable
-            onPress={() => {
-              setActiveTab("runner");
-              setIsEditing(false);
-              setActiveSettings("main");
-            }}
-            className={`px-4 py-2 rounded-full ${
-              activeTab === "runner" ? "bg-primary" : "bg-tertiary"
-            }`}
-          >
-            <Text className={`font-nunito-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
-          </Pressable>
+        <Pressable
+          onPress={() => {
+            setActiveTab("runner");
+            setIsEditing(false);
+            setActiveSettings("main");
+          }}
+          className={`px-4 py-2 rounded-full ${
+            activeTab === "runner" ? "bg-primary" : "bg-tertiary"
+          }`}
+        >
+          <Text className={`font-nunito-bold ${activeTab === "runner" ? "text-white" : "text-gray-700"}`}>Runner</Text>
+        </Pressable>
         )}
         <Pressable
           onPress={() => {

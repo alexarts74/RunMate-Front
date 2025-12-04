@@ -64,7 +64,7 @@ export default function TabLayout() {
       setActiveTab(1);
     } else if (currentPath.includes("create")) {
       if (isOrganizer) {
-        setActiveTab(2);
+      setActiveTab(2);
       }
     } else if (currentPath.includes("matches") || currentPath === "") {
       setActiveTab(0);

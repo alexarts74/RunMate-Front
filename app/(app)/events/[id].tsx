@@ -7,6 +7,7 @@ import { eventService } from "@/service/api/event";
 import { Event } from "@/interface/Event";
 import { useAuth } from "@/context/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -330,9 +331,25 @@ export default function EventDetailsScreen() {
                 elevation: 2,
               }}
             >
-              <Text className="text-gray-900 font-nunito-bold text-lg mb-4">
-                Participants ({event.participants_count})
-              </Text>
+              <View className="flex-row items-center justify-between mb-4">
+                <Text className="text-gray-900 font-nunito-bold text-lg">
+                  Participants ({event.participants_count})
+                </Text>
+                {event.is_creator && user?.user_type === "organizer" && (
+                  <Pressable
+                    onPress={() => {
+                      // TODO: Naviguer vers une page de gestion des participants
+                      Alert.alert("Gestion", "Fonctionnalité de gestion des participants à venir");
+                    }}
+                    className="flex-row items-center"
+                  >
+                    <Text className="text-primary font-nunito-bold text-sm mr-1">
+                      Gérer
+                    </Text>
+                    <Ionicons name="settings-outline" size={16} color="#FF6B4A" />
+                  </Pressable>
+                )}
+              </View>
               <View className="flex-row items-center flex-wrap">
                 {event.participants.slice(0, 8).map((participant, index) => (
                   <View
@@ -366,35 +383,123 @@ export default function EventDetailsScreen() {
               </View>
             </View>
           )}
+
+          {/* Section Organisateur - Statistiques et Actions */}
+          {event.is_creator && user?.user_type === "organizer" && (
+            <View className="bg-white p-5 rounded-2xl mb-6"
+              style={{
+                shadowColor: "#FF6B4A",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
+            >
+              <View className="flex-row items-center mb-4">
+                <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
+                  <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                </View>
+                <Text className="text-gray-900 font-nunito-bold text-lg">
+                  Gestion de l'événement
+                </Text>
+              </View>
+              
+              <View className="flex-row" style={{ gap: 12 }}>
+                <View className="flex-1 bg-tertiary p-4 rounded-xl">
+                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                    Participants
+                  </Text>
+                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                    {event.participants_count || 0}
+                  </Text>
+                  {event.max_participants && (
+                    <Text className="text-gray-500 font-nunito-medium text-xs mt-1">
+                      / {event.max_participants} max
+                    </Text>
+                  )}
+                </View>
+                
+                <View className="flex-1 bg-tertiary p-4 rounded-xl">
+                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                    Places restantes
+                  </Text>
+                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                    {event.spots_left !== undefined ? event.spots_left : (event.max_participants ? event.max_participants - (event.participants_count || 0) : '∞')}
+                  </Text>
+                </View>
+              </View>
+
+              <View className="mt-4 flex-row" style={{ gap: 12 }}>
+                <Pressable
+                  onPress={() => {
+                    Alert.alert("Modifier", "Fonctionnalité de modification à venir");
+                  }}
+                  className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
+                >
+                  <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                  <Text className="text-primary font-nunito-bold text-sm">
+                    Modifier
+                  </Text>
+                </Pressable>
+                
+                <Pressable
+                  onPress={() => {
+                    Alert.alert(
+                      "Supprimer l'événement",
+                      "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.",
+                      [
+                        { text: "Annuler", style: "cancel" },
+                        {
+                          text: "Supprimer",
+                          style: "destructive",
+                          onPress: () => {
+                            Alert.alert("Info", "Fonctionnalité de suppression à venir");
+                          },
+                        },
+                      ]
+                    );
+                  }}
+                  className="flex-1 bg-white border-2 border-red-500 py-3 rounded-xl flex-row items-center justify-center"
+                >
+                  <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
+                  <Text className="text-red-500 font-nunito-bold text-sm">
+                    Supprimer
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
 
       {/* Footer avec bouton d'action */}
-      <View className="px-6 pb-6 pt-4 bg-fond border-t border-gray-200">
-        <Pressable
-          onPress={handleEventAction}
-          className={`py-4 rounded-full flex-row items-center justify-center ${
-            event.is_participant ? "bg-red-500" : "bg-primary"
-          }`}
-          style={{
-            shadowColor: event.is_participant ? "#EF4444" : "#FF6B4A",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-          }}
-        >
-          <Ionicons 
-            name={event.is_participant ? "exit-outline" : "checkmark-circle"} 
-            size={20} 
-            color="white" 
-            style={{ marginRight: 8 }} 
-          />
-          <Text className="text-center text-white font-nunito-bold text-base">
-            {event.is_participant ? "Quitter l'événement" : "Participer"}
-          </Text>
-        </Pressable>
-      </View>
+      {!(event.is_creator && user?.user_type === "organizer") && (
+        <View className="px-6 pb-6 pt-4 bg-fond border-t border-gray-200">
+          <Pressable
+            onPress={handleEventAction}
+            className={`py-4 rounded-full flex-row items-center justify-center ${
+              event.is_participant ? "bg-red-500" : "bg-primary"
+            }`}
+            style={{
+              shadowColor: event.is_participant ? "#EF4444" : "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
+          >
+            <Ionicons 
+              name={event.is_participant ? "exit-outline" : "checkmark-circle"} 
+              size={20} 
+              color="white" 
+              style={{ marginRight: 8 }} 
+            />
+            <Text className="text-center text-white font-nunito-bold text-base">
+              {event.is_participant ? "Quitter l'événement" : "Participer"}
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }

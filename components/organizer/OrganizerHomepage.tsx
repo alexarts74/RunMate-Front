@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "@/context/AuthContext";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { eventService } from "@/service/api/event";
 import { groupService } from "@/service/api/group";
 import { organizerProfileService } from "@/service/api/organizerProfile";
@@ -33,9 +33,17 @@ export function OrganizerHomepage() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  // Charger les données au montage initial
   useEffect(() => {
     loadData();
   }, []);
+
+  // Recharger les données quand l'écran revient au focus (après création d'un groupe/événement)
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   const loadOrganizerProfile = async () => {
     try {
@@ -59,13 +67,25 @@ export function OrganizerHomepage() {
       await loadOrganizerProfile();
       
       // Charger les événements créés
+      console.log("🏢 [OrganizerHomepage] Chargement des événements...");
       const eventsResponse = await eventService.getMyEvents();
+      console.log("🏢 [OrganizerHomepage] Réponse complète getMyEvents:", JSON.stringify(eventsResponse, null, 2));
       const createdEvents = eventsResponse.created || [];
+      console.log("🏢 [OrganizerHomepage] Événements créés:", createdEvents.length, createdEvents);
       setMyEvents(createdEvents);
 
       // Charger les groupes
+      console.log("🏢 [OrganizerHomepage] Chargement des groupes...");
       const groupsData = await groupService.getGroups();
+      console.log("🏢 [OrganizerHomepage] Tous les groupes reçus:", groupsData.length, groupsData);
+      console.log("🏢 [OrganizerHomepage] Détail de chaque groupe:", groupsData.map((g: GroupInfo) => ({
+        id: g.id,
+        name: g.name,
+        is_admin: g.is_admin,
+        is_member: g.is_member,
+      })));
       const myCreatedGroups = groupsData.filter((g: GroupInfo) => g.is_admin);
+      console.log("🏢 [OrganizerHomepage] Groupes filtrés (is_admin=true):", myCreatedGroups.length, myCreatedGroups);
       setMyGroups(myCreatedGroups);
 
       // Calculer les statistiques
@@ -165,13 +185,17 @@ export function OrganizerHomepage() {
               Statistiques
             </Text>
             <View style={{ gap: 12 }}>
-              <View className="bg-white rounded-2xl p-5" style={{
-                shadowColor: "#FF6B4A",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                elevation: 3,
-              }}>
+              <Pressable
+                onPress={() => router.push("/(app)/organizer/events/all")}
+                className="bg-white rounded-2xl p-5 active:opacity-90" 
+                style={{
+                  shadowColor: "#FF6B4A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}
+              >
                 <View className="flex-row items-center">
                   <View className="w-14 h-14 rounded-xl bg-primary/10 items-center justify-center mr-4">
                     <Ionicons name="calendar" size={28} color="#FF6B4A" />
@@ -189,16 +213,21 @@ export function OrganizerHomepage() {
                       </Text>
                     )}
                   </View>
+                  <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
                 </View>
-              </View>
+              </Pressable>
 
-              <View className="bg-white rounded-2xl p-5" style={{
-                shadowColor: "#A78BFA",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                elevation: 3,
-              }}>
+              <Pressable
+                onPress={() => router.push("/(app)/groups/all")}
+                className="bg-white rounded-2xl p-5 active:opacity-90"
+                style={{
+                  shadowColor: "#A78BFA",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}
+              >
                 <View className="flex-row items-center">
                   <View className="w-14 h-14 rounded-xl bg-secondary/10 items-center justify-center mr-4">
                     <Ionicons name="people" size={28} color="#A78BFA" />
@@ -211,8 +240,9 @@ export function OrganizerHomepage() {
                       {stats.totalGroups}
                     </Text>
                   </View>
+                  <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
                 </View>
-              </View>
+              </Pressable>
 
               <View className="bg-white rounded-2xl p-5" style={{
                 shadowColor: "#10B981",
@@ -315,7 +345,7 @@ export function OrganizerHomepage() {
                 <Text className="text-gray-900 font-nunito-extrabold text-xl">
                   Mes événements
                 </Text>
-                <Pressable onPress={() => router.push("/(app)/events/all")}>
+                <Pressable onPress={() => router.push("/(app)/organizer/events/all")}>
                   <Text className="text-primary font-nunito-bold text-sm">
                     Voir tout
                   </Text>
@@ -323,10 +353,10 @@ export function OrganizerHomepage() {
               </View>
 
               <View style={{ gap: 12 }}>
-                {myEvents.slice(0, 3).map((event) => (
+                {myEvents.slice(0, 3).map((event, index) => (
                   <Pressable
-                    key={event.id}
-                    onPress={() => router.push(`/(app)/events/${event.id}`)}
+                    key={event.id || `event-${index}`}
+                    onPress={() => router.push(`/(app)/organizer/events/${String(event.id)}`)}
                     className="bg-white rounded-2xl overflow-hidden"
                     style={{
                       shadowColor: "#000",
@@ -397,10 +427,10 @@ export function OrganizerHomepage() {
               </View>
 
               <View style={{ gap: 12 }}>
-                {myGroups.slice(0, 3).map((group) => (
+                {myGroups.slice(0, 3).map((group, index) => (
                   <Pressable
-                    key={group.id}
-                    onPress={() => router.push(`/(app)/groups/${group.id}`)}
+                    key={group.id || `group-${index}`}
+                    onPress={() => router.push(`/(app)/organizer/groups/${String(group.id)}`)}
                     className="bg-white rounded-2xl overflow-hidden"
                     style={{
                       shadowColor: "#000",
@@ -422,9 +452,11 @@ export function OrganizerHomepage() {
                         <Text className="text-gray-900 font-nunito-bold text-base mb-1">
                           {group.name}
                         </Text>
-                        <Text className="text-gray-600 font-nunito-medium text-sm mb-2" numberOfLines={2}>
-                          {group.description}
-                        </Text>
+                        {group.description && group.description.trim() !== "" && (
+                          <Text className="text-gray-600 font-nunito-medium text-sm mb-2" numberOfLines={2}>
+                            {String(group.description)}
+                          </Text>
+                        )}
                         <View className="flex-row items-center" style={{ gap: 12 }}>
                           <View className="flex-row items-center">
                             <Ionicons name="people-outline" size={14} color="#A78BFA" />

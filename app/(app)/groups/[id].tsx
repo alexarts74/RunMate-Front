@@ -14,10 +14,12 @@ import { groupService } from "@/service/api/group";
 import LoadingScreen from "@/components/LoadingScreen";
 import { GroupInfo, JoinRequest } from "@/interface/Group";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/context/AuthContext";
 
 export default function GroupDetailsScreen() {
   const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
   const [group, setGroup] = useState<GroupInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -205,6 +207,87 @@ export default function GroupDetailsScreen() {
           {/* ADMIN SECTION */}
           {group.is_admin && (
             <View className="mb-4">
+              {/* Section Organisateur - Statistiques */}
+              {user?.user_type === "organizer" && (
+                <View className="bg-white rounded-2xl p-5 mb-4"
+                  style={{
+                    shadowColor: "#FF6B4A",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 8,
+                    elevation: 3,
+                  }}
+                >
+                  <View className="flex-row items-center mb-4">
+                    <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
+                      <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                    </View>
+                    <Text className="text-gray-900 font-nunito-bold text-lg">
+                      Statistiques du groupe
+                    </Text>
+                  </View>
+                  
+                  <View className="flex-row" style={{ gap: 12 }}>
+                    <View className="flex-1 bg-tertiary p-4 rounded-xl">
+                      <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                        Membres
+                      </Text>
+                      <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                        {group.members_count || 0}
+                      </Text>
+                    </View>
+                    
+                    <View className="flex-1 bg-tertiary p-4 rounded-xl">
+                      <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                        Demandes
+                      </Text>
+                      <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                        {pendingRequests.length}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View className="mt-4 flex-row" style={{ gap: 12 }}>
+                    <Pressable
+                      onPress={() => {
+                        Alert.alert("Modifier", "Fonctionnalité de modification à venir");
+                      }}
+                      className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
+                    >
+                      <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                      <Text className="text-primary font-nunito-bold text-sm">
+                        Modifier
+                      </Text>
+                    </Pressable>
+                    
+                    <Pressable
+                      onPress={() => {
+                        Alert.alert(
+                          "Supprimer le groupe",
+                          "Êtes-vous sûr de vouloir supprimer ce groupe ? Cette action est irréversible.",
+                          [
+                            { text: "Annuler", style: "cancel" },
+                            {
+                              text: "Supprimer",
+                              style: "destructive",
+                              onPress: () => {
+                                Alert.alert("Info", "Fonctionnalité de suppression à venir");
+                              },
+                            },
+                          ]
+                        );
+                      }}
+                      className="flex-1 bg-white border-2 border-red-500 py-3 rounded-xl flex-row items-center justify-center"
+                    >
+                      <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
+                      <Text className="text-red-500 font-nunito-bold text-sm">
+                        Supprimer
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+              )}
+
               <Pressable
                 onPress={() => setShowRequests(!showRequests)}
                 className="bg-white rounded-2xl p-5 flex-row items-center justify-between"

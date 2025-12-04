@@ -150,27 +150,27 @@ const MessagesScreen = () => {
               : "Commencez une conversation avec un utilisateur ou un groupe"}
           </Text>
           {user?.user_type !== "organizer" && (
-            <Pressable
-              className="bg-primary rounded-full px-6 py-3 flex-row items-center"
-              style={{
-                shadowColor: "#FF6B4A",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 4,
-              }}
-              onPress={() => router.push("/")}
-            >
-              <Ionicons
-                name="chatbubble-ellipses"
-                size={20}
-                color="white"
-                style={{ marginRight: 8 }}
-              />
-              <Text className="text-white text-base font-nunito-bold">
-                Trouve ton RunMate
-              </Text>
-            </Pressable>
+          <Pressable
+            className="bg-primary rounded-full px-6 py-3 flex-row items-center"
+            style={{
+              shadowColor: "#FF6B4A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
+            onPress={() => router.push("/")}
+          >
+            <Ionicons
+              name="chatbubble-ellipses"
+              size={20}
+              color="white"
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-white text-base font-nunito-bold">
+              Trouve ton RunMate
+            </Text>
+          </Pressable>
           )}
         </View>
       ) : (

@@ -42,7 +42,7 @@ export const PremiumFeatureModal = ({
           >
             {/* Header avec icône premium */}
             <View className="px-6 pt-6 pb-4 bg-white">
-              <View className="items-center mb-4">
+          <View className="items-center mb-4">
                 <View
                   className="w-20 h-20 rounded-full items-center justify-center mb-4"
                   style={{
@@ -57,18 +57,18 @@ export const PremiumFeatureModal = ({
                   <Ionicons name="star" size={40} color="#FFFFFF" />
                 </View>
                 <Text className="text-2xl font-nunito-extrabold text-gray-900 text-center">
-                  {title}
-                </Text>
+              {title}
+            </Text>
                 <Text className="text-gray-600 font-nunito-medium text-sm text-center mt-2 px-2">
-                  {description}
-                </Text>
+              {description}
+            </Text>
               </View>
-            </View>
+          </View>
 
             {/* Contenu */}
             <View className="px-6 pb-6 bg-fond">
               {/* Bouton Upgrade Premium */}
-              <Pressable
+          <Pressable
                 onPress={onUpgrade}
                 className="mb-3"
                 style={{
@@ -84,27 +84,27 @@ export const PremiumFeatureModal = ({
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   className="py-4 rounded-full"
-                >
+          >
                   <View className="flex-row items-center justify-center">
                     <Ionicons name="sparkles" size={20} color="#FFFFFF" style={{ marginRight: 8 }} />
                     <Text className="text-white font-nunito-bold text-base">
                       Passer à Premium
-                    </Text>
+            </Text>
                   </View>
                 </LinearGradient>
-              </Pressable>
+          </Pressable>
 
               {/* Bouton Fermer */}
-              <Pressable
+          <Pressable
                 onPress={onClose}
                 className="bg-white py-3 rounded-full border-2 border-gray-200"
-              >
+          >
                 <Text className="text-gray-700 text-center font-nunito-bold text-base">
                   Plus tard
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+            </Text>
+          </Pressable>
+        </View>
+      </View>
         </Pressable>
       </Pressable>
     </Modal>

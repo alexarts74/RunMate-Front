@@ -87,7 +87,7 @@ export default function SignUpForm() {
             setUserType(savedData.user_type as "runner" | "organizer");
           }
           if (savedData.running_type) {
-            setRunnerType(savedData.running_type as "chill" | "perf");
+          setRunnerType(savedData.running_type as "chill" | "perf");
           }
           setFormData(savedData);
         } else {
@@ -254,41 +254,41 @@ export default function SignUpForm() {
       // 4. Créer le profil selon le type d'utilisateur
       if (userType === "runner") {
         // Créer le profil coureur avec les bons champs
-        const runnerProfileData: RunnerProfile = {
-          actual_pace: runnerType === "perf" ? formData.actual_pace : "",
-          target_pace: runnerType === "perf" ? formData.target_pace : "",
-          weekly_mileage:
-            runnerType === "perf"
-              ? parseInt(formData.weekly_mileage) || null
-              : null,
-          competition_goals:
-            runnerType === "perf" ? formData.competition_goals : [],
-          training_days: runnerType === "perf" ? formData.training_days : [],
-          usual_distance:
-            runnerType === "chill" ? formData.usual_distance.toString() : null,
-          preferred_time_of_day: formData.preferred_time_of_day || [],
-          running_type: runnerType,
-          availability: [],
-          objective: "",
-          social_preferences:
-            runnerType === "chill" ? formData.social_preferences : [],
-          post_run_activities:
-            runnerType === "chill" ? formData.post_run_activities : [],
-          running_frequency:
-            runnerType === "chill" ? formData.running_frequency : [],
-        };
+      const runnerProfileData: RunnerProfile = {
+        actual_pace: runnerType === "perf" ? formData.actual_pace : "",
+        target_pace: runnerType === "perf" ? formData.target_pace : "",
+        weekly_mileage:
+          runnerType === "perf"
+            ? parseInt(formData.weekly_mileage) || null
+            : null,
+        competition_goals:
+          runnerType === "perf" ? formData.competition_goals : [],
+        training_days: runnerType === "perf" ? formData.training_days : [],
+        usual_distance:
+          runnerType === "chill" ? formData.usual_distance.toString() : null,
+        preferred_time_of_day: formData.preferred_time_of_day || [],
+        running_type: runnerType,
+        availability: [],
+        objective: "",
+        social_preferences:
+          runnerType === "chill" ? formData.social_preferences : [],
+        post_run_activities:
+          runnerType === "chill" ? formData.post_run_activities : [],
+        running_frequency:
+          runnerType === "chill" ? formData.running_frequency : [],
+      };
 
-        const savedProfile = await runnerProfileService.save(runnerProfileData);
+      const savedProfile = await runnerProfileService.save(runnerProfileData);
 
-        const updatedUserData = {
-          ...signUpResponse,
-          user: {
-            ...signUpResponse.user,
-            runner_profile: savedProfile,
-          },
-        };
+      const updatedUserData = {
+        ...signUpResponse,
+        user: {
+          ...signUpResponse.user,
+          runner_profile: savedProfile,
+        },
+      };
 
-        await login(updatedUserData);
+      await login(updatedUserData);
       } else if (userType === "organizer") {
         // Créer le profil organisateur
         const organizerProfileData = {
