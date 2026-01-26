@@ -16,8 +16,9 @@
       "env": {
         "API_BASE_URL_PROD": "https://runmate-back-api.onrender.com"
       },
-      "node": {
-        "installCommand": "npm ci --legacy-peer-deps"
+      "node": "20",
+      "install": {
+        "customCommand": "npm ci --legacy-peer-deps"
       }
     },
     "production": {
@@ -25,8 +26,9 @@
       "env": {
         "API_BASE_URL_PROD": "https://runmate-back-api.onrender.com"
       },
-      "node": {
-        "installCommand": "npm ci --legacy-peer-deps"
+      "node": "20",
+      "install": {
+        "customCommand": "npm ci --legacy-peer-deps"
       }
     }
   },
