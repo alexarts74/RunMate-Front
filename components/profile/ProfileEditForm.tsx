@@ -15,6 +15,8 @@ import { Image } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import User from "@/interface/User";
 
+const ACCENT = "#F97316";
+
 type ProfileEditFormProps = {
   setIsEditing: (value: boolean) => void;
 };
@@ -131,7 +133,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             onFocus={() => setFocusedInput("first_name")}
             onBlur={() => setFocusedInput(null)}
             style={{
-              shadowColor: focusedInput === "first_name" ? "#FF6B4A" : "#000",
+              shadowColor: focusedInput === "first_name" ? ACCENT : "#000",
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: focusedInput === "first_name" ? 0.1 : 0.05,
               shadowRadius: 2,
@@ -157,7 +159,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             onFocus={() => setFocusedInput("last_name")}
             onBlur={() => setFocusedInput(null)}
             style={{
-              shadowColor: focusedInput === "last_name" ? "#FF6B4A" : "#000",
+              shadowColor: focusedInput === "last_name" ? ACCENT : "#000",
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: focusedInput === "last_name" ? 0.1 : 0.05,
               shadowRadius: 2,
@@ -182,7 +184,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             onBlur={() => setFocusedInput(null)}
             keyboardType="numeric"
             style={{
-              shadowColor: focusedInput === "age" ? "#FF6B4A" : "#000",
+              shadowColor: focusedInput === "age" ? ACCENT : "#000",
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: focusedInput === "age" ? 0.1 : 0.05,
               shadowRadius: 2,
@@ -203,7 +205,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             placeholder="Sélectionnez votre genre"
             boxStyles={{
               borderWidth: 1,
-              borderColor: focusedInput === "gender" ? "#FF6B4A" : "#E5E7EB",
+              borderColor: focusedInput === "gender" ? ACCENT : "#E5E7EB",
               borderRadius: 9999,
               padding: 16,
               backgroundColor: "#ffffff",
@@ -238,7 +240,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
             multiline
             numberOfLines={4}
             style={{
-              shadowColor: focusedInput === "bio" ? "#FF6B4A" : "#000",
+              shadowColor: focusedInput === "bio" ? ACCENT : "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: focusedInput === "bio" ? 0.1 : 0.05,
               shadowRadius: 4,
@@ -256,7 +258,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         <Pressable
           className="bg-primary py-4 rounded-full items-center"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,

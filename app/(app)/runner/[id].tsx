@@ -22,6 +22,8 @@ const StyledPressable = styled(Pressable);
 const StyledSafeAreaView = styled(SafeAreaView);
 const StyledAnimatedView = styled(Animated.View);
 
+const ACCENT = "#F97316";
+
 // Composant de section repliable
 const CollapsibleSection = ({
   title,
@@ -61,23 +63,23 @@ const CollapsibleSection = ({
         style={{
           borderBottomLeftRadius: isOpen ? 0 : 16,
           borderBottomRightRadius: isOpen ? 0 : 16,
-          shadowColor: "#FF6B4A",
+          shadowColor: "#000",
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
+          shadowOpacity: 0.05,
           shadowRadius: 4,
           elevation: 2,
         }}
       >
         <StyledView className="flex-row items-center">
           <StyledView className="bg-tertiary p-2.5 rounded-xl">
-            <Ionicons name={icon as any} size={18} color="#FF6B4A" />
+            <Ionicons name={icon as any} size={18} color={ACCENT} />
           </StyledView>
           <StyledText className="text-gray-900 ml-3 font-nunito-bold">
             {title}
           </StyledText>
         </StyledView>
         <StyledAnimatedView style={{ transform: [{ rotate: rotation }] }}>
-          <Ionicons name="chevron-forward" size={20} color="#A78BFA" />
+          <Ionicons name="chevron-forward" size={20} color="#525252" />
         </StyledAnimatedView>
       </StyledPressable>
 
@@ -94,7 +96,7 @@ const CollapsibleSection = ({
                 }),
               },
             ],
-            shadowColor: "#FF6B4A",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.05,
             shadowRadius: 4,
@@ -193,7 +195,7 @@ export default function RunnerProfileScreen() {
               onPress={() => router.back()}
               className="p-2 rounded-full bg-tertiary"
             >
-              <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+              <Ionicons name="arrow-back" size={24} color={ACCENT} />
             </StyledPressable>
             <StyledText className="text-xl font-nunito-extrabold text-gray-900 ml-3">
               Profil Runner
@@ -221,7 +223,7 @@ export default function RunnerProfileScreen() {
 
             <StyledView className="flex-row items-center mt-3">
               <View className="w-5 h-5 rounded-full bg-tertiary items-center justify-center mr-2">
-                <Ionicons name="location" size={12} color="#A78BFA" />
+                <Ionicons name="location" size={12} color="#525252" />
               </View>
               <StyledText className="text-gray-700 font-nunito-medium">
                 {runner.city}, {runner.department}
@@ -261,7 +263,7 @@ export default function RunnerProfileScreen() {
 
               {runner.runner_profile.flexible && (
                 <StyledView className="bg-tertiary border border-secondary px-4 py-2 rounded-full flex-row items-center">
-                  <Ionicons name="leaf-outline" size={16} color="#A78BFA" />
+                  <Ionicons name="leaf-outline" size={16} color="#525252" />
                   <StyledText className="text-secondary ml-2 text-sm font-nunito-bold">
                     Flexible
                   </StyledText>
@@ -279,7 +281,7 @@ export default function RunnerProfileScreen() {
               {/* Allure actuelle - affiché pour tous */}
               <StyledView className="items-center bg-tertiary p-4 rounded-xl flex-1 border border-gray-200">
                 <StyledView className="bg-white p-2.5 rounded-full mb-2">
-                  <Ionicons name="walk-outline" size={18} color="#FF6B4A" />
+                  <Ionicons name="walk-outline" size={18} color={ACCENT} />
                 </StyledView>
                 <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
                   Pace
@@ -292,7 +294,7 @@ export default function RunnerProfileScreen() {
               {/* Distance - adapté selon le type */}
               <StyledView className="items-center bg-tertiary p-4 rounded-xl flex-1 border border-gray-200">
                 <StyledView className="bg-white p-2.5 rounded-full mb-2">
-                  <Ionicons name="resize-outline" size={18} color="#A78BFA" />
+                  <Ionicons name="resize-outline" size={18} color="#525252" />
                 </StyledView>
                 <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
                   {runner.runner_profile.running_type === "perf"
@@ -313,10 +315,10 @@ export default function RunnerProfileScreen() {
                     <Ionicons
                       name="speedometer-outline"
                       size={18}
-                      color="#FF6B4A"
+                      color={ACCENT}
                     />
                   ) : (
-                    <Ionicons name="repeat-outline" size={18} color="#A78BFA" />
+                    <Ionicons name="repeat-outline" size={18} color="#525252" />
                   )}
                 </StyledView>
                 <StyledText className="text-gray-600 text-center text-xs font-nunito-medium mb-1">
@@ -354,7 +356,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="ribbon-outline"
                           size={16}
-                          color="#FF6B4A"
+                          color={ACCENT}
                       />
                       </View>
                       <StyledText className="text-gray-900 ml-1 font-nunito-bold">
@@ -379,7 +381,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="calendar-outline"
                           size={16}
-                          color="#A78BFA"
+                          color="#525252"
                       />
                       </View>
                       <StyledText className="text-gray-900 ml-1 font-nunito-bold">
@@ -413,7 +415,7 @@ export default function RunnerProfileScreen() {
                 <StyledView className="mb-4">
                   <StyledView className="flex-row items-center mb-2">
                     <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
-                      <Ionicons name="trophy-outline" size={16} color="#FF6B4A" />
+                      <Ionicons name="trophy-outline" size={16} color={ACCENT} />
                     </View>
                     <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                       Objectif
@@ -437,7 +439,7 @@ export default function RunnerProfileScreen() {
                     <Ionicons
                       name="calendar-outline"
                         size={16}
-                        color="#A78BFA"
+                        color="#525252"
                     />
                     </View>
                     <StyledText className="text-gray-900 ml-1 font-nunito-bold">
@@ -473,7 +475,7 @@ export default function RunnerProfileScreen() {
                         <Ionicons
                           name="time-outline"
                             size={16}
-                            color="#A78BFA"
+                            color="#525252"
                         />
                         </View>
                         <StyledText className="text-gray-900 ml-1 font-nunito-bold">
@@ -509,7 +511,7 @@ export default function RunnerProfileScreen() {
                       <Ionicons
                         name="people-outline"
                           size={16}
-                          color="#A78BFA"
+                          color="#525252"
                       />
                       </View>
                       <StyledText className="text-gray-900 ml-1 font-nunito-bold">
@@ -537,7 +539,7 @@ export default function RunnerProfileScreen() {
                   <StyledView>
                     <StyledView className="flex-row items-center mb-2">
                       <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
-                        <Ionicons name="cafe-outline" size={16} color="#FF6B4A" />
+                        <Ionicons name="cafe-outline" size={16} color={ACCENT} />
                       </View>
                       <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                         Après la course
@@ -572,7 +574,7 @@ export default function RunnerProfileScreen() {
             <StyledView className="mb-4">
               <StyledView className="flex-row items-center mb-2">
                 <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
-                  <Ionicons name="pulse-outline" size={16} color="#FF6B4A" />
+                  <Ionicons name="pulse-outline" size={16} color={ACCENT} />
                 </View>
                 <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                   Dernière activité
@@ -591,7 +593,7 @@ export default function RunnerProfileScreen() {
             <StyledView>
               <StyledView className="flex-row items-center mb-2">
                 <View className="w-6 h-6 rounded-lg bg-tertiary items-center justify-center mr-2">
-                  <Ionicons name="create-outline" size={16} color="#A78BFA" />
+                  <Ionicons name="create-outline" size={16} color="#525252" />
                 </View>
                 <StyledText className="text-gray-900 ml-1 font-nunito-bold">
                   Membre depuis
@@ -610,11 +612,12 @@ export default function RunnerProfileScreen() {
       </StyledScrollView>
 
       {/* Footer fixe */}
-      <StyledView className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-white border-t border-gray-200">
+      <StyledView className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-white border-t border-neutral-100">
         <StyledPressable
-          className="bg-primary py-4 rounded-full w-full flex-row justify-center items-center"
+          className="py-4 rounded-2xl w-full flex-row justify-center items-center"
           style={{
-            shadowColor: "#FF6B4A",
+            backgroundColor: ACCENT,
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,

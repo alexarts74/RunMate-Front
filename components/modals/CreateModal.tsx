@@ -4,6 +4,8 @@ import { router } from "expo-router";
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 interface CreateModalProps {
   visible: boolean;
   onClose: () => void;
@@ -50,7 +52,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                   onPress={onClose}
                   className="w-8 h-8 rounded-full bg-tertiary items-center justify-center"
                 >
-                  <Ionicons name="close" size={20} color="#FF6B4A" />
+                  <Ionicons name="close" size={20} color={ACCENT} />
                 </Pressable>
               </View>
             </View>
@@ -60,10 +62,10 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
               {isOrganizer ? (
                 <>
               <Pressable
-                onPress={() => handleAction("/events/create")}
+                onPress={() => handleAction("/(app)/events/create")}
                 className="bg-white rounded-2xl mb-3 overflow-hidden"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.15,
                   shadowRadius: 4,
@@ -72,7 +74,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
               >
                 <View className="flex-row items-center p-4">
                   <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="calendar" size={24} color="#FF6B4A" />
+                    <Ionicons name="calendar" size={24} color={ACCENT} />
                   </View>
                   <View className="flex-1">
                     <Text className="text-gray-900 font-nunito-bold text-base">
@@ -85,7 +87,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                   <Ionicons
                     name="chevron-forward"
                     size={18}
-                    color="#A78BFA"
+                    color="#525252"
                   />
                 </View>
               </Pressable>
@@ -94,7 +96,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                 onPress={() => handleAction("/(app)/groups/create")}
                 className="bg-white rounded-2xl overflow-hidden"
                 style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.15,
                   shadowRadius: 4,
@@ -103,7 +105,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
               >
                 <View className="flex-row items-center p-4">
                   <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="people" size={24} color="#A78BFA" />
+                    <Ionicons name="people" size={24} color="#525252" />
                   </View>
                   <View className="flex-1">
                     <Text className="text-gray-900 font-nunito-bold text-base">
@@ -116,7 +118,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                   <Ionicons
                     name="chevron-forward"
                     size={18}
-                    color="#FF6B4A"
+                    color={ACCENT}
                   />
                 </View>
               </Pressable>
@@ -125,7 +127,7 @@ export function CreateModal({ visible, onClose }: CreateModalProps) {
                 <View className="bg-white rounded-2xl p-6">
                   <View className="items-center">
                     <View className="w-16 h-16 rounded-full bg-tertiary items-center justify-center mb-4">
-                      <Ionicons name="lock-closed" size={32} color="#A78BFA" />
+                      <Ionicons name="lock-closed" size={32} color="#525252" />
                     </View>
                     <Text className="text-gray-900 font-nunito-bold text-lg mb-2 text-center">
                       Fonctionnalité réservée aux organisateurs

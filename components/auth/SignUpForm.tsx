@@ -303,16 +303,13 @@ export default function SignUpForm() {
           department: formData.organizer_department,
           postcode: formData.organizer_postcode || undefined,
           country: formData.country || "France",
+          latitude: formData.organizer_latitude || undefined,
+          longitude: formData.organizer_longitude || undefined,
         };
 
-        try {
-          console.log("🏢 [SignUpForm] Création profil organisateur avec:", organizerProfileData);
-          const createdProfile = await organizerProfileService.createProfile(organizerProfileData);
-          console.log("🏢 [SignUpForm] Profil organisateur créé:", createdProfile);
-        } catch (error) {
-          console.error("❌ [SignUpForm] Erreur lors de la création du profil organisateur:", error);
-          // On continue même si le profil n'a pas pu être créé, l'utilisateur pourra le faire plus tard
-        }
+        console.log("🏢 [SignUpForm] Création profil organisateur avec:", organizerProfileData);
+        const createdProfile = await organizerProfileService.createProfile(organizerProfileData);
+        console.log("🏢 [SignUpForm] Profil organisateur créé:", createdProfile);
       }
 
       // 5. Nettoyer et rediriger

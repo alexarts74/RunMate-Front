@@ -15,6 +15,8 @@ import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "../ui/ActionButton";
 
+const ACCENT = "#F97316";
+
 export function FiltersContent() {
   const router = useRouter();
   const [showGenderModal, setShowGenderModal] = useState(false);
@@ -66,13 +68,13 @@ export function FiltersContent() {
       <View className="mb-6">
         <View className="flex-row items-center mb-3">
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
-            <Ionicons name="person-outline" size={20} color="#FF6B4A" />
+            <Ionicons name="person-outline" size={20} color={ACCENT} />
           </View>
           <Text className="text-gray-900 text-lg font-nunito-bold">Âge</Text>
         </View>
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
@@ -96,7 +98,7 @@ export function FiltersContent() {
             step={1}
             sliderLength={280}
             selectedStyle={{
-              backgroundColor: "#FF6B4A",
+              backgroundColor: ACCENT,
             }}
             unselectedStyle={{
               backgroundColor: "#E5E7EB",
@@ -106,7 +108,7 @@ export function FiltersContent() {
               alignItems: "center",
             }}
             markerStyle={{
-              backgroundColor: "#FF6B4A",
+              backgroundColor: ACCENT,
               height: 24,
               width: 24,
               borderRadius: 12,
@@ -125,13 +127,13 @@ export function FiltersContent() {
       <View className="mb-6">
         <View className="flex-row items-center mb-3">
           <View className="bg-secondary/10 p-2 rounded-xl mr-3">
-            <Ionicons name="fitness-outline" size={20} color="#A78BFA" />
+            <Ionicons name="fitness-outline" size={20} color="#525252" />
           </View>
           <Text className="text-gray-900 text-lg font-nunito-bold">Type de runner</Text>
         </View>
         <View className="bg-white p-4 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#A78BFA",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
@@ -154,7 +156,7 @@ export function FiltersContent() {
                     : "bg-gray-100"
                 }`}
                 style={{
-                  shadowColor: filters.running_type === option.value ? "#A78BFA" : "#000",
+                  shadowColor: filters.running_type === option.value ? "#525252" : "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: filters.running_type === option.value ? 0.2 : 0.05,
                   shadowRadius: 4,
@@ -179,7 +181,7 @@ export function FiltersContent() {
       <View className="mb-6">
         <View className="flex-row items-center mb-3">
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
-            <Ionicons name="male-female-outline" size={20} color="#FF6B4A" />
+            <Ionicons name="male-female-outline" size={20} color={ACCENT} />
           </View>
           <Text className="text-gray-900 text-lg font-nunito-bold">Genre</Text>
         </View>
@@ -187,7 +189,7 @@ export function FiltersContent() {
           onPress={() => setShowGenderModal(true)}
           className="bg-white p-4 rounded-2xl border border-gray-200 flex-row justify-between items-center"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
@@ -198,20 +200,20 @@ export function FiltersContent() {
             {genderOptions.find((opt) => opt.value === filters.gender)?.label ||
               "Sélectionner"}
           </Text>
-          <Ionicons name="chevron-down" size={20} color="#FF6B4A" />
+          <Ionicons name="chevron-down" size={20} color={ACCENT} />
         </Pressable>
       </View>
       {/* Filtre de distance */}
       <View className="mb-6">
         <View className="flex-row items-center mb-3">
           <View className="bg-primary/10 p-2 rounded-xl mr-3">
-            <Ionicons name="location-outline" size={20} color="#FF6B4A" />
+            <Ionicons name="location-outline" size={20} color={ACCENT} />
           </View>
           <Text className="text-gray-900 text-lg font-nunito-bold">Distance maximale</Text>
         </View>
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
@@ -227,9 +229,9 @@ export function FiltersContent() {
             minimumValue={1}
             maximumValue={100}
             step={1}
-            minimumTrackTintColor="#FF6B4A"
+            minimumTrackTintColor={ACCENT}
             maximumTrackTintColor="#E5E7EB"
-            thumbTintColor="#FF6B4A"
+            thumbTintColor={ACCENT}
           />
           <View className="flex-row justify-between mt-3">
             <Text className="text-gray-500 text-sm font-nunito-medium">1 km</Text>
@@ -241,7 +243,7 @@ export function FiltersContent() {
       <View className="mb-8">
         <View className="flex-row items-center mb-3">
           <View className="bg-secondary/10 p-2 rounded-xl mr-3">
-            <Ionicons name="star-outline" size={20} color="#A78BFA" />
+            <Ionicons name="star-outline" size={20} color="#525252" />
           </View>
           <Text className="text-gray-900 text-lg font-nunito-bold">
             Critères de compatibilité
@@ -249,7 +251,7 @@ export function FiltersContent() {
         </View>
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#A78BFA",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
@@ -264,7 +266,7 @@ export function FiltersContent() {
               onValueChange={(value) =>
                 setFilters((prev) => ({ ...prev, filter_pace: value }))
               }
-              trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+              trackColor={{ false: "#E5E7EB", true: ACCENT }}
               thumbColor="#FFFFFF"
             />
           </View>
@@ -284,7 +286,7 @@ export function FiltersContent() {
                       filter_competition_goals: value,
                     }))
                   }
-                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  trackColor={{ false: "#E5E7EB", true: ACCENT }}
                   thumbColor="#FFFFFF"
                 />
               </View>
@@ -300,7 +302,7 @@ export function FiltersContent() {
                       filter_training_days: value,
                     }))
                   }
-                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  trackColor={{ false: "#E5E7EB", true: ACCENT }}
                   thumbColor="#FFFFFF"
                 />
               </View>
@@ -317,7 +319,7 @@ export function FiltersContent() {
                       filter_availability: value,
                     }))
                   }
-                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  trackColor={{ false: "#E5E7EB", true: ACCENT }}
                   thumbColor="#FFFFFF"
                 />
               </View>
@@ -333,7 +335,7 @@ export function FiltersContent() {
                       filter_social_preferences: value,
                     }))
                   }
-                  trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+                  trackColor={{ false: "#E5E7EB", true: ACCENT }}
                   thumbColor="#FFFFFF"
                 />
               </View>
@@ -359,7 +361,7 @@ export function FiltersContent() {
                 onPress={() => setShowGenderModal(false)}
                 className="bg-gray-100 p-2 rounded-full"
               >
-                <Ionicons name="close" size={20} color="#FF6B4A" />
+                <Ionicons name="close" size={20} color={ACCENT} />
               </Pressable>
             </View>
             {genderOptions.map((option, index) => (
@@ -371,7 +373,7 @@ export function FiltersContent() {
                 }}
                 className={`p-4 ${index !== genderOptions.length - 1 ? 'border-b border-gray-100' : ''}`}
                 style={{
-                  backgroundColor: filters.gender === option.value ? 'rgba(255, 107, 74, 0.1)' : 'transparent',
+                  backgroundColor: filters.gender === option.value ? 'rgba(249, 115, 22, 0.1)' : 'transparent',
                 }}
               >
                 <Text

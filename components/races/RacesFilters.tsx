@@ -12,6 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Race } from "@/interface/Race";
 
+const ACCENT = "#F97316";
+
 const availableDistances = [
   { label: "Toutes", value: null, icon: "🏃" },
   { label: "5 km", value: 5, icon: "🚶" },
@@ -119,7 +121,7 @@ export const RacesFilters = ({
               <View className="flex-row items-center justify-between mb-2">
                 <View className="flex-row items-center">
                   <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                    <Ionicons name="filter" size={20} color="#FF6B4A" />
+                    <Ionicons name="filter" size={20} color={ACCENT} />
                   </View>
                   <View>
                     <Text className="text-gray-900 text-2xl font-nunito-extrabold">
@@ -136,7 +138,7 @@ export const RacesFilters = ({
                   onPress={onClose}
                   className="w-10 h-10 rounded-full bg-tertiary items-center justify-center"
                 >
-                  <Ionicons name="close" size={22} color="#FF6B4A" />
+                  <Ionicons name="close" size={22} color={ACCENT} />
                 </Pressable>
               </View>
             </View>
@@ -153,7 +155,7 @@ export const RacesFilters = ({
                     Rechercher par localisation
                   </Text>
                   <View className="flex-row items-center bg-tertiary rounded-xl px-4 py-3">
-                    <Ionicons name="search" size={20} color="#FF6B4A" />
+                    <Ionicons name="search" size={20} color={ACCENT} />
                     <TextInput
                       placeholder="Ex: Paris, Lyon..."
                       value={searchLocation}
@@ -181,7 +183,7 @@ export const RacesFilters = ({
                         showFutureOnly ? "bg-primary" : "bg-tertiary"
                       }`}
                       style={{
-                        shadowColor: showFutureOnly ? "#FF6B4A" : "#A78BFA",
+                        shadowColor: showFutureOnly ? ACCENT : "#000",
                         shadowOffset: { width: 0, height: 2 },
                         shadowOpacity: 0.15,
                         shadowRadius: 4,
@@ -191,7 +193,7 @@ export const RacesFilters = ({
                       <Ionicons
                         name="calendar"
                         size={18}
-                        color={showFutureOnly ? "white" : "#A78BFA"}
+                        color={showFutureOnly ? "white" : "#000"}
                         style={{ marginRight: 8 }}
                       />
                       <Text
@@ -208,7 +210,7 @@ export const RacesFilters = ({
                         !showFutureOnly ? "bg-primary" : "bg-tertiary"
                       }`}
                       style={{
-                        shadowColor: !showFutureOnly ? "#FF6B4A" : "#A78BFA",
+                        shadowColor: !showFutureOnly ? ACCENT : "#000",
                         shadowOffset: { width: 0, height: 2 },
                         shadowOpacity: 0.15,
                         shadowRadius: 4,
@@ -218,7 +220,7 @@ export const RacesFilters = ({
                       <Ionicons
                         name="calendar-outline"
                         size={18}
-                        color={!showFutureOnly ? "white" : "#A78BFA"}
+                        color={!showFutureOnly ? "white" : "#000"}
                         style={{ marginRight: 8 }}
                       />
                       <Text
@@ -250,8 +252,8 @@ export const RacesFilters = ({
                         style={{
                           shadowColor:
                             selectedDistance === distance.value
-                              ? "#FF6B4A"
-                              : "#A78BFA",
+                              ? ACCENT
+                              : "#000",
                           shadowOffset: { width: 0, height: 2 },
                           shadowOpacity: 0.15,
                           shadowRadius: 4,
@@ -291,7 +293,7 @@ export const RacesFilters = ({
                         }`}
                         style={{
                           shadowColor:
-                            selectedCountry === null ? "#FF6B4A" : "#A78BFA",
+                            selectedCountry === null ? ACCENT : "#000",
                           shadowOffset: { width: 0, height: 2 },
                           shadowOpacity: 0.15,
                           shadowRadius: 4,
@@ -319,7 +321,7 @@ export const RacesFilters = ({
                           }`}
                           style={{
                             shadowColor:
-                              selectedCountry === country ? "#FF6B4A" : "#A78BFA",
+                              selectedCountry === country ? ACCENT : "#000",
                             shadowOffset: { width: 0, height: 2 },
                             shadowOpacity: 0.15,
                             shadowRadius: 4,
@@ -351,7 +353,7 @@ export const RacesFilters = ({
                     onPress={handleClear}
                     className="flex-1 bg-tertiary border border-primary py-4 rounded-xl"
                     style={{
-                      shadowColor: "#FF6B4A",
+                      shadowColor: ACCENT,
                       shadowOffset: { width: 0, height: 2 },
                       shadowOpacity: 0.1,
                       shadowRadius: 4,
@@ -367,7 +369,7 @@ export const RacesFilters = ({
                   onPress={handleApply}
                   className={`${activeFiltersCount > 0 ? "flex-1" : "flex-1"} bg-primary py-4 rounded-xl`}
                   style={{
-                    shadowColor: "#FF6B4A",
+                    shadowColor: ACCENT,
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.3,
                     shadowRadius: 8,

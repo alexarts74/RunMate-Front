@@ -15,12 +15,13 @@ import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { EventCard } from "@/components/events/EventCard";
 
+const ACCENT = "#F97316";
+
 export default function OrganizerAllEventsScreen() {
   const [events, setEvents] = useState<Event[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
   const router = useRouter();
 
   const loadEvents = async () => {
@@ -72,7 +73,7 @@ export default function OrganizerAllEventsScreen() {
             onPress={() => loadEvents()}
             className="bg-primary px-6 py-3 rounded-xl"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
@@ -89,7 +90,7 @@ export default function OrganizerAllEventsScreen() {
       return (
         <View className="flex-1 justify-center items-center p-4">
           <View className="bg-tertiary p-8 rounded-full mb-6">
-            <Ionicons name="calendar-outline" size={60} color="#FF6B4A" />
+            <Ionicons name="calendar-outline" size={60} color={ACCENT} />
           </View>
           <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-nunito-bold">
             Aucun événement créé
@@ -101,7 +102,7 @@ export default function OrganizerAllEventsScreen() {
             onPress={() => router.push("/(app)/events/create")}
             className="bg-primary px-6 py-3 rounded-full"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
@@ -150,7 +151,7 @@ export default function OrganizerAllEventsScreen() {
       <SafeAreaView className="bg-fond" edges={['top']}>
         <View className="px-6 py-4 flex-row items-center border-b border-gray-200">
           <Pressable onPress={() => router.back()} className="mr-3">
-            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={24} color={ACCENT} />
           </Pressable>
           <Text className="text-2xl font-nunito-extrabold text-gray-900">
             Mes événements
@@ -164,7 +165,7 @@ export default function OrganizerAllEventsScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#FF6B4A"
+            tintColor={ACCENT}
           />
         }
       >

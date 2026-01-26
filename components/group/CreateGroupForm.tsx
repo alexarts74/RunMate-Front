@@ -16,6 +16,8 @@ import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 interface CreateGroupForm {
   name: string;
   description: string;
@@ -115,7 +117,7 @@ export function CreateGroupForm() {
             onPress={handleImagePick}
             className="bg-white rounded-2xl overflow-hidden h-48 items-center justify-center border-2 border-dashed border-gray-300"
             style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -131,7 +133,7 @@ export function CreateGroupForm() {
             ) : (
               <View className="items-center">
                 <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
-                  <Ionicons name="image-outline" size={32} color="#A78BFA" />
+                  <Ionicons name="image-outline" size={32} color="#525252" />
                 </View>
                 <Text className="text-gray-600 font-nunito-medium text-base">
                   Ajouter une image de couverture
@@ -252,7 +254,7 @@ export function CreateGroupForm() {
           disabled={isLoading}
           className="bg-secondary py-4 px-8 rounded-full active:opacity-90"
           style={{
-            shadowColor: "#A78BFA",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,

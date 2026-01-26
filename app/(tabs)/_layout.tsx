@@ -1,4 +1,3 @@
-// TabLayout.tsx
 import { Tabs, useSegments } from "expo-router";
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Animated, Dimensions } from "react-native";
@@ -8,6 +7,8 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
 import { useAuth } from "@/context/AuthContext";
+
+const ACCENT = "#F97316";
 
 function CreateActionButton({
   focused,
@@ -29,7 +30,7 @@ function CreateActionButton({
     <>
       <TabBarIcon
         name="add-circle"
-        color={focused ? "#FF6B4A" : "rgba(107, 75, 82, 0.5)"}
+        color={focused ? ACCENT : "#A3A3A3"}
         focused={focused}
         onPress={handlePress}
       />
@@ -55,7 +56,6 @@ export default function TabLayout() {
   const numberOfTabs = isOrganizer ? 4 : 3;
   const tabWidth = tabBarWidth / numberOfTabs;
 
-  // Détecter automatiquement l'onglet actif basé sur les segments de route
   useEffect(() => {
     const currentPath = segments.join("/");
     if (currentPath.includes("profile")) {
@@ -64,7 +64,7 @@ export default function TabLayout() {
       setActiveTab(1);
     } else if (currentPath.includes("create")) {
       if (isOrganizer) {
-      setActiveTab(2);
+        setActiveTab(2);
       }
     } else if (currentPath.includes("matches") || currentPath === "") {
       setActiveTab(0);
@@ -83,7 +83,7 @@ export default function TabLayout() {
   const tabBarBackground = () => (
     <View style={StyleSheet.absoluteFill}>
       <BlurView
-        intensity={15}
+        intensity={20}
         tint="light"
         style={{
           flex: 1,
@@ -94,9 +94,8 @@ export default function TabLayout() {
         <View
           style={{
             flex: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.85)",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
             borderRadius: 28,
-            borderWidth: 0,
             position: "relative",
             overflow: "hidden",
           }}
@@ -104,20 +103,12 @@ export default function TabLayout() {
           <Animated.View
             style={{
               position: "absolute",
-              top: 3,
+              top: 4,
               left: indicatorPosition,
               width: 76,
-              height: 52,
-              borderRadius: 27,
-              backgroundColor: "rgba(255, 107, 74, 0.2)",
-              shadowColor: "#FF6B4A",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 3,
+              height: 50,
+              borderRadius: 24,
+              backgroundColor: `${ACCENT}15`,
             }}
           />
         </View>
@@ -128,8 +119,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#FF6B4A",
-        tabBarInactiveTintColor: "rgba(107, 75, 82, 0.5)",
+        tabBarActiveTintColor: ACCENT,
+        tabBarInactiveTintColor: "#A3A3A3",
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
@@ -145,9 +136,11 @@ export default function TabLayout() {
           paddingBottom: 0,
           paddingTop: 5,
           marginBottom: 0,
-          shadowColor: "transparent",
-          shadowOpacity: 0,
-          elevation: 0,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 16,
+          elevation: 8,
         },
         tabBarItemStyle: {
           paddingVertical: 1,
@@ -193,7 +186,7 @@ export default function TabLayout() {
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: "#FF6B4A",
+            backgroundColor: ACCENT,
             color: "#ffffff",
             fontSize: 10,
             fontWeight: "700",
@@ -221,7 +214,7 @@ export default function TabLayout() {
               }}
             />
           ),
-          href: isOrganizer ? "/create" : null, // Masquer l'onglet pour les runners
+          href: isOrganizer ? "/create" : null,
         }}
         listeners={{
           tabPress: (e) => {
@@ -232,7 +225,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile/index"
         options={{
-          title: "Profile",
+          title: "Profil",
           tabBarIcon: ({ color }) => (
             <TabBarIcon
               name="person-circle-outline"

@@ -5,6 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "@/components/ui/ActionButton";
 import * as Location from "expo-location";
 
+const ACCENT = "#F97316";
+
 interface LocationSuggestion {
   city: string;
   postcode: string;
@@ -276,14 +278,14 @@ export function SignUpFormStepOrganizer2({
                   onPress={onBack}
                   className="bg-white p-2.5 rounded-full active:opacity-80 mr-4"
                   style={{
-                    shadowColor: "#FF6B4A",
+                    shadowColor: ACCENT,
                     shadowOffset: { width: 0, height: 2 },
                     shadowOpacity: 0.15,
                     shadowRadius: 4,
                     elevation: 3,
                   }}
                 >
-                  <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+                  <Ionicons name="arrow-back" size={20} color={ACCENT} />
                 </Pressable>
                 <View className="flex-1">
                   <Text className="text-gray-900 text-2xl font-nunito-extrabold">
@@ -322,7 +324,7 @@ export function SignUpFormStepOrganizer2({
                   placeholderTextColor="#9CA3AF"
                   className="text-gray-900 text-base font-nunito-medium"
                   style={{ color: "#111827" }}
-                  selectionColor="#FF6B4A"
+                  selectionColor={ACCENT}
                   editable={true}
                   keyboardType="url"
                   autoCapitalize="none"
@@ -356,7 +358,7 @@ export function SignUpFormStepOrganizer2({
                   placeholderTextColor="#9CA3AF"
                   className="text-gray-900 text-base font-nunito-medium"
                   style={{ color: "#111827" }}
-                  selectionColor="#FF6B4A"
+                  selectionColor={ACCENT}
                   editable={true}
                   keyboardType="phone-pad"
                 />
@@ -389,7 +391,7 @@ export function SignUpFormStepOrganizer2({
                   placeholderTextColor="#9CA3AF"
                   className="text-gray-900 text-base font-nunito-medium"
                   style={{ color: "#111827" }}
-                  selectionColor="#FF6B4A"
+                  selectionColor={ACCENT}
                   editable={true}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -414,7 +416,7 @@ export function SignUpFormStepOrganizer2({
                     <Ionicons
                       name="location"
                       size={16}
-                      color={loadingLocation ? "#9CA3AF" : "#FF6B4A"}
+                      color={loadingLocation ? "#9CA3AF" : ACCENT}
                       style={{ marginRight: 4 }}
                     />
                     <Text
@@ -478,7 +480,7 @@ export function SignUpFormStepOrganizer2({
                     placeholderTextColor="#9CA3AF"
                     className="text-gray-900 text-base font-nunito-medium"
                     style={{ color: "#111827" }}
-                    selectionColor="#FF6B4A"
+                    selectionColor={ACCENT}
                     editable={true}
                   />
                 </View>
@@ -527,7 +529,7 @@ export function SignUpFormStepOrganizer2({
                     placeholderTextColor="#9CA3AF"
                     className="text-gray-900 text-base font-nunito-medium"
                     style={{ color: "#111827" }}
-                    selectionColor="#FF6B4A"
+                    selectionColor={ACCENT}
                     editable={true}
                   />
                 </View>
@@ -559,7 +561,7 @@ export function SignUpFormStepOrganizer2({
                     placeholderTextColor="#9CA3AF"
                     className="text-gray-900 text-base font-nunito-medium"
                     style={{ color: "#111827" }}
-                    selectionColor="#FF6B4A"
+                    selectionColor={ACCENT}
                     editable={true}
                   />
                 </View>
@@ -591,7 +593,7 @@ export function SignUpFormStepOrganizer2({
                     placeholderTextColor="#9CA3AF"
                     className="text-gray-900 text-base font-nunito-medium"
                     style={{ color: "#111827" }}
-                    selectionColor="#FF6B4A"
+                    selectionColor={ACCENT}
                     editable={true}
                     keyboardType="numeric"
                   />
@@ -624,7 +626,7 @@ export function SignUpFormStepOrganizer2({
                     placeholderTextColor="#9CA3AF"
                     className="text-gray-900 text-base font-nunito-medium"
                     style={{ color: "#111827" }}
-                    selectionColor="#FF6B4A"
+                    selectionColor={ACCENT}
                     editable={true}
                   />
                 </View>

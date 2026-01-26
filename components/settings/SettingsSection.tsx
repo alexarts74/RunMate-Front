@@ -3,6 +3,8 @@ import React from "react";
 import { styled } from "nativewind";
 import { Ionicons } from "@expo/vector-icons";
 
+const ACCENT = "#F97316";
+
 const StyledView = styled(View);
 const StyledText = styled(Text);
 const StyledPressable = styled(Pressable);
@@ -28,7 +30,7 @@ export default function SettingsSection({
     <StyledView className="space-y-4 pt-4">
       <StyledView className="bg-white rounded-2xl overflow-hidden"
         style={{
-          shadowColor: "#FF6B4A",
+          shadowColor: ACCENT,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
           shadowRadius: 4,
@@ -45,7 +47,7 @@ export default function SettingsSection({
           >
             <StyledView className="flex-row items-center space-x-4 flex-1">
               <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-                <Ionicons name={item.icon} size={20} color="#FF6B4A" />
+                <Ionicons name={item.icon} size={20} color={ACCENT} />
               </View>
               <StyledView className="flex-1">
                 <StyledText className="text-gray-900 font-nunito-bold">
@@ -61,7 +63,7 @@ export default function SettingsSection({
             <Switch
               value={item.value}
               onValueChange={item.onToggle}
-              trackColor={{ false: "#E5E7EB", true: "#FF6B4A" }}
+              trackColor={{ false: "#E5E7EB", true: ACCENT }}
               thumbColor="#fff"
               ios_backgroundColor="#E5E7EB"
             />

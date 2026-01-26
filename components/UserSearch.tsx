@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { userService } from "@/service/api/user";
 import User from "@/interface/User";
 
+const ACCENT = "#F97316";
+
 interface UserSearchProps {
   onSelectUser: (user: User) => void;
   selectedUsers: User[];
@@ -71,7 +73,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
           elevation: 1,
         }}
       >
-        <Ionicons name="search" size={20} color="#FF6B4A" style={{ marginRight: 8 }} />
+        <Ionicons name="search" size={20} color={ACCENT} style={{ marginRight: 8 }} />
         <TextInput
           className="flex-1 text-gray-900 p-4 font-nunito-medium"
           placeholder="Rechercher des participants..."
@@ -93,7 +95,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
             elevation: 1,
           }}
         >
-          <ActivityIndicator color="#FF6B4A" />
+          <ActivityIndicator color={ACCENT} />
         </View>
       ) : (
         searchResults.length > 0 && (
@@ -120,7 +122,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                     setSearchResults([]);
                   }}
                   className="flex-row items-center p-3 border-b border-gray-100"
-                  android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
+                  android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
                 >
                   <Image
                     source={{ uri: item.profile_image }}
@@ -145,7 +147,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                 key={user.id}
                 className="flex-row items-center bg-white rounded-full px-3 py-1.5 border-2 border-tertiary"
                 style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 1 },
                   shadowOpacity: 0.1,
                   shadowRadius: 2,
@@ -158,7 +160,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                 />
                 <Text className="text-gray-700 mx-2 font-nunito-medium text-sm">{user.first_name}</Text>
                 <Pressable onPress={() => onSelectUser(user)}>
-                  <Ionicons name="close-circle" size={18} color="#FF6B4A" />
+                  <Ionicons name="close-circle" size={18} color={ACCENT} />
                 </Pressable>
               </View>
             ))}

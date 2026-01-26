@@ -16,6 +16,8 @@ import { GroupInfo, JoinRequest } from "@/interface/Group";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 export default function OrganizerGroupDetailsScreen() {
   const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -96,7 +98,7 @@ export default function OrganizerGroupDetailsScreen() {
   if (!group.is_admin) {
     return (
       <View className="flex-1 bg-fond items-center justify-center px-6">
-        <Ionicons name="lock-closed" size={64} color="#FF6B4A" />
+        <Ionicons name="lock-closed" size={64} color={ACCENT} />
         <Text className="text-gray-900 font-nunito-bold text-xl mt-4 text-center">
           Accès restreint
         </Text>
@@ -143,7 +145,7 @@ export default function OrganizerGroupDetailsScreen() {
             className="absolute left-4 bg-white/90 p-3 rounded-full"
             style={{ top: insets.top + 8 }}
           >
-            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={24} color={ACCENT} />
           </Pressable>
 
           <View className="absolute bottom-0 left-0 right-0 p-6">
@@ -171,7 +173,7 @@ export default function OrganizerGroupDetailsScreen() {
           {user?.user_type === "organizer" && (
             <View className="bg-white rounded-2xl p-5 mb-4"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 8,
@@ -180,7 +182,7 @@ export default function OrganizerGroupDetailsScreen() {
             >
               <View className="flex-row items-center mb-4">
                 <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                  <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                  <Ionicons name="stats-chart" size={20} color={ACCENT} />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-lg">
                   Statistiques du groupe
@@ -214,7 +216,7 @@ export default function OrganizerGroupDetailsScreen() {
                   }}
                   className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
                 >
-                  <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                  <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
                   <Text className="text-primary font-nunito-bold text-sm">
                     Modifier
                   </Text>
@@ -251,7 +253,7 @@ export default function OrganizerGroupDetailsScreen() {
           {/* Description Card */}
           {group.description && (
             <View className="bg-white rounded-2xl p-5 mb-4" style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -259,7 +261,7 @@ export default function OrganizerGroupDetailsScreen() {
             }}>
               <View className="flex-row items-center mb-3">
                 <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                  <Ionicons name="information-circle" size={20} color="#A78BFA" />
+                  <Ionicons name="information-circle" size={20} color="#525252" />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-lg">
                   À propos
@@ -276,7 +278,7 @@ export default function OrganizerGroupDetailsScreen() {
             onPress={() => setShowRequests(!showRequests)}
             className="bg-white rounded-2xl p-5 flex-row items-center justify-between mb-4"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -285,7 +287,7 @@ export default function OrganizerGroupDetailsScreen() {
           >
             <View className="flex-row items-center flex-1">
               <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
-                <Ionicons name="people-outline" size={20} color="#FF6B4A" />
+                <Ionicons name="people-outline" size={20} color={ACCENT} />
               </View>
               <Text className="text-gray-900 font-nunito-bold text-base">
                 Demandes d'adhésion
@@ -302,14 +304,14 @@ export default function OrganizerGroupDetailsScreen() {
               <Ionicons
                 name={showRequests ? "chevron-up" : "chevron-down"}
                 size={24}
-                color="#A78BFA"
+                color="#525252"
               />
             </View>
           </Pressable>
 
           {showRequests && (
             <View className="mb-4 bg-white rounded-2xl overflow-hidden" style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -318,7 +320,7 @@ export default function OrganizerGroupDetailsScreen() {
               {pendingRequests.length === 0 ? (
                 <View className="p-8 items-center">
                   <View className="bg-tertiary p-4 rounded-full mb-3">
-                    <Ionicons name="checkmark-circle" size={40} color="#A78BFA" />
+                    <Ionicons name="checkmark-circle" size={40} color="#525252" />
                   </View>
                   <Text className="text-gray-500 font-nunito text-center">
                     Aucune demande en attente
@@ -376,7 +378,7 @@ export default function OrganizerGroupDetailsScreen() {
           {/* Membres */}
           {group.members && group.members.length > 0 && (
             <View className="bg-white rounded-2xl p-5 mb-4" style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -384,7 +386,7 @@ export default function OrganizerGroupDetailsScreen() {
             }}>
               <View className="flex-row items-center mb-4">
                 <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                  <Ionicons name="people" size={20} color="#A78BFA" />
+                  <Ionicons name="people" size={20} color="#525252" />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-lg">
                   Membres ({group.members.length})

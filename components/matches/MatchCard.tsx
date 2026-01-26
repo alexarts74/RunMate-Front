@@ -5,6 +5,8 @@ import { MatchUser } from "@/interface/Matches";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 
+const ACCENT = "#F97316";
+
 type MatchCardProps = {
   match: MatchUser;
 };
@@ -64,7 +66,7 @@ export function MatchCard({ match }: MatchCardProps) {
         shadowRadius: 24,
         elevation: 12,
         borderWidth: 2,
-        borderColor: '#FF6B4A',
+        borderColor: ACCENT,
         backgroundColor: '#FFFFFF',
       }}
     >
@@ -176,11 +178,11 @@ export function MatchCard({ match }: MatchCardProps) {
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 20,
-              backgroundColor: 'rgba(255, 107, 74, 0.12)',
+              backgroundColor: 'rgba(249, 115, 22, 0.12)',
             }}
           >
             <Text style={{ 
-              color: '#FF6B4A',
+              color: ACCENT,
               fontSize: 12,
               fontWeight: '700',
               fontFamily: 'Nunito-Bold',

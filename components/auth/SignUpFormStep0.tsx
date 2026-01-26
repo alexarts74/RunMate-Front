@@ -3,6 +3,9 @@ import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+
+const ACCENT = "#F97316";
+
 type RunnerType = "chill" | "perf";
 
 type Props = {
@@ -32,7 +35,7 @@ export function SignUpFormStep0({ onNext }: Props) {
               onPress={() => handleNext("chill")}
               className="bg-white px-5 h-[180px] py-4 rounded-2xl active:opacity-80 border-2 border-gray-200"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.15,
                 shadowRadius: 8,
@@ -41,7 +44,7 @@ export function SignUpFormStep0({ onNext }: Props) {
             >
               <View className="flex-row items-center mb-3">
                 <View className="bg-tertiary p-3 rounded-xl">
-                  <Ionicons name="leaf-outline" size={24} color="#A78BFA" />
+                  <Ionicons name="leaf-outline" size={24} color="#525252" />
                 </View>
                 <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
                   Je suis un runner Chill
@@ -55,7 +58,7 @@ export function SignUpFormStep0({ onNext }: Props) {
                 <Ionicons
                   name="arrow-forward-circle-outline"
                   size={18}
-                  color="#A78BFA"
+                  color="#525252"
                 />
                 <Text className="text-secondary ml-2 font-nunito-medium text-sm">
                   Choisir ce profil
@@ -67,7 +70,7 @@ export function SignUpFormStep0({ onNext }: Props) {
               onPress={() => handleNext("perf")}
               className="bg-white px-5 py-4 h-[180px] rounded-2xl active:opacity-80 border-2 border-gray-200"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.15,
                 shadowRadius: 8,
@@ -76,7 +79,7 @@ export function SignUpFormStep0({ onNext }: Props) {
             >
               <View className="flex-row items-center mb-3">
                 <View className="bg-tertiary p-3 rounded-xl">
-                  <Ionicons name="trophy-outline" size={24} color="#FF6B4A" />
+                  <Ionicons name="trophy-outline" size={24} color={ACCENT} />
                 </View>
                 <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
                   Je suis un runner Perf
@@ -90,7 +93,7 @@ export function SignUpFormStep0({ onNext }: Props) {
                 <Ionicons
                   name="arrow-forward-circle-outline"
                   size={18}
-                  color="#FF6B4A"
+                  color={ACCENT}
                 />
                 <Text className="text-primary ml-2 font-nunito-medium text-sm">
                   Choisir ce profil
@@ -108,7 +111,7 @@ export function SignUpFormStep0({ onNext }: Props) {
                   isFlexible ? "border-primary" : "border-gray-200"
                 }`}
                 style={{
-                  shadowColor: isFlexible ? "#FF6B4A" : "#000",
+                  shadowColor: isFlexible ? ACCENT : "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: isFlexible ? 0.15 : 0.05,
                   shadowRadius: 4,
@@ -148,7 +151,7 @@ export function SignUpFormStep0({ onNext }: Props) {
           onPress={() => router.back()}
           className="bg-white px-6 py-4 rounded-full active:opacity-80 border-2 border-gray-200"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.15,
             shadowRadius: 4,
@@ -156,7 +159,7 @@ export function SignUpFormStep0({ onNext }: Props) {
           }}
         >
           <View className="flex-row items-center justify-center">
-            <Ionicons name="arrow-back" size={18} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={18} color={ACCENT} />
             <Text className="text-primary ml-2 font-nunito-bold text-base">
               Retour
             </Text>

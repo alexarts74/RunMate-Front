@@ -15,6 +15,8 @@ import { AvailabilitySelect } from "../runner-profile/AvailabilitySelect";
 import { ObjectiveSelect } from "../runner-profile/ObjectiveSelect";
 import { PaceDistanceInputs } from "../runner-profile/PaceDistanceInputs";
 
+const ACCENT = "#F97316";
+
 type RunnerProfileEditFormProps = {
   setIsEditing: (value: boolean) => void;
 };
@@ -68,13 +70,13 @@ export function RunnerProfileEditForm({
             onPress={() => setIsEditing(false)}
             className="bg-tertiary p-3 rounded-full"
           >
-            <Ionicons name="close" size={20} color="#FF6B4A" />
+            <Ionicons name="close" size={20} color={ACCENT} />
           </Pressable>
         </View>
 
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
@@ -83,7 +85,7 @@ export function RunnerProfileEditForm({
         >
           <View className="flex-row items-center space-x-3 mb-4">
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="fitness-outline" size={20} color="#FF6B4A" />
+              <Ionicons name="fitness-outline" size={20} color={ACCENT} />
             </View>
             <Text className="text-gray-900 text-base font-nunito-bold">
               Performance
@@ -98,7 +100,7 @@ export function RunnerProfileEditForm({
 
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#A78BFA",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
@@ -107,7 +109,7 @@ export function RunnerProfileEditForm({
         >
           <View className="flex-row items-center space-x-3 mb-4">
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="trophy-outline" size={20} color="#FF6B4A" />
+              <Ionicons name="trophy-outline" size={20} color={ACCENT} />
             </View>
             <Text className="text-gray-900 text-base font-nunito-bold">Objectif</Text>
           </View>
@@ -116,7 +118,7 @@ export function RunnerProfileEditForm({
 
         <View className="bg-white p-5 rounded-2xl border border-gray-200"
           style={{
-            shadowColor: "#A78BFA",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
@@ -125,7 +127,7 @@ export function RunnerProfileEditForm({
         >
           <View className="flex-row items-center space-x-3 mb-4">
             <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="calendar-outline" size={20} color="#A78BFA" />
+              <Ionicons name="calendar-outline" size={20} color="#525252" />
             </View>
             <Text className="text-gray-900 text-base font-nunito-bold">
               Disponibilités
@@ -141,7 +143,7 @@ export function RunnerProfileEditForm({
           <Pressable
             className="bg-primary py-4 rounded-full items-center flex-row justify-center space-x-2"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,

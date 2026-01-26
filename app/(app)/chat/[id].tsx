@@ -20,6 +20,8 @@ import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { LinearGradient } from "expo-linear-gradient";
 
+const ACCENT = "#F97316";
+
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
   const [newMessage, setNewMessage] = useState("");
@@ -100,7 +102,7 @@ const ChatPage = () => {
             : "bg-white rounded-bl-md border border-gray-200"
         }`}
         style={{
-          shadowColor: item.sender_id === user?.id ? "#FF6B4A" : "#000",
+          shadowColor: item.sender_id === user?.id ? ACCENT : "#000",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
           shadowRadius: 4,
@@ -141,7 +143,7 @@ const ChatPage = () => {
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center flex-1">
                 <Pressable onPress={() => router.back()} className="p-2 mr-3">
-                  <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+                  <Ionicons name="arrow-back" size={24} color={ACCENT} />
                 </Pressable>
                 <Image
                   source={
@@ -185,7 +187,7 @@ const ChatPage = () => {
                 onPress={sendMessage}
                 className="bg-primary w-12 h-12 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.3,
                   shadowRadius: 4,

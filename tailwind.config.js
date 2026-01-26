@@ -4,28 +4,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Nouvelles couleurs du redesign
-        primary: "#FF6B4A",
-        secondary: "#A78BFA",
-        tertiary: "#F6F0FA",
-        fond: "#f5faff",
+        // Couleurs du design sportif
+        primary: "#F97316", // Orange sportif
+        secondary: "#525252", // Gris neutre
+        tertiary: "#F5F5F5", // Gris clair
+        fond: "#FFFFFF", // Fond blanc
+        accent: {
+          DEFAULT: "#F97316",
+          light: "#FFF7ED",
+        },
         // Anciennes couleurs conservées pour compatibilité
         green: "#0F4D3B",
         greenLight: "#126C52",
-        // purple: "#401346",
-        // purple: "#f0c2fe",
         background: "#1b1d21",
         gray: {
-          50: "#f9fafb",
-          100: "#f3f4f6",
-          200: "#e5e7eb",
-          300: "#d1d5db",
-          400: "#9ca3af",
-          500: "#6b7280",
-          600: "#4b5563",
-          700: "#374151",
-          800: "#1f2937",
-          900: "#111827",
+          50: "#FAFAFA",
+          100: "#F5F5F5",
+          200: "#E5E5E5",
+          300: "#D4D4D4",
+          400: "#A3A3A3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
         },
         dark: "#1b1d21",
       },

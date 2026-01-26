@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Event } from "@/interface/Event";
 
+const ACCENT = "#F97316";
+
 export const EventCard = ({
   event,
   onEventUpdate,
@@ -16,13 +18,13 @@ export const EventCard = ({
       onPress={() => router.push(`/events/${event.id}`)}
       className="bg-white rounded-2xl mb-6 overflow-hidden"
       style={{
-        shadowColor: "#FF6B4A",
+        shadowColor: ACCENT,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
         elevation: 5,
       }}
-      android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
+      android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
     >
       {/* Cover Image */}
       <Image
@@ -53,7 +55,7 @@ export const EventCard = ({
         <View className="space-y-3 mb-4">
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
-              <Ionicons name="calendar" size={16} color="#FF6B4A" />
+              <Ionicons name="calendar" size={16} color={ACCENT} />
             </View>
             <Text className="text-gray-700 font-nunito-medium">
             {new Date(event.start_date).toLocaleDateString()}
@@ -62,14 +64,14 @@ export const EventCard = ({
 
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
-              <Ionicons name="location" size={16} color="#A78BFA" />
+              <Ionicons name="location" size={16} color="#525252" />
             </View>
             <Text className="text-gray-700 font-nunito-medium">{event.location}</Text>
         </View>
 
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
-              <Ionicons name="trending-up" size={16} color="#FF6B4A" />
+              <Ionicons name="trending-up" size={16} color={ACCENT} />
             </View>
             <Text className="text-gray-700 font-nunito-medium">{event.distance} km</Text>
           </View>
@@ -86,7 +88,7 @@ export const EventCard = ({
           onPress={() => router.push(`/events/${event.id}`)}
           className="bg-primary py-3 rounded-xl"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,

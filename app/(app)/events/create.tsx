@@ -25,6 +25,8 @@ import { validateCreateEventForm } from "@/constants/formValidation";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 // Enum pour le niveau (correspondant à votre DB)
 enum EventLevel {
   BEGINNER = 0,
@@ -307,7 +309,7 @@ export default function CreateEventScreen() {
           }}
         >
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color="#FF6B4A" />
+            <Ionicons name="close" size={24} color={ACCENT} />
           </Pressable>
           <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
             Créer un événement
@@ -328,7 +330,7 @@ export default function CreateEventScreen() {
                 onPress={handleImagePick}
                 className="h-48 bg-white rounded-2xl items-center justify-center mb-2 border-2 border-dashed border-gray-300"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 4,
@@ -343,7 +345,7 @@ export default function CreateEventScreen() {
                 ) : (
                   <View className="items-center">
                     <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
-                      <Ionicons name="image-outline" size={32} color="#FF6B4A" />
+                      <Ionicons name="image-outline" size={32} color={ACCENT} />
                     </View>
                     <Text className="text-gray-600 font-nunito-medium text-base">
                       Ajouter une photo
@@ -436,7 +438,7 @@ export default function CreateEventScreen() {
                 <Text className="text-gray-900 font-nunito-medium">
                   {formData.start_date.toLocaleString()}
                 </Text>
-                <Ionicons name="calendar" size={20} color="#FF6B4A" />
+                <Ionicons name="calendar" size={20} color={ACCENT} />
               </Pressable>
               {errors.start_date && (
                 <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
@@ -473,7 +475,7 @@ export default function CreateEventScreen() {
                           : "bg-white border-gray-200"
                       }`}
                       style={{
-                        shadowColor: formData.level === value ? "#FF6B4A" : "#000",
+                        shadowColor: formData.level === value ? ACCENT : "#000",
                         shadowOffset: { width: 0, height: 2 },
                         shadowOpacity: formData.level === value ? 0.2 : 0.05,
                         shadowRadius: 4,
@@ -535,7 +537,7 @@ export default function CreateEventScreen() {
                       key={index}
                       onPress={() => handleSelectLocation(suggestion)}
                       className="p-4 border-b border-gray-100"
-                      android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
+                      android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
                     >
                       <Text className="text-gray-900 font-nunito-medium">{suggestion.full_name}</Text>
                     </Pressable>
@@ -622,7 +624,7 @@ export default function CreateEventScreen() {
             onPress={handleSubmit}
             className="bg-primary py-4 px-8 rounded-full active:opacity-90"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,

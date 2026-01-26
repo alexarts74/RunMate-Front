@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Race } from "@/interface/Race";
 
+const ACCENT = "#F97316";
+
 export const RaceCard = ({ race }: { race: Race }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -41,13 +43,13 @@ export const RaceCard = ({ race }: { race: Race }) => {
       onPress={() => router.push(`/(app)/races/${race.id}`)}
       className="bg-white rounded-2xl mb-6 overflow-hidden"
       style={{
-        shadowColor: "#FF6B4A",
+        shadowColor: ACCENT,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
         elevation: 5,
       }}
-      android_ripple={{ color: "rgba(255, 107, 74, 0.1)" }}
+      android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
     >
       {/* Cover Image */}
       {race.cover_image && (
@@ -69,7 +71,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
               <Ionicons
                 name="time-outline"
                 size={12}
-                color="#A78BFA"
+                color="#525252"
                 style={{ marginRight: 4 }}
               />
               <Text className="text-secondary font-nunito-bold text-xs">
@@ -86,7 +88,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
         <View className="space-y-3 mb-4">
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
-              <Ionicons name="calendar" size={16} color="#FF6B4A" />
+              <Ionicons name="calendar" size={16} color={ACCENT} />
             </View>
             <Text className="text-gray-700 font-nunito-medium">
               {formatDate(race.start_date)}
@@ -95,7 +97,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
 
           <View className="flex-row items-center">
             <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3">
-              <Ionicons name="location" size={16} color="#A78BFA" />
+              <Ionicons name="location" size={16} color="#525252" />
             </View>
             <Text className="text-gray-700 font-nunito-medium flex-1">
               {race.location}
@@ -106,7 +108,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
           {race.distances && race.distances.length > 0 && (
             <View className="flex-row items-start">
               <View className="w-8 h-8 rounded-lg bg-tertiary items-center justify-center mr-3 mt-0.5">
-                <Ionicons name="flag" size={16} color="#FF6B4A" />
+                <Ionicons name="flag" size={16} color={ACCENT} />
               </View>
               <View className="flex-1 flex-row flex-wrap" style={{ gap: 6 }}>
                 {race.distances.map((distance, index) => (
@@ -135,7 +137,7 @@ export const RaceCard = ({ race }: { race: Race }) => {
           onPress={() => router.push(`/(app)/races/${race.id}`)}
           className="bg-primary py-3 rounded-xl"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.3,
             shadowRadius: 4,

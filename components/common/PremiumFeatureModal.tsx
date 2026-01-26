@@ -3,6 +3,8 @@ import { View, Text, Modal, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+const ACCENT = "#F97316";
+
 interface PremiumFeatureModalProps {
   visible: boolean;
   onClose: () => void;
@@ -46,8 +48,8 @@ export const PremiumFeatureModal = ({
                 <View
                   className="w-20 h-20 rounded-full items-center justify-center mb-4"
                   style={{
-                    backgroundColor: "#FF6B4A",
-                    shadowColor: "#FF6B4A",
+                    backgroundColor: ACCENT,
+                    shadowColor: ACCENT,
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.3,
                     shadowRadius: 8,
@@ -72,7 +74,7 @@ export const PremiumFeatureModal = ({
                 onPress={onUpgrade}
                 className="mb-3"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.3,
                   shadowRadius: 8,
@@ -80,7 +82,7 @@ export const PremiumFeatureModal = ({
                 }}
               >
                 <LinearGradient
-                  colors={["#FF6B4A", "#FF8E75"]}
+                  colors={[ACCENT, "#FB923C"]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   className="py-4 rounded-full"

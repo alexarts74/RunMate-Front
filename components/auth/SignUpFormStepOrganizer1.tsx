@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "@/components/ui/ActionButton";
 
+const ACCENT = "#F97316";
+
 type OrganizationType = "association" | "club_sportif" | "collectif" | "autre";
 
 interface SignUpFormStepOrganizer1Props {
@@ -73,14 +75,14 @@ export function SignUpFormStepOrganizer1({
                   onPress={onBack}
                   className="bg-white p-2.5 rounded-full active:opacity-80 mr-4"
                   style={{
-                    shadowColor: "#FF6B4A",
+                    shadowColor: ACCENT,
                     shadowOffset: { width: 0, height: 2 },
                     shadowOpacity: 0.15,
                     shadowRadius: 4,
                     elevation: 3,
                   }}
                 >
-                  <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+                  <Ionicons name="arrow-back" size={20} color={ACCENT} />
                 </Pressable>
                 <View className="flex-1">
                   <Text className="text-gray-900 text-2xl font-nunito-extrabold">
@@ -123,7 +125,7 @@ export function SignUpFormStepOrganizer1({
                   placeholderTextColor="#9CA3AF"
                   className="text-gray-900 text-base font-nunito-medium"
                   style={{ color: "#111827" }}
-                  selectionColor="#FF6B4A"
+                  selectionColor={ACCENT}
                   editable={true}
                   autoCorrect={false}
                 />
@@ -153,7 +155,7 @@ export function SignUpFormStepOrganizer1({
                         : "border-gray-200"
                     }`}
                     style={{
-                      shadowColor: formData.organization_type === type.value ? "#FF6B4A" : "#000",
+                      shadowColor: formData.organization_type === type.value ? ACCENT : "#000",
                       shadowOffset: { width: 0, height: 2 },
                       shadowOpacity: formData.organization_type === type.value ? 0.15 : 0.05,
                       shadowRadius: 4,
@@ -184,7 +186,7 @@ export function SignUpFormStepOrganizer1({
                         {type.label}
                       </Text>
                       {formData.organization_type === type.value && (
-                        <Ionicons name="checkmark-circle" size={24} color="#FF6B4A" />
+                        <Ionicons name="checkmark-circle" size={24} color={ACCENT} />
                       )}
                     </View>
                   </Pressable>
@@ -226,7 +228,7 @@ export function SignUpFormStepOrganizer1({
                   placeholderTextColor="#9CA3AF"
                   className="text-gray-900 text-base font-nunito-medium"
                   style={{ color: "#111827" }}
-                  selectionColor="#FF6B4A"
+                  selectionColor={ACCENT}
                   editable={true}
                   autoCorrect={false}
                   multiline

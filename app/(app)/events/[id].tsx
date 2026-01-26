@@ -9,6 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
 import { LinearGradient } from "expo-linear-gradient";
 
+const ACCENT = "#F97316";
+
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -153,7 +155,7 @@ export default function EventDetailsScreen() {
                   elevation: 3,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color="#FF6B4A" />
+                <Ionicons name="arrow-back" size={22} color={ACCENT} />
               </Pressable>
             </View>
           </SafeAreaView>
@@ -179,7 +181,7 @@ export default function EventDetailsScreen() {
                 </View>
               ) : (
                 <View className="bg-tertiary border border-secondary px-3 py-1.5 rounded-full flex-row items-center">
-                  <Ionicons name="time-outline" size={14} color="#A78BFA" style={{ marginRight: 4 }} />
+                  <Ionicons name="time-outline" size={14} color="#525252" style={{ marginRight: 4 }} />
                   <Text className="text-secondary font-nunito-bold text-xs">
                     {countdown.days}j {countdown.hours}h
                   </Text>
@@ -194,7 +196,7 @@ export default function EventDetailsScreen() {
           {/* Carte créateur */}
           <View className="bg-white p-4 rounded-2xl mb-6 flex-row items-center"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -220,7 +222,7 @@ export default function EventDetailsScreen() {
                 onPress={() => router.push(`/chat/${event.creator.id}`)}
                 className="bg-primary px-4 py-2.5 rounded-full"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.3,
                   shadowRadius: 4,
@@ -235,7 +237,7 @@ export default function EventDetailsScreen() {
           {/* Informations principales */}
           <View className="bg-white p-5 rounded-2xl mb-6"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -245,7 +247,7 @@ export default function EventDetailsScreen() {
             <View className="space-y-4">
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={20} color="#FF6B4A" />
+                  <Ionicons name="calendar" size={20} color={ACCENT} />
                 </View>
                 <View className="flex-1">
                   <Text className="text-gray-900 font-nunito-bold text-base">
@@ -265,14 +267,14 @@ export default function EventDetailsScreen() {
 
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="location" size={20} color="#A78BFA" />
+                  <Ionicons name="location" size={20} color="#525252" />
                 </View>
                 <Text className="text-gray-900 font-nunito-medium text-base flex-1">{event.location}</Text>
               </View>
 
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="trending-up" size={20} color="#FF6B4A" />
+                  <Ionicons name="trending-up" size={20} color={ACCENT} />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-base">
                   {event.distance} km
@@ -282,7 +284,7 @@ export default function EventDetailsScreen() {
               {event.participants_count !== undefined && (
                 <View className="flex-row items-center">
                   <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="people" size={20} color="#A78BFA" />
+                    <Ionicons name="people" size={20} color="#525252" />
                   </View>
                   <View className="flex-1 flex-row items-center">
                     <Text className="text-gray-900 font-nunito-bold text-base mr-2">
@@ -306,7 +308,7 @@ export default function EventDetailsScreen() {
           {event.description && (
             <View className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -324,7 +326,7 @@ export default function EventDetailsScreen() {
           {event.participants && event.participants.length > 0 && (
             <View className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -346,7 +348,7 @@ export default function EventDetailsScreen() {
                     <Text className="text-primary font-nunito-bold text-sm mr-1">
                       Gérer
                     </Text>
-                    <Ionicons name="settings-outline" size={16} color="#FF6B4A" />
+                    <Ionicons name="settings-outline" size={16} color={ACCENT} />
                   </Pressable>
                 )}
               </View>
@@ -388,7 +390,7 @@ export default function EventDetailsScreen() {
           {event.is_creator && user?.user_type === "organizer" && (
             <View className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -397,7 +399,7 @@ export default function EventDetailsScreen() {
             >
               <View className="flex-row items-center mb-4">
                 <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                  <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                  <Ionicons name="stats-chart" size={20} color={ACCENT} />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-lg">
                   Gestion de l'événement
@@ -436,7 +438,7 @@ export default function EventDetailsScreen() {
                   }}
                   className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
                 >
-                  <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                  <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
                   <Text className="text-primary font-nunito-bold text-sm">
                     Modifier
                   </Text>
@@ -481,7 +483,7 @@ export default function EventDetailsScreen() {
               event.is_participant ? "bg-red-500" : "bg-primary"
             }`}
             style={{
-              shadowColor: event.is_participant ? "#EF4444" : "#FF6B4A",
+              shadowColor: event.is_participant ? "#EF4444" : ACCENT,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,

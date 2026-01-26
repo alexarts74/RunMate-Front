@@ -3,6 +3,8 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+const ACCENT = "#F97316";
+
 type RunnerProfileViewProps = {
   setIsEditing: (value: boolean) => void;
 };
@@ -85,7 +87,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
     icon: string,
     iconColor: string,
     children: React.ReactNode,
-    bgColor: string = "#FF6B4A"
+    bgColor: string = ACCENT
   ) => (
     <View className="bg-white rounded-2xl border border-gray-200"
       style={{
@@ -156,14 +158,14 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             onPress={() => setIsEditing(true)}
             className="bg-tertiary p-3 rounded-full"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
               elevation: 2,
             }}
           >
-            <Ionicons name="pencil" size={20} color="#FF6B4A" />
+            <Ionicons name="pencil" size={20} color={ACCENT} />
           </Pressable>
         </View>
 
@@ -174,7 +176,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             style={{
               width: '48%',
               padding: 16,
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -183,7 +185,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           >
             <View className="items-center">
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
-                <Ionicons name="speedometer-outline" size={24} color="#FF6B4A" />
+                <Ionicons name="speedometer-outline" size={24} color={ACCENT} />
               </View>
               <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Allure actuelle
@@ -200,7 +202,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             style={{
               width: '48%',
               padding: 16,
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -209,7 +211,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           >
             <View className="items-center">
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
-                <Ionicons name="flag-outline" size={24} color="#A78BFA" />
+                <Ionicons name="flag-outline" size={24} color="#525252" />
               </View>
               <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Allure cible
@@ -226,7 +228,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             style={{
               width: '100%',
               padding: 16,
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -235,7 +237,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           >
             <View className="items-center">
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
-                <Ionicons name="trail-sign-outline" size={24} color="#A78BFA" />
+                <Ionicons name="trail-sign-outline" size={24} color="#525252" />
               </View>
               <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Distance habituelle
@@ -252,7 +254,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
             style={{
               width: '48%',
               padding: 16,
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -261,7 +263,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           >
             <View className="items-center">
               <View className="w-12 h-12 rounded-xl bg-tertiary items-center justify-center mb-3">
-                <Ionicons name="stats-chart-outline" size={24} color="#FF6B4A" />
+                <Ionicons name="stats-chart-outline" size={24} color={ACCENT} />
               </View>
               <Text className="text-gray-600 text-sm font-nunito-medium mt-1">
                 Kilométrage hebdo
@@ -280,7 +282,7 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
         {renderSection(
           "Objectifs",
           "trophy-outline",
-          "#FF6B4A",
+          ACCENT,
           <>
             {isPerformance && runner?.objective && Array.isArray(runner.objective) && runner.objective.length > 0 && (
               <View className="flex-row flex-wrap gap-2">
@@ -308,18 +310,18 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
               <Text className="text-gray-500 font-nunito-medium">Aucun objectif défini</Text>
             )}
           </>,
-          "#FF6B4A"
+          "ACCENT"
         )}
 
         {/* Disponibilités */}
         {renderSection(
           "Disponibilités",
           "calendar-outline",
-          "#A78BFA",
+          "#525252",
           <View className="flex-row flex-wrap gap-2">
             {renderAvailability()}
           </View>,
-          "#A78BFA"
+          "#525252"
         )}
 
         {/* Type Performance - Objectifs de compétition */}
@@ -327,11 +329,11 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Objectifs de compétition",
             "medal-outline",
-            "#FF6B4A",
+            ACCENT,
             <Text className="text-gray-700 text-base font-nunito-medium">
               {runner.competition_goals}
             </Text>,
-            "#FF6B4A"
+            "ACCENT"
           )
         )}
 
@@ -340,9 +342,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Jours d'entraînement",
             "fitness-outline",
-            "#FF6B4A",
+            ACCENT,
             renderBadges(parseJsonField(runner.training_days).map(formatDay), "Aucun jour d'entraînement"),
-            "#FF6B4A"
+            "ACCENT"
           )
         )}
 
@@ -351,11 +353,11 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Fréquence de course",
             "repeat-outline",
-            "#A78BFA",
+            "#525252",
             <Text className="text-gray-700 text-base font-nunito-medium">
               {runner.running_frequency}
             </Text>,
-            "#A78BFA"
+            "#525252"
           )
         )}
 
@@ -364,9 +366,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Préférences sociales",
             "people-outline",
-            "#A78BFA",
+            "#525252",
             renderBadges(parseJsonField(runner.social_preferences), "Aucune préférence"),
-            "#A78BFA"
+            "#525252"
           )
         )}
 
@@ -375,9 +377,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Moments préférés",
             "time-outline",
-            "#A78BFA",
+            "#525252",
             renderBadges(parseJsonField(runner.preferred_time_of_day), "Aucun moment préféré"),
-            "#A78BFA"
+            "#525252"
           )
         )}
 
@@ -386,9 +388,9 @@ export function RunnerProfileView({ setIsEditing }: RunnerProfileViewProps) {
           renderSection(
             "Activités post-course",
             "cafe-outline",
-            "#A78BFA",
+            "#525252",
             renderBadges(parseJsonField(runner.post_run_activities), "Aucune activité"),
-            "#A78BFA"
+            "#525252"
           )
         )}
       </View>

@@ -19,6 +19,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { GenderSelect } from "../GenderSelect";
 import { ActionButton } from "../ui/ActionButton";
 
+const ACCENT = "#F97316";
+
 interface SignUpFormStep2Props {
   formData: {
     first_name: string;
@@ -102,14 +104,14 @@ export function SignUpFormStep2({
             onPress={onBack}
             className="bg-white p-2.5 rounded-full active:opacity-80"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
               shadowRadius: 4,
               elevation: 3,
             }}
           >
-            <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={20} color={ACCENT} />
           </Pressable>
 
           <View className="flex-1">
@@ -141,7 +143,7 @@ export function SignUpFormStep2({
               onFocus={() => setFocusedInput("first_name")}
               onBlur={() => setFocusedInput(null)}
               style={{
-                shadowColor: focusedInput === "first_name" ? "#FF6B4A" : "#000",
+                shadowColor: focusedInput === "first_name" ? ACCENT : "#000",
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: focusedInput === "first_name" ? 0.15 : 0.05,
                 shadowRadius: 2,
@@ -175,7 +177,7 @@ export function SignUpFormStep2({
               onFocus={() => setFocusedInput("last_name")}
               onBlur={() => setFocusedInput(null)}
               style={{
-                shadowColor: focusedInput === "last_name" ? "#FF6B4A" : "#000",
+                shadowColor: focusedInput === "last_name" ? ACCENT : "#000",
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: focusedInput === "last_name" ? 0.15 : 0.05,
                 shadowRadius: 2,
@@ -249,7 +251,7 @@ export function SignUpFormStep2({
               style={{
                 height: 50,
                 textAlignVertical: "top",
-                shadowColor: focusedInput === "bio" ? "#FF6B4A" : "#000",
+                shadowColor: focusedInput === "bio" ? ACCENT : "#000",
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: focusedInput === "bio" ? 0.15 : 0.05,
                 shadowRadius: 2,
@@ -270,7 +272,7 @@ export function SignUpFormStep2({
                   : "border-gray-200"
               }`}
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -288,7 +290,7 @@ export function SignUpFormStep2({
               ) : (
                 <View className="items-center">
                   <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
-                    <Ionicons name="camera-outline" size={32} color="#FF6B4A" />
+                    <Ionicons name="camera-outline" size={32} color={ACCENT} />
                   </View>
                   <Text className="text-gray-600 font-nunito-medium">
                     Sélectionner une image de profil
@@ -326,7 +328,7 @@ export function SignUpFormStep2({
                 Sélectionnez votre âge
               </Text>
               <Pressable onPress={() => setShowAgePicker(false)}>
-                <Ionicons name="close" size={24} color="#FF6B4A" />
+                <Ionicons name="close" size={24} color={ACCENT} />
               </Pressable>
             </View>
             <Picker

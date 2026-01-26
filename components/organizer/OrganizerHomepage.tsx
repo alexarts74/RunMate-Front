@@ -19,6 +19,8 @@ import { organizerProfileService } from "@/service/api/organizerProfile";
 import { Event } from "@/interface/Event";
 import { GroupInfo } from "@/interface/Group";
 
+const ACCENT = "#F97316";
+
 export function OrganizerHomepage() {
   const { user } = useAuth();
   const { unreadCount } = useUnreadMessages();
@@ -75,17 +77,9 @@ export function OrganizerHomepage() {
       setMyEvents(createdEvents);
 
       // Charger les groupes
-      console.log("🏢 [OrganizerHomepage] Chargement des groupes...");
       const groupsData = await groupService.getGroups();
-      console.log("🏢 [OrganizerHomepage] Tous les groupes reçus:", groupsData.length, groupsData);
-      console.log("🏢 [OrganizerHomepage] Détail de chaque groupe:", groupsData.map((g: GroupInfo) => ({
-        id: g.id,
-        name: g.name,
-        is_admin: g.is_admin,
-        is_member: g.is_member,
-      })));
+
       const myCreatedGroups = groupsData.filter((g: GroupInfo) => g.is_admin);
-      console.log("🏢 [OrganizerHomepage] Groupes filtrés (is_admin=true):", myCreatedGroups.length, myCreatedGroups);
       setMyGroups(myCreatedGroups);
 
       // Calculer les statistiques
@@ -133,7 +127,7 @@ export function OrganizerHomepage() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 mr-4">
                 <View className="flex-row items-center mb-2">
-                  <Ionicons name="business" size={20} color="#FF6B4A" style={{ marginRight: 8 }} />
+                  <Ionicons name="business" size={20} color={ACCENT} style={{ marginRight: 8 }} />
                   <Text className="text-gray-500 font-nunito-medium text-sm">
                     Bienvenue
                   </Text>
@@ -151,7 +145,7 @@ export function OrganizerHomepage() {
                   onPress={() => router.push("/messages")}
                   className="relative"
                 >
-                  <Ionicons name="notifications-outline" size={24} color="#FF6B4A" />
+                  <Ionicons name="notifications-outline" size={24} color={ACCENT} />
                   {unreadCount > 0 && (
                     <View className="absolute -top-1 -right-1 bg-primary rounded-full w-5 h-5 items-center justify-center border-2 border-fond">
                       <Text className="text-white font-nunito-bold text-xs">
@@ -189,7 +183,7 @@ export function OrganizerHomepage() {
                 onPress={() => router.push("/(app)/organizer/events/all")}
                 className="bg-white rounded-2xl p-5 active:opacity-90" 
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -198,7 +192,7 @@ export function OrganizerHomepage() {
               >
                 <View className="flex-row items-center">
                   <View className="w-14 h-14 rounded-xl bg-primary/10 items-center justify-center mr-4">
-                    <Ionicons name="calendar" size={28} color="#FF6B4A" />
+                    <Ionicons name="calendar" size={28} color={ACCENT} />
                   </View>
                   <View className="flex-1">
                     <Text className="text-gray-500 font-nunito-medium text-sm mb-1">
@@ -221,7 +215,7 @@ export function OrganizerHomepage() {
                 onPress={() => router.push("/(app)/groups/all")}
                 className="bg-white rounded-2xl p-5 active:opacity-90"
                 style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -230,7 +224,7 @@ export function OrganizerHomepage() {
               >
                 <View className="flex-row items-center">
                   <View className="w-14 h-14 rounded-xl bg-secondary/10 items-center justify-center mr-4">
-                    <Ionicons name="people" size={28} color="#A78BFA" />
+                    <Ionicons name="people" size={28} color="#525252" />
                   </View>
                   <View className="flex-1">
                     <Text className="text-gray-500 font-nunito-medium text-sm mb-1">
@@ -279,7 +273,7 @@ export function OrganizerHomepage() {
                 onPress={() => router.push("/(app)/events/create")}
                 className="flex-1 bg-white rounded-2xl p-5"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -288,7 +282,7 @@ export function OrganizerHomepage() {
               >
                 <View>
                   <LinearGradient
-                    colors={["#FF6B4A", "#FF8E75"]}
+                    colors={[ACCENT, "#FB923C"]}
                     className="w-12 h-12 rounded-xl items-center justify-center mb-4"
                   >
                     <Ionicons name="calendar-outline" size={24} color="#FFFFFF" />
@@ -310,7 +304,7 @@ export function OrganizerHomepage() {
                 onPress={() => router.push("/(app)/groups/create")}
                 className="flex-1 bg-white rounded-2xl p-5"
                 style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -319,7 +313,7 @@ export function OrganizerHomepage() {
               >
                 <View>
                   <LinearGradient
-                    colors={["#A78BFA", "#C4AFFF"]}
+                    colors={["#525252", "#737373"]}
                     className="w-12 h-12 rounded-xl items-center justify-center mb-4"
                   >
                     <Ionicons name="people-outline" size={24} color="#FFFFFF" />
@@ -427,56 +421,68 @@ export function OrganizerHomepage() {
               </View>
 
               <View style={{ gap: 12 }}>
-                {myGroups.slice(0, 3).map((group, index) => (
-                  <Pressable
-                    key={group.id || `group-${index}`}
-                    onPress={() => router.push(`/(app)/organizer/groups/${String(group.id)}`)}
-                    className="bg-white rounded-2xl overflow-hidden"
-                    style={{
-                      shadowColor: "#000",
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 8,
-                      elevation: 3,
-                    }}
-                  >
-                    <View className="flex-row">
-                      {group.cover_image && (
-                        <Image
-                          source={{ uri: group.cover_image }}
-                          className="w-24 h-24"
-                          style={{ resizeMode: "cover" }}
-                        />
-                      )}
-                      <View className="flex-1 p-4">
-                        <Text className="text-gray-900 font-nunito-bold text-base mb-1">
-                          {group.name}
-                        </Text>
-                        {group.description && group.description.trim() !== "" && (
-                          <Text className="text-gray-600 font-nunito-medium text-sm mb-2" numberOfLines={2}>
-                            {String(group.description)}
-                          </Text>
+                {myGroups.slice(0, 3).map((group, index) => {
+                  // Sanitize group data to prevent string leakage
+                  const groupName = String(group.name || '');
+                  const groupDesc = group.description && typeof group.description === 'string' 
+                    ? group.description.trim() 
+                    : '';
+                  const membersCount = Number(group.members_count) || 0;
+                  const pendingCount = Number(group.pending_requests_count) || 0;
+                  const coverImage = group.cover_image ? String(group.cover_image) : null;
+                  const groupId = group.id;
+
+                  return (
+                    <Pressable
+                      key={groupId || `group-${index}`}
+                      onPress={() => router.push(`/(app)/organizer/groups/${String(groupId)}`)}
+                      className="bg-white rounded-2xl overflow-hidden"
+                      style={{
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.1,
+                        shadowRadius: 8,
+                        elevation: 3,
+                      }}
+                    >
+                      <View className="flex-row">
+                        {coverImage && (
+                          <Image
+                            source={{ uri: coverImage }}
+                            className="w-24 h-24"
+                            style={{ resizeMode: "cover" }}
+                          />
                         )}
-                        <View className="flex-row items-center" style={{ gap: 12 }}>
-                          <View className="flex-row items-center">
-                            <Ionicons name="people-outline" size={14} color="#A78BFA" />
-                            <Text className="text-gray-600 font-nunito-medium text-xs ml-1">
-                              {group.members_count || 0} membres
+                        <View className="flex-1 p-4">
+                          <Text className="text-gray-900 font-nunito-bold text-base mb-1">
+                            {groupName}
+                          </Text>
+                          {groupDesc.length > 0 && (
+                            <Text className="text-gray-600 font-nunito-medium text-sm mb-2" numberOfLines={2}>
+                              {groupDesc}
                             </Text>
-                          </View>
-                          {group.pending_requests_count && group.pending_requests_count > 0 && (
-                            <View className="flex-row items-center bg-orange-100 px-2 py-1 rounded-full">
-                              <Ionicons name="notifications" size={12} color="#F59E0B" />
-                              <Text className="text-orange-700 font-nunito-bold text-xs ml-1">
-                                {group.pending_requests_count} demande{group.pending_requests_count > 1 ? 's' : ''}
+                          )}
+                          <View className="flex-row items-center" style={{ gap: 12 }}>
+                            <View className="flex-row items-center">
+                              <Ionicons name="people-outline" size={14} color="#525252" />
+                              <Text className="text-gray-600 font-nunito-medium text-xs ml-1">
+                                {membersCount} membres
                               </Text>
                             </View>
-                          )}
+                            {pendingCount > 0 && (
+                              <View className="flex-row items-center bg-orange-100 px-2 py-1 rounded-full">
+                                <Ionicons name="notifications" size={12} color="#F59E0B" />
+                                <Text className="text-orange-700 font-nunito-bold text-xs ml-1">
+                                  {pendingCount} demande{pendingCount > 1 ? 's' : ''}
+                                </Text>
+                              </View>
+                            )}
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </Pressable>
-                ))}
+                    </Pressable>
+                  );
+                })}
               </View>
             </View>
           )}
@@ -496,7 +502,7 @@ export function OrganizerHomepage() {
               >
                 <View className="flex-row items-center mb-4">
                   <View className="w-14 h-14 rounded-xl bg-primary/10 items-center justify-center mr-4">
-                    <Ionicons name="rocket-outline" size={28} color="#FF6B4A" />
+                    <Ionicons name="rocket-outline" size={28} color={ACCENT} />
                   </View>
                   <View className="flex-1">
                     <Text className="text-gray-900 font-nunito-extrabold text-lg mb-1">
@@ -524,4 +530,3 @@ export function OrganizerHomepage() {
     </View>
   );
 }
-

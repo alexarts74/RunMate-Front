@@ -6,6 +6,8 @@ import LottieView from "lottie-react-native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
+const ACCENT = "#F97316";
+
 interface IntroScreenProps {
   onFinish?: () => void;
 }
@@ -119,9 +121,9 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
       {/* Gradient de fond amélioré */}
       <LinearGradient
         colors={[
-          "rgba(255, 107, 74, 0.2)",
-          "rgba(167, 139, 250, 0.15)",
-          "rgba(255, 107, 74, 0.05)",
+          "rgba(249, 115, 22, 0.2)",
+          "rgba(82, 82, 82, 0.1)",
+          "rgba(249, 115, 22, 0.05)",
           "transparent",
         ]}
         style={StyleSheet.absoluteFill}
@@ -197,7 +199,7 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
         >
           {/* Bouton principal - Connexion */}
           <LinearGradient
-            colors={["#FF6B4A", "#FF8C6A"]}
+            colors={[ACCENT, "#FB923C"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[styles.primaryButton, styles.buttonShadow]}
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
     width: 128,
     height: 128,
     borderRadius: 64,
-    backgroundColor: "rgba(255, 107, 74, 0.08)",
+    backgroundColor: "rgba(249, 115, 22, 0.08)",
   },
   mainTitle: {
     letterSpacing: -2,
@@ -267,12 +269,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#A78BFA",
+    backgroundColor: "#525252",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 3,
     borderColor: "white",
-    shadowColor: "#A78BFA",
+    shadowColor: "#525252",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   buttonShadow: {
-    shadowColor: "#FF6B4A",
+    shadowColor: ACCENT,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
@@ -296,12 +298,12 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "rgba(167, 139, 250, 0.3)",
+    borderColor: "rgba(82, 82, 82, 0.2)",
   },
   buttonShadowSecondary: {
-    shadowColor: "#A78BFA",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 6,
   },

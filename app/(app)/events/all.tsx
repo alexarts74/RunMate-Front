@@ -16,12 +16,14 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+const ACCENT = "#F97316";
+
 const distances = [
-  { label: "Tous", value: 1000, icon: "🌍", id: "all" },
-  { label: "5km", value: 5, icon: "🚶", id: "walk" },
-  { label: "10km", value: 10, icon: "🏃", id: "run" },
-  { label: "50km", value: 50, icon: "🚴", id: "bike" },
-  { label: "200km", value: 200, icon: "🚗", id: "car" },
+  { label: "Tous", value: 1000, id: "all" },
+  { label: "5km", value: 5, id: "walk" },
+  { label: "10km", value: 10, id: "run" },
+  { label: "50km", value: 50, id: "bike" },
+  { label: "200km", value: 200, id: "car" },
 ];
 
 export default function AllEventsScreen() {
@@ -35,7 +37,6 @@ export default function AllEventsScreen() {
   const router = useRouter();
 
   const handleFeatureAccess = () => {
-    // Les organisateurs ont accès gratuitement
     if (user?.user_type === "organizer") {
       return true;
     }
@@ -55,7 +56,6 @@ export default function AllEventsScreen() {
       const response = await eventService.getAllEvents({
         radius: selectedRadius,
       });
-      // Extraire les événements de la structure {event: {...}}
       const eventsData = response.map((item: any) => item.event || item);
       setEvents(eventsData);
     } catch (error) {
@@ -77,7 +77,6 @@ export default function AllEventsScreen() {
   }, []);
 
   useEffect(() => {
-    // Les organisateurs ont accès gratuitement
     if (user?.user_type === "organizer" || user?.is_premium) {
       setShowPremiumModal(false);
       loadEvents();
@@ -85,44 +84,31 @@ export default function AllEventsScreen() {
   }, [user?.is_premium, user?.user_type]);
 
   const DistanceFilter = () => (
-    <View className="bg-white py-3 border-b border-gray-200">
+    <View className="py-3 border-b border-neutral-100">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        className="px-4"
+        contentContainerStyle={{ paddingHorizontal: 24, gap: 8 }}
       >
-        <View className="flex-row gap-2">
-          {distances.map((item) => (
-            <Pressable
-              key={item.id}
-              onPress={() => {
-                setRadius(item.value);
-                loadEvents(item.value);
-              }}
-              className={`px-4 py-3 rounded-xl flex-row items-center gap-2 ${
-                radius === item.value
-                  ? "bg-primary"
-                  : "bg-tertiary"
+        {distances.map((item) => (
+          <Pressable
+            key={item.id}
+            onPress={() => {
+              setRadius(item.value);
+              loadEvents(item.value);
+            }}
+            className="px-4 py-2.5 rounded-xl"
+            style={{ backgroundColor: radius === item.value ? ACCENT : "#F5F5F5" }}
+          >
+            <Text
+              className={`font-nunito-bold text-sm ${
+                radius === item.value ? "text-white" : "text-neutral-600"
               }`}
-              style={{
-                shadowColor: radius === item.value ? "#FF6B4A" : "#A78BFA",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
             >
-              <Text className="text-base">{item.icon}</Text>
-              <Text
-                className={`${
-                  radius === item.value ? "text-white font-nunito-bold" : "text-gray-700 font-nunito-medium"
-                } text-base`}
-              >
-                {item.label}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+              {item.label}
+            </Text>
+          </Pressable>
+        ))}
       </ScrollView>
     </View>
   );
@@ -134,18 +120,12 @@ export default function AllEventsScreen() {
 
     if (error) {
       return (
-        <View className="flex-1 justify-center items-center p-4">
+        <View className="flex-1 justify-center items-center p-6">
           <Text className="text-red-500 text-center mb-4 font-nunito-medium">{error}</Text>
           <Pressable
             onPress={() => loadEvents()}
-            className="bg-primary px-6 py-3 rounded-xl"
-            style={{
-              shadowColor: "#FF6B4A",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 4,
-            }}
+            className="px-6 py-3 rounded-2xl"
+            style={{ backgroundColor: ACCENT }}
           >
             <Text className="text-white font-nunito-bold">Réessayer</Text>
           </Pressable>
@@ -155,24 +135,27 @@ export default function AllEventsScreen() {
 
     if (events.length === 0) {
       return (
-        <View className="flex-1 justify-center items-center p-4">
-          <View className="bg-tertiary p-8 rounded-full mb-6">
-            <Ionicons name="calendar-outline" size={60} color="#FF6B4A" />
+        <View className="flex-1 justify-center items-center p-6">
+          <View
+            className="w-20 h-20 rounded-full items-center justify-center mb-6"
+            style={{ backgroundColor: `${ACCENT}15` }}
+          >
+            <Ionicons name="calendar-outline" size={40} color={ACCENT} />
           </View>
-          <Text className="text-gray-900 text-center text-lg mb-2 mt-4 font-nunito-bold">
-            Aucun événement disponible
+          <Text className="text-neutral-900 text-xl font-nunito-bold text-center mb-2">
+            Aucun événement
           </Text>
-          <Text className="text-gray-500 text-center font-nunito-medium">
+          <Text className="text-neutral-500 text-sm font-nunito-medium text-center">
             {radius === 1000
-              ? "Aucun événement n'est disponible pour le moment."
-              : `Aucun événement trouvé dans un rayon de ${radius}km.`}
+              ? "Aucun événement disponible pour le moment."
+              : `Aucun événement dans un rayon de ${radius}km.`}
           </Text>
         </View>
       );
     }
 
     return (
-      <View className="p-4">
+      <View className="px-6 pt-4">
         {events.map((event, index) => (
           <EventCard
             key={`${event.id}-${index}`}
@@ -185,13 +168,17 @@ export default function AllEventsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-fond">
-      <SafeAreaView className="bg-fond" edges={['top']}>
-        <View className="px-6 py-4 flex-row items-center border-b border-gray-200">
-          <Pressable onPress={() => router.back()} className="mr-3">
-            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+    <View className="flex-1 bg-white">
+      <SafeAreaView edges={["top"]}>
+        {/* Header */}
+        <View className="px-6 py-4 flex-row items-center">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+          >
+            <Ionicons name="arrow-back" size={20} color="#525252" />
           </Pressable>
-          <Text className="text-2xl font-nunito-extrabold text-gray-900">
+          <Text className="text-xl font-nunito-bold text-neutral-900">
             Événements
           </Text>
         </View>
@@ -201,11 +188,13 @@ export default function AllEventsScreen() {
 
       <ScrollView
         className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#FF6B4A"
+            tintColor={ACCENT}
           />
         }
       >
@@ -223,7 +212,7 @@ export default function AllEventsScreen() {
           router.back();
         }}
         title="Fonctionnalité Premium"
-        description="Cette fonctionnalité sera bientôt disponible dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+        description="Cette fonctionnalité sera bientôt disponible dans la version premium."
       />
     </View>
   );

@@ -9,6 +9,8 @@ import { groupMessageService } from "@/service/api/groupMessage";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { Ionicons } from "@expo/vector-icons";
 
+const ACCENT = "#F97316";
+
 type ConversationItemProps = {
   conversation: Conversation;
   onMessageRead: (id: string) => void;
@@ -54,7 +56,7 @@ export function ConversationItem({
         marginHorizontal: 4,
         marginVertical: 2,
         borderRadius: 12,
-        shadowColor: "#FF6B4A",
+        shadowColor: ACCENT,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.05,
         shadowRadius: 2,
@@ -131,7 +133,7 @@ export function ConversationItem({
           </Text>
           {conversation.type === "group" && (
             <View className="bg-tertiary px-1.5 py-1 rounded-full ml-1">
-              <Ionicons name="people" size={10} color="#A78BFA" />
+              <Ionicons name="people" size={10} color="#525252" />
             </View>
           )}
         </View>

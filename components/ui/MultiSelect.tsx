@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+const ACCENT = "#F97316";
+
 interface MultiSelectProps {
   options: string[];
   selectedValues: string[];
@@ -40,7 +42,7 @@ export function MultiSelect({
                   : "bg-white border-gray-200"
               }`}
               style={{
-                shadowColor: isSelected ? "#FF6B4A" : "#000",
+                shadowColor: isSelected ? ACCENT : "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: isSelected ? 0.2 : 0.05,
                 shadowRadius: 4,
@@ -57,7 +59,7 @@ export function MultiSelect({
               <Ionicons
                 name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                 size={16}
-                color={isSelected ? "white" : "#FF6B4A"}
+                color={isSelected ? "white" : ACCENT}
               />
             </Pressable>
           );

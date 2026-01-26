@@ -13,6 +13,8 @@ export interface CreateOrganizerProfileData {
   department: string;
   postcode?: string;
   country?: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 class OrganizerProfileService {

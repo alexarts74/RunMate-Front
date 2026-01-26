@@ -2,6 +2,8 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+const ACCENT = "#F97316";
+
 interface ActionButtonProps {
   onPress: () => void;
   text: string;
@@ -27,7 +29,7 @@ export function ActionButton({
         onPress={onPress}
         className={`bg-primary py-4 rounded-full active:opacity-90 ${className}`}
         style={{
-          shadowColor: "#FF6B4A",
+          shadowColor: ACCENT,
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
           shadowRadius: 8,

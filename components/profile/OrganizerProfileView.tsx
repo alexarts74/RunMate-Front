@@ -5,6 +5,8 @@ import { View, Text, Image, Pressable, ScrollView, Linking } from "react-native"
 import { organizerProfileService } from "@/service/api/organizerProfile";
 import { OrganizerProfile } from "@/interface/User";
 
+const ACCENT = "#F97316";
+
 type OrganizerProfileViewProps = {
   setIsEditing: (value: boolean) => void;
 };
@@ -99,20 +101,20 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
           onPress={() => setIsEditing(true)}
           className="flex-row items-center px-3 py-3 rounded-full bg-tertiary"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
             elevation: 2,
           }}
         >
-          <Ionicons name="pencil" size={20} color="#FF6B4A" />
+          <Ionicons name="pencil" size={20} color={ACCENT} />
         </Pressable>
       </View>
 
       <View className="items-center mb-8">
         <View className="w-32 h-32 rounded-full border-4 border-primary bg-primary/10 items-center justify-center">
-          <Ionicons name="business" size={64} color="#FF6B4A" />
+          <Ionicons name="business" size={64} color={ACCENT} />
         </View>
         <Text className="text-gray-900 font-nunito-extrabold text-xl mt-4 text-center">
           {organizerProfile.organization_name}
@@ -132,7 +134,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
             <View
               className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.05,
                 shadowRadius: 4,
@@ -156,7 +158,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               onPress={() => handleOpenWebsite(organizerProfile.website!)}
               className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: 0.05,
                 shadowRadius: 2,
@@ -166,7 +168,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               <Text className="text-primary font-nunito-medium flex-1" numberOfLines={1}>
                 {organizerProfile.website}
               </Text>
-              <Ionicons name="open-outline" size={20} color="#FF6B4A" />
+              <Ionicons name="open-outline" size={20} color={ACCENT} />
             </Pressable>
           </View>
         )}
@@ -181,7 +183,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               onPress={() => handleEmail(organizerProfile.email!)}
               className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: 0.05,
                 shadowRadius: 2,
@@ -191,7 +193,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               <Text className="text-gray-900 font-nunito-medium flex-1" numberOfLines={1}>
                 {organizerProfile.email}
               </Text>
-              <Ionicons name="mail-outline" size={20} color="#FF6B4A" />
+              <Ionicons name="mail-outline" size={20} color={ACCENT} />
             </Pressable>
           </View>
         )}
@@ -206,7 +208,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               onPress={() => handleCall(organizerProfile.phone!)}
               className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: 0.05,
                 shadowRadius: 2,
@@ -216,7 +218,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
               <Text className="text-gray-900 font-nunito-medium flex-1" numberOfLines={1}>
                 {organizerProfile.phone}
               </Text>
-              <Ionicons name="call-outline" size={20} color="#FF6B4A" />
+              <Ionicons name="call-outline" size={20} color={ACCENT} />
             </Pressable>
           </View>
         )}
@@ -230,7 +232,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
             <View
               className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.05,
                 shadowRadius: 4,
@@ -264,7 +266,7 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
           <View
             className="w-full border border-gray-200 rounded-full p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.05,
               shadowRadius: 2,

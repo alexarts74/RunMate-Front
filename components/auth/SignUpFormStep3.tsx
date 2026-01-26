@@ -19,6 +19,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { ActionButton } from "../ui/ActionButton";
 import { MultiSelect } from "../ui/MultiSelect";
 
+const ACCENT = "#F97316";
+
 interface SignUpFormStep3Props {
   formData: {
     actual_pace: string;
@@ -224,14 +226,14 @@ export function SignUpFormStep3({
             onPress={onBack}
             className="bg-white p-2.5 rounded-full active:opacity-80"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
               shadowRadius: 4,
               elevation: 3,
             }}
           >
-            <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={20} color={ACCENT} />
           </Pressable>
 
           <View className="flex-1">
@@ -260,7 +262,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="speedometer-outline"
                         size={22}
-                        color="#FF6B4A"
+                        color={ACCENT}
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -285,7 +287,7 @@ export function SignUpFormStep3({
                         ? `${formData.actual_pace} min/km`
                         : "Sélectionnez votre allure"}
                     </Text>
-                    <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
+                    <Ionicons name="chevron-down" size={18} color={ACCENT} />
                   </Pressable>
                   {errors.actual_pace && (
                     <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
@@ -315,7 +317,7 @@ export function SignUpFormStep3({
                           Sélectionnez votre allure
                         </Text>
                         <Pressable onPress={() => setShowPacePicker(false)}>
-                          <Ionicons name="close" size={24} color="#FF6B4A" />
+                          <Ionicons name="close" size={24} color={ACCENT} />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
@@ -354,7 +356,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#FF6B4A"
+                        color={ACCENT}
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -379,7 +381,7 @@ export function SignUpFormStep3({
                         ? `${formData.target_pace} min/km`
                         : "Sélectionnez votre objectif d'allure en EF"}
                     </Text>
-                    <Ionicons name="chevron-down" size={18} color="#FF6B4A" />
+                    <Ionicons name="chevron-down" size={18} color={ACCENT} />
                   </Pressable>
                   {errors.target_pace && (
                     <Text className="text-red-500 mt-2 ml-4 font-nunito-medium text-sm">
@@ -411,7 +413,7 @@ export function SignUpFormStep3({
                         <Pressable
                           onPress={() => setShowTargetPacePicker(false)}
                         >
-                          <Ionicons name="close" size={24} color="#FF6B4A" />
+                          <Ionicons name="close" size={24} color={ACCENT} />
                         </Pressable>
                       </View>
                       <ScrollView className="max-h-72">
@@ -447,7 +449,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="stats-chart" size={22} color="#FF6B4A" />
+                      <Ionicons name="stats-chart" size={22} color={ACCENT} />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
                       Kilométrage hebdomadaire
@@ -467,7 +469,7 @@ export function SignUpFormStep3({
                       shadowColor:
                         focusedInput === "weekly_mileage" &&
                         !errors.weekly_mileage
-                          ? "#FF6B4A"
+                          ? ACCENT
                           : "#000",
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity:
@@ -505,7 +507,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="calendar-outline"
                         size={22}
-                        color="#FF6B4A"
+                        color={ACCENT}
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -531,7 +533,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="trophy-outline"
                         size={22}
-                        color="#FF6B4A"
+                        color={ACCENT}
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -576,7 +578,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="map-outline" size={22} color="#A78BFA" />
+                      <Ionicons name="map-outline" size={22} color="#525252" />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
                       Distance habituelle / semaine (km)
@@ -596,7 +598,7 @@ export function SignUpFormStep3({
                       shadowColor:
                         focusedInput === "usual_distance" &&
                         !errors.usual_distance
-                          ? "#A78BFA"
+                          ? "#525252"
                           : "#000",
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity:
@@ -630,7 +632,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="flag-outline" size={22} color="#A78BFA" />
+                      <Ionicons name="flag-outline" size={22} color="#525252" />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
                       Objectif principal
@@ -654,7 +656,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="people-outline"
                         size={22}
-                        color="#A78BFA"
+                        color="#525252"
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -678,7 +680,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="cafe-outline" size={22} color="#A78BFA" />
+                      <Ionicons name="cafe-outline" size={22} color="#525252" />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
                       Activités post-course
@@ -706,7 +708,7 @@ export function SignUpFormStep3({
                       <Ionicons
                         name="repeat-outline"
                         size={22}
-                        color="#A78BFA"
+                        color="#525252"
                       />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
@@ -730,7 +732,7 @@ export function SignUpFormStep3({
                 <View>
                   <View className="flex-row items-center mb-3">
                     <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="time-outline" size={22} color="#A78BFA" />
+                      <Ionicons name="time-outline" size={22} color="#525252" />
                     </View>
                     <Text className="text-gray-900 text-sm font-nunito-bold">
                       Préférences de course

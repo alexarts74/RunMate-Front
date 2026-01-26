@@ -20,6 +20,8 @@ import { GroupMessage, GroupInfo, GroupChatData } from "@/interface/Group";
 import { groupService } from "@/service/api/group";
 import { LinearGradient } from "expo-linear-gradient";
 
+const ACCENT = "#F97316";
+
 const GroupChatPage = () => {
   const { id } = useLocalSearchParams();
   const [newMessage, setNewMessage] = useState("");
@@ -130,7 +132,7 @@ const GroupChatPage = () => {
               : "bg-white rounded-bl-md border border-gray-200"
           }`}
           style={{
-            shadowColor: item.sender.id === user?.id ? "#FF6B4A" : "#000",
+            shadowColor: item.sender.id === user?.id ? ACCENT : "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
@@ -182,7 +184,7 @@ const GroupChatPage = () => {
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center flex-1">
                 <Pressable onPress={() => router.back()} className="p-2 mr-3">
-                  <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+                  <Ionicons name="arrow-back" size={24} color={ACCENT} />
                 </Pressable>
                 <Image
                   source={
@@ -199,7 +201,7 @@ const GroupChatPage = () => {
                   onPress={() => setShowMembersModal(true)}
                   className="p-2 ml-2"
                 >
-                  <Ionicons name="people" size={24} color="#FF6B4A" />
+                  <Ionicons name="people" size={24} color={ACCENT} />
                 </Pressable>
               </View>
             </View>
@@ -248,7 +250,7 @@ const GroupChatPage = () => {
                 onPress={sendMessage}
                 className="bg-primary w-12 h-12 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.3,
                   shadowRadius: 4,
@@ -274,7 +276,7 @@ const GroupChatPage = () => {
                     Membres ({groupInfo?.members.length})
                   </Text>
                   <Pressable onPress={() => setShowMembersModal(false)} className="p-2">
-                    <Ionicons name="close" size={24} color="#FF6B4A" />
+                    <Ionicons name="close" size={24} color={ACCENT} />
                   </Pressable>
                 </View>
                 <FlatList

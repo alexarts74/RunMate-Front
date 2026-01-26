@@ -14,6 +14,8 @@ import { raceService } from "@/service/api/race";
 import { Race } from "@/interface/Race";
 import LoadingScreen from "@/components/LoadingScreen";
 
+const ACCENT = "#F97316";
+
 export default function RaceDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -130,7 +132,7 @@ export default function RaceDetailsScreen() {
                   elevation: 3,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color="#FF6B4A" />
+                <Ionicons name="arrow-back" size={22} color={ACCENT} />
               </Pressable>
             </View>
           </SafeAreaView>
@@ -159,7 +161,7 @@ export default function RaceDetailsScreen() {
                   <Ionicons
                     name="time-outline"
                     size={16}
-                    color="#A78BFA"
+                    color="#525252"
                     style={{ marginRight: 6 }}
                   />
                   <Text className="text-secondary font-nunito-bold text-sm">
@@ -185,7 +187,7 @@ export default function RaceDetailsScreen() {
           <View
             className="bg-white p-5 rounded-2xl mb-6"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -198,7 +200,7 @@ export default function RaceDetailsScreen() {
             <View className="space-y-4">
               <View className="flex-row items-center">
                 <View className="w-12 h-12 rounded-xl bg-primary/10 items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={22} color="#FF6B4A" />
+                  <Ionicons name="calendar" size={22} color={ACCENT} />
                 </View>
                 <View className="flex-1">
                   <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
@@ -214,7 +216,7 @@ export default function RaceDetailsScreen() {
 
               <View className="flex-row items-center">
                 <View className="w-12 h-12 rounded-xl bg-secondary/10 items-center justify-center mr-4">
-                  <Ionicons name="location" size={22} color="#A78BFA" />
+                  <Ionicons name="location" size={22} color="#525252" />
                 </View>
                 <View className="flex-1">
                   <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
@@ -232,7 +234,7 @@ export default function RaceDetailsScreen() {
                   <View className="h-px bg-gray-200 mb-4" />
                   <View className="flex-row items-start">
                     <View className="w-12 h-12 rounded-xl bg-primary/10 items-center justify-center mr-4 mt-1">
-                      <Ionicons name="flag" size={22} color="#FF6B4A" />
+                      <Ionicons name="flag" size={22} color={ACCENT} />
                     </View>
                     <View className="flex-1">
                       <Text className="text-gray-900 font-nunito-extrabold text-sm mb-2">
@@ -244,7 +246,7 @@ export default function RaceDetailsScreen() {
                             key={index}
                             className="bg-primary px-4 py-2.5 rounded-xl"
                             style={{
-                              shadowColor: "#FF6B4A",
+                              shadowColor: ACCENT,
                               shadowOffset: { width: 0, height: 2 },
                               shadowOpacity: 0.2,
                               shadowRadius: 4,
@@ -269,7 +271,7 @@ export default function RaceDetailsScreen() {
             <View
               className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,

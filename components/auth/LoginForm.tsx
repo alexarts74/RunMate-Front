@@ -24,6 +24,8 @@ import { ParticlesBackground } from "@/components/animations/ParticlesBackground
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNotifications } from "@/context/NotificationContext";
 
+const ACCENT = "#F97316";
+
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     email: "",
@@ -91,14 +93,14 @@ export default function LoginForm() {
                 onPress={() => router.replace("/")}
                 className="bg-white p-2.5 rounded-full active:opacity-80"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.15,
                   shadowRadius: 4,
                   elevation: 3,
                 }}
               >
-                <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+                <Ionicons name="arrow-back" size={20} color={ACCENT} />
               </Pressable>
               <View className="flex-1 items-center justify-center">
                 <Text className="text-3xl font-nunito-extrabold text-gray-900 text-center">
@@ -125,14 +127,14 @@ export default function LoginForm() {
                         : "border-gray-200"
                     }`}
                     style={{
-                      shadowColor: focusedInput === "email" && !errors.email ? "#FF6B4A" : "#000",
+                      shadowColor: focusedInput === "email" && !errors.email ? ACCENT : "#000",
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity: focusedInput === "email" && !errors.email ? 0.15 : 0.05,
                       shadowRadius: 2,
                       elevation: 1,
                     }}
                   >
-                    <Ionicons name="mail-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
+                    <Ionicons name="mail-outline" size={20} color={ACCENT} style={{ marginRight: 12 }} />
                     <TextInput
                       className="flex-1 text-gray-900 font-nunito-medium"
                       placeholder="Email"
@@ -165,14 +167,14 @@ export default function LoginForm() {
                         : "border-gray-200"
                     }`}
                     style={{
-                      shadowColor: focusedInput === "password" && !errors.password ? "#FF6B4A" : "#000",
+                      shadowColor: focusedInput === "password" && !errors.password ? ACCENT : "#000",
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity: focusedInput === "password" && !errors.password ? 0.15 : 0.05,
                       shadowRadius: 2,
                       elevation: 1,
                     }}
                   >
-                    <Ionicons name="lock-closed-outline" size={20} color="#FF6B4A" style={{ marginRight: 12 }} />
+                    <Ionicons name="lock-closed-outline" size={20} color={ACCENT} style={{ marginRight: 12 }} />
                     <TextInput
                       className="flex-1 text-gray-900 font-nunito-medium"
                       placeholder="Mot de passe"
@@ -206,7 +208,7 @@ export default function LoginForm() {
               onPress={handleLogin}
               disabled={loading}
               style={{
-                shadowColor: "#FF6B4A",
+                shadowColor: ACCENT,
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.3,
                 shadowRadius: 8,

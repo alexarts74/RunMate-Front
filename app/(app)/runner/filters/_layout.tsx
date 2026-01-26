@@ -5,6 +5,8 @@ import { FiltersContent } from "@/components/filters/FiltersContent";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+const ACCENT = "#F97316";
+
 export default function FilterScreen() {
   const router = useRouter();
 
@@ -27,14 +29,14 @@ export default function FilterScreen() {
                 onPress={() => router.back()} 
                 className="bg-tertiary p-3 rounded-full mr-3"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 4,
                   elevation: 2,
                 }}
               >
-                <Ionicons name="arrow-back" size={20} color="#FF6B4A" />
+                <Ionicons name="arrow-back" size={20} color={ACCENT} />
               </Pressable>
               <Text className="text-2xl font-nunito-extrabold text-gray-900">Filtres</Text>
             </View>

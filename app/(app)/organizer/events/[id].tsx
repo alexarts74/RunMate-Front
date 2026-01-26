@@ -8,6 +8,8 @@ import { Event } from "@/interface/Event";
 import { useAuth } from "@/context/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
 
+const ACCENT = "#F97316";
+
 export default function OrganizerEventDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
@@ -58,7 +60,7 @@ export default function OrganizerEventDetailsScreen() {
   if (!event.is_creator) {
     return (
       <View className="flex-1 bg-fond items-center justify-center px-6">
-        <Ionicons name="lock-closed" size={64} color="#FF6B4A" />
+        <Ionicons name="lock-closed" size={64} color={ACCENT} />
         <Text className="text-gray-900 font-nunito-bold text-xl mt-4 text-center">
           Accès restreint
         </Text>
@@ -101,7 +103,7 @@ export default function OrganizerEventDetailsScreen() {
                   elevation: 3,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color="#FF6B4A" />
+                <Ionicons name="arrow-back" size={22} color={ACCENT} />
               </Pressable>
             </View>
           </SafeAreaView>
@@ -123,7 +125,7 @@ export default function OrganizerEventDetailsScreen() {
           {/* Statistiques */}
           <View className="bg-white p-5 rounded-2xl mb-6"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -132,7 +134,7 @@ export default function OrganizerEventDetailsScreen() {
           >
             <View className="flex-row items-center mb-4">
               <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                <Ionicons name="stats-chart" size={20} color={ACCENT} />
               </View>
               <Text className="text-gray-900 font-nunito-bold text-lg">
                 Statistiques
@@ -168,7 +170,7 @@ export default function OrganizerEventDetailsScreen() {
           {/* Informations principales */}
           <View className="bg-white p-5 rounded-2xl mb-6"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -178,7 +180,7 @@ export default function OrganizerEventDetailsScreen() {
             <View className="space-y-4">
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={20} color="#FF6B4A" />
+                  <Ionicons name="calendar" size={20} color={ACCENT} />
                 </View>
                 <View className="flex-1">
                   <Text className="text-gray-900 font-nunito-bold text-base">
@@ -198,14 +200,14 @@ export default function OrganizerEventDetailsScreen() {
 
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="location" size={20} color="#A78BFA" />
+                  <Ionicons name="location" size={20} color="#525252" />
                 </View>
                 <Text className="text-gray-900 font-nunito-medium text-base flex-1">{event.location}</Text>
               </View>
 
               <View className="flex-row items-center">
                 <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="trending-up" size={20} color="#FF6B4A" />
+                  <Ionicons name="trending-up" size={20} color={ACCENT} />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-base">
                   {event.distance} km
@@ -218,7 +220,7 @@ export default function OrganizerEventDetailsScreen() {
           {event.description && (
             <View className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -236,7 +238,7 @@ export default function OrganizerEventDetailsScreen() {
           {event.participants && event.participants.length > 0 && (
             <View className="bg-white p-5 rounded-2xl mb-6"
               style={{
-                shadowColor: "#A78BFA",
+                shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -276,7 +278,7 @@ export default function OrganizerEventDetailsScreen() {
           {/* Actions */}
           <View className="bg-white p-5 rounded-2xl mb-6"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
@@ -293,7 +295,7 @@ export default function OrganizerEventDetailsScreen() {
                 }}
                 className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
               >
-                <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
                 <Text className="text-primary font-nunito-bold text-sm">
                   Modifier
                 </Text>

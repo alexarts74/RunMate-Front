@@ -6,6 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { CreateGroupForm } from "@/components/group/CreateGroupForm";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 export default function CreateGroupScreen() {
   const { user } = useAuth();
 
@@ -39,7 +41,7 @@ export default function CreateGroupScreen() {
           }}
         >
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color="#FF6B4A" />
+            <Ionicons name="close" size={24} color={ACCENT} />
           </Pressable>
           <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
             Créer un groupe

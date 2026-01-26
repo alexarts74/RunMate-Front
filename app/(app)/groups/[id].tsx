@@ -16,6 +16,8 @@ import { GroupInfo, JoinRequest } from "@/interface/Group";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 
+const ACCENT = "#F97316";
+
 export default function GroupDetailsScreen() {
   const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -161,7 +163,7 @@ export default function GroupDetailsScreen() {
             className="absolute left-4 bg-white/90 p-3 rounded-full"
             style={{ top: insets.top + 8 }}
           >
-            <Ionicons name="arrow-back" size={24} color="#FF6B4A" />
+            <Ionicons name="arrow-back" size={24} color={ACCENT} />
           </Pressable>
 
           {/* Titre et membres sur l'image */}
@@ -184,7 +186,7 @@ export default function GroupDetailsScreen() {
           {/* Description Card */}
           {group.description && (
             <View className="bg-white rounded-2xl p-5 mb-4" style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
@@ -192,7 +194,7 @@ export default function GroupDetailsScreen() {
             }}>
               <View className="flex-row items-center mb-3">
                 <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                  <Ionicons name="information-circle" size={20} color="#A78BFA" />
+                  <Ionicons name="information-circle" size={20} color="#525252" />
                 </View>
                 <Text className="text-gray-900 font-nunito-bold text-lg">
                   À propos
@@ -211,7 +213,7 @@ export default function GroupDetailsScreen() {
               {user?.user_type === "organizer" && (
                 <View className="bg-white rounded-2xl p-5 mb-4"
                   style={{
-                    shadowColor: "#FF6B4A",
+                    shadowColor: ACCENT,
                     shadowOffset: { width: 0, height: 2 },
                     shadowOpacity: 0.1,
                     shadowRadius: 8,
@@ -220,7 +222,7 @@ export default function GroupDetailsScreen() {
                 >
                   <View className="flex-row items-center mb-4">
                     <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                      <Ionicons name="stats-chart" size={20} color="#FF6B4A" />
+                      <Ionicons name="stats-chart" size={20} color={ACCENT} />
                     </View>
                     <Text className="text-gray-900 font-nunito-bold text-lg">
                       Statistiques du groupe
@@ -254,7 +256,7 @@ export default function GroupDetailsScreen() {
                       }}
                       className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
                     >
-                      <Ionicons name="create-outline" size={18} color="#FF6B4A" style={{ marginRight: 6 }} />
+                      <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
                       <Text className="text-primary font-nunito-bold text-sm">
                         Modifier
                       </Text>
@@ -292,7 +294,7 @@ export default function GroupDetailsScreen() {
                 onPress={() => setShowRequests(!showRequests)}
                 className="bg-white rounded-2xl p-5 flex-row items-center justify-between"
                 style={{
-                  shadowColor: "#FF6B4A",
+                  shadowColor: ACCENT,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -301,7 +303,7 @@ export default function GroupDetailsScreen() {
               >
                 <View className="flex-row items-center flex-1">
                   <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
-                    <Ionicons name="people-outline" size={20} color="#FF6B4A" />
+                    <Ionicons name="people-outline" size={20} color={ACCENT} />
                   </View>
                   <Text className="text-gray-900 font-nunito-bold text-base">
                     Demandes d'adhésion
@@ -318,14 +320,14 @@ export default function GroupDetailsScreen() {
                   <Ionicons
                     name={showRequests ? "chevron-up" : "chevron-down"}
                     size={24}
-                    color="#A78BFA"
+                    color="#525252"
                   />
                 </View>
               </Pressable>
 
               {showRequests && (
                 <View className="mt-3 bg-white rounded-2xl overflow-hidden" style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -334,7 +336,7 @@ export default function GroupDetailsScreen() {
                   {pendingRequests.length === 0 ? (
                     <View className="p-8 items-center">
                       <View className="bg-tertiary p-4 rounded-full mb-3">
-                        <Ionicons name="checkmark-circle" size={40} color="#A78BFA" />
+                        <Ionicons name="checkmark-circle" size={40} color="#525252" />
                       </View>
                       <Text className="text-gray-500 font-nunito text-center">
                         Aucune demande en attente
@@ -409,7 +411,7 @@ export default function GroupDetailsScreen() {
                 }}
                 className="bg-gradient-to-r from-secondary to-primary rounded-2xl p-5 flex-row items-center mb-4"
                 style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.3,
                   shadowRadius: 8,
@@ -433,7 +435,7 @@ export default function GroupDetailsScreen() {
               {/* Members List */}
               {group.members && group.members.length > 0 && (
                 <View className="bg-white rounded-2xl p-5 mb-4" style={{
-                  shadowColor: "#A78BFA",
+                  shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 8,
@@ -441,7 +443,7 @@ export default function GroupDetailsScreen() {
                 }}>
                   <View className="flex-row items-center mb-4">
                     <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                      <Ionicons name="people" size={20} color="#A78BFA" />
+                      <Ionicons name="people" size={20} color="#525252" />
                     </View>
                     <Text className="text-gray-900 font-nunito-bold text-lg">
                       Membres ({group.members.length})
@@ -477,14 +479,14 @@ export default function GroupDetailsScreen() {
           ) : (
             /* NON-MEMBER VIEW */
             <View className="bg-white rounded-2xl p-8 items-center mb-4" style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 8,
               elevation: 3,
             }}>
               <View className="bg-tertiary p-6 rounded-full mb-4">
-                <Ionicons name="lock-closed" size={48} color="#A78BFA" />
+                <Ionicons name="lock-closed" size={48} color="#525252" />
               </View>
               <Text className="text-gray-900 font-nunito-bold text-xl text-center mb-2">
                 Groupe Privé
@@ -540,7 +542,7 @@ export default function GroupDetailsScreen() {
               isActionLoading ? "opacity-50" : ""
             }`}
             style={{
-              shadowColor: "#A78BFA",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,

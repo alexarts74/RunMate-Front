@@ -4,6 +4,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
 import { OrganizerProfileView } from "./OrganizerProfileView";
 
+const ACCENT = "#F97316";
+
 type ProfileViewProps = {
   setIsEditing: (value: boolean) => void;
 };
@@ -28,14 +30,14 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           onPress={() => setIsEditing(true)}
           className="flex-row items-center px-3 py-3 rounded-full bg-tertiary"
           style={{
-            shadowColor: "#FF6B4A",
+            shadowColor: ACCENT,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
             elevation: 2,
           }}
         >
-          <Ionicons name="pencil" size={20} color="#FF6B4A" />
+          <Ionicons name="pencil" size={20} color={ACCENT} />
         </Pressable>
       </View>
 
@@ -57,7 +59,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </Text>
           <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.05,
               shadowRadius: 2,
@@ -76,7 +78,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </Text>
           <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.05,
               shadowRadius: 2,
@@ -93,7 +95,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </Text>
           <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.05,
               shadowRadius: 2,
@@ -110,7 +112,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </Text>
           <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.05,
               shadowRadius: 2,
@@ -127,7 +129,7 @@ export function ProfileView({ setIsEditing }: ProfileViewProps) {
           </Text>
           <View className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
             style={{
-              shadowColor: "#FF6B4A",
+              shadowColor: ACCENT,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.05,
               shadowRadius: 4,
