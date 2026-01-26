@@ -15,12 +15,18 @@
       "distribution": "internal",
       "env": {
         "API_BASE_URL_PROD": "https://runmate-back-api.onrender.com"
+      },
+      "node": {
+        "installCommand": "npm ci --legacy-peer-deps"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
         "API_BASE_URL_PROD": "https://runmate-back-api.onrender.com"
+      },
+      "node": {
+        "installCommand": "npm ci --legacy-peer-deps"
       }
     }
   },
