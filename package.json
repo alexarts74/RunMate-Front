@@ -9,7 +9,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build:prod": "eas build --profile production --platform ios",
+    "submit:ios": "eas submit --platform ios",
+    "deploy:testflight": "eas build --profile preview --platform ios --auto-submit --clear-cache"
   },
   "jest": {
     "preset": "jest-expo"
