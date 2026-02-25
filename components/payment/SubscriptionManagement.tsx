@@ -4,13 +4,17 @@ import {
   Text,
   Pressable,
   Alert,
-  ActivityIndicator,
   ScrollView,
 } from "react-native";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { stripeService } from "@/service/api/stripe";
 import { useAuth } from "@/context/AuthContext";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import PulseLoader from "@/components/ui/PulseLoader";
+import { useThemeColors, palette } from "@/constants/theme";
 
 type SubscriptionStatus =
   | "active"
@@ -54,6 +58,7 @@ export default function SubscriptionManagement() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const { user, updateUserSubscriptionPlan } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
   useEffect(() => {
     loadSubscriptionData();
@@ -145,211 +150,214 @@ export default function SubscriptionManagement() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 bg-background justify-center items-center">
-        <ActivityIndicator size="large" color="#126C52" />
-        <Text className="text-white mt-4 font-nunito">
-          Chargement des informations...
-        </Text>
-      </View>
+      <WarmBackground>
+        <View className="flex-1 justify-center items-center">
+          <PulseLoader color={colors.primary.DEFAULT} size={12} />
+          <Text style={{ color: colors.text.secondary }} className="mt-4 font-nunito">
+            Chargement des informations...
+          </Text>
+        </View>
+      </WarmBackground>
     );
   }
 
   return (
-    <ScrollView className="flex-1 bg-background pt-10">
-      <View className="px-5">
-        <View className="flex-row items-center mb-6">
-          <Pressable
-            onPress={() => router.back()}
-            className="bg-background p-2 rounded-xl mr-3"
-          >
-            <Ionicons name="arrow-back" size={20} color="#fff" />
-          </Pressable>
-          <Text className="text-2xl font-nunito-semibold text-white">
-            Mon abonnement
-          </Text>
-        </View>
+    <WarmBackground>
+      <ScrollView className="flex-1 pt-10">
+        <View className="px-5">
+          <View className="flex-row items-center mb-6">
+            <Pressable
+              onPress={() => router.back()}
+              className="p-2 rounded-xl mr-3"
+              style={{ backgroundColor: colors.glass.light }}
+            >
+              <Ionicons name="arrow-back" size={20} color={colors.text.primary} />
+            </Pressable>
+            <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-semibold">
+              Mon abonnement
+            </Text>
+          </View>
 
-        {/* Statut de l'abonnement */}
-        <View className="bg-background p-5 rounded-xl mb-6">
-          {subscription ? (
-            <>
-              <View className="flex-row justify-between items-center mb-4">
-                <View className="flex-row items-center">
-                  <Ionicons name="diamond" size={24} color="#126C52" />
-                  <Text className="text-xl font-nunito-semibold text-white ml-2">
-                    RunMate Premium
-                  </Text>
-                </View>
-                <View
-                  className={`px-3 py-1 rounded-full ${
-                    subscription.status === "active"
-                      ? "bg-green-500/20"
-                      : "bg-yellow-500/20"
-                  }`}
-                >
-                  <Text
-                    className={`text-xs font-nunito-bold ${
-                      subscription.status === "active"
-                        ? "text-green-500"
-                        : "text-yellow-500"
-                    }`}
+          {/* Statut de l'abonnement */}
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
+            {subscription ? (
+              <>
+                <View className="flex-row justify-between items-center mb-4">
+                  <View className="flex-row items-center">
+                    <Ionicons name="diamond" size={24} color={colors.primary.DEFAULT} />
+                    <Text style={{ color: colors.text.primary }} className="text-xl font-nunito-semibold ml-2">
+                      RunMate Premium
+                    </Text>
+                  </View>
+                  <View
+                    className="px-3 py-1 rounded-full"
+                    style={{
+                      backgroundColor: subscription.status === "active"
+                        ? 'rgba(124, 184, 138, 0.2)'
+                        : 'rgba(229, 184, 103, 0.2)',
+                    }}
                   >
-                    {subscription.status === "active"
-                      ? "Actif"
-                      : subscription.cancelAtPeriodEnd
-                      ? "Se termine bientôt"
-                      : subscription.status === "past_due"
-                      ? "Paiement en retard"
-                      : "En attente"}
+                    <Text
+                      className="text-xs font-nunito-bold"
+                      style={{
+                        color: subscription.status === "active"
+                          ? colors.success
+                          : colors.warning,
+                      }}
+                    >
+                      {subscription.status === "active"
+                        ? "Actif"
+                        : subscription.cancelAtPeriodEnd
+                        ? "Se termine bientôt"
+                        : subscription.status === "past_due"
+                        ? "Paiement en retard"
+                        : "En attente"}
+                    </Text>
+                  </View>
+                </View>
+
+                <View className="mb-4">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-semibold mb-1">
+                    Forfait
+                  </Text>
+                  <Text style={{ color: colors.text.secondary }} className="font-nunito">
+                    {subscription.plan.name} -{" "}
+                    {formatCurrency(subscription.plan.amount)} /{" "}
+                    {subscription.plan.interval === "month" ? "mois" : "an"}
                   </Text>
                 </View>
-              </View>
 
-              <View className="mb-4">
-                <Text className="text-white font-nunito-semibold mb-1">
-                  Forfait
-                </Text>
-                <Text className="text-gray-300 font-nunito">
-                  {subscription.plan.name} -{" "}
-                  {formatCurrency(subscription.plan.amount)} /{" "}
-                  {subscription.plan.interval === "month" ? "mois" : "an"}
-                </Text>
-              </View>
+                <View className="mb-4">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-semibold mb-1">
+                    Moyen de paiement
+                  </Text>
+                  <View className="flex-row items-center">
+                    <Ionicons
+                      name={
+                        subscription.paymentMethod?.brand === "visa"
+                          ? "card"
+                          : subscription.paymentMethod?.brand === "mastercard"
+                          ? "card"
+                          : "card-outline"
+                      }
+                      size={16}
+                      color={colors.text.primary}
+                    />
+                    <Text style={{ color: colors.text.secondary }} className="font-nunito ml-2">
+                      {subscription.paymentMethod?.brand.toUpperCase()} ****{" "}
+                      {subscription.paymentMethod?.last4}
+                    </Text>
+                  </View>
+                </View>
 
-              <View className="mb-4">
-                <Text className="text-white font-nunito-semibold mb-1">
-                  Moyen de paiement
-                </Text>
-                <View className="flex-row items-center">
-                  <Ionicons
-                    name={
-                      subscription.paymentMethod?.brand === "visa"
-                        ? "card"
-                        : subscription.paymentMethod?.brand === "mastercard"
-                        ? "card"
-                        : "card-outline"
-                    }
-                    size={16}
-                    color="#fff"
+                <View className="mb-4">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-semibold mb-1">
+                    Prochain renouvellement
+                  </Text>
+                  <Text style={{ color: colors.text.secondary }} className="font-nunito">
+                    {subscription.cancelAtPeriodEnd
+                      ? `Se termine le ${formatDate(
+                          subscription.currentPeriodEnd
+                        )}`
+                      : `Le ${formatDate(subscription.currentPeriodEnd)}`}
+                  </Text>
+                </View>
+
+                {!subscription.cancelAtPeriodEnd && (
+                  <GlassButton
+                    title="Annuler l'abonnement"
+                    onPress={handleCancelSubscription}
+                    variant="ghost"
+                    style={{ marginTop: 8 }}
                   />
-                  <Text className="text-gray-300 font-nunito ml-2">
-                    {subscription.paymentMethod?.brand.toUpperCase()} ****{" "}
-                    {subscription.paymentMethod?.last4}
-                  </Text>
-                </View>
+                )}
+              </>
+            ) : (
+              <View className="items-center py-6">
+                <Ionicons
+                  name="diamond-outline"
+                  size={40}
+                  color={colors.primary.DEFAULT}
+                  style={{ marginBottom: 16 }}
+                />
+                <Text style={{ color: colors.text.primary }} className="text-center font-nunito-semibold text-lg mb-3">
+                  Vous n'avez pas d'abonnement actif
+                </Text>
+                <Text style={{ color: colors.text.secondary }} className="text-center font-nunito mb-5">
+                  Découvrez tous les avantages de RunMate Premium
+                </Text>
+                <GlassButton
+                  title="Devenir Premium"
+                  onPress={() => router.push("/premium")}
+                />
               </View>
+            )}
+          </GlassCard>
 
-              <View className="mb-4">
-                <Text className="text-white font-nunito-semibold mb-1">
-                  Prochain renouvellement
-                </Text>
-                <Text className="text-gray-300 font-nunito">
-                  {subscription.cancelAtPeriodEnd
-                    ? `Se termine le ${formatDate(
-                        subscription.currentPeriodEnd
-                      )}`
-                    : `Le ${formatDate(subscription.currentPeriodEnd)}`}
-                </Text>
-              </View>
+          {/* Historique de paiements */}
+          {paymentHistory.length > 0 && (
+            <View className="mb-10">
+              <Text style={{ color: colors.text.primary }} className="text-xl font-nunito-semibold mb-4">
+                Historique des paiements
+              </Text>
 
-              {!subscription.cancelAtPeriodEnd && (
-                <Pressable
-                  onPress={handleCancelSubscription}
-                  className="bg-background py-3 rounded-xl items-center mt-2"
-                >
-                  <Text className="text-white font-nunito">
-                    Annuler l'abonnement
-                  </Text>
-                </Pressable>
-              )}
-            </>
-          ) : (
-            <View className="items-center py-6">
-              <Ionicons
-                name="diamond-outline"
-                size={40}
-                color="#126C52"
-                className="mb-4"
-              />
-              <Text className="text-white text-center font-nunito-semibold text-lg mb-3">
-                Vous n'avez pas d'abonnement actif
-              </Text>
-              <Text className="text-gray-300 text-center font-nunito mb-5">
-                Découvrez tous les avantages de RunMate Premium
-              </Text>
-              <Pressable
-                onPress={() => router.push("/premium")}
-                className="bg-purple px-6 py-3 rounded-xl"
-              >
-                <Text className="text-white font-nunito-bold">
-                  Devenir Premium
-                </Text>
-              </Pressable>
+              <GlassCard noPadding>
+                {paymentHistory.map((payment, index) => (
+                  <View
+                    key={payment.id}
+                    className="p-4 flex-row justify-between items-center"
+                    style={{
+                      borderBottomWidth: index !== paymentHistory.length - 1 ? 1 : 0,
+                      borderBottomColor: colors.glass.border,
+                    }}
+                  >
+                    <View>
+                      <Text style={{ color: colors.text.primary }} className="font-nunito mb-1">
+                        {payment.description}
+                      </Text>
+                      <Text style={{ color: colors.text.tertiary }} className="font-nunito text-xs">
+                        {formatDate(payment.date)}
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center">
+                      <Text
+                        className="font-nunito-semibold mr-2"
+                        style={{
+                          color:
+                            payment.status === "succeeded"
+                              ? colors.text.primary
+                              : payment.status === "pending"
+                              ? colors.warning
+                              : colors.error,
+                        }}
+                      >
+                        {formatCurrency(payment.amount)}
+                      </Text>
+                      <Ionicons
+                        name={
+                          payment.status === "succeeded"
+                            ? "checkmark-circle"
+                            : payment.status === "pending"
+                            ? "time"
+                            : "close-circle"
+                        }
+                        size={16}
+                        color={
+                          payment.status === "succeeded"
+                            ? colors.success
+                            : payment.status === "pending"
+                            ? colors.warning
+                            : colors.error
+                        }
+                      />
+                    </View>
+                  </View>
+                ))}
+              </GlassCard>
             </View>
           )}
         </View>
-
-        {/* Historique de paiements */}
-        {paymentHistory.length > 0 && (
-          <View className="mb-10">
-            <Text className="text-xl font-nunito-semibold text-white mb-4">
-              Historique des paiements
-            </Text>
-
-            <View className="bg-background rounded-xl overflow-hidden">
-              {paymentHistory.map((payment, index) => (
-                <View
-                  key={payment.id}
-                  className={`p-4 flex-row justify-between items-center ${
-                    index !== paymentHistory.length - 1
-                      ? "border-b border-gray-800"
-                      : ""
-                  }`}
-                >
-                  <View>
-                    <Text className="text-white font-nunito mb-1">
-                      {payment.description}
-                    </Text>
-                    <Text className="text-gray-400 font-nunito text-xs">
-                      {formatDate(payment.date)}
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center">
-                    <Text
-                      className={`font-nunito-semibold mr-2 ${
-                        payment.status === "succeeded"
-                          ? "text-white"
-                          : payment.status === "pending"
-                          ? "text-yellow-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      {formatCurrency(payment.amount)}
-                    </Text>
-                    <Ionicons
-                      name={
-                        payment.status === "succeeded"
-                          ? "checkmark-circle"
-                          : payment.status === "pending"
-                          ? "time"
-                          : "close-circle"
-                      }
-                      size={16}
-                      color={
-                        payment.status === "succeeded"
-                          ? "#10b981"
-                          : payment.status === "pending"
-                          ? "#f59e0b"
-                          : "#ef4444"
-                      }
-                    />
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </WarmBackground>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
+import { useThemeColors } from "@/constants/theme";
 
 const daysOptions = [
   { key: "lundi", value: "Lundi" },
@@ -17,6 +18,8 @@ type Props = {
 };
 
 export function TrainingDaysSelect({ value, onChange }: Props) {
+  const { colors } = useThemeColors();
+
   const toggleDay = (day: string) => {
     if (value.includes(day)) {
       onChange(value.filter((d) => d !== day));
@@ -27,7 +30,7 @@ export function TrainingDaysSelect({ value, onChange }: Props) {
 
   return (
     <View>
-      <Text className="text-white text-sm font-semibold pl-2 mb-2">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-2">
         Jours d'entraînement préférés
       </Text>
       <View className="flex-row flex-wrap gap-2">
@@ -35,16 +38,25 @@ export function TrainingDaysSelect({ value, onChange }: Props) {
           <Pressable
             key={day.key}
             onPress={() => toggleDay(day.key)}
-            className={`py-2 px-4 rounded-full ${
-              value.includes(day.key)
-                ? "bg-purple"
-                : "bg-[#1e2429] border border-[#2a3238]"
-            }`}
+            style={{
+              backgroundColor: value.includes(day.key)
+                ? colors.primary.subtle
+                : colors.glass.light,
+              borderColor: value.includes(day.key)
+                ? colors.primary.DEFAULT
+                : colors.glass.border,
+              borderWidth: 1,
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 9999,
+            }}
           >
             <Text
-              className={
-                value.includes(day.key) ? "text-[#12171b]" : "text-white"
-              }
+              style={{
+                color: value.includes(day.key)
+                  ? colors.primary.dark
+                  : colors.text.secondary,
+              }}
             >
               {day.value}
             </Text>

@@ -1,13 +1,8 @@
 import { View, Text, Pressable, Switch } from "react-native";
 import React from "react";
-import { styled } from "nativewind";
 import { Ionicons } from "@expo/vector-icons";
-
-const ACCENT = "#F97316";
-
-const StyledView = styled(View);
-const StyledText = styled(Text);
-const StyledPressable = styled(Pressable);
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors, palette } from "@/constants/theme";
 
 type SettingItem = {
   icon: keyof typeof Ionicons.glyphMap;
@@ -26,56 +21,55 @@ export default function SettingsSection({
   items,
   description,
 }: SettingsSectionProps) {
+  const { colors } = useThemeColors();
+
   return (
-    <StyledView className="space-y-4 pt-4">
-      <StyledView className="bg-white rounded-2xl overflow-hidden"
-        style={{
-          shadowColor: ACCENT,
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
-        }}
-      >
+    <View className="pt-4" style={{ gap: 16 }}>
+      <GlassCard noPadding>
         {items.map((item, index) => (
-          <StyledPressable
+          <Pressable
             key={item.title}
-            className={`flex-row items-center justify-between p-5 ${
-              index !== items.length - 1 ? "border-b border-gray-100" : ""
-            }`}
+            className="flex-row items-center justify-between p-5"
+            style={{
+              borderBottomWidth: index !== items.length - 1 ? 1 : 0,
+              borderBottomColor: colors.glass.border,
+            }}
             onPress={item.onToggle}
           >
-            <StyledView className="flex-row items-center space-x-4 flex-1">
-              <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-                <Ionicons name={item.icon} size={20} color={ACCENT} />
+            <View className="flex-row items-center flex-1" style={{ gap: 16 }}>
+              <View
+                className="w-10 h-10 rounded-xl items-center justify-center"
+                style={{ backgroundColor: palette.primary.subtle }}
+              >
+                <Ionicons name={item.icon} size={20} color={colors.primary.DEFAULT} />
               </View>
-              <StyledView className="flex-1">
-                <StyledText className="text-gray-900 font-nunito-bold">
+              <View className="flex-1">
+                <Text style={{ color: colors.text.primary }} className="font-nunito-bold">
                   {item.title}
-                </StyledText>
+                </Text>
                 {item.description && (
-                  <StyledText className="text-gray-500 text-sm font-nunito-medium mt-1">
+                  <Text style={{ color: colors.text.tertiary }} className="text-sm font-nunito-medium mt-1">
                     {item.description}
-                  </StyledText>
+                  </Text>
                 )}
-              </StyledView>
-            </StyledView>
+              </View>
+            </View>
             <Switch
               value={item.value}
               onValueChange={item.onToggle}
-              trackColor={{ false: "#E5E7EB", true: ACCENT }}
+              trackColor={{ false: colors.surface, true: colors.primary.DEFAULT }}
               thumbColor="#fff"
-              ios_backgroundColor="#E5E7EB"
+              ios_backgroundColor={colors.surface}
             />
-          </StyledPressable>
+          </Pressable>
         ))}
-      </StyledView>
+      </GlassCard>
 
       {description && (
-        <StyledText className="text-gray-500 text-sm px-6 font-nunito-medium">
+        <Text style={{ color: colors.text.tertiary }} className="text-sm px-6 font-nunito-medium">
           {description}
-        </StyledText>
+        </Text>
       )}
-    </StyledView>
+    </View>
   );
 }

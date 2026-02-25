@@ -6,13 +6,12 @@ import {
   Pressable,
   FlatList,
   Image,
-  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { userService } from "@/service/api/user";
 import User from "@/interface/User";
-
-const ACCENT = "#F97316";
+import PulseLoader from "@/components/ui/PulseLoader";
+import { useThemeColors, palette } from "@/constants/theme";
 
 interface UserSearchProps {
   onSelectUser: (user: User) => void;
@@ -24,6 +23,7 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { colors, shadows } = useThemeColors();
 
   useEffect(() => {
     if (debounceTimerRef.current) {
@@ -64,20 +64,21 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
 
   return (
     <View className="mb-4">
-      <View className="flex-row items-center bg-white rounded-xl px-4 border-2 border-gray-200"
+      <View
+        className="flex-row items-center rounded-xl px-4"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.05,
-          shadowRadius: 2,
-          elevation: 1,
+          backgroundColor: colors.glass.light,
+          borderWidth: 1,
+          borderColor: colors.glass.border,
+          ...shadows.sm,
         }}
       >
-        <Ionicons name="search" size={20} color={ACCENT} style={{ marginRight: 8 }} />
+        <Ionicons name="search" size={20} color={colors.primary.DEFAULT} style={{ marginRight: 8 }} />
         <TextInput
-          className="flex-1 text-gray-900 p-4 font-nunito-medium"
+          className="flex-1 p-4 font-nunito-medium"
+          style={{ color: colors.text.primary }}
           placeholder="Rechercher des participants..."
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.text.tertiary}
           value={searchQuery}
           onChangeText={(text) => {
             setSearchQuery(text);
@@ -86,28 +87,27 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
       </View>
 
       {isSearching ? (
-        <View className="bg-white rounded-xl mt-2 p-4 border-2 border-gray-200 items-center justify-center"
+        <View
+          className="rounded-xl mt-2 p-4 items-center justify-center"
           style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.05,
-            shadowRadius: 2,
-            elevation: 1,
+            backgroundColor: colors.glass.light,
+            borderWidth: 1,
+            borderColor: colors.glass.border,
+            ...shadows.sm,
           }}
         >
-          <ActivityIndicator color={ACCENT} />
+          <PulseLoader color={colors.primary.DEFAULT} />
         </View>
       ) : (
         searchResults.length > 0 && (
           <View
-            className="bg-white rounded-xl mt-2 border-2 border-gray-200"
-            style={{ 
+            className="rounded-xl mt-2"
+            style={{
               maxHeight: 200,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.15,
-              shadowRadius: 8,
-              elevation: 5,
+              backgroundColor: colors.elevated,
+              borderWidth: 1,
+              borderColor: colors.glass.border,
+              ...shadows.md,
             }}
           >
             <FlatList
@@ -121,14 +121,16 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
                     setSearchQuery("");
                     setSearchResults([]);
                   }}
-                  className="flex-row items-center p-3 border-b border-gray-100"
-                  android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
+                  className="flex-row items-center p-3"
+                  style={{ borderBottomWidth: 1, borderBottomColor: colors.glass.border }}
+                  android_ripple={{ color: palette.primary.subtle }}
                 >
                   <Image
                     source={{ uri: item.profile_image }}
-                    className="w-10 h-10 rounded-full border border-gray-200"
+                    className="w-10 h-10 rounded-full"
+                    style={{ borderWidth: 1, borderColor: colors.glass.border }}
                   />
-                  <Text className="text-gray-900 ml-3 font-nunito-medium">
+                  <Text style={{ color: colors.text.primary }} className="ml-3 font-nunito-medium">
                     {item.first_name} {item.last_name}
                   </Text>
                 </Pressable>
@@ -140,27 +142,27 @@ export function UserSearch({ onSelectUser, selectedUsers }: UserSearchProps) {
 
       {selectedUsers.length > 0 && (
         <View className="mt-4">
-          <Text className="text-gray-900 font-nunito-bold text-base mb-3">Participants invités</Text>
+          <Text style={{ color: colors.text.primary }} className="font-nunito-bold text-base mb-3">Participants invités</Text>
           <View className="flex-row flex-wrap gap-2">
             {selectedUsers.map((user) => (
               <View
                 key={user.id}
-                className="flex-row items-center bg-white rounded-full px-3 py-1.5 border-2 border-tertiary"
+                className="flex-row items-center rounded-full px-3 py-1.5"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 2,
-                  elevation: 1,
+                  backgroundColor: colors.glass.light,
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  ...shadows.sm,
                 }}
               >
                 <Image
                   source={{ uri: user.profile_image }}
-                  className="w-6 h-6 rounded-full border border-gray-200"
+                  className="w-6 h-6 rounded-full"
+                  style={{ borderWidth: 1, borderColor: colors.glass.border }}
                 />
-                <Text className="text-gray-700 mx-2 font-nunito-medium text-sm">{user.first_name}</Text>
+                <Text style={{ color: colors.text.secondary }} className="mx-2 font-nunito-medium text-sm">{user.first_name}</Text>
                 <Pressable onPress={() => onSelectUser(user)}>
-                  <Ionicons name="close-circle" size={18} color={ACCENT} />
+                  <Ionicons name="close-circle" size={18} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             ))}

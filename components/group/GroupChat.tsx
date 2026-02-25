@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { groupMessageService } from "@/service/api/groupMessage";
 import { Message } from "@/interface/Conversation";
+import PulseLoader from "@/components/ui/PulseLoader";
+import { useThemeColors } from "@/constants/theme";
 
 interface GroupChatProps {
   groupId: string | number;
@@ -21,6 +23,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const { colors, shadows } = useThemeColors();
 
   const loadMessages = async () => {
     try {
@@ -65,28 +68,32 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
           }}
           className="w-8 h-8 rounded-full mr-2"
         />
-        <Text className="text-white font-semibold">
+        <Text style={{ color: colors.text.primary }} className="font-semibold">
           {message.sender.first_name}
         </Text>
       </View>
-      <View className="ml-10 bg-[#1e2429] rounded-lg p-3">
-        <Text className="text-white">{message.content}</Text>
+      <View
+        className="ml-10 rounded-lg p-3"
+        style={{ backgroundColor: colors.glass.light }}
+      >
+        <Text style={{ color: colors.text.primary }}>{message.content}</Text>
       </View>
     </View>
   );
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-white">Chargement des messages...</Text>
+      <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.background }}>
+        <PulseLoader color={colors.primary.DEFAULT} size={10} />
+        <Text style={{ color: colors.text.tertiary }} className="mt-3">Chargement des messages...</Text>
       </View>
     );
   }
 
   if (error) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-white">Erreur: {error}</Text>
+      <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.background }}>
+        <Text style={{ color: colors.error }}>Erreur: {error}</Text>
       </View>
     );
   }
@@ -96,7 +103,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1"
     >
-      <View className="flex-1 bg-background">
+      <View className="flex-1" style={{ backgroundColor: colors.background }}>
         <FlatList
           data={messages}
           renderItem={renderMessage}
@@ -104,29 +111,34 @@ export const GroupChat: React.FC<GroupChatProps> = ({ groupId }) => {
           contentContainerStyle={{ padding: 16 }}
           ListEmptyComponent={
             <View className="flex-1 justify-center items-center">
-              <Text className="text-gray-400">
+              <Text style={{ color: colors.text.tertiary }}>
                 Aucun message dans ce groupe
               </Text>
             </View>
           }
         />
 
-        <View className="p-4 border-t border-[#2a3238]">
+        <View className="p-4" style={{ borderTopWidth: 1, borderTopColor: colors.glass.border }}>
           <View className="flex-row items-center">
             <TextInput
               value={newMessage}
               onChangeText={setNewMessage}
               placeholder="Écrivez votre message..."
-              placeholderTextColor="#666"
-              className="flex-1 bg-[#1e2429] text-white px-4 py-3 rounded-l-xl"
+              placeholderTextColor={colors.text.tertiary}
+              className="flex-1 px-4 py-3 rounded-l-xl"
+              style={{
+                backgroundColor: colors.glass.light,
+                color: colors.text.primary,
+              }}
               multiline={false}
             />
             <Pressable
               onPress={handleSendMessage}
               disabled={!newMessage.trim()}
-              className="bg-purple px-4 py-3 rounded-r-xl"
+              className="px-4 py-3 rounded-r-xl"
+              style={{ backgroundColor: colors.primary.DEFAULT, opacity: !newMessage.trim() ? 0.5 : 1 }}
             >
-              <Text className="text-background font-semibold">Envoyer</Text>
+              <Text className="text-white font-semibold">Envoyer</Text>
             </Pressable>
           </View>
         </View>

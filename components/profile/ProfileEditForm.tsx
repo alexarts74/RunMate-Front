@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import {
   View,
-  TextInput,
   Pressable,
   Text,
   ScrollView,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
-import { Image } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import User from "@/interface/User";
-
-const ACCENT = "#F97316";
+import { useThemeColors, typography, radii, spacing } from "@/constants/theme";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import GlassAvatar from "@/components/ui/GlassAvatar";
+import WarmBackground from "@/components/ui/WarmBackground";
 
 type ProfileEditFormProps = {
   setIsEditing: (value: boolean) => void;
@@ -23,9 +24,9 @@ type ProfileEditFormProps = {
 
 export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   const { user, updateUser } = useAuth();
+  const { colors, shadows } = useThemeColors();
   const [loading, setLoading] = useState(false);
   const [error] = useState("");
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: user?.email || "",
     first_name: user?.first_name || "",
@@ -59,7 +60,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
         handleChange("profile_image", result.assets[0].uri);
       }
     } catch (error) {
-      console.error("Erreur lors de la sélection de l'image:", error);
+      console.error("Erreur lors de la selection de l'image:", error);
     }
   };
 
@@ -78,7 +79,7 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
       setIsEditing(false);
       setLoading(true);
     } catch (error) {
-      console.error("Erreur lors de la mise à jour:", error);
+      console.error("Erreur lors de la mise a jour:", error);
     } finally {
       setLoading(false);
     }
@@ -93,194 +94,162 @@ export function ProfileEditForm({ setIsEditing }: ProfileEditFormProps) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
+      style={styles.flex}
     >
-      <ScrollView
-        className="flex-1 bg-fond px-6 py-6 pt-6"
-        contentContainerStyle={{ paddingBottom: 150 }}
-      >
-      <Text className="text-2xl font-nunito-extrabold mb-6 text-gray-900">
-        Modifier mon profil
-      </Text>
-
-      <Pressable onPress={pickImage} className="items-center mb-8">
-        <Image
-          source={
-            formData.profile_image
-              ? { uri: formData.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-32 h-32 rounded-full border-4 border-primary"
-        />
-        <Text className="text-primary mt-3 font-nunito-bold">Changer la photo</Text>
-      </Pressable>
-
-      <View className="space-y-4">
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Prénom
-          </Text>
-          <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
-              focusedInput === "first_name"
-                ? "border-primary"
-                : "border-gray-200"
-            }`}
-            placeholder="Prénom"
-            placeholderTextColor="#9CA3AF"
-            value={formData.first_name}
-            onChangeText={(value) => handleChange("first_name", value)}
-            onFocus={() => setFocusedInput("first_name")}
-            onBlur={() => setFocusedInput(null)}
-            style={{
-              shadowColor: focusedInput === "first_name" ? ACCENT : "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: focusedInput === "first_name" ? 0.1 : 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Nom
-          </Text>
-          <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
-              focusedInput === "last_name"
-                ? "border-primary"
-                : "border-gray-200"
-            }`}
-            placeholder="Nom"
-            placeholderTextColor="#9CA3AF"
-            value={formData.last_name}
-            onChangeText={(value) => handleChange("last_name", value)}
-            onFocus={() => setFocusedInput("last_name")}
-            onBlur={() => setFocusedInput(null)}
-            style={{
-              shadowColor: focusedInput === "last_name" ? ACCENT : "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: focusedInput === "last_name" ? 0.1 : 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Âge
-          </Text>
-          <TextInput
-            className={`w-full border rounded-full p-4 bg-white text-gray-900 font-nunito-medium ${
-              focusedInput === "age" ? "border-primary" : "border-gray-200"
-            }`}
-            placeholder="Âge"
-            placeholderTextColor="#9CA3AF"
-            value={formData.age}
-            onChangeText={(value) => handleChange("age", value)}
-            onFocus={() => setFocusedInput("age")}
-            onBlur={() => setFocusedInput(null)}
-            keyboardType="numeric"
-            style={{
-              shadowColor: focusedInput === "age" ? ACCENT : "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: focusedInput === "age" ? 0.1 : 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Genre
-          </Text>
-          <SelectList
-            setSelected={(val: string) => handleChange("gender", val)}
-            data={genderOptions}
-            save="key"
-            defaultOption={{ key: formData.gender, value: formData.gender }}
-            placeholder="Sélectionnez votre genre"
-            boxStyles={{
-              borderWidth: 1,
-              borderColor: focusedInput === "gender" ? ACCENT : "#E5E7EB",
-              borderRadius: 9999,
-              padding: 16,
-              backgroundColor: "#ffffff",
-            }}
-            dropdownStyles={{
-              borderWidth: 1,
-              borderColor: "#E5E7EB",
-              borderRadius: 16,
-              backgroundColor: "#ffffff",
-              marginTop: 4,
-            }}
-            inputStyles={{ color: "#111827", fontFamily: "Nunito-Medium" }}
-            dropdownTextStyles={{ color: "#111827", fontFamily: "Nunito-Medium" }}
-            search={false}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Bio
-          </Text>
-          <TextInput
-            className={`w-full border rounded-2xl p-4 bg-white text-gray-900 font-nunito-medium ${
-              focusedInput === "bio" ? "border-primary" : "border-gray-200"
-            }`}
-            placeholder="Bio"
-            placeholderTextColor="#9CA3AF"
-            value={formData.bio}
-            onChangeText={(value) => handleChange("bio", value)}
-            onFocus={() => setFocusedInput("bio")}
-            onBlur={() => setFocusedInput(null)}
-            multiline
-            numberOfLines={4}
-            style={{
-              shadowColor: focusedInput === "bio" ? ACCENT : "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: focusedInput === "bio" ? 0.1 : 0.05,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          />
-        </View>
-      </View>
-
-      {error ? (
-        <Text className="text-red-500 text-center mt-4 font-nunito-medium">{error}</Text>
-      ) : null}
-
-      <View className="space-y-3 mt-6">
-        <Pressable
-          className="bg-primary py-4 rounded-full items-center"
-          style={{
-            shadowColor: ACCENT,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-          }}
-          onPress={handleSubmit}
-          disabled={loading}
+      <WarmBackground>
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          {loading ? (
-            <ActivityIndicator color="#ffffff" />
-          ) : (
-            <Text className="text-white font-nunito-bold">Enregistrer</Text>
-          )}
-        </Pressable>
-        <Pressable
-          className="bg-white border-2 border-gray-300 py-4 rounded-full items-center"
-          onPress={() => setIsEditing(false)}
-        >
-          <Text className="text-gray-700 font-nunito-bold">Annuler</Text>
-        </Pressable>
-      </View>
-      </ScrollView>
+          <Text style={[styles.title, { color: colors.text.primary }]}>
+            Modifier mon profil
+          </Text>
+
+          <Pressable onPress={pickImage} style={styles.avatarContainer}>
+            <GlassAvatar
+              uri={formData.profile_image || undefined}
+              size={128}
+              showRing
+            />
+            <Text style={[styles.changePhotoText, { color: colors.primary.DEFAULT }]}>
+              Changer la photo
+            </Text>
+          </Pressable>
+
+          <View style={styles.fieldsContainer}>
+            <GlassInput
+              label="Prenom"
+              placeholder="Prenom"
+              value={formData.first_name}
+              onChangeText={(value) => handleChange("first_name", value)}
+            />
+
+            <GlassInput
+              label="Nom"
+              placeholder="Nom"
+              value={formData.last_name}
+              onChangeText={(value) => handleChange("last_name", value)}
+            />
+
+            <GlassInput
+              label="Age"
+              placeholder="Age"
+              value={formData.age}
+              onChangeText={(value) => handleChange("age", value)}
+              keyboardType="numeric"
+            />
+
+            <View>
+              <Text style={[styles.label, { color: colors.text.secondary }]}>
+                Genre
+              </Text>
+              <SelectList
+                setSelected={(val: string) => handleChange("gender", val)}
+                data={genderOptions}
+                save="key"
+                defaultOption={{ key: formData.gender, value: formData.gender }}
+                placeholder="Selectionnez votre genre"
+                boxStyles={{
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  borderRadius: radii.md,
+                  padding: 16,
+                  backgroundColor: colors.glass.light,
+                  ...shadows.sm,
+                }}
+                dropdownStyles={{
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  borderRadius: radii.md,
+                  backgroundColor: colors.glass.light,
+                  marginTop: 4,
+                }}
+                inputStyles={{ color: colors.text.primary, fontFamily: "Nunito-Medium" }}
+                dropdownTextStyles={{ color: colors.text.primary, fontFamily: "Nunito-Medium" }}
+                search={false}
+              />
+            </View>
+
+            <GlassInput
+              label="Bio"
+              placeholder="Bio"
+              value={formData.bio}
+              onChangeText={(value) => handleChange("bio", value)}
+              multiline
+              numberOfLines={4}
+              style={styles.bioInput}
+            />
+          </View>
+
+          {error ? (
+            <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
+          ) : null}
+
+          <View style={styles.buttonsContainer}>
+            <GlassButton
+              title="Enregistrer"
+              onPress={handleSubmit}
+              variant="primary"
+              loading={loading}
+              disabled={loading}
+            />
+            <GlassButton
+              title="Annuler"
+              onPress={() => setIsEditing(false)}
+              variant="secondary"
+            />
+          </View>
+        </ScrollView>
+      </WarmBackground>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: 150,
+  },
+  title: {
+    fontFamily: typography.h1.fontFamily,
+    fontSize: typography.h1.fontSize,
+    lineHeight: typography.h1.lineHeight,
+    marginBottom: spacing.lg,
+  },
+  avatarContainer: {
+    alignItems: "center",
+    marginBottom: spacing.xl,
+  },
+  changePhotoText: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.label.fontSize,
+    marginTop: 12,
+  },
+  fieldsContainer: {
+    gap: spacing.md,
+  },
+  label: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.label.fontSize,
+    marginBottom: 6,
+  },
+  bioInput: {
+    minHeight: 80,
+    textAlignVertical: "top",
+  },
+  errorText: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.body.fontSize,
+    textAlign: "center",
+    marginTop: spacing.md,
+  },
+  buttonsContainer: {
+    gap: 12,
+    marginTop: spacing.lg,
+  },
+});

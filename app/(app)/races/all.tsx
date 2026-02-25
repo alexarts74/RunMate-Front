@@ -15,8 +15,9 @@ import { Race } from "@/interface/Race";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 export default function AllRacesScreen() {
   const [allRaces, setAllRaces] = useState<Race[]>([]);
@@ -30,6 +31,7 @@ export default function AllRacesScreen() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
   const router = useRouter();
+  const { colors, shadows } = useThemeColors();
 
   const loadRaces = async (location?: string) => {
     setLoading(true);
@@ -43,7 +45,7 @@ export default function AllRacesScreen() {
       setAllRaces(response.races || []);
     } catch (error) {
       console.error("Erreur lors du chargement des courses:", error);
-      setError("Impossible de charger les courses. Veuillez réessayer.");
+      setError("Impossible de charger les courses. Veuillez reessayer.");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -136,16 +138,16 @@ export default function AllRacesScreen() {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-6">
-          <Text className="text-red-500 text-center mb-4 font-nunito-medium">
+          <Text
+            className="text-center mb-4 font-nunito-medium"
+            style={{ color: colors.error }}
+          >
             {error}
           </Text>
-          <Pressable
+          <GlassButton
+            title="Reessayer"
             onPress={() => loadRaces(locationFilter)}
-            className="px-6 py-3 rounded-2xl"
-            style={{ backgroundColor: ACCENT }}
-          >
-            <Text className="text-white font-nunito-bold">Réessayer</Text>
-          </Pressable>
+          />
         </View>
       );
     }
@@ -155,28 +157,30 @@ export default function AllRacesScreen() {
         <View className="flex-1 justify-center items-center p-6">
           <View
             className="w-20 h-20 rounded-full items-center justify-center mb-6"
-            style={{ backgroundColor: `${ACCENT}15` }}
+            style={{ backgroundColor: colors.primary.subtle }}
           >
-            <Ionicons name="trophy-outline" size={40} color={ACCENT} />
+            <Ionicons name="trophy-outline" size={40} color={colors.primary.DEFAULT} />
           </View>
-          <Text className="text-neutral-900 text-xl font-nunito-bold text-center mb-2">
+          <Text
+            className="text-xl font-nunito-bold text-center mb-2"
+            style={{ color: colors.text.primary }}
+          >
             Aucune course
           </Text>
-          <Text className="text-neutral-500 text-sm font-nunito-medium text-center">
+          <Text
+            className="text-sm font-nunito-medium text-center"
+            style={{ color: colors.text.secondary }}
+          >
             {activeFiltersCount > 0
-              ? "Aucune course ne correspond à vos critères."
+              ? "Aucune course ne correspond a vos criteres."
               : "Aucune course disponible pour le moment."}
           </Text>
           {activeFiltersCount > 0 && (
-            <Pressable
+            <GlassButton
+              title="Reinitialiser les filtres"
               onPress={clearAllFilters}
-              className="mt-4 px-6 py-3 rounded-2xl"
-              style={{ backgroundColor: ACCENT }}
-            >
-              <Text className="text-white font-nunito-bold">
-                Réinitialiser les filtres
-              </Text>
-            </Pressable>
+              style={{ marginTop: 16 }}
+            />
           )}
         </View>
       );
@@ -192,35 +196,42 @@ export default function AllRacesScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <WarmBackground>
       <SafeAreaView edges={["top"]}>
         {/* Header */}
         <View className="px-6 py-4 flex-row items-center justify-between">
           <View className="flex-row items-center">
             <Pressable
               onPress={() => router.back()}
-              className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+              className="w-10 h-10 rounded-full items-center justify-center mr-3"
+              style={{ backgroundColor: colors.glass.light }}
             >
-              <Ionicons name="arrow-back" size={20} color="#525252" />
+              <Ionicons name="arrow-back" size={20} color={colors.text.secondary} />
             </Pressable>
-            <Text className="text-xl font-nunito-bold text-neutral-900">
+            <Text
+              className="text-xl font-nunito-bold"
+              style={{ color: colors.text.primary }}
+            >
               Courses
             </Text>
           </View>
           <Pressable
             onPress={() => setFiltersVisible(true)}
             className="flex-row items-center px-4 py-2.5 rounded-xl"
-            style={{ backgroundColor: activeFiltersCount > 0 ? ACCENT : "#F5F5F5" }}
+            style={{
+              backgroundColor: activeFiltersCount > 0 ? colors.primary.DEFAULT : colors.glass.light,
+            }}
           >
             <Ionicons
               name="options-outline"
               size={18}
-              color={activeFiltersCount > 0 ? "white" : "#525252"}
+              color={activeFiltersCount > 0 ? "white" : colors.text.secondary}
             />
             <Text
-              className={`font-nunito-bold text-sm ml-2 ${
-                activeFiltersCount > 0 ? "text-white" : "text-neutral-600"
-              }`}
+              className="font-nunito-bold text-sm ml-2"
+              style={{
+                color: activeFiltersCount > 0 ? colors.text.inverse : colors.text.secondary,
+              }}
             >
               Filtres
             </Text>
@@ -237,19 +248,27 @@ export default function AllRacesScreen() {
 
       {/* Search Bar */}
       <View className="px-6 pb-4">
-        <View className="bg-neutral-100 flex-row items-center px-4 py-3 rounded-xl">
-          <Ionicons name="search" size={18} color="#A3A3A3" />
+        <View
+          className="flex-row items-center px-4 py-3 rounded-xl"
+          style={{
+            backgroundColor: colors.glass.light,
+            borderWidth: 1,
+            borderColor: colors.glass.border,
+          }}
+        >
+          <Ionicons name="search" size={18} color={colors.text.tertiary} />
           <TextInput
             placeholder="Rechercher par localisation..."
             value={searchLocation}
             onChangeText={setSearchLocation}
             onSubmitEditing={handleSearch}
-            className="flex-1 ml-3 font-nunito text-neutral-900 text-sm"
-            placeholderTextColor="#A3A3A3"
+            className="flex-1 ml-3 font-nunito text-sm"
+            placeholderTextColor={colors.text.tertiary}
+            style={{ color: colors.text.primary }}
           />
           {searchLocation.length > 0 && (
             <Pressable onPress={() => setSearchLocation("")}>
-              <Ionicons name="close-circle" size={18} color="#A3A3A3" />
+              <Ionicons name="close-circle" size={18} color={colors.text.tertiary} />
             </Pressable>
           )}
         </View>
@@ -260,9 +279,9 @@ export default function AllRacesScreen() {
             {locationFilter && (
               <View
                 className="px-3 py-1.5 rounded-full flex-row items-center"
-                style={{ backgroundColor: `${ACCENT}15` }}
+                style={{ backgroundColor: colors.primary.subtle }}
               >
-                <Text className="font-nunito-medium text-xs" style={{ color: ACCENT }}>
+                <Text className="font-nunito-medium text-xs" style={{ color: colors.primary.DEFAULT }}>
                   {locationFilter}
                 </Text>
                 <Pressable
@@ -272,29 +291,29 @@ export default function AllRacesScreen() {
                   }}
                   className="ml-2"
                 >
-                  <Ionicons name="close-circle" size={14} color={ACCENT} />
+                  <Ionicons name="close-circle" size={14} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             )}
             {selectedCountry && (
               <View
                 className="px-3 py-1.5 rounded-full flex-row items-center"
-                style={{ backgroundColor: `${ACCENT}15` }}
+                style={{ backgroundColor: colors.primary.subtle }}
               >
-                <Text className="font-nunito-medium text-xs" style={{ color: ACCENT }}>
+                <Text className="font-nunito-medium text-xs" style={{ color: colors.primary.DEFAULT }}>
                   {selectedCountry}
                 </Text>
                 <Pressable onPress={() => setSelectedCountry(null)} className="ml-2">
-                  <Ionicons name="close-circle" size={14} color={ACCENT} />
+                  <Ionicons name="close-circle" size={14} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             )}
             {selectedDistance !== null && (
               <View
                 className="px-3 py-1.5 rounded-full flex-row items-center"
-                style={{ backgroundColor: `${ACCENT}15` }}
+                style={{ backgroundColor: colors.primary.subtle }}
               >
-                <Text className="font-nunito-medium text-xs" style={{ color: ACCENT }}>
+                <Text className="font-nunito-medium text-xs" style={{ color: colors.primary.DEFAULT }}>
                   {selectedDistance === 42.195
                     ? "Marathon"
                     : selectedDistance === 21.0975
@@ -302,15 +321,16 @@ export default function AllRacesScreen() {
                     : `${selectedDistance} km`}
                 </Text>
                 <Pressable onPress={() => setSelectedDistance(null)} className="ml-2">
-                  <Ionicons name="close-circle" size={14} color={ACCENT} />
+                  <Ionicons name="close-circle" size={14} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             )}
             <Pressable
               onPress={clearAllFilters}
-              className="bg-neutral-200 px-3 py-1.5 rounded-full"
+              className="px-3 py-1.5 rounded-full"
+              style={{ backgroundColor: colors.glass.medium }}
             >
-              <Text className="text-neutral-600 font-nunito-bold text-xs">
+              <Text className="font-nunito-bold text-xs" style={{ color: colors.text.secondary }}>
                 Effacer
               </Text>
             </Pressable>
@@ -318,8 +338,11 @@ export default function AllRacesScreen() {
         )}
 
         {races.length > 0 && (
-          <Text className="text-neutral-400 font-nunito-medium text-sm mt-3">
-            {races.length} course{races.length > 1 ? "s" : ""} trouvée{races.length > 1 ? "s" : ""}
+          <Text
+            className="font-nunito-medium text-sm mt-3"
+            style={{ color: colors.text.tertiary }}
+          >
+            {races.length} course{races.length > 1 ? "s" : ""} trouvee{races.length > 1 ? "s" : ""}
           </Text>
         )}
       </View>
@@ -332,7 +355,7 @@ export default function AllRacesScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor={ACCENT}
+            tintColor={colors.primary.DEFAULT}
           />
         }
       >
@@ -355,6 +378,6 @@ export default function AllRacesScreen() {
         onClearFilters={clearAllFilters}
         activeFiltersCount={activeFiltersCount}
       />
-    </View>
+    </WarmBackground>
   );
 }

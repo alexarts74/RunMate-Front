@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
+import { useThemeColors } from "@/constants/theme";
 
 const socialOptions = [
   { key: "solo", value: "Course en solo" },
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export function SocialPreferencesSelect({ value, onChange }: Props) {
+  const { colors } = useThemeColors();
+
   const toggleOption = (option: string) => {
     if (value.includes(option)) {
       onChange(value.filter((o) => o !== option));
@@ -25,7 +28,7 @@ export function SocialPreferencesSelect({ value, onChange }: Props) {
 
   return (
     <View>
-      <Text className="text-white text-sm font-semibold pl-2 mb-2">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-2">
         Préférences sociales
       </Text>
       <View className="flex-row flex-wrap gap-2">
@@ -33,16 +36,25 @@ export function SocialPreferencesSelect({ value, onChange }: Props) {
           <Pressable
             key={option.key}
             onPress={() => toggleOption(option.key)}
-            className={`py-2 px-4 rounded-full ${
-              value.includes(option.key)
-                ? "bg-purple"
-                : "bg-[#1e2429] border border-[#2a3238]"
-            }`}
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 9999,
+              borderWidth: 1,
+              backgroundColor: value.includes(option.key)
+                ? colors.primary.subtle
+                : colors.glass.light,
+              borderColor: value.includes(option.key)
+                ? colors.primary.DEFAULT
+                : colors.glass.border,
+            }}
           >
             <Text
-              className={
-                value.includes(option.key) ? "text-[#12171b]" : "text-white"
-              }
+              style={{
+                color: value.includes(option.key)
+                  ? colors.primary.dark
+                  : colors.text.secondary,
+              }}
             >
               {option.value}
             </Text>

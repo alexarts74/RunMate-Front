@@ -1,10 +1,12 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { View, Text, Image, Pressable, ScrollView } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 import { OrganizerProfileView } from "./OrganizerProfileView";
-
-const ACCENT = "#F97316";
+import { useThemeColors, typography, radii, spacing } from "@/constants/theme";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassAvatar from "@/components/ui/GlassAvatar";
+import WarmBackground from "@/components/ui/WarmBackground";
 
 type ProfileViewProps = {
   setIsEditing: (value: boolean) => void;
@@ -12,134 +14,114 @@ type ProfileViewProps = {
 
 export function ProfileView({ setIsEditing }: ProfileViewProps) {
   const { user } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
   // Si l'utilisateur est un organisateur, afficher le profil organisateur
   if (user?.user_type === "organizer") {
     return <OrganizerProfileView setIsEditing={setIsEditing} />;
   }
 
+  const renderField = (label: string, value: string | undefined | null, isMultiline = false) => (
+    <View style={styles.fieldContainer}>
+      <Text style={[styles.label, { color: colors.text.secondary }]}>{label}</Text>
+      <GlassCard variant="light" style={isMultiline ? styles.multilineCard : styles.fieldCard}>
+        <Text style={[styles.fieldValue, { color: colors.text.primary }]}>
+          {value || "Non renseigne"}
+        </Text>
+      </GlassCard>
+    </View>
+  );
+
   // Sinon, afficher le profil runner classique
   return (
-    <ScrollView
-      className="flex-1 bg-fond px-6 py-6 pt-6 pb-24"
-      contentContainerStyle={{ paddingBottom: 150 }}
-    >
-      <View className="flex-row justify-between items-center mb-6">
-        <Text className="text-2xl font-nunito-extrabold text-gray-900">Mon Profil</Text>
-        <Pressable
-          onPress={() => setIsEditing(true)}
-          className="flex-row items-center px-3 py-3 rounded-full bg-tertiary"
-          style={{
-            shadowColor: ACCENT,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
-        >
-          <Ionicons name="pencil" size={20} color={ACCENT} />
-        </Pressable>
-      </View>
-
-      <View className="items-center mb-8">
-        <Image
-          source={
-            user?.profile_image
-              ? { uri: user?.profile_image }
-              : require("@/assets/images/react-logo.png")
-          }
-          className="w-32 h-32 rounded-full border-4 border-primary"
-        />
-      </View>
-
-      <View className="space-y-4">
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Nom complet
-          </Text>
-          <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
+    <WarmBackground>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text.primary }]}>Mon Profil</Text>
+          <Pressable
+            onPress={() => setIsEditing(true)}
+            style={[
+              styles.editButton,
+              shadows.sm,
+              { backgroundColor: colors.glass.light, borderColor: colors.glass.border },
+            ]}
           >
-            <Text className="text-gray-900 font-nunito-medium">
-              {user?.first_name} {user?.last_name}
-            </Text>
-          </View>
+            <Ionicons name="pencil" size={20} color={colors.primary.DEFAULT} />
+          </Pressable>
         </View>
 
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Email
-          </Text>
-          <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-medium">{user?.email}</Text>
-          </View>
+        <View style={styles.avatarContainer}>
+          <GlassAvatar
+            uri={user?.profile_image}
+            size={128}
+            showRing
+          />
         </View>
 
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Âge
-          </Text>
-          <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-medium">{user?.age} ans</Text>
-          </View>
+        <View style={styles.fieldsContainer}>
+          {renderField("Nom complet", `${user?.first_name} ${user?.last_name}`)}
+          {renderField("Email", user?.email)}
+          {renderField("Age", user?.age ? `${user.age} ans` : null)}
+          {renderField("Genre", user?.gender)}
+          {renderField("Bio", user?.bio || "Aucune bio", true)}
         </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Genre
-          </Text>
-          <View className="w-full border border-gray-200 rounded-full p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-medium">{user?.gender}</Text>
-          </View>
-        </View>
-
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Bio
-          </Text>
-          <View className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-medium">{user?.bio || "Aucune bio"}</Text>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </WarmBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: 150,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: spacing.lg,
+  },
+  title: {
+    fontFamily: typography.h1.fontFamily,
+    fontSize: typography.h1.fontSize,
+    lineHeight: typography.h1.lineHeight,
+  },
+  editButton: {
+    padding: 12,
+    borderRadius: radii.full,
+    borderWidth: 1,
+  },
+  avatarContainer: {
+    alignItems: "center",
+    marginBottom: spacing.xl,
+  },
+  fieldsContainer: {
+    gap: spacing.md,
+  },
+  fieldContainer: {
+    gap: 6,
+  },
+  label: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.label.fontSize,
+    paddingLeft: 4,
+  },
+  fieldCard: {
+    borderRadius: radii.full,
+  },
+  multilineCard: {
+    borderRadius: radii.lg,
+  },
+  fieldValue: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.bodyMedium.fontSize,
+  },
+});

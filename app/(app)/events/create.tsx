@@ -24,10 +24,13 @@ import * as Location from "expo-location";
 import { validateCreateEventForm } from "@/constants/formValidation";
 import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
-const ACCENT = "#F97316";
-
-// Enum pour le niveau (correspondant à votre DB)
+// Enum pour le niveau (correspondant a votre DB)
 enum EventLevel {
   BEGINNER = 0,
   INTERMEDIATE = 1,
@@ -68,13 +71,13 @@ export default function CreateEventScreen() {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { user } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
-  // Vérifier si l'utilisateur est organisateur
   useEffect(() => {
     if (user?.user_type !== "organizer") {
       Alert.alert(
-        "Accès restreint",
-        "Seuls les organisateurs peuvent créer des événements. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité.",
+        "Acces restreint",
+        "Seuls les organisateurs peuvent creer des evenements. Veuillez creer un compte organisateur pour acceder a cette fonctionnalite.",
         [
           {
             text: "OK",
@@ -85,20 +88,16 @@ export default function CreateEventScreen() {
     }
   }, [user]);
 
-  // Vérifier si l'utilisateur est premium dès le chargement (sauf pour les organisateurs)
   useEffect(() => {
-    // Les organisateurs peuvent créer des événements gratuitement
     if (user?.user_type === "organizer") {
       setShowPremiumModal(false);
       return;
     }
-    // Pour les runners, vérifier le statut premium
     if (!(user && "is_premium" in user && user.is_premium)) {
       setShowPremiumModal(true);
     }
   }, [user]);
 
-  // Nettoyer les timers au démontage
   useEffect(() => {
     return () => {
       if (geocodeTimerRef.current) {
@@ -142,7 +141,7 @@ export default function CreateEventScreen() {
           }));
         }
       } catch (error) {
-        console.error("Erreur de géocodage:", error);
+        console.error("Erreur de geocodage:", error);
       }
     }, 1000);
   }, []);
@@ -164,11 +163,10 @@ export default function CreateEventScreen() {
         )}&limit=15`;
         const response = await fetch(url);
 
-        // Vérifier si la réponse est ok
         if (!response.ok) {
           console.error("Erreur API:", response.status, response.statusText);
           const text = await response.text();
-          console.error("Réponse brute:", text);
+          console.error("Reponse brute:", text);
           setSuggestions([]);
           return;
         }
@@ -191,7 +189,7 @@ export default function CreateEventScreen() {
               city: props.city,
               postcode: props.postcode,
               street: props.name,
-              coordinates: feature.geometry.coordinates.reverse(), // [lat, lng]
+              coordinates: feature.geometry.coordinates.reverse(),
               full_name: formatAddress(props),
             };
           });
@@ -267,7 +265,7 @@ export default function CreateEventScreen() {
     if (Object.keys(validationErrors).length > 0) {
       Alert.alert(
         "Erreur de validation",
-        "Veuillez corriger les erreurs avant de créer l'événement"
+        "Veuillez corriger les erreurs avant de creer l'evenement"
       );
       return;
     }
@@ -282,10 +280,10 @@ export default function CreateEventScreen() {
       await eventService.createEvent(eventData);
       router.back();
     } catch (error: any) {
-      console.error("Erreur lors de la création de l'événement:", error);
+      console.error("Erreur lors de la creation de l'evenement:", error);
       const errorMessage =
         error.message ||
-        "Une erreur est survenue lors de la création de l'événement";
+        "Une erreur est survenue lors de la creation de l'evenement";
       Alert.alert("Erreur", errorMessage);
     }
   };
@@ -296,23 +294,23 @@ export default function CreateEventScreen() {
   };
 
   return (
-    <View className="flex-1 bg-fond">
-      <SafeAreaView className="bg-white" edges={['top']}>
+    <WarmBackground>
+      <SafeAreaView style={{ backgroundColor: colors.glass.heavy }} edges={['top']}>
         <View
-          className="flex-row items-center px-6 py-4 bg-white border-b border-gray-200"
+          className="flex-row items-center px-6 py-4"
           style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.05,
-            shadowRadius: 4,
-            elevation: 2,
+            backgroundColor: colors.glass.heavy,
+            ...shadows.sm,
           }}
         >
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color={ACCENT} />
+            <Ionicons name="close" size={24} color={colors.primary.DEFAULT} />
           </Pressable>
-          <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
-            Créer un événement
+          <Text
+            className="text-xl font-nunito-extrabold flex-1"
+            style={{ color: colors.text.primary }}
+          >
+            Creer un evenement
           </Text>
         </View>
       </SafeAreaView>
@@ -322,19 +320,19 @@ export default function CreateEventScreen() {
         className="flex-1"
         style={[styles.container, showPremiumModal && styles.blurContainer]}
       >
-        <ScrollView className="flex-1 px-6 py-4 bg-fond" showsVerticalScrollIndicator={false}>
+        <ScrollView className="flex-1 px-6 py-4" showsVerticalScrollIndicator={false}>
           <View className="space-y-5">
             {/* Image de couverture */}
             <View>
               <Pressable
                 onPress={handleImagePick}
-                className="h-48 bg-white rounded-2xl items-center justify-center mb-2 border-2 border-dashed border-gray-300"
+                className="h-48 rounded-2xl items-center justify-center mb-2"
                 style={{
-                  shadowColor: ACCENT,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 4,
-                  elevation: 2,
+                  backgroundColor: colors.glass.light,
+                  borderWidth: 2,
+                  borderStyle: "dashed",
+                  borderColor: colors.glass.border,
+                  ...shadows.sm,
                 }}
               >
                 {formData.cover_image ? (
@@ -344,104 +342,75 @@ export default function CreateEventScreen() {
                   />
                 ) : (
                   <View className="items-center">
-                    <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
-                      <Ionicons name="image-outline" size={32} color={ACCENT} />
+                    <View
+                      className="w-16 h-16 rounded-xl items-center justify-center mb-3"
+                      style={{ backgroundColor: colors.primary.subtle }}
+                    >
+                      <Ionicons name="image-outline" size={32} color={colors.primary.DEFAULT} />
                     </View>
-                    <Text className="text-gray-600 font-nunito-medium text-base">
+                    <Text className="font-nunito-medium text-base" style={{ color: colors.text.secondary }}>
                       Ajouter une photo
                     </Text>
                   </View>
                 )}
               </Pressable>
               {errors.cover_image && (
-                <Text className="text-red-500 text-sm font-nunito-medium mt-1">
+                <Text className="text-sm font-nunito-medium mt-1" style={{ color: colors.error }}>
                   {errors.cover_image}
                 </Text>
               )}
             </View>
 
             {/* Nom */}
-            <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
-                Nom de l'événement
-              </Text>
-              <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
-                  errors.name ? "border-red-500" : "border-gray-200"
-                }`}
-                placeholder="Ex: Course matinale"
-                placeholderTextColor="#9CA3AF"
-                value={formData.name}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, name: text })
-                }
-                style={{
-                  shadowColor: errors.name ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
-                }}
-              />
-              {errors.name && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">{errors.name}</Text>
-              )}
-            </View>
+            <GlassInput
+              label="Nom de l'evenement"
+              placeholder="Ex: Course matinale"
+              value={formData.name}
+              onChangeText={(text) =>
+                setFormData({ ...formData, name: text })
+              }
+              error={errors.name}
+            />
 
             {/* Description */}
-            <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Description</Text>
-              <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
-                  errors.description ? "border-red-500" : "border-gray-200"
-                }`}
-                placeholder="Décrivez votre événement"
-                placeholderTextColor="#9CA3AF"
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-                value={formData.description}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, description: text })
-                }
-                style={{
-                  shadowColor: errors.description ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
-                }}
-              />
-              {errors.description && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
-                  {errors.description}
-                </Text>
-              )}
-            </View>
+            <GlassInput
+              label="Description"
+              placeholder="Decrivez votre evenement"
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              value={formData.description}
+              onChangeText={(text) =>
+                setFormData({ ...formData, description: text })
+              }
+              error={errors.description}
+            />
 
             {/* Date */}
             <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Date et heure</Text>
+              <Text
+                className="font-nunito-bold text-base mb-2"
+                style={{ color: colors.text.primary }}
+              >
+                Date et heure
+              </Text>
               <Pressable
                 onPress={() => setShowDatePicker(true)}
-                className={`bg-white p-4 rounded-xl border-2 flex-row items-center justify-between ${
-                  errors.start_date ? "border-red-500" : "border-gray-200"
-                }`}
+                className="p-4 rounded-xl flex-row items-center justify-between"
                 style={{
-                  shadowColor: errors.start_date ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
+                  backgroundColor: colors.glass.light,
+                  borderWidth: 1,
+                  borderColor: errors.start_date ? colors.error : colors.glass.border,
+                  ...shadows.sm,
                 }}
               >
-                <Text className="text-gray-900 font-nunito-medium">
+                <Text className="font-nunito-medium" style={{ color: colors.text.primary }}>
                   {formData.start_date.toLocaleString()}
                 </Text>
-                <Ionicons name="calendar" size={20} color={ACCENT} />
+                <Ionicons name="calendar" size={20} color={colors.primary.DEFAULT} />
               </Pressable>
               {errors.start_date && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
+                <Text className="text-sm mt-1 font-nunito-medium" style={{ color: colors.error }}>
                   {errors.start_date}
                 </Text>
               )}
@@ -459,7 +428,12 @@ export default function CreateEventScreen() {
 
             {/* Niveau */}
             <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-3">Niveau</Text>
+              <Text
+                className="font-nunito-bold text-base mb-3"
+                style={{ color: colors.text.primary }}
+              >
+                Niveau
+              </Text>
               <View className="flex-row justify-between flex-wrap gap-3">
                 {Object.values(EventLevel)
                   .filter((value) => typeof value === "number")
@@ -469,23 +443,22 @@ export default function CreateEventScreen() {
                       onPress={() =>
                         setFormData({ ...formData, level: value as EventLevel })
                       }
-                      className={`flex-1 min-w-[45%] px-4 py-3.5 rounded-xl border-2 ${
-                        formData.level === value
-                          ? "bg-primary border-primary"
-                          : "bg-white border-gray-200"
-                      }`}
+                      className="flex-1 min-w-[45%] px-4 py-3.5 rounded-xl"
                       style={{
-                        shadowColor: formData.level === value ? ACCENT : "#000",
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: formData.level === value ? 0.2 : 0.05,
-                        shadowRadius: 4,
-                        elevation: formData.level === value ? 3 : 1,
+                        backgroundColor:
+                          formData.level === value ? colors.primary.DEFAULT : colors.glass.light,
+                        borderWidth: 1,
+                        borderColor:
+                          formData.level === value ? colors.primary.DEFAULT : colors.glass.border,
+                        ...(formData.level === value ? shadows.md : shadows.sm),
                       }}
                     >
                       <Text
-                        className={`text-center font-nunito-bold text-sm ${
-                          formData.level === value ? "text-white" : "text-gray-700"
-                        }`}
+                        className="text-center font-nunito-bold text-sm"
+                        style={{
+                          color:
+                            formData.level === value ? colors.text.inverse : colors.text.secondary,
+                        }}
                       >
                         {EventLevel[value]}
                       </Text>
@@ -496,50 +469,40 @@ export default function CreateEventScreen() {
 
             {/* Lieu */}
             <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Lieu</Text>
-              <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
-                  errors.location ? "border-red-500" : "border-gray-200"
-                }`}
+              <GlassInput
+                label="Lieu"
                 placeholder="Rechercher une adresse..."
-                placeholderTextColor="#9CA3AF"
                 value={formData.location}
                 onChangeText={(text) => {
                   setFormData((prev) => ({ ...prev, location: text }));
                   searchLocation(text);
                 }}
-                style={{
-                  shadowColor: errors.location ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
-                }}
+                error={errors.location}
               />
-              {errors.location && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
-                  {errors.location}
-                </Text>
-              )}
 
               {suggestions.length > 0 && (
-                <View className="bg-white mt-2 rounded-xl overflow-hidden border-2 border-gray-200"
+                <View
+                  className="mt-2 rounded-xl overflow-hidden"
                   style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 8,
-                    elevation: 5,
+                    backgroundColor: colors.elevated,
+                    borderWidth: 1,
+                    borderColor: colors.glass.border,
+                    ...shadows.md,
                   }}
                 >
                   {suggestions.map((suggestion, index) => (
                     <Pressable
                       key={index}
                       onPress={() => handleSelectLocation(suggestion)}
-                      className="p-4 border-b border-gray-100"
-                      android_ripple={{ color: "rgba(249, 115, 22, 0.1)" }}
+                      className="p-4"
+                      style={{
+                        borderBottomWidth: index !== suggestions.length - 1 ? 1 : 0,
+                        borderBottomColor: colors.glass.border,
+                      }}
                     >
-                      <Text className="text-gray-900 font-nunito-medium">{suggestion.full_name}</Text>
+                      <Text className="font-nunito-medium" style={{ color: colors.text.primary }}>
+                        {suggestion.full_name}
+                      </Text>
                     </Pressable>
                   ))}
                 </View>
@@ -547,67 +510,34 @@ export default function CreateEventScreen() {
             </View>
 
             {/* Distance */}
-            <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">Distance (km)</Text>
-              <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
-                  errors.distance ? "border-red-500" : "border-gray-200"
-                }`}
-                placeholder="Ex: 5"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-                value={formData.distance}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, distance: text })
-                }
-                style={{
-                  shadowColor: errors.distance ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
-                }}
-              />
-              {errors.distance && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
-                  {errors.distance}
-                </Text>
-              )}
-            </View>
+            <GlassInput
+              label="Distance (km)"
+              placeholder="Ex: 5"
+              keyboardType="numeric"
+              value={formData.distance}
+              onChangeText={(text) =>
+                setFormData({ ...formData, distance: text })
+              }
+              error={errors.distance}
+            />
 
             {/* Nombre max de participants */}
-            <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
-                Nombre maximum de participants
-              </Text>
-              <TextInput
-                className={`bg-white text-gray-900 p-4 rounded-xl border-2 font-nunito-medium ${
-                  errors.max_participants ? "border-red-500" : "border-gray-200"
-                }`}
-                placeholder="Ex: 10"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-                value={formData.max_participants}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, max_participants: text })
-                }
-                style={{
-                  shadowColor: errors.max_participants ? "#EF4444" : "#000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  elevation: 1,
-                }}
-              />
-              {errors.max_participants && (
-                <Text className="text-red-500 text-sm mt-1 font-nunito-medium">
-                  {errors.max_participants}
-                </Text>
-              )}
-            </View>
+            <GlassInput
+              label="Nombre maximum de participants"
+              placeholder="Ex: 10"
+              keyboardType="numeric"
+              value={formData.max_participants}
+              onChangeText={(text) =>
+                setFormData({ ...formData, max_participants: text })
+              }
+              error={errors.max_participants}
+            />
 
             <View>
-              <Text className="text-gray-900 font-nunito-bold text-base mb-2">
+              <Text
+                className="font-nunito-bold text-base mb-2"
+                style={{ color: colors.text.primary }}
+              >
                 Inviter des participants
               </Text>
               <UserSearch
@@ -619,22 +549,19 @@ export default function CreateEventScreen() {
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-fond border-t border-gray-200">
-          <Pressable
+        <View
+          className="px-6 py-4"
+          style={{
+            backgroundColor: colors.glass.heavy,
+            borderTopWidth: 1,
+            borderTopColor: colors.glass.border,
+          }}
+        >
+          <GlassButton
+            title="Creer l'evenement"
             onPress={handleSubmit}
-            className="bg-primary py-4 px-8 rounded-full active:opacity-90"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 4,
-            }}
-          >
-            <Text className="text-white text-center font-nunito-bold text-lg">
-              Créer l'événement
-            </Text>
-          </Pressable>
+            size="lg"
+          />
         </View>
       </KeyboardAvoidingView>
 
@@ -646,10 +573,10 @@ export default function CreateEventScreen() {
         }}
         visible={showPremiumModal}
         onClose={closeModal}
-        title="Fonctionnalité Premium"
-        description="La création d'événements sera bientôt disponible dans la version premium de l'application. Restez à l'écoute pour plus d'informations !"
+        title="Fonctionnalite Premium"
+        description="La creation d'evenements sera bientot disponible dans la version premium de l'application. Restez a l'ecoute pour plus d'informations !"
       />
-    </View>
+    </WarmBackground>
   );
 }
 

@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   Pressable,
   Alert,
   Image,
-  ScrollView,
 } from "react-native";
 import { router } from "expo-router";
 import { groupService } from "@/service/api/group";
@@ -15,10 +13,12 @@ import User from "@/interface/User";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors } from "@/constants/theme";
 
-const ACCENT = "#F97316";
-
-interface CreateGroupForm {
+interface CreateGroupFormData {
   name: string;
   description: string;
   cover_image: string;
@@ -29,7 +29,8 @@ interface CreateGroupForm {
 
 export function CreateGroupForm() {
   const { user } = useAuth();
-  const [form, setForm] = useState<CreateGroupForm>({
+  const { colors, shadows } = useThemeColors();
+  const [form, setForm] = useState<CreateGroupFormData>({
     name: "",
     description: "",
     cover_image: "",
@@ -110,18 +111,18 @@ export function CreateGroupForm() {
 
   return (
     <View className="flex-1">
-      <View className="space-y-5">
+      <View style={{ gap: 20 }}>
         <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Image de couverture</Text>
+          <Text style={{ color: colors.text.primary }} className="font-nunito-bold text-base mb-2">Image de couverture</Text>
           <Pressable
             onPress={handleImagePick}
-            className="bg-white rounded-2xl overflow-hidden h-48 items-center justify-center border-2 border-dashed border-gray-300"
+            className="rounded-2xl overflow-hidden h-48 items-center justify-center"
             style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
+              backgroundColor: colors.glass.light,
+              borderWidth: 2,
+              borderStyle: 'dashed',
+              borderColor: colors.glass.border,
+              ...shadows.sm,
             }}
           >
             {form.cover_image ? (
@@ -132,10 +133,13 @@ export function CreateGroupForm() {
               />
             ) : (
               <View className="items-center">
-                <View className="w-16 h-16 rounded-xl bg-tertiary items-center justify-center mb-3">
-                  <Ionicons name="image-outline" size={32} color="#525252" />
+                <View
+                  className="w-16 h-16 rounded-xl items-center justify-center mb-3"
+                  style={{ backgroundColor: colors.surface }}
+                >
+                  <Ionicons name="image-outline" size={32} color={colors.text.secondary} />
                 </View>
-                <Text className="text-gray-600 font-nunito-medium text-base">
+                <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-base">
                   Ajouter une image de couverture
                 </Text>
               </View>
@@ -143,104 +147,49 @@ export function CreateGroupForm() {
           </Pressable>
         </View>
 
-        <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Nom du groupe</Text>
-          <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
-            placeholder="Ex: Coureurs du dimanche"
-            placeholderTextColor="#9CA3AF"
-            value={form.name}
-            onChangeText={(text) => setForm({ ...form, name: text })}
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
+        <GlassInput
+          label="Nom du groupe"
+          placeholder="Ex: Coureurs du dimanche"
+          value={form.name}
+          onChangeText={(text) => setForm({ ...form, name: text })}
+        />
+
+        <GlassInput
+          label="Description"
+          placeholder="Décrivez votre groupe"
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+          value={form.description}
+          onChangeText={(text) => setForm({ ...form, description: text })}
+        />
+
+        <GlassInput
+          label="Localisation"
+          placeholder="Ex: Paris, France"
+          value={form.location}
+          onChangeText={(text) => setForm({ ...form, location: text })}
+        />
+
+        <GlassInput
+          label="Niveau"
+          placeholder="Ex: Débutant, Intermédiaire, Avancé"
+          value={form.level}
+          onChangeText={(text) => setForm({ ...form, level: text })}
+        />
+
+        <GlassInput
+          label="Nombre de membres"
+          placeholder="Ex: 10"
+          value={form.max_members.toString()}
+          onChangeText={(text) =>
+            setForm({ ...form, max_members: parseInt(text) || 0 })
+          }
+          keyboardType="numeric"
+        />
 
         <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Description</Text>
-          <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
-            placeholder="Décrivez votre groupe"
-            placeholderTextColor="#9CA3AF"
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-            value={form.description}
-            onChangeText={(text) => setForm({ ...form, description: text })}
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Localisation</Text>
-          <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
-            placeholder="Ex: Paris, France"
-            placeholderTextColor="#9CA3AF"
-            value={form.location}
-            onChangeText={(text) => setForm({ ...form, location: text })}
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Niveau</Text>
-          <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
-            placeholder="Ex: Débutant, Intermédiaire, Avancé"
-            placeholderTextColor="#9CA3AF"
-            value={form.level}
-            onChangeText={(text) => setForm({ ...form, level: text })}
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Nombre de membres</Text>
-          <TextInput
-            className="bg-white text-gray-900 p-4 rounded-xl border-2 border-gray-200 font-nunito-medium"
-            placeholder="Ex: 10"
-            placeholderTextColor="#9CA3AF"
-            value={form.max_members.toString()}
-            onChangeText={(text) =>
-              setForm({ ...form, max_members: parseInt(text) || 0 })
-            }
-            keyboardType="numeric"
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-900 font-nunito-bold text-base mb-2">Inviter des membres</Text>
+          <Text style={{ color: colors.text.primary }} className="font-nunito-bold text-base mb-2">Inviter des membres</Text>
           <UserSearch
             onSelectUser={handleUserSelect}
             selectedUsers={selectedUsers}
@@ -249,22 +198,13 @@ export function CreateGroupForm() {
       </View>
 
       <View className="mt-8 mb-6">
-        <Pressable
+        <GlassButton
+          title={isLoading ? "Création..." : "Créer le groupe"}
           onPress={handleSubmit}
+          loading={isLoading}
           disabled={isLoading}
-          className="bg-secondary py-4 px-8 rounded-full active:opacity-90"
-          style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-          }}
-        >
-          <Text className="text-white text-center font-nunito-bold text-lg">
-            {isLoading ? "Création..." : "Créer le groupe"}
-          </Text>
-        </Pressable>
+          size="lg"
+        />
       </View>
     </View>
   );

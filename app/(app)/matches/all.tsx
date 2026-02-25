@@ -14,14 +14,16 @@ import { router, useFocusEffect } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MatchUser } from "@/interface/Matches";
 import LoadingScreen from "@/components/LoadingScreen";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 export default function AllMatchesScreen() {
   const { matches, refreshMatches, isLoading } = useMatches();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const { colors, shadows } = useThemeColors();
 
   const { width: screenWidth } = Dimensions.get("window");
   const ITEM_WIDTH = screenWidth * 0.95;
@@ -92,23 +94,30 @@ export default function AllMatchesScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <WarmBackground>
       <SafeAreaView edges={["top"]}>
         {/* Header */}
         <View className="px-6 py-4 flex-row justify-between items-center">
           <View className="flex-row items-center flex-1">
             <Pressable
               onPress={() => router.back()}
-              className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+              className="w-10 h-10 rounded-full items-center justify-center mr-3"
+              style={{ backgroundColor: colors.glass.light }}
             >
-              <Ionicons name="arrow-back" size={20} color="#525252" />
+              <Ionicons name="arrow-back" size={20} color={colors.text.secondary} />
             </Pressable>
             <View className="flex-1">
-              <Text className="text-xl font-nunito-bold text-neutral-900">
+              <Text
+                className="text-xl font-nunito-bold"
+                style={{ color: colors.text.primary }}
+              >
                 Tous les matches
               </Text>
               {matches && matches.length > 0 && (
-                <Text className="text-neutral-400 font-nunito-medium text-sm mt-0.5">
+                <Text
+                  className="font-nunito-medium text-sm mt-0.5"
+                  style={{ color: colors.text.tertiary }}
+                >
                   {matches.length} coureur{matches.length > 1 ? "s" : ""} compatible{matches.length > 1 ? "s" : ""}
                 </Text>
               )}
@@ -118,9 +127,9 @@ export default function AllMatchesScreen() {
           <Pressable
             onPress={() => router.push("/runner/filters")}
             className="w-10 h-10 rounded-full items-center justify-center"
-            style={{ backgroundColor: `${ACCENT}15` }}
+            style={{ backgroundColor: colors.primary.subtle }}
           >
-            <Ionicons name="options-outline" size={20} color={ACCENT} />
+            <Ionicons name="options-outline" size={20} color={colors.primary.DEFAULT} />
           </Pressable>
         </View>
       </SafeAreaView>
@@ -132,35 +141,42 @@ export default function AllMatchesScreen() {
           <View className="flex-1 items-center justify-center px-6">
             <View
               className="w-20 h-20 rounded-full items-center justify-center mb-6"
-              style={{ backgroundColor: `${ACCENT}15` }}
+              style={{ backgroundColor: colors.primary.subtle }}
             >
-              <Ionicons name="search-outline" size={40} color={ACCENT} />
+              <Ionicons name="search-outline" size={40} color={colors.primary.DEFAULT} />
             </View>
-            <Text className="text-neutral-900 text-xl font-nunito-bold text-center mb-2">
-              Aucun match trouvé
-            </Text>
-            <Text className="text-neutral-500 text-sm font-nunito-medium text-center mb-6">
-              Essaie d'élargir tes critères de recherche
-            </Text>
-            <Pressable
-              onPress={() => router.push("/runner/filters")}
-              className="px-6 py-3 rounded-2xl flex-row items-center"
-              style={{ backgroundColor: ACCENT }}
+            <Text
+              className="text-xl font-nunito-bold text-center mb-2"
+              style={{ color: colors.text.primary }}
             >
-              <Ionicons name="options-outline" size={18} color="white" />
-              <Text className="text-white font-nunito-bold ml-2">
-                Ajuster les filtres
-              </Text>
-            </Pressable>
+              Aucun match trouve
+            </Text>
+            <Text
+              className="text-sm font-nunito-medium text-center mb-6"
+              style={{ color: colors.text.secondary }}
+            >
+              Essaie d'elargir tes criteres de recherche
+            </Text>
+            <GlassButton
+              title="Ajuster les filtres"
+              onPress={() => router.push("/runner/filters")}
+              icon={<Ionicons name="options-outline" size={18} color="white" />}
+            />
           </View>
         ) : (
           <View className="relative flex-1">
             {/* Position indicator */}
             {matches && matches.length > 1 && (
               <View className="absolute top-4 left-0 right-0 z-20 items-center">
-                <View className="bg-white px-4 py-2 rounded-full flex-row items-center shadow-sm">
-                  <Ionicons name="person" size={14} color={ACCENT} style={{ marginRight: 6 }} />
-                  <Text className="text-neutral-800 font-nunito-bold text-sm">
+                <View
+                  className="px-4 py-2 rounded-full flex-row items-center"
+                  style={{
+                    backgroundColor: colors.glass.heavy,
+                    ...shadows.sm,
+                  }}
+                >
+                  <Ionicons name="person" size={14} color={colors.primary.DEFAULT} style={{ marginRight: 6 }} />
+                  <Text className="font-nunito-bold text-sm" style={{ color: colors.text.primary }}>
                     {activeIndex + 1} / {matches.length}
                   </Text>
                 </View>
@@ -172,7 +188,7 @@ export default function AllMatchesScreen() {
               <View className="absolute top-4 right-6 z-20">
                 <View
                   className="px-3 py-2 rounded-full flex-row items-center"
-                  style={{ backgroundColor: ACCENT }}
+                  style={{ backgroundColor: colors.primary.DEFAULT }}
                 >
                   <Ionicons name="fitness" size={14} color="white" style={{ marginRight: 4 }} />
                   <Text className="text-white font-nunito-bold text-sm">
@@ -187,15 +203,23 @@ export default function AllMatchesScreen() {
               <View className="absolute bottom-24 left-0 right-0 flex-row justify-between px-6 z-20">
                 <Pressable
                   onPress={goToPrevious}
-                  className="w-12 h-12 bg-white rounded-full items-center justify-center shadow-lg"
+                  className="w-12 h-12 rounded-full items-center justify-center"
+                  style={{
+                    backgroundColor: colors.glass.heavy,
+                    ...shadows.md,
+                  }}
                 >
-                  <Ionicons name="chevron-back" size={24} color={ACCENT} />
+                  <Ionicons name="chevron-back" size={24} color={colors.primary.DEFAULT} />
                 </Pressable>
                 <Pressable
                   onPress={goToNext}
-                  className="w-12 h-12 bg-white rounded-full items-center justify-center shadow-lg"
+                  className="w-12 h-12 rounded-full items-center justify-center"
+                  style={{
+                    backgroundColor: colors.glass.heavy,
+                    ...shadows.md,
+                  }}
                 >
-                  <Ionicons name="chevron-forward" size={24} color={ACCENT} />
+                  <Ionicons name="chevron-forward" size={24} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             )}
@@ -209,7 +233,7 @@ export default function AllMatchesScreen() {
                     className="h-2 rounded-full"
                     style={{
                       width: index === activeIndex ? 24 : 8,
-                      backgroundColor: index === activeIndex ? ACCENT : "#E5E5E5",
+                      backgroundColor: index === activeIndex ? colors.primary.DEFAULT : colors.glass.medium,
                     }}
                   />
                 ))}
@@ -234,34 +258,41 @@ export default function AllMatchesScreen() {
 
             {/* Action bar */}
             {matches && matches[activeIndex] && (
-              <View className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-white border-t border-neutral-100">
+              <View
+                className="absolute bottom-0 left-0 right-0 px-6 py-4"
+                style={{
+                  backgroundColor: colors.glass.heavy,
+                  borderTopWidth: 1,
+                  borderTopColor: colors.glass.border,
+                }}
+              >
                 <View className="flex-row" style={{ gap: 12 }}>
                   <Pressable
                     onPress={() => router.push(`/runner/${matches[activeIndex].user.id}`)}
-                    className="flex-1 bg-neutral-100 py-3.5 rounded-2xl flex-row items-center justify-center"
+                    className="flex-1 py-3.5 rounded-2xl flex-row items-center justify-center"
+                    style={{ backgroundColor: colors.glass.light }}
                   >
-                    <Ionicons name="person-outline" size={18} color="#525252" />
-                    <Text className="text-neutral-700 font-nunito-bold text-sm ml-2">
+                    <Ionicons name="person-outline" size={18} color={colors.text.secondary} />
+                    <Text
+                      className="font-nunito-bold text-sm ml-2"
+                      style={{ color: colors.text.secondary }}
+                    >
                       Profil
                     </Text>
                   </Pressable>
 
-                  <Pressable
+                  <GlassButton
+                    title="Message"
                     onPress={() => router.push(`/chat/${matches[activeIndex].user.id}`)}
-                    className="flex-1 py-3.5 rounded-2xl flex-row items-center justify-center"
-                    style={{ backgroundColor: ACCENT }}
-                  >
-                    <Ionicons name="chatbubble-ellipses" size={18} color="white" />
-                    <Text className="text-white font-nunito-bold text-sm ml-2">
-                      Message
-                    </Text>
-                  </Pressable>
+                    icon={<Ionicons name="chatbubble-ellipses" size={18} color="white" />}
+                    style={{ flex: 1 }}
+                  />
                 </View>
               </View>
             )}
           </View>
         )}
       </View>
-    </View>
+    </WarmBackground>
   );
 }

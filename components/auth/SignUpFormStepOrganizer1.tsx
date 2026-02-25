@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { ActionButton } from "@/components/ui/ActionButton";
-
-const ACCENT = "#F97316";
+import { useThemeColors } from "@/constants/theme";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import GlassCard from "@/components/ui/GlassCard";
 
 type OrganizationType = "association" | "club_sportif" | "collectif" | "autre";
 
@@ -32,8 +34,8 @@ export function SignUpFormStepOrganizer1({
   handleChange,
   onBack,
 }: SignUpFormStepOrganizer1Props) {
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const { colors, shadows } = useThemeColors();
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -43,7 +45,7 @@ export function SignUpFormStepOrganizer1({
     }
 
     if (!formData.organization_type) {
-      newErrors.organization_type = "Veuillez sélectionner un type d'organisation";
+      newErrors.organization_type = "Veuillez s\u00e9lectionner un type d'organisation";
     }
 
     setErrors(newErrors);
@@ -57,199 +59,173 @@ export function SignUpFormStepOrganizer1({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-fond">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
-      >
-        <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
+    <WarmBackground>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
         >
-          <View className="px-6 py-6">
-            {/* Header avec bouton retour */}
-            <View className="mb-6">
-              <View className="flex-row items-center mb-4">
-                <Pressable
-                  onPress={onBack}
-                  className="bg-white p-2.5 rounded-full active:opacity-80 mr-4"
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={{ paddingHorizontal: 24, paddingVertical: 24 }}>
+              {/* Header avec bouton retour */}
+              <View style={{ marginBottom: 24 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+                  <Pressable
+                    onPress={onBack}
+                    style={[
+                      {
+                        backgroundColor: colors.glass.light,
+                        padding: 10,
+                        borderRadius: 9999,
+                        marginRight: 16,
+                      },
+                      shadows.sm,
+                    ]}
+                  >
+                    <Ionicons name="arrow-back" size={20} color={colors.primary.DEFAULT} />
+                  </Pressable>
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: colors.text.primary,
+                        fontSize: 24,
+                        fontFamily: "Nunito-ExtraBold",
+                      }}
+                    >
+                      Informations de votre organisation
+                    </Text>
+                  </View>
+                </View>
+                <Text
                   style={{
-                    shadowColor: ACCENT,
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 4,
-                    elevation: 3,
+                    color: colors.text.secondary,
+                    fontSize: 16,
+                    fontFamily: "Nunito-Medium",
                   }}
                 >
-                  <Ionicons name="arrow-back" size={20} color={ACCENT} />
-                </Pressable>
-                <View className="flex-1">
-                  <Text className="text-gray-900 text-2xl font-nunito-extrabold">
-                    Informations de votre organisation
-                  </Text>
-                </View>
+                  Remplissez les informations de base de votre organisation
+                </Text>
               </View>
-              <Text className="text-gray-600 text-base font-nunito-medium">
-                Remplissez les informations de base de votre organisation
-              </Text>
-            </View>
 
-            {/* Nom de l'organisation */}
-            <View className="mb-6">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-2">
-                Nom de l'organisation *
-              </Text>
-              <View
-                className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                  focusedInput === "organization_name"
-                    ? "border-primary"
-                    : errors.organization_name
-                    ? "border-red-500"
-                    : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                <TextInput
+              {/* Nom de l'organisation */}
+              <View style={{ marginBottom: 24 }}>
+                <GlassInput
+                  label="Nom de l'organisation *"
+                  placeholder="Ex: Club de Running Paris"
                   value={formData.organization_name}
                   onChangeText={(value) => handleChange("organization_name", value)}
-                  onFocus={() => setFocusedInput("organization_name")}
-                  onBlur={() => setFocusedInput(null)}
-                  placeholder="Ex: Club de Running Paris"
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 text-base font-nunito-medium"
-                  style={{ color: "#111827" }}
-                  selectionColor={ACCENT}
-                  editable={true}
+                  error={errors.organization_name}
                   autoCorrect={false}
                 />
               </View>
-              {errors.organization_name && (
-                <Text className="text-red-500 text-sm font-nunito-medium mt-1">
-                  {errors.organization_name}
-                </Text>
-              )}
-            </View>
 
-            {/* Type d'organisation */}
-            <View className="mb-6">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-3">
-                Type d'organisation *
-              </Text>
-              <View className="space-y-3">
-                {organizationTypes.map((type) => (
-                  <Pressable
-                    key={type.value}
-                    onPress={() => handleChange("organization_type", type.value)}
-                    className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                      formData.organization_type === type.value
-                        ? "border-primary bg-primary/5"
-                        : errors.organization_type
-                        ? "border-red-500"
-                        : "border-gray-200"
-                    }`}
-                    style={{
-                      shadowColor: formData.organization_type === type.value ? ACCENT : "#000",
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: formData.organization_type === type.value ? 0.15 : 0.05,
-                      shadowRadius: 4,
-                      elevation: 2,
-                    }}
-                  >
-                    <View className="flex-row items-center">
-                      <View
-                        className={`w-10 h-10 rounded-xl items-center justify-center mr-3 ${
-                          formData.organization_type === type.value
-                            ? "bg-primary"
-                            : "bg-gray-100"
-                        }`}
+              {/* Type d'organisation */}
+              <View style={{ marginBottom: 24 }}>
+                <Text
+                  style={{
+                    color: colors.text.secondary,
+                    fontSize: 14,
+                    fontFamily: "Nunito-SemiBold",
+                    marginBottom: 12,
+                  }}
+                >
+                  Type d'organisation *
+                </Text>
+                <View style={{ gap: 12 }}>
+                  {organizationTypes.map((type) => (
+                    <Pressable
+                      key={type.value}
+                      onPress={() => handleChange("organization_type", type.value)}
+                    >
+                      <GlassCard
+                        variant={formData.organization_type === type.value ? "medium" : "light"}
+                        style={{
+                          borderWidth: 2,
+                          borderColor: formData.organization_type === type.value
+                            ? colors.primary.DEFAULT
+                            : errors.organization_type
+                            ? colors.error
+                            : colors.glass.border,
+                        }}
                       >
-                        <Ionicons
-                          name={type.icon as any}
-                          size={20}
-                          color={formData.organization_type === type.value ? "#FFFFFF" : "#6B7280"}
-                        />
-                      </View>
-                      <Text
-                        className={`text-base font-nunito-bold flex-1 ${
-                          formData.organization_type === type.value
-                            ? "text-primary"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        {type.label}
-                      </Text>
-                      {formData.organization_type === type.value && (
-                        <Ionicons name="checkmark-circle" size={24} color={ACCENT} />
-                      )}
-                    </View>
-                  </Pressable>
-                ))}
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                          <View
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: 12,
+                              alignItems: "center",
+                              justifyContent: "center",
+                              marginRight: 12,
+                              backgroundColor: formData.organization_type === type.value
+                                ? colors.primary.DEFAULT
+                                : colors.primary.subtle,
+                            }}
+                          >
+                            <Ionicons
+                              name={type.icon as any}
+                              size={20}
+                              color={formData.organization_type === type.value ? "#FFFFFF" : colors.text.tertiary}
+                            />
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontFamily: "Nunito-Bold",
+                              flex: 1,
+                              color: formData.organization_type === type.value
+                                ? colors.primary.DEFAULT
+                                : colors.text.primary,
+                            }}
+                          >
+                            {type.label}
+                          </Text>
+                          {formData.organization_type === type.value && (
+                            <Ionicons name="checkmark-circle" size={24} color={colors.primary.DEFAULT} />
+                          )}
+                        </View>
+                      </GlassCard>
+                    </Pressable>
+                  ))}
+                </View>
+                {errors.organization_type && (
+                  <Text style={{ color: colors.error, fontSize: 13, fontFamily: "Nunito-Regular", marginTop: 4 }}>
+                    {errors.organization_type}
+                  </Text>
+                )}
               </View>
-              {errors.organization_type && (
-                <Text className="text-red-500 text-sm font-nunito-medium mt-1">
-                  {errors.organization_type}
-                </Text>
-              )}
-            </View>
 
-            {/* Description */}
-            <View className="mb-6">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-2">
-                Description (optionnel)
-              </Text>
-              <View
-                className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                  focusedInput === "description"
-                    ? "border-primary"
-                    : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                  minHeight: 120,
-                }}
-              >
-                <TextInput
+              {/* Description */}
+              <View style={{ marginBottom: 24 }}>
+                <GlassInput
+                  label="Description (optionnel)"
+                  placeholder="D\u00e9crivez votre organisation, ses valeurs, ses activit\u00e9s..."
                   value={formData.description}
                   onChangeText={(value) => handleChange("description", value)}
-                  onFocus={() => setFocusedInput("description")}
-                  onBlur={() => setFocusedInput(null)}
-                  placeholder="Décrivez votre organisation, ses valeurs, ses activités..."
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 text-base font-nunito-medium"
-                  style={{ color: "#111827" }}
-                  selectionColor={ACCENT}
-                  editable={true}
                   autoCorrect={false}
                   multiline
                   numberOfLines={5}
                   textAlignVertical="top"
+                  style={{ minHeight: 120 }}
                 />
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
 
-        {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-gray-200">
-          <ActionButton
-            onPress={handleSubmit}
-            text="Suivant"
-            className="w-full"
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          {/* Footer */}
+          <View style={{ paddingHorizontal: 24, paddingVertical: 16 }}>
+            <GlassButton
+              title="Suivant"
+              onPress={handleSubmit}
+              variant="primary"
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </WarmBackground>
   );
 }
-

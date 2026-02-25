@@ -3,19 +3,20 @@ import {
   View,
   Text,
   Pressable,
-  ActivityIndicator,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from "react-native";
 import { useAuth } from "@/context/AuthContext";
-
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AvailabilitySelect } from "../runner-profile/AvailabilitySelect";
 import { ObjectiveSelect } from "../runner-profile/ObjectiveSelect";
 import { PaceDistanceInputs } from "../runner-profile/PaceDistanceInputs";
-
-const ACCENT = "#F97316";
+import { useThemeColors, typography, radii, spacing } from "@/constants/theme";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import WarmBackground from "@/components/ui/WarmBackground";
 
 type RunnerProfileEditFormProps = {
   setIsEditing: (value: boolean) => void;
@@ -25,6 +26,7 @@ export function RunnerProfileEditForm({
   setIsEditing,
 }: RunnerProfileEditFormProps) {
   const { user, updateUser } = useAuth();
+  const { colors, shadows } = useThemeColors();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     actual_pace: user?.runner_profile?.actual_pace || "",
@@ -49,7 +51,7 @@ export function RunnerProfileEditForm({
       });
       setIsEditing(false);
     } catch (error) {
-      console.error("Erreur mise à jour profil runner:", error);
+      console.error("Erreur mise a jour profil runner:", error);
     } finally {
       setLoading(false);
     }
@@ -58,116 +60,142 @@ export function RunnerProfileEditForm({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
+      style={styles.flex}
     >
-      <ScrollView className="space-y-4 bg-fond">
-      <View className="px-6 space-y-6 mt-6">
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-2xl font-nunito-extrabold text-gray-900">
-            Modifier Profil Coureur
-          </Text>
-          <Pressable
-            onPress={() => setIsEditing(false)}
-            className="bg-tertiary p-3 rounded-full"
-          >
-            <Ionicons name="close" size={20} color={ACCENT} />
-          </Pressable>
-        </View>
-
-        <View className="bg-white p-5 rounded-2xl border border-gray-200"
-          style={{
-            shadowColor: ACCENT,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
+      <WarmBackground>
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center space-x-3 mb-4">
-            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="fitness-outline" size={20} color={ACCENT} />
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <Text style={[styles.title, { color: colors.text.primary }]}>
+                Modifier Profil Coureur
+              </Text>
+              <Pressable
+                onPress={() => setIsEditing(false)}
+                style={[
+                  styles.closeButton,
+                  shadows.sm,
+                  { backgroundColor: colors.glass.light, borderColor: colors.glass.border },
+                ]}
+              >
+                <Ionicons name="close" size={20} color={colors.primary.DEFAULT} />
+              </Pressable>
             </View>
-            <Text className="text-gray-900 text-base font-nunito-bold">
-              Performance
-            </Text>
-          </View>
-          <PaceDistanceInputs
-            actual_pace={formData.actual_pace}
-            usual_distance={formData.usual_distance}
-            handleChange={handleChange}
-          />
-        </View>
 
-        <View className="bg-white p-5 rounded-2xl border border-gray-200"
-          style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
-        >
-          <View className="flex-row items-center space-x-3 mb-4">
-            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="trophy-outline" size={20} color={ACCENT} />
+            <GlassCard variant="light">
+              <View style={styles.sectionHeader}>
+                <View style={[styles.iconBox, { backgroundColor: colors.primary.subtle }]}>
+                  <Ionicons name="fitness-outline" size={20} color={colors.primary.DEFAULT} />
+                </View>
+                <Text style={[styles.sectionTitle, { color: colors.text.primary }]}>
+                  Performance
+                </Text>
+              </View>
+              <PaceDistanceInputs
+                actual_pace={formData.actual_pace}
+                usual_distance={formData.usual_distance}
+                handleChange={handleChange}
+              />
+            </GlassCard>
+
+            <GlassCard variant="light">
+              <View style={styles.sectionHeader}>
+                <View style={[styles.iconBox, { backgroundColor: colors.primary.subtle }]}>
+                  <Ionicons name="trophy-outline" size={20} color={colors.primary.DEFAULT} />
+                </View>
+                <Text style={[styles.sectionTitle, { color: colors.text.primary }]}>
+                  Objectif
+                </Text>
+              </View>
+              <ObjectiveSelect handleChange={handleChange} />
+            </GlassCard>
+
+            <GlassCard variant="light">
+              <View style={styles.sectionHeader}>
+                <View style={[styles.iconBox, { backgroundColor: colors.primary.subtle }]}>
+                  <Ionicons name="calendar-outline" size={20} color={colors.text.secondary} />
+                </View>
+                <Text style={[styles.sectionTitle, { color: colors.text.primary }]}>
+                  Disponibilites
+                </Text>
+              </View>
+              <AvailabilitySelect
+                availability={formData.availability}
+                handleChange={handleChange}
+              />
+            </GlassCard>
+
+            <View style={styles.buttonsContainer}>
+              <GlassButton
+                title="Enregistrer"
+                onPress={handleSubmit}
+                variant="primary"
+                loading={loading}
+                disabled={loading}
+                icon={
+                  !loading ? (
+                    <Ionicons name="checkmark-circle-outline" size={20} color="#ffffff" />
+                  ) : undefined
+                }
+              />
             </View>
-            <Text className="text-gray-900 text-base font-nunito-bold">Objectif</Text>
           </View>
-          <ObjectiveSelect handleChange={handleChange} />
-        </View>
-
-        <View className="bg-white p-5 rounded-2xl border border-gray-200"
-          style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
-        >
-          <View className="flex-row items-center space-x-3 mb-4">
-            <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center">
-              <Ionicons name="calendar-outline" size={20} color="#525252" />
-            </View>
-            <Text className="text-gray-900 text-base font-nunito-bold">
-              Disponibilités
-            </Text>
-          </View>
-          <AvailabilitySelect
-            availability={formData.availability}
-            handleChange={handleChange}
-          />
-        </View>
-
-        <View className="space-y-3 mt-4">
-          <Pressable
-            className="bg-primary py-4 rounded-full items-center flex-row justify-center space-x-2"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 4,
-            }}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#ffffff" />
-            ) : (
-              <>
-                <Ionicons
-                  name="checkmark-circle-outline"
-                  size={20}
-                  color="#ffffff"
-                />
-                <Text className="text-white font-nunito-bold">Enregistrer</Text>
-              </>
-            )}
-          </Pressable>
-        </View>
-      </View>
-      </ScrollView>
+        </ScrollView>
+      </WarmBackground>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 100,
+  },
+  content: {
+    paddingHorizontal: spacing.lg,
+    gap: spacing.lg,
+    marginTop: spacing.lg,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: spacing.sm,
+  },
+  title: {
+    fontFamily: typography.h1.fontFamily,
+    fontSize: typography.h1.fontSize,
+    lineHeight: typography.h1.lineHeight,
+  },
+  closeButton: {
+    padding: 12,
+    borderRadius: radii.full,
+    borderWidth: 1,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: spacing.md,
+  },
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: radii.md,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sectionTitle: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.body.fontSize,
+  },
+  buttonsContainer: {
+    gap: 12,
+    marginTop: spacing.sm,
+  },
+});

@@ -4,19 +4,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Couleurs du design sportif
-        primary: "#F97316", // Orange sportif
-        secondary: "#525252", // Gris neutre
-        tertiary: "#F5F5F5", // Gris clair
-        fond: "#FFFFFF", // Fond blanc
+        primary: "#7B9E87",
+        "primary-light": "#A8C4B2",
+        "primary-dark": "#5A7B65",
+        secondary: "#4D5E53",
+        tertiary: "#EDF2EE",
+        fond: "#F8FAF8",
         accent: {
-          DEFAULT: "#F97316",
-          light: "#FFF7ED",
+          DEFAULT: "#7B9E87",
+          light: "#A8C4B2",
         },
-        // Anciennes couleurs conservées pour compatibilité
-        green: "#0F4D3B",
-        greenLight: "#126C52",
-        background: "#1b1d21",
+        background: "#F8FAF8",
+        surface: "#EDF2EE",
+        elevated: "#FFFFFF",
         gray: {
           50: "#FAFAFA",
           100: "#F5F5F5",
@@ -29,7 +29,6 @@ module.exports = {
           800: "#262626",
           900: "#171717",
         },
-        dark: "#1b1d21",
       },
       fontFamily: {
         fredoka: ["Fredoka"],

@@ -2,8 +2,7 @@ import React from "react";
 import { View, Text, Modal, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
-const ACCENT = "#F97316";
+import { useThemeColors, palette } from "@/constants/theme";
 
 interface PremiumFeatureModalProps {
   visible: boolean;
@@ -20,6 +19,8 @@ export const PremiumFeatureModal = ({
   title,
   description,
 }: PremiumFeatureModalProps) => {
+  const { colors, shadows, gradients } = useThemeColors();
+
   return (
     <Modal
       animationType="fade"
@@ -28,61 +29,49 @@ export const PremiumFeatureModal = ({
       onRequestClose={onClose}
     >
       <Pressable
-        className="flex-1 bg-black/50 items-center justify-center px-6"
+        className="flex-1 items-center justify-center px-6"
+        style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
         onPress={onClose}
       >
         <Pressable onPress={(e) => e.stopPropagation()}>
           <View
-            className="rounded-3xl w-[320px] bg-white overflow-hidden"
+            className="rounded-3xl w-[320px] overflow-hidden"
             style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.3,
-              shadowRadius: 16,
-              elevation: 10,
+              backgroundColor: colors.elevated,
+              ...shadows.lg,
             }}
           >
             {/* Header avec icône premium */}
-            <View className="px-6 pt-6 pb-4 bg-white">
+            <View className="px-6 pt-6 pb-4" style={{ backgroundColor: colors.elevated }}>
           <View className="items-center mb-4">
                 <View
                   className="w-20 h-20 rounded-full items-center justify-center mb-4"
                   style={{
-                    backgroundColor: ACCENT,
-                    shadowColor: ACCENT,
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 8,
-                    elevation: 4,
+                    backgroundColor: colors.primary.DEFAULT,
+                    ...shadows.glow,
                   }}
                 >
                   <Ionicons name="star" size={40} color="#FFFFFF" />
                 </View>
-                <Text className="text-2xl font-nunito-extrabold text-gray-900 text-center">
+                <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-extrabold text-center">
               {title}
             </Text>
-                <Text className="text-gray-600 font-nunito-medium text-sm text-center mt-2 px-2">
+                <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm text-center mt-2 px-2">
               {description}
             </Text>
               </View>
           </View>
 
             {/* Contenu */}
-            <View className="px-6 pb-6 bg-fond">
+            <View className="px-6 pb-6" style={{ backgroundColor: colors.background }}>
               {/* Bouton Upgrade Premium */}
           <Pressable
                 onPress={onUpgrade}
                 className="mb-3"
-                style={{
-                  shadowColor: ACCENT,
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 8,
-                  elevation: 4,
-                }}
+                style={shadows.md}
               >
                 <LinearGradient
-                  colors={[ACCENT, "#FB923C"]}
+                  colors={gradients.primaryButton as unknown as [string, string, ...string[]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   className="py-4 rounded-full"
@@ -99,9 +88,14 @@ export const PremiumFeatureModal = ({
               {/* Bouton Fermer */}
           <Pressable
                 onPress={onClose}
-                className="bg-white py-3 rounded-full border-2 border-gray-200"
+                className="py-3 rounded-full"
+                style={{
+                  backgroundColor: colors.elevated,
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                }}
           >
-                <Text className="text-gray-700 text-center font-nunito-bold text-base">
+                <Text style={{ color: colors.text.secondary }} className="text-center font-nunito-bold text-base">
                   Plus tard
             </Text>
           </Pressable>

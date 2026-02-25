@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
+import { useThemeColors } from "@/constants/theme";
 
 const timeOptions = [
   { key: "matin", value: "Matin (avant 12h)" },
@@ -16,9 +17,11 @@ type Props = {
 };
 
 export function TimeOfDaySelect({ value, onChange }: Props) {
+  const { colors } = useThemeColors();
+
   return (
     <View>
-      <Text className="text-white text-sm font-semibold pl-2 mb-1">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-1">
         Moment préféré pour courir
       </Text>
       <SelectList
@@ -35,14 +38,25 @@ export function TimeOfDaySelect({ value, onChange }: Props) {
             : undefined
         }
         boxStyles={{
-          backgroundColor: "#1e2429",
-          borderColor: "transparent",
+          backgroundColor: colors.glass.light,
+          borderColor: colors.glass.border,
+          borderWidth: 1,
           padding: 12,
           borderRadius: 12,
         }}
-        inputStyles={{ color: "white" }}
-        dropdownStyles={{ backgroundColor: "#1e2429", borderRadius: 12 }}
-        dropdownTextStyles={{ color: "white" }}
+        inputStyles={{ color: colors.text.primary }}
+        dropdownStyles={{
+          backgroundColor: colors.elevated,
+          borderColor: colors.glass.border,
+          borderWidth: 1,
+          borderRadius: 12,
+        }}
+        dropdownItemStyles={{
+          borderBottomColor: colors.glass.border,
+          borderBottomWidth: 0.5,
+          paddingVertical: 8,
+        }}
+        dropdownTextStyles={{ color: colors.text.secondary }}
       />
     </View>
   );

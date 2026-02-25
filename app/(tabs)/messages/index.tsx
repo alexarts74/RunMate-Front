@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable, Image } from "react-native";
+import { View, Text, FlatList, Pressable } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Conversation } from "@/interface/Conversation";
@@ -9,13 +9,16 @@ import { directMessageService } from "@/service/api/message";
 import { groupMessageService } from "@/service/api/groupMessage";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAuth } from "@/context/AuthContext";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassAvatar from "@/components/ui/GlassAvatar";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 const MessagesScreen = () => {
   const { user } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { colors, shadows } = useThemeColors();
 
   const loadConversations = async () => {
     try {
@@ -74,26 +77,32 @@ const MessagesScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <WarmBackground>
       <SafeAreaView className="flex-1" edges={["top"]}>
         {/* Header */}
-        <View className="px-6 pt-2 pb-4 border-b border-neutral-100">
+        <View
+          style={{
+            paddingHorizontal: 24,
+            paddingTop: 8,
+            paddingBottom: 16,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.glass.border,
+          }}
+        >
           <View className="flex-row items-center justify-between">
-            <Text className="text-neutral-900 font-nunito-bold text-2xl">
+            <Text
+              className="font-nunito-bold text-2xl"
+              style={{ color: colors.text.primary }}
+            >
               Messages
             </Text>
             <Pressable
               onPress={() => router.push("/(tabs)/profile")}
-              className="w-10 h-10 rounded-full overflow-hidden"
             >
-              <Image
-                source={
-                  user?.profile_image
-                    ? { uri: user.profile_image }
-                    : require("@/assets/images/react-logo.png")
-                }
-                className="w-full h-full"
-                style={{ resizeMode: "cover" }}
+              <GlassAvatar
+                uri={user?.profile_image}
+                size={40}
+                showRing
               />
             </Pressable>
           </View>
@@ -105,29 +114,30 @@ const MessagesScreen = () => {
           <View className="flex-1 items-center justify-center px-6">
             <View
               className="w-20 h-20 rounded-full items-center justify-center mb-6"
-              style={{ backgroundColor: `${ACCENT}15` }}
+              style={{ backgroundColor: colors.primary.subtle }}
             >
-              <Ionicons name="chatbubbles-outline" size={40} color={ACCENT} />
+              <Ionicons name="chatbubbles-outline" size={40} color={colors.primary.DEFAULT} />
             </View>
-            <Text className="text-neutral-900 text-xl font-nunito-bold text-center mb-2">
+            <Text
+              className="text-xl font-nunito-bold text-center mb-2"
+              style={{ color: colors.text.primary }}
+            >
               Aucune conversation
             </Text>
-            <Text className="text-neutral-500 text-sm font-nunito-medium text-center mb-6">
+            <Text
+              className="text-sm font-nunito-medium text-center mb-6"
+              style={{ color: colors.text.secondary }}
+            >
               {user?.user_type === "organizer"
-                ? "Les messages de vos participants apparaîtront ici"
+                ? "Les messages de vos participants apparaitront ici"
                 : "Commence une conversation avec un coureur"}
             </Text>
             {user?.user_type !== "organizer" && (
-              <Pressable
-                className="rounded-2xl px-6 py-3 flex-row items-center"
-                style={{ backgroundColor: ACCENT }}
+              <GlassButton
+                title="Trouver des coureurs"
                 onPress={() => router.push("/")}
-              >
-                <Ionicons name="fitness" size={18} color="white" />
-                <Text className="text-white text-sm font-nunito-bold ml-2">
-                  Trouver des coureurs
-                </Text>
-              </Pressable>
+                icon={<Ionicons name="fitness" size={18} color="white" />}
+              />
             )}
           </View>
         ) : (
@@ -142,7 +152,7 @@ const MessagesScreen = () => {
           />
         )}
       </SafeAreaView>
-    </View>
+    </WarmBackground>
   );
 };
 

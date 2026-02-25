@@ -7,6 +7,8 @@ import LoadingScreen from "../LoadingScreen";
 import { MatchCard } from "./MatchCard";
 import Swiper from "react-native-deck-swiper";
 import { useMatches } from "@/context/MatchesContext";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors, palette } from "@/constants/theme";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -14,6 +16,7 @@ export function MatchesDeckSwiper() {
   const { matches, refreshMatches, isLoading } = useMatches();
   const swiperRef = useRef<Swiper<MatchUser>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { colors, shadows } = useThemeColors();
 
   // Rafraîchir les matches au focus initial
   useFocusEffect(
@@ -93,21 +96,26 @@ export function MatchesDeckSwiper() {
 
   if (!matches || matches.length === 0) {
     return (
-      <View className="flex-1 bg-background">
+      <View className="flex-1" style={{ backgroundColor: colors.background }}>
         {/* Header */}
         <View className="px-5 pt-6 pb-3">
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
-              <Text className="text-2xl font-nunito-semibold text-white">
+              <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-semibold">
                 Vos matches
               </Text>
             </View>
 
             <Pressable
               onPress={() => router.push("/runner/filters")}
-              className="bg-background p-2.5 rounded-xl border border-gray-700"
+              className="p-2.5 rounded-xl"
+              style={{
+                backgroundColor: colors.glass.light,
+                borderWidth: 1,
+                borderColor: colors.glass.border,
+              }}
             >
-              <Ionicons name="options-outline" size={20} color="#126C52" />
+              <Ionicons name="options-outline" size={20} color={colors.primary.DEFAULT} />
             </Pressable>
           </View>
         </View>
@@ -117,37 +125,33 @@ export function MatchesDeckSwiper() {
           <Ionicons
             name="search"
             size={60}
-            color="#126C52"
+            color={colors.primary.DEFAULT}
             style={{ marginBottom: 16 }}
           />
-          <Text className="text-gray-300 text-center text-base font-nunito mb-4">
+          <Text style={{ color: colors.text.secondary }} className="text-center text-base font-nunito mb-4">
             Aucun coureur ne correspond à vos critères actuels.
           </Text>
-          <Pressable
+          <GlassButton
+            title="Élargir la recherche"
             onPress={removeDistanceFilter}
-            className="bg-purple rounded-xl px-6 py-3 flex-row items-center"
-          >
-            <Ionicons name="locate" size={18} color="white" />
-            <Text className="text-white font-nunito-semibold ml-2">
-              Élargir la recherche
-            </Text>
-          </Pressable>
+            icon={<Ionicons name="locate" size={18} color="white" />}
+          />
         </View>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1" style={{ backgroundColor: colors.background }}>
       {/* Header */}
       <View className="px-5 pt-6 pb-3">
         <View className="flex-row justify-between items-center">
           <View className="flex-row items-center">
-            <Text className="text-2xl font-nunito-semibold text-white">
+            <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-semibold">
               Vos matches
             </Text>
-            <View className="bg-purple/20 px-2.5 py-1 rounded-full ml-3">
-              <Text className="text-purple text-sm font-nunito-semibold">
+            <View className="px-2.5 py-1 rounded-full ml-3" style={{ backgroundColor: palette.primary.subtle }}>
+              <Text style={{ color: colors.primary.DEFAULT }} className="text-sm font-nunito-semibold">
                 {matches.length}
               </Text>
             </View>
@@ -155,9 +159,14 @@ export function MatchesDeckSwiper() {
 
           <Pressable
             onPress={() => router.push("/runner/filters")}
-            className="bg-background p-2.5 rounded-xl border border-gray-700"
+            className="p-2.5 rounded-xl"
+            style={{
+              backgroundColor: colors.glass.light,
+              borderWidth: 1,
+              borderColor: colors.glass.border,
+            }}
           >
-            <Ionicons name="options-outline" size={20} color="#126C52" />
+            <Ionicons name="options-outline" size={20} color={colors.primary.DEFAULT} />
           </Pressable>
         </View>
       </View>
@@ -168,15 +177,23 @@ export function MatchesDeckSwiper() {
         <View className="absolute top-4 left-0 right-0 flex-row justify-center space-x-4 z-10">
           <Pressable
             onPress={goToPrevious}
-            className="bg-white/20 backdrop-blur-md p-3 rounded-full"
+            className="p-3 rounded-full"
+            style={{
+              backgroundColor: colors.glass.medium,
+              ...shadows.sm,
+            }}
           >
-            <Ionicons name="chevron-back" size={24} color="white" />
+            <Ionicons name="chevron-back" size={24} color={colors.text.primary} />
           </Pressable>
           <Pressable
             onPress={goToNext}
-            className="bg-white/20 backdrop-blur-md p-3 rounded-full"
+            className="p-3 rounded-full"
+            style={{
+              backgroundColor: colors.glass.medium,
+              ...shadows.sm,
+            }}
           >
-            <Ionicons name="chevron-forward" size={24} color="white" />
+            <Ionicons name="chevron-forward" size={24} color={colors.text.primary} />
           </Pressable>
         </View>
 
@@ -203,8 +220,8 @@ export function MatchesDeckSwiper() {
               title: "PRÉCÉDENT",
               style: {
                 label: {
-                  backgroundColor: "#126C52",
-                  borderColor: "#126C52",
+                  backgroundColor: palette.primary.DEFAULT,
+                  borderColor: palette.primary.DEFAULT,
                   color: "white",
                   borderWidth: 1,
                   fontSize: 20,
@@ -225,8 +242,8 @@ export function MatchesDeckSwiper() {
               title: "SUIVANT",
               style: {
                 label: {
-                  backgroundColor: "#126C52",
-                  borderColor: "#126C52",
+                  backgroundColor: palette.primary.DEFAULT,
+                  borderColor: palette.primary.DEFAULT,
                   color: "white",
                   borderWidth: 1,
                   fontSize: 20,

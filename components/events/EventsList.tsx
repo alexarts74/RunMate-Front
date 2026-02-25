@@ -14,6 +14,8 @@ import LoadingScreen from "../LoadingScreen";
 import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors, palette } from "@/constants/theme";
 
 interface EventsListProps {
   eventsType: "all" | "my";
@@ -36,6 +38,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
+  const { colors, shadows } = useThemeColors();
 
   // Vérifier si l'utilisateur est premium et si la fonctionnalité nécessite le premium
   const isPremiumFeature = eventsType === "my";
@@ -111,7 +114,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   }, [user?.is_premium]);
 
   const DistanceFilter = () => (
-    <View className="bg-background py-3">
+    <View className="py-3" style={{ backgroundColor: colors.background }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -125,17 +128,20 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
                 setRadius(item.value);
                 loadEvents(item.value);
               }}
-              className={`px-4 py-3 rounded-xl flex-row items-center gap-2 ${
-                radius === item.value
-                  ? "bg-[#1e2429] border border-purple"
-                  : "bg-[#1e2429] border border-[#2a3137]"
-              }`}
+              className="px-4 py-3 rounded-xl flex-row items-center gap-2"
+              style={{
+                backgroundColor: colors.glass.light,
+                borderWidth: 1,
+                borderColor: radius === item.value ? colors.primary.DEFAULT : colors.glass.border,
+              }}
             >
               <Text className="text-base">{item.icon}</Text>
               <Text
-                className={`${
-                  radius === item.value ? "text-purple font-bold" : "text-white"
-                } text-base`}
+                className="text-base"
+                style={{
+                  color: radius === item.value ? colors.primary.DEFAULT : colors.text.primary,
+                  fontWeight: radius === item.value ? 'bold' : 'normal',
+                }}
               >
                 {item.label}
               </Text>
@@ -154,10 +160,11 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-red-500 text-center mb-4">{error}</Text>
+          <Text style={{ color: colors.error }} className="text-center mb-4">{error}</Text>
           <Pressable
             onPress={() => loadEvents()}
-            className="bg-purple px-6 py-3 rounded-xl"
+            className="px-6 py-3 rounded-xl"
+            style={{ backgroundColor: colors.primary.DEFAULT }}
           >
             <Text className="text-white font-bold">Réessayer</Text>
           </Pressable>
@@ -168,10 +175,10 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
     if (events.length === 0) {
       return (
         <View className="flex-1 justify-center items-center p-4">
-          <Text className="text-white text-center text-lg mb-2">
+          <Text style={{ color: colors.text.primary }} className="text-center text-lg mb-2">
             Aucun événement disponible
           </Text>
-          <Text className="text-gray-400 text-center">
+          <Text style={{ color: colors.text.tertiary }} className="text-center">
             {radius === 1000
               ? "Aucun événement n'est disponible pour le moment."
               : `Aucun événement trouvé dans un rayon de ${radius}km.`}
@@ -194,7 +201,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
   };
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1" style={{ backgroundColor: colors.background }}>
       <View
         style={[styles.container, showPremiumModal && styles.blurContainer]}
       >
@@ -205,7 +212,7 @@ export const EventsList = ({ eventsType }: EventsListProps) => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#126C52"
+              tintColor={colors.primary.DEFAULT}
             />
           }
         >

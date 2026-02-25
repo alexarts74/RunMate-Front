@@ -3,8 +3,10 @@ import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-
-const ACCENT = "#F97316";
+import { useThemeColors } from "@/constants/theme";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
 
 type RunnerType = "chill" | "perf";
 
@@ -15,157 +17,220 @@ type Props = {
 export function SignUpFormStep0({ onNext }: Props) {
   const [isFlexible, setIsFlexible] = useState(false);
   const router = useRouter();
+  const { colors, shadows } = useThemeColors();
 
   const handleNext = (type: RunnerType) => {
     onNext(type, isFlexible);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-fond">
-      <View className="flex-1 px-6">
-        <View className="mt-8 mb-4">
-          <Text className="text-gray-900 text-2xl font-nunito-extrabold text-center">
-            Quel type de
-            <Text className="text-primary"> runner</Text> {"\n"}es tu ?
-          </Text>
-        </View>
-        <View className="flex-1 justify-center pb-24">
-          <View className="space-y-4">
-            <Pressable
-              onPress={() => handleNext("chill")}
-              className="bg-white px-5 h-[180px] py-4 rounded-2xl active:opacity-80 border-2 border-gray-200"
+    <WarmBackground>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingHorizontal: 24 }}>
+          <View style={{ marginTop: 32, marginBottom: 16 }}>
+            <Text
               style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.15,
-                shadowRadius: 8,
-                elevation: 3,
+                color: colors.text.primary,
+                fontSize: 24,
+                fontFamily: "Nunito-ExtraBold",
+                textAlign: "center",
               }}
             >
-              <View className="flex-row items-center mb-3">
-                <View className="bg-tertiary p-3 rounded-xl">
-                  <Ionicons name="leaf-outline" size={24} color="#525252" />
-                </View>
-                <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
-                  Je suis un runner Chill
-                </Text>
-              </View>
-              <Text className="text-gray-600 text-sm leading-5 font-nunito-medium mb-3">
-                Je cours pour le plaisir, la santé et la socialisation. Je ne
-                suis pas focalisé sur la performance.
-              </Text>
-              <View className="flex-row items-center">
-                <Ionicons
-                  name="arrow-forward-circle-outline"
-                  size={18}
-                  color="#525252"
-                />
-                <Text className="text-secondary ml-2 font-nunito-medium text-sm">
-                  Choisir ce profil
-                </Text>
-              </View>
-            </Pressable>
-
-            <Pressable
-              onPress={() => handleNext("perf")}
-              className="bg-white px-5 py-4 h-[180px] rounded-2xl active:opacity-80 border-2 border-gray-200"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.15,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
-              <View className="flex-row items-center mb-3">
-                <View className="bg-tertiary p-3 rounded-xl">
-                  <Ionicons name="trophy-outline" size={24} color={ACCENT} />
-                </View>
-                <Text className="text-gray-900 text-lg font-nunito-bold ml-3">
-                  Je suis un runner Perf
-                </Text>
-              </View>
-              <Text className="text-gray-600 text-sm leading-5 font-nunito-medium mb-3">
-                Je cours pour la performance, avec des objectifs précis et un
-                plan d'entraînement structuré.
-              </Text>
-              <View className="flex-row items-center">
-                <Ionicons
-                  name="arrow-forward-circle-outline"
-                  size={18}
-                  color={ACCENT}
-                />
-                <Text className="text-primary ml-2 font-nunito-medium text-sm">
-                  Choisir ce profil
-                </Text>
-              </View>
-            </Pressable>
-
-            <View className="mt-6">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-4">
-                Option supplémentaire
-              </Text>
-              <Pressable
-                onPress={() => setIsFlexible(!isFlexible)}
-                className={`px-5 py-4 rounded-xl active:opacity-80 border-2 bg-white ${
-                  isFlexible ? "border-primary" : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: isFlexible ? ACCENT : "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: isFlexible ? 0.15 : 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                <View className="flex-row items-center">
-                  <View
-                    className={`w-6 h-6 rounded-lg border-2 items-center justify-center mr-3 ${
-                      isFlexible
-                        ? "bg-primary border-primary"
-                        : "border-gray-300 bg-white"
-                    }`}
+              Quel type de
+              <Text style={{ color: colors.primary.DEFAULT }}> runner</Text> {"\n"}es tu ?
+            </Text>
+          </View>
+          <View style={{ flex: 1, justifyContent: "center", paddingBottom: 96 }}>
+            <View style={{ gap: 16 }}>
+              <Pressable onPress={() => handleNext("chill")}>
+                <GlassCard variant="medium" style={{ paddingHorizontal: 20, paddingVertical: 16, height: 180 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+                    <View
+                      style={{
+                        backgroundColor: colors.primary.subtle,
+                        padding: 12,
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Ionicons name="leaf-outline" size={24} color={colors.text.secondary} />
+                    </View>
+                    <Text
+                      style={{
+                        color: colors.text.primary,
+                        fontSize: 18,
+                        fontFamily: "Nunito-Bold",
+                        marginLeft: 12,
+                      }}
+                    >
+                      Je suis un runner Chill
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      color: colors.text.secondary,
+                      fontSize: 14,
+                      lineHeight: 20,
+                      fontFamily: "Nunito-Medium",
+                      marginBottom: 12,
+                    }}
                   >
-                    {isFlexible && (
-                      <Ionicons name="checkmark" size={16} color="white" />
-                    )}
-                  </View>
-                  <View className="flex-1">
-                    <Text className="text-gray-900 text-base font-nunito-bold">
-                      Je suis flexible
+                    Je cours pour le plaisir, la sant{"\u00e9"} et la socialisation. Je ne
+                    suis pas focalis{"\u00e9"} sur la performance.
+                  </Text>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Ionicons
+                      name="arrow-forward-circle-outline"
+                      size={18}
+                      color={colors.text.secondary}
+                    />
+                    <Text
+                      style={{
+                        color: colors.text.secondary,
+                        marginLeft: 8,
+                        fontFamily: "Nunito-Medium",
+                        fontSize: 14,
+                      }}
+                    >
+                      Choisir ce profil
                     </Text>
-                    <Text className="text-gray-600 text-sm leading-5 mt-1 font-nunito-medium">
-                      Je peux m'adapter aux objectifs, et entrainements de mes
-                      partenaires.
-                    </Text>
                   </View>
-                </View>
+                </GlassCard>
               </Pressable>
+
+              <Pressable onPress={() => handleNext("perf")}>
+                <GlassCard variant="medium" style={{ paddingHorizontal: 20, paddingVertical: 16, height: 180 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+                    <View
+                      style={{
+                        backgroundColor: colors.primary.subtle,
+                        padding: 12,
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Ionicons name="trophy-outline" size={24} color={colors.primary.DEFAULT} />
+                    </View>
+                    <Text
+                      style={{
+                        color: colors.text.primary,
+                        fontSize: 18,
+                        fontFamily: "Nunito-Bold",
+                        marginLeft: 12,
+                      }}
+                    >
+                      Je suis un runner Perf
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      color: colors.text.secondary,
+                      fontSize: 14,
+                      lineHeight: 20,
+                      fontFamily: "Nunito-Medium",
+                      marginBottom: 12,
+                    }}
+                  >
+                    Je cours pour la performance, avec des objectifs pr{"\u00e9"}cis et un
+                    plan d'entra{"\u00ee"}nement structur{"\u00e9"}.
+                  </Text>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Ionicons
+                      name="arrow-forward-circle-outline"
+                      size={18}
+                      color={colors.primary.DEFAULT}
+                    />
+                    <Text
+                      style={{
+                        color: colors.primary.DEFAULT,
+                        marginLeft: 8,
+                        fontFamily: "Nunito-Medium",
+                        fontSize: 14,
+                      }}
+                    >
+                      Choisir ce profil
+                    </Text>
+                  </View>
+                </GlassCard>
+              </Pressable>
+
+              <View style={{ marginTop: 24 }}>
+                <Text
+                  style={{
+                    color: colors.text.primary,
+                    fontSize: 16,
+                    fontFamily: "Nunito-Bold",
+                    marginBottom: 16,
+                  }}
+                >
+                  Option suppl{"\u00e9"}mentaire
+                </Text>
+                <Pressable onPress={() => setIsFlexible(!isFlexible)}>
+                  <GlassCard
+                    variant={isFlexible ? "medium" : "light"}
+                    style={{
+                      paddingHorizontal: 20,
+                      paddingVertical: 16,
+                      borderWidth: 2,
+                      borderColor: isFlexible ? colors.primary.DEFAULT : colors.glass.border,
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      <View
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 8,
+                          borderWidth: 2,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginRight: 12,
+                          backgroundColor: isFlexible ? colors.primary.DEFAULT : "transparent",
+                          borderColor: isFlexible ? colors.primary.DEFAULT : colors.text.tertiary,
+                        }}
+                      >
+                        {isFlexible && (
+                          <Ionicons name="checkmark" size={16} color="white" />
+                        )}
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text
+                          style={{
+                            color: colors.text.primary,
+                            fontSize: 16,
+                            fontFamily: "Nunito-Bold",
+                          }}
+                        >
+                          Je suis flexible
+                        </Text>
+                        <Text
+                          style={{
+                            color: colors.text.secondary,
+                            fontSize: 14,
+                            lineHeight: 20,
+                            marginTop: 4,
+                            fontFamily: "Nunito-Medium",
+                          }}
+                        >
+                          Je peux m'adapter aux objectifs, et entrainements de mes
+                          partenaires.
+                        </Text>
+                      </View>
+                    </View>
+                  </GlassCard>
+                </Pressable>
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View className="absolute bottom-8 left-0 right-0 px-6">
-        <Pressable
-          onPress={() => router.back()}
-          className="bg-white px-6 py-4 rounded-full active:opacity-80 border-2 border-gray-200"
-          style={{
-            shadowColor: ACCENT,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
-            shadowRadius: 4,
-            elevation: 3,
-          }}
-        >
-          <View className="flex-row items-center justify-center">
-            <Ionicons name="arrow-back" size={18} color={ACCENT} />
-            <Text className="text-primary ml-2 font-nunito-bold text-base">
-              Retour
-            </Text>
-          </View>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+        <View style={{ position: "absolute", bottom: 32, left: 0, right: 0, paddingHorizontal: 24 }}>
+          <GlassButton
+            title="Retour"
+            onPress={() => router.back()}
+            variant="secondary"
+            icon={<Ionicons name="arrow-back" size={18} color={colors.primary.DEFAULT} />}
+          />
+        </View>
+      </SafeAreaView>
+    </WarmBackground>
   );
 }

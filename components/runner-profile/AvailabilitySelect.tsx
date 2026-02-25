@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
+import { useThemeColors } from "@/constants/theme";
 
 const availabilityOptions = [
   { key: "monday", value: "Lundi" },
@@ -17,6 +18,8 @@ type Props = {
 };
 
 export function AvailabilitySelect({ availability, handleChange }: Props) {
+  const { colors } = useThemeColors();
+
   const toggleDay = (key: string) => {
     const newAvailability = availability?.includes(key)
       ? availability.filter((day) => day !== key)
@@ -26,7 +29,7 @@ export function AvailabilitySelect({ availability, handleChange }: Props) {
 
   return (
     <View className="mb-4">
-      <Text className="text-white text-sm font-semibold pl-2 mb-2">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-2">
         Vos disponibilités*
       </Text>
       <View className="flex-row flex-wrap gap-2">
@@ -34,18 +37,25 @@ export function AvailabilitySelect({ availability, handleChange }: Props) {
           <Pressable
             key={option.key}
             onPress={() => toggleDay(option.key)}
-            className={`px-4 py-2 rounded-full border ${
-              availability.includes(option.key)
-                ? "bg-purple border-purple"
-                : "border-gray bg-background"
-            }`}
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderRadius: 9999,
+              borderWidth: 1,
+              backgroundColor: availability.includes(option.key)
+                ? colors.primary.subtle
+                : colors.glass.light,
+              borderColor: availability.includes(option.key)
+                ? colors.primary.DEFAULT
+                : colors.glass.border,
+            }}
           >
             <Text
-              className={`${
-                availability.includes(option.key)
-                  ? "text-background"
-                  : "text-white"
-              }`}
+              style={{
+                color: availability.includes(option.key)
+                  ? colors.primary.dark
+                  : colors.text.secondary,
+              }}
             >
               {option.value}
             </Text>

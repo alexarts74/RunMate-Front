@@ -99,7 +99,7 @@ export const ParticlesBackground = () => {
             },
           ]}
         >
-          <Ionicons name="walk" size={24} color="#401346" />
+          <Ionicons name="walk" size={24} color="rgba(123,158,135,0.3)" />
         </Animated.View>
       ))}
     </View>

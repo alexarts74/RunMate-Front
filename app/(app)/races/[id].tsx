@@ -13,14 +13,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { raceService } from "@/service/api/race";
 import { Race } from "@/interface/Race";
 import LoadingScreen from "@/components/LoadingScreen";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors } from "@/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function RaceDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [race, setRace] = useState<Race | null>(null);
   const [loading, setLoading] = useState(true);
+  const { colors, shadows, gradients } = useThemeColors();
 
   const fetchRaceDetails = async () => {
     try {
@@ -28,7 +31,7 @@ export default function RaceDetailsScreen() {
       setRace(data);
     } catch (error) {
       console.error("Erreur lors du chargement de la course:", error);
-      Alert.alert("Erreur", "Impossible de charger les détails de la course");
+      Alert.alert("Erreur", "Impossible de charger les details de la course");
     } finally {
       setLoading(false);
     }
@@ -56,11 +59,9 @@ export default function RaceDetailsScreen() {
     const now = new Date();
     const race = new Date(raceDate);
 
-    // Réinitialiser les heures pour avoir un calcul précis des jours
     now.setHours(0, 0, 0, 0);
     race.setHours(0, 0, 0, 0);
 
-    // Calculer la différence en jours
     const differenceInTime = race.getTime() - now.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
@@ -98,7 +99,7 @@ export default function RaceDetailsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-fond">
+    <WarmBackground>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Image de couverture avec header */}
         <View className="relative h-64">
@@ -111,10 +112,15 @@ export default function RaceDetailsScreen() {
               style={{ resizeMode: "cover" }}
             />
           ) : (
-            <View className="w-full h-full bg-gradient-to-br from-primary to-secondary" />
+            <View
+              className="w-full h-full"
+              style={{ backgroundColor: colors.primary.DEFAULT }}
+            />
           )}
-          {/* Overlay gradient */}
-          <View className="absolute inset-0 bg-black/30" />
+          <LinearGradient
+            colors={gradients.imageOverlay as unknown as [string, string, ...string[]]}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          />
           <SafeAreaView
             className="absolute inset-0"
             edges={["top"]}
@@ -123,60 +129,70 @@ export default function RaceDetailsScreen() {
             <View className="flex-row items-center pt-2 pl-4 z-10">
               <Pressable
                 onPress={() => router.back()}
-                className="w-11 h-11 bg-white/90 rounded-full items-center justify-center"
+                className="w-11 h-11 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
-                  elevation: 3,
+                  backgroundColor: colors.glass.heavy,
+                  ...shadows.sm,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color={ACCENT} />
+                <Ionicons name="arrow-back" size={22} color={colors.primary.DEFAULT} />
               </Pressable>
             </View>
           </SafeAreaView>
         </View>
 
-        <View className="px-6 py-6 bg-fond">
+        <View className="px-6 py-6">
           {/* Titre et badges */}
           <View className="mb-6">
             <View className="flex-row items-center mb-3 flex-wrap">
               {countdown.isExpired ? (
-                <View className="bg-red-100 border border-red-300 px-4 py-2 rounded-full mb-2">
+                <View
+                  className="px-4 py-2 rounded-full mb-2"
+                  style={{ backgroundColor: 'rgba(212,115,110,0.15)', borderWidth: 1, borderColor: colors.error }}
+                >
                   <View className="flex-row items-center">
                     <Ionicons
                       name="checkmark-circle"
                       size={16}
-                      color="#DC2626"
+                      color={colors.error}
                       style={{ marginRight: 6 }}
                     />
-                    <Text className="text-red-600 font-nunito-bold text-sm">
-                      Course terminée
+                    <Text className="font-nunito-bold text-sm" style={{ color: colors.error }}>
+                      Course terminee
                     </Text>
                   </View>
                 </View>
               ) : (
-                <View className="bg-tertiary border border-secondary px-4 py-2 rounded-full flex-row items-center mb-2">
+                <View
+                  className="px-4 py-2 rounded-full flex-row items-center mb-2"
+                  style={{
+                    backgroundColor: colors.primary.subtle,
+                    borderWidth: 1,
+                    borderColor: colors.primary.light,
+                  }}
+                >
                   <Ionicons
                     name="time-outline"
                     size={16}
-                    color="#525252"
+                    color={colors.text.secondary}
                     style={{ marginRight: 6 }}
                   />
-                  <Text className="text-secondary font-nunito-bold text-sm">
+                  <Text className="font-nunito-bold text-sm" style={{ color: colors.text.secondary }}>
                     Dans {countdown.days} jour{countdown.days > 1 ? "s" : ""}
                   </Text>
                 </View>
               )}
             </View>
-            <Text className="text-gray-900 font-nunito-black text-3xl mb-3">
+            <Text
+              className="font-nunito-black text-3xl mb-3"
+              style={{ color: colors.text.primary }}
+            >
               {race.name}
             </Text>
             {race.distances && race.distances.length > 0 && (
               <View className="flex-row items-center mb-2">
-                <Ionicons name="trophy" size={18} color="#F59E0B" />
-                <Text className="text-gray-600 font-nunito-medium text-sm ml-2">
+                <Ionicons name="trophy" size={18} color={colors.warning} />
+                <Text className="font-nunito-medium text-sm ml-2" style={{ color: colors.text.secondary }}>
                   {race.distances.length} distance{race.distances.length > 1 ? "s" : ""} disponible{race.distances.length > 1 ? "s" : ""}
                 </Text>
               </View>
@@ -184,45 +200,45 @@ export default function RaceDetailsScreen() {
           </View>
 
           {/* Informations principales */}
-          <View
-            className="bg-white p-5 rounded-2xl mb-6"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-extrabold text-lg mb-4">
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
+            <Text
+              className="font-nunito-extrabold text-lg mb-4"
+              style={{ color: colors.text.primary }}
+            >
               Informations de la course
             </Text>
             <View className="space-y-4">
               <View className="flex-row items-center">
-                <View className="w-12 h-12 rounded-xl bg-primary/10 items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={22} color={ACCENT} />
+                <View
+                  className="w-12 h-12 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="calendar" size={22} color={colors.primary.DEFAULT} />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
+                  <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.tertiary }}>
                     Date de la course
                   </Text>
-                  <Text className="text-gray-900 font-nunito-bold text-base">
+                  <Text className="font-nunito-bold text-base" style={{ color: colors.text.primary }}>
                     {formatDate(race.start_date)}
                   </Text>
                 </View>
               </View>
 
-              <View className="h-px bg-gray-200" />
+              <View style={{ height: 1, backgroundColor: colors.glass.border }} />
 
               <View className="flex-row items-center">
-                <View className="w-12 h-12 rounded-xl bg-secondary/10 items-center justify-center mr-4">
-                  <Ionicons name="location" size={22} color="#525252" />
+                <View
+                  className="w-12 h-12 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="location" size={22} color={colors.text.secondary} />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-500 font-nunito-medium text-xs mb-1">
+                  <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.tertiary }}>
                     Localisation
                   </Text>
-                  <Text className="text-gray-900 font-nunito-bold text-base">
+                  <Text className="font-nunito-bold text-base" style={{ color: colors.text.primary }}>
                     {race.location}
                   </Text>
                 </View>
@@ -231,26 +247,29 @@ export default function RaceDetailsScreen() {
               {/* Distances disponibles */}
               {race.distances && race.distances.length > 0 && (
                 <View>
-                  <View className="h-px bg-gray-200 mb-4" />
+                  <View style={{ height: 1, backgroundColor: colors.glass.border, marginBottom: 16 }} />
                   <View className="flex-row items-start">
-                    <View className="w-12 h-12 rounded-xl bg-primary/10 items-center justify-center mr-4 mt-1">
-                      <Ionicons name="flag" size={22} color={ACCENT} />
+                    <View
+                      className="w-12 h-12 rounded-xl items-center justify-center mr-4 mt-1"
+                      style={{ backgroundColor: colors.primary.subtle }}
+                    >
+                      <Ionicons name="flag" size={22} color={colors.primary.DEFAULT} />
                     </View>
                     <View className="flex-1">
-                      <Text className="text-gray-900 font-nunito-extrabold text-sm mb-2">
+                      <Text
+                        className="font-nunito-extrabold text-sm mb-2"
+                        style={{ color: colors.text.primary }}
+                      >
                         Distances disponibles
                       </Text>
                       <View className="flex-row flex-wrap" style={{ gap: 8 }}>
                         {race.distances.map((distance, index) => (
                           <View
                             key={index}
-                            className="bg-primary px-4 py-2.5 rounded-xl"
+                            className="px-4 py-2.5 rounded-xl"
                             style={{
-                              shadowColor: ACCENT,
-                              shadowOffset: { width: 0, height: 2 },
-                              shadowOpacity: 0.2,
-                              shadowRadius: 4,
-                              elevation: 2,
+                              backgroundColor: colors.primary.DEFAULT,
+                              ...shadows.sm,
                             }}
                           >
                             <Text className="text-white font-nunito-bold text-sm">
@@ -264,31 +283,27 @@ export default function RaceDetailsScreen() {
                 </View>
               )}
             </View>
-          </View>
+          </GlassCard>
 
           {/* Description */}
           {race.description && (
-            <View
-              className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-extrabold text-lg mb-3">
+            <GlassCard variant="light" style={{ marginBottom: 24 }}>
+              <Text
+                className="font-nunito-extrabold text-lg mb-3"
+                style={{ color: colors.text.primary }}
+              >
                 Description
               </Text>
-              <Text className="text-gray-600 font-nunito-medium leading-6">
+              <Text
+                className="font-nunito-medium leading-6"
+                style={{ color: colors.text.secondary }}
+              >
                 {race.description}
               </Text>
-            </View>
+            </GlassCard>
           )}
         </View>
       </ScrollView>
-    </View>
+    </WarmBackground>
   );
 }
-

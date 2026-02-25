@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
+import { useThemeColors, radii } from "@/constants/theme";
 
 const genderOptions = [
   { key: "homme", value: "Homme" },
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export function GenderSelect({ value, onChange }: Props) {
+  const { colors, shadows } = useThemeColors();
+
   return (
     <View>
       <SelectList
@@ -32,39 +35,31 @@ export function GenderSelect({ value, onChange }: Props) {
         }
         placeholder="Etes-vous ?"
         boxStyles={{
-          backgroundColor: "#ffffff",
-          borderColor: "#E5E7EB",
-          borderWidth: 2,
+          backgroundColor: colors.glass.light,
+          borderColor: colors.glass.border,
+          borderWidth: 1,
           padding: 16,
-          borderRadius: 9999,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.05,
-          shadowRadius: 2,
-          elevation: 1,
+          borderRadius: radii.md,
+          ...shadows.sm,
         }}
-        inputStyles={{ 
-          color: "#111827",
+        inputStyles={{
+          color: colors.text.primary,
           fontFamily: "Nunito-Medium",
         }}
         dropdownStyles={{
-          backgroundColor: "#ffffff",
-          borderRadius: 16,
+          backgroundColor: colors.elevated,
+          borderRadius: radii.md,
           marginTop: 4,
-          borderColor: "#E5E7EB",
-          borderWidth: 2,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.15,
-          shadowRadius: 8,
-          elevation: 5,
+          borderColor: colors.glass.border,
+          borderWidth: 1,
+          ...shadows.md,
         }}
-        dropdownTextStyles={{ 
-          color: "#111827",
+        dropdownTextStyles={{
+          color: colors.text.primary,
           fontFamily: "Nunito-Medium",
         }}
         dropdownItemStyles={{
-          borderBottomColor: "#F3F4F6",
+          borderBottomColor: colors.surface,
           borderBottomWidth: 1,
         }}
       />

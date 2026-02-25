@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import { View, Text, Pressable, ScrollView, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { ActionButton } from "@/components/ui/ActionButton";
 import * as Location from "expo-location";
-
-const ACCENT = "#F97316";
+import { useThemeColors } from "@/constants/theme";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import PulseLoader from "@/components/ui/PulseLoader";
 
 interface LocationSuggestion {
   city: string;
@@ -41,16 +43,16 @@ export function SignUpFormStepOrganizer2({
   handleMultipleChanges,
   onBack,
 }: SignUpFormStepOrganizer2Props) {
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [locationUsed, setLocationUsed] = useState(false);
   const searchLocationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { colors, shadows } = useThemeColors();
 
-  // Log du formData reçu en props
+  // Log du formData recu en props
   useEffect(() => {
-    console.log("📋 [SignUpFormStepOrganizer2] formData reçu:", {
+    console.log("[SignUpFormStepOrganizer2] formData recu:", {
       address: formData.address,
       city: formData.city,
       department: formData.department,
@@ -61,7 +63,7 @@ export function SignUpFormStepOrganizer2({
     });
   }, [formData]);
 
-  // Vérifier si les champs de localisation sont déjà remplis
+  // Verifier si les champs de localisation sont deja remplis
   useEffect(() => {
     if (formData.city && formData.department) {
       setLocationUsed(true);
@@ -155,8 +157,8 @@ export function SignUpFormStepOrganizer2({
 
       if (status !== "granted") {
         Alert.alert(
-          "Permission refusée",
-          "L'accès à la localisation est nécessaire pour compléter votre profil."
+          "Permission refus\u00e9e",
+          "L'acc\u00e8s \u00e0 la localisation est n\u00e9cessaire pour compl\u00e9ter votre profil."
         );
         setLoadingLocation(false);
         return;
@@ -169,13 +171,12 @@ export function SignUpFormStepOrganizer2({
       });
 
       if (result) {
-        // Remplir tous les champs de localisation avec les bons noms de champs
         const addressParts = [];
         if (result.streetNumber) addressParts.push(result.streetNumber);
         if (result.street) addressParts.push(result.street);
         const fullAddress = addressParts.join(" ").trim();
 
-        console.log("📍 [handleUseCurrentLocation] Résultat de la géolocalisation:", {
+        console.log("[handleUseCurrentLocation] Resultat de la geolocalisation:", {
           result,
           location: {
             latitude: location.coords.latitude,
@@ -194,11 +195,10 @@ export function SignUpFormStepOrganizer2({
           longitude: location.coords.longitude,
         };
 
-        console.log("📍 [handleUseCurrentLocation] Données à sauvegarder:", locationData);
+        console.log("[handleUseCurrentLocation] Donnees a sauvegarder:", locationData);
 
-        // Mettre à jour tous les champs en une seule fois pour éviter les problèmes de state asynchrone
         if (handleMultipleChanges) {
-          console.log("📍 [handleUseCurrentLocation] Utilisation de handleMultipleChanges");
+          console.log("[handleUseCurrentLocation] Utilisation de handleMultipleChanges");
           await handleMultipleChanges({
             address: fullAddress,
             organizer_city: locationData.city,
@@ -208,8 +208,7 @@ export function SignUpFormStepOrganizer2({
             organizer_longitude: locationData.longitude,
           });
         } else {
-          // Fallback si handleMultipleChanges n'est pas disponible
-          console.log("📍 [handleUseCurrentLocation] Fallback: utilisation de handleChange séquentiel");
+          console.log("[handleUseCurrentLocation] Fallback: utilisation de handleChange sequentiel");
           await handleChange("address", fullAddress);
           await handleChange("organizer_city", locationData.city);
           await handleChange("organizer_department", locationData.department);
@@ -218,24 +217,22 @@ export function SignUpFormStepOrganizer2({
           await handleChange("organizer_longitude", locationData.longitude);
         }
 
-        console.log("📍 [handleUseCurrentLocation] Tous les champs ont été mis à jour");
+        console.log("[handleUseCurrentLocation] Tous les champs ont ete mis a jour");
 
-        // Marquer que la localisation a été utilisée
         setLocationUsed(true);
 
-        // Afficher un message de succès
         Alert.alert(
-          "Localisation récupérée",
-          "Vos informations de localisation ont été remplies automatiquement.",
+          "Localisation r\u00e9cup\u00e9r\u00e9e",
+          "Vos informations de localisation ont \u00e9t\u00e9 remplies automatiquement.",
           [{ text: "OK" }]
         );
       } else {
-        console.error("📍 [handleUseCurrentLocation] Aucun résultat de géolocalisation");
-        Alert.alert("Erreur", "Impossible de déterminer votre adresse");
+        console.error("[handleUseCurrentLocation] Aucun resultat de geolocalisation");
+        Alert.alert("Erreur", "Impossible de d\u00e9terminer votre adresse");
       }
     } catch (error) {
       console.error("Erreur de localisation:", error);
-      Alert.alert("Erreur", "Impossible de récupérer votre localisation");
+      Alert.alert("Erreur", "Impossible de r\u00e9cup\u00e9rer votre localisation");
     } finally {
       setLoadingLocation(false);
     }
@@ -247,7 +244,7 @@ export function SignUpFormStepOrganizer2({
       return false;
     }
     if (!formData.department.trim()) {
-      Alert.alert("Erreur", "Le département est requis");
+      Alert.alert("Erreur", "Le d\u00e9partement est requis");
       return false;
     }
     return true;
@@ -260,391 +257,278 @@ export function SignUpFormStepOrganizer2({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-fond">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
-      >
-        <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
+    <WarmBackground>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
         >
-          <View className="px-6 py-6">
-            {/* Header avec bouton retour */}
-            <View className="mb-6">
-              <View className="flex-row items-center mb-4">
-                <Pressable
-                  onPress={onBack}
-                  className="bg-white p-2.5 rounded-full active:opacity-80 mr-4"
-                  style={{
-                    shadowColor: ACCENT,
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 4,
-                    elevation: 3,
-                  }}
-                >
-                  <Ionicons name="arrow-back" size={20} color={ACCENT} />
-                </Pressable>
-                <View className="flex-1">
-                  <Text className="text-gray-900 text-2xl font-nunito-extrabold">
-                    Contact et localisation
-                  </Text>
-                </View>
-              </View>
-              <Text className="text-gray-600 text-base font-nunito-medium">
-                Ajoutez vos informations de contact et votre localisation
-              </Text>
-            </View>
-
-            {/* Site web */}
-            <View className="mb-4">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-2">
-                Site web (optionnel)
-              </Text>
-              <View
-                className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                  focusedInput === "website" ? "border-primary" : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                <TextInput
-                  value={formData.website}
-                  onChangeText={(value) => handleChange("website", value)}
-                  onFocus={() => setFocusedInput("website")}
-                  onBlur={() => setFocusedInput(null)}
-                  placeholder="https://example.com"
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 text-base font-nunito-medium"
-                  style={{ color: "#111827" }}
-                  selectionColor={ACCENT}
-                  editable={true}
-                  keyboardType="url"
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
-
-            {/* Téléphone */}
-            <View className="mb-4">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-2">
-                Téléphone (optionnel)
-              </Text>
-              <View
-                className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                  focusedInput === "phone" ? "border-primary" : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                <TextInput
-                  value={formData.phone}
-                  onChangeText={(value) => handleChange("phone", value)}
-                  onFocus={() => setFocusedInput("phone")}
-                  onBlur={() => setFocusedInput(null)}
-                  placeholder="+33 1 23 45 67 89"
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 text-base font-nunito-medium"
-                  style={{ color: "#111827" }}
-                  selectionColor={ACCENT}
-                  editable={true}
-                  keyboardType="phone-pad"
-                />
-              </View>
-            </View>
-
-            {/* Email */}
-            <View className="mb-4">
-              <Text className="text-gray-900 text-base font-nunito-bold mb-2">
-                Email de contact (optionnel)
-              </Text>
-              <View
-                className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                  focusedInput === "email" ? "border-primary" : "border-gray-200"
-                }`}
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.05,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                <TextInput
-                  value={formData.email}
-                  onChangeText={(value) => handleChange("organizer_email", value)}
-                  onFocus={() => setFocusedInput("email")}
-                  onBlur={() => setFocusedInput(null)}
-                  placeholder="contact@example.com"
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 text-base font-nunito-medium"
-                  style={{ color: "#111827" }}
-                  selectionColor={ACCENT}
-                  editable={true}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
-
-            {/* Localisation */}
-            <View className="mb-4">
-              <View className="flex-row items-center justify-between mb-2">
-                <Text className="text-gray-900 text-base font-nunito-bold">
-                  Localisation *
-                </Text>
-                {!locationUsed && (
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={{ paddingHorizontal: 24, paddingVertical: 24 }}>
+              {/* Header avec bouton retour */}
+              <View style={{ marginBottom: 24 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
                   <Pressable
-                    onPress={handleUseCurrentLocation}
-                    disabled={loadingLocation}
-                    className={`flex-row items-center px-3 py-2 rounded-xl ${
-                      loadingLocation ? "bg-gray-200" : "bg-primary/10"
-                    }`}
+                    onPress={onBack}
+                    style={[
+                      {
+                        backgroundColor: colors.glass.light,
+                        padding: 10,
+                        borderRadius: 9999,
+                        marginRight: 16,
+                      },
+                      shadows.sm,
+                    ]}
                   >
-                    <Ionicons
-                      name="location"
-                      size={16}
-                      color={loadingLocation ? "#9CA3AF" : ACCENT}
-                      style={{ marginRight: 4 }}
-                    />
-                    <Text
-                      className={`text-sm font-nunito-bold ${
-                        loadingLocation ? "text-gray-500" : "text-primary"
-                      }`}
-                    >
-                      {loadingLocation ? "Chargement..." : "Utiliser ma position"}
-                    </Text>
+                    <Ionicons name="arrow-back" size={20} color={colors.primary.DEFAULT} />
                   </Pressable>
-                )}
-                {locationUsed && (
-                  <View className="flex-row items-center px-3 py-2 bg-green-100 rounded-xl">
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={16}
-                      color="#10B981"
-                      style={{ marginRight: 4 }}
-                    />
-                    <Text className="text-green-700 text-sm font-nunito-bold">
-                      Localisation remplie
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: colors.text.primary,
+                        fontSize: 24,
+                        fontFamily: "Nunito-ExtraBold",
+                      }}
+                    >
+                      Contact et localisation
                     </Text>
                   </View>
-                )}
-              </View>
-
-              {/* Adresse */}
-              <View className="mb-3">
-                <Text className="text-gray-700 text-sm font-nunito-medium mb-2">
-                  Adresse (optionnel)
-                </Text>
-                <View
-                  className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                    focusedInput === "address" ? "border-primary" : "border-gray-200"
-                  }`}
+                </View>
+                <Text
                   style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 4,
-                    elevation: 2,
+                    color: colors.text.secondary,
+                    fontSize: 16,
+                    fontFamily: "Nunito-Medium",
                   }}
                 >
-                  <TextInput
+                  Ajoutez vos informations de contact et votre localisation
+                </Text>
+              </View>
+
+              {/* Site web */}
+              <View style={{ marginBottom: 16 }}>
+                <GlassInput
+                  label="Site web (optionnel)"
+                  placeholder="https://example.com"
+                  value={formData.website}
+                  onChangeText={(value) => handleChange("website", value)}
+                  keyboardType="url"
+                  autoCapitalize="none"
+                  icon={<Ionicons name="globe-outline" size={20} color={colors.primary.DEFAULT} />}
+                />
+              </View>
+
+              {/* Telephone */}
+              <View style={{ marginBottom: 16 }}>
+                <GlassInput
+                  label="T\u00e9l\u00e9phone (optionnel)"
+                  placeholder="+33 1 23 45 67 89"
+                  value={formData.phone}
+                  onChangeText={(value) => handleChange("phone", value)}
+                  keyboardType="phone-pad"
+                  icon={<Ionicons name="call-outline" size={20} color={colors.primary.DEFAULT} />}
+                />
+              </View>
+
+              {/* Email */}
+              <View style={{ marginBottom: 16 }}>
+                <GlassInput
+                  label="Email de contact (optionnel)"
+                  placeholder="contact@example.com"
+                  value={formData.email}
+                  onChangeText={(value) => handleChange("organizer_email", value)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  icon={<Ionicons name="mail-outline" size={20} color={colors.primary.DEFAULT} />}
+                />
+              </View>
+
+              {/* Localisation */}
+              <View style={{ marginBottom: 16 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <Text
+                    style={{
+                      color: colors.text.secondary,
+                      fontSize: 14,
+                      fontFamily: "Nunito-SemiBold",
+                    }}
+                  >
+                    Localisation *
+                  </Text>
+                  {!locationUsed && (
+                    <Pressable
+                      onPress={handleUseCurrentLocation}
+                      disabled={loadingLocation}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        borderRadius: 12,
+                        backgroundColor: loadingLocation ? colors.surface : colors.primary.subtle,
+                      }}
+                    >
+                      {loadingLocation ? (
+                        <PulseLoader color={colors.text.tertiary} size={6} />
+                      ) : (
+                        <>
+                          <Ionicons
+                            name="location"
+                            size={16}
+                            color={colors.primary.DEFAULT}
+                            style={{ marginRight: 4 }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: "Nunito-Bold",
+                              color: colors.primary.DEFAULT,
+                            }}
+                          >
+                            Utiliser ma position
+                          </Text>
+                        </>
+                      )}
+                    </Pressable>
+                  )}
+                  {locationUsed && (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        backgroundColor: "rgba(124, 184, 138, 0.15)",
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={16}
+                        color={colors.success}
+                        style={{ marginRight: 4 }}
+                      />
+                      <Text style={{ color: colors.success, fontSize: 14, fontFamily: "Nunito-Bold" }}>
+                        Localisation remplie
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                {/* Adresse */}
+                <View style={{ marginBottom: 12 }}>
+                  <GlassInput
+                    label="Adresse (optionnel)"
+                    placeholder="Rechercher une adresse..."
                     value={formData.address}
                     onChangeText={(text) => {
                       handleChange("address", text);
                       searchLocation(text);
                     }}
                     onFocus={() => {
-                      setFocusedInput("address");
                       if (formData.address) {
                         searchLocation(formData.address);
                       }
                     }}
                     onBlur={() => {
-                      setFocusedInput(null);
                       setTimeout(() => setShowSuggestions(false), 200);
                     }}
-                    placeholder="Rechercher une adresse..."
-                    placeholderTextColor="#9CA3AF"
-                    className="text-gray-900 text-base font-nunito-medium"
-                    style={{ color: "#111827" }}
-                    selectionColor={ACCENT}
-                    editable={true}
+                    icon={<Ionicons name="search-outline" size={20} color={colors.primary.DEFAULT} />}
                   />
+
+                  {/* Suggestions d'adresses */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <View
+                      style={[
+                        {
+                          marginTop: 8,
+                          backgroundColor: colors.glass.heavy,
+                          borderRadius: 16,
+                          borderWidth: 1,
+                          borderColor: colors.glass.border,
+                          overflow: "hidden",
+                        },
+                        shadows.sm,
+                      ]}
+                    >
+                      {suggestions.map((suggestion, index) => (
+                        <Pressable
+                          key={index}
+                          onPress={() => handleSelectLocation(suggestion)}
+                          style={{
+                            paddingHorizontal: 16,
+                            paddingVertical: 12,
+                            borderBottomWidth: index < suggestions.length - 1 ? 1 : 0,
+                            borderBottomColor: colors.glass.border,
+                          }}
+                        >
+                          <Text style={{ color: colors.text.primary, fontSize: 14, fontFamily: "Nunito-Medium" }}>
+                            {suggestion.full_name}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  )}
                 </View>
 
-                {/* Suggestions d'adresses */}
-                {showSuggestions && suggestions.length > 0 && (
-                  <View className="mt-2 bg-white rounded-2xl border-2 border-gray-200 overflow-hidden">
-                    {suggestions.map((suggestion, index) => (
-                      <Pressable
-                        key={index}
-                        onPress={() => handleSelectLocation(suggestion)}
-                        className="px-4 py-3 border-b border-gray-100 active:bg-gray-50"
-                      >
-                        <Text className="text-gray-900 text-sm font-nunito-medium">
-                          {suggestion.full_name}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                )}
-              </View>
-
-              {/* Ville */}
-              <View className="mb-3">
-                <Text className="text-gray-700 text-sm font-nunito-medium mb-2">
-                  Ville *
-                </Text>
-                <View
-                  className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                    focusedInput === "city" ? "border-primary" : "border-gray-200"
-                  }`}
-                  style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 4,
-                    elevation: 2,
-                  }}
-                >
-                  <TextInput
+                {/* Ville */}
+                <View style={{ marginBottom: 12 }}>
+                  <GlassInput
+                    label="Ville *"
+                    placeholder="Paris"
                     value={formData.city}
                     onChangeText={(value) => handleChange("organizer_city", value)}
-                    onFocus={() => setFocusedInput("city")}
-                    onBlur={() => setFocusedInput(null)}
-                    placeholder="Paris"
-                    placeholderTextColor="#9CA3AF"
-                    className="text-gray-900 text-base font-nunito-medium"
-                    style={{ color: "#111827" }}
-                    selectionColor={ACCENT}
-                    editable={true}
                   />
                 </View>
-              </View>
 
-              {/* Département */}
-              <View className="mb-3">
-                <Text className="text-gray-700 text-sm font-nunito-medium mb-2">
-                  Département *
-                </Text>
-                <View
-                  className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                    focusedInput === "department" ? "border-primary" : "border-gray-200"
-                  }`}
-                  style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 4,
-                    elevation: 2,
-                  }}
-                >
-                  <TextInput
+                {/* Departement */}
+                <View style={{ marginBottom: 12 }}>
+                  <GlassInput
+                    label="D\u00e9partement *"
+                    placeholder="75"
                     value={formData.department}
                     onChangeText={(value) => handleChange("organizer_department", value)}
-                    onFocus={() => setFocusedInput("department")}
-                    onBlur={() => setFocusedInput(null)}
-                    placeholder="75"
-                    placeholderTextColor="#9CA3AF"
-                    className="text-gray-900 text-base font-nunito-medium"
-                    style={{ color: "#111827" }}
-                    selectionColor={ACCENT}
-                    editable={true}
                   />
                 </View>
-              </View>
 
-              {/* Code postal */}
-              <View className="mb-3">
-                <Text className="text-gray-700 text-sm font-nunito-medium mb-2">
-                  Code postal (optionnel)
-                </Text>
-                <View
-                  className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                    focusedInput === "postcode" ? "border-primary" : "border-gray-200"
-                  }`}
-                  style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 4,
-                    elevation: 2,
-                  }}
-                >
-                  <TextInput
+                {/* Code postal */}
+                <View style={{ marginBottom: 12 }}>
+                  <GlassInput
+                    label="Code postal (optionnel)"
+                    placeholder="75001"
                     value={formData.postcode}
                     onChangeText={(value) => handleChange("organizer_postcode", value)}
-                    onFocus={() => setFocusedInput("postcode")}
-                    onBlur={() => setFocusedInput(null)}
-                    placeholder="75001"
-                    placeholderTextColor="#9CA3AF"
-                    className="text-gray-900 text-base font-nunito-medium"
-                    style={{ color: "#111827" }}
-                    selectionColor={ACCENT}
-                    editable={true}
                     keyboardType="numeric"
                   />
                 </View>
-              </View>
 
-              {/* Pays */}
-              <View>
-                <Text className="text-gray-700 text-sm font-nunito-medium mb-2">
-                  Pays (optionnel)
-                </Text>
-                <View
-                  className={`bg-white rounded-2xl px-4 py-4 border-2 ${
-                    focusedInput === "country" ? "border-primary" : "border-gray-200"
-                  }`}
-                  style={{
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 4,
-                    elevation: 2,
-                  }}
-                >
-                  <TextInput
+                {/* Pays */}
+                <View>
+                  <GlassInput
+                    label="Pays (optionnel)"
+                    placeholder="France"
                     value={formData.country || "France"}
                     onChangeText={(value) => handleChange("country", value)}
-                    onFocus={() => setFocusedInput("country")}
-                    onBlur={() => setFocusedInput(null)}
-                    placeholder="France"
-                    placeholderTextColor="#9CA3AF"
-                    className="text-gray-900 text-base font-nunito-medium"
-                    style={{ color: "#111827" }}
-                    selectionColor={ACCENT}
-                    editable={true}
                   />
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
 
-        {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-gray-200">
-          <ActionButton
-            onPress={handleSubmit}
-            text="Terminer"
-            className="w-full"
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          {/* Footer */}
+          <View style={{ paddingHorizontal: 24, paddingVertical: 16 }}>
+            <GlassButton
+              title="Terminer"
+              onPress={handleSubmit}
+              variant="primary"
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </WarmBackground>
   );
 }
-

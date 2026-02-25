@@ -7,15 +7,16 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { CreateModal } from "@/components/modals/CreateModal";
 import { useAuth } from "@/context/AuthContext";
-
-const ACCENT = "#F97316";
+import { useThemeColors, blur, radii } from "@/constants/theme";
 
 function CreateActionButton({
   focused,
   onPress,
+  accentColor,
 }: {
   focused: boolean;
   onPress?: () => void;
+  accentColor: string;
 }) {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -30,7 +31,7 @@ function CreateActionButton({
     <>
       <TabBarIcon
         name="add-circle"
-        color={focused ? ACCENT : "#A3A3A3"}
+        color={focused ? accentColor : "#8A9B90"}
         focused={focused}
         onPress={handlePress}
       />
@@ -47,6 +48,7 @@ export default function TabLayout() {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const segments = useSegments();
+  const { colors, shadows, isDark } = useThemeColors();
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState(0);
   const indicatorPosition = useRef(new Animated.Value(0)).current;
@@ -83,19 +85,19 @@ export default function TabLayout() {
   const tabBarBackground = () => (
     <View style={StyleSheet.absoluteFill}>
       <BlurView
-        intensity={20}
-        tint="light"
+        intensity={blur.medium}
+        tint={isDark ? "dark" : "light"}
         style={{
           flex: 1,
-          borderRadius: 28,
+          borderRadius: radii["3xl"],
           overflow: "hidden",
         }}
       >
         <View
           style={{
             flex: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            borderRadius: 28,
+            backgroundColor: colors.glass.heavy,
+            borderRadius: radii["3xl"],
             position: "relative",
             overflow: "hidden",
           }}
@@ -107,8 +109,8 @@ export default function TabLayout() {
               left: indicatorPosition,
               width: 76,
               height: 50,
-              borderRadius: 24,
-              backgroundColor: `${ACCENT}15`,
+              borderRadius: radii.xl,
+              backgroundColor: colors.primary.subtle,
             }}
           />
         </View>
@@ -119,8 +121,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: ACCENT,
-        tabBarInactiveTintColor: "#A3A3A3",
+        tabBarActiveTintColor: colors.primary.DEFAULT,
+        tabBarInactiveTintColor: colors.text.tertiary,
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
@@ -136,11 +138,7 @@ export default function TabLayout() {
           paddingBottom: 0,
           paddingTop: 5,
           marginBottom: 0,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.08,
-          shadowRadius: 16,
-          elevation: 8,
+          ...shadows.lg,
         },
         tabBarItemStyle: {
           paddingVertical: 1,
@@ -186,7 +184,7 @@ export default function TabLayout() {
           ),
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarBadgeStyle: {
-            backgroundColor: ACCENT,
+            backgroundColor: colors.primary.DEFAULT,
             color: "#ffffff",
             fontSize: 10,
             fontWeight: "700",
@@ -209,6 +207,7 @@ export default function TabLayout() {
           tabBarIcon: () => (
             <CreateActionButton
               focused={activeTab === 2}
+              accentColor={colors.primary.DEFAULT}
               onPress={() => {
                 setActiveTab(2);
               }}

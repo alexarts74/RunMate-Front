@@ -1,8 +1,7 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
-const ACCENT = "#F97316";
+import { useThemeColors, typography, radii } from "@/constants/theme";
 
 interface MultiSelectProps {
   options: string[];
@@ -17,6 +16,8 @@ export function MultiSelect({
   onChange,
   label,
 }: MultiSelectProps) {
+  const { colors, shadows } = useThemeColors();
+
   const toggleOption = (option: string) => {
     if (selectedValues.includes(option)) {
       onChange(selectedValues.filter((value) => value !== option));
@@ -27,8 +28,12 @@ export function MultiSelect({
 
   return (
     <View>
-      {label && <Text className="text-gray-900 text-sm mb-2 font-nunito-bold">{label}</Text>}
-      <View className="flex-row flex-wrap gap-2">
+      {label && (
+        <Text style={[styles.label, { color: colors.text.primary }]}>
+          {label}
+        </Text>
+      )}
+      <View style={styles.optionsRow}>
         {options.map((option) => {
           const isSelected = selectedValues.includes(option);
 
@@ -36,30 +41,33 @@ export function MultiSelect({
             <Pressable
               key={option}
               onPress={() => toggleOption(option)}
-              className={`flex-row items-center px-4 py-2.5 rounded-full border-2 ${
+              style={[
+                styles.option,
                 isSelected
-                  ? "bg-primary border-primary"
-                  : "bg-white border-gray-200"
-              }`}
-              style={{
-                shadowColor: isSelected ? ACCENT : "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: isSelected ? 0.2 : 0.05,
-                shadowRadius: 4,
-                elevation: isSelected ? 3 : 1,
-              }}
+                  ? {
+                      backgroundColor: colors.primary.DEFAULT,
+                      borderColor: colors.primary.DEFAULT,
+                      ...shadows.md,
+                    }
+                  : {
+                      backgroundColor: colors.glass.light,
+                      borderColor: colors.glass.border,
+                      ...shadows.sm,
+                    },
+              ]}
             >
               <Text
-                className={`${
-                  isSelected ? "text-white" : "text-gray-700"
-                } font-nunito-bold text-sm mr-2`}
+                style={[
+                  styles.optionText,
+                  { color: isSelected ? "#FFFFFF" : colors.text.secondary },
+                ]}
               >
                 {option}
               </Text>
               <Ionicons
                 name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                 size={16}
-                color={isSelected ? "white" : ACCENT}
+                color={isSelected ? "#FFFFFF" : colors.primary.DEFAULT}
               />
             </Pressable>
           );
@@ -68,3 +76,29 @@ export function MultiSelect({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  label: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.label.fontSize,
+    marginBottom: 8,
+  },
+  optionsRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  option: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: radii.full,
+    borderWidth: 2,
+  },
+  optionText: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.caption.fontSize,
+    marginRight: 8,
+  },
+});

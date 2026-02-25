@@ -5,7 +5,6 @@ import {
   FlatList,
   Image,
   Pressable,
-  Alert,
   StyleSheet,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,6 +13,11 @@ import { useRouter, useFocusEffect } from "expo-router";
 import LoadingScreen from "../LoadingScreen";
 import { PremiumFeatureModal } from "../common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
+import { useThemeColors, radii, typography } from "@/constants/theme";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import WarmBackground from "@/components/ui/WarmBackground";
+import PulseLoader from "@/components/ui/PulseLoader";
 
 type RunningGroupType = {
   id: string;
@@ -32,6 +36,7 @@ const RunningGroup = () => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
   const handleFeatureAccess = (groupId: string) => {
     if (user?.is_premium) {
@@ -85,50 +90,81 @@ const RunningGroup = () => {
 
   const renderGroup = ({ item }: { item: RunningGroupType }) => (
     <Pressable
-      className="bg-[#1e2429] rounded-xl overflow-hidden mb-3 mx-4 border border-gray-700"
-      style={{
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
       onPress={() => handleFeatureAccess(item.id)}
+      style={{ marginHorizontal: 16, marginBottom: 12 }}
     >
-      <Image
-        source={
-          item.cover_image
-            ? { uri: item.cover_image }
-            : require("@/assets/images/favicon.png")
-        }
-        className="w-full h-32"
-        style={{ resizeMode: "cover" }}
-      />
+      <GlassCard
+        variant="medium"
+        noPadding
+        style={{
+          borderRadius: radii.lg,
+          ...shadows.md,
+        }}
+      >
+        <Image
+          source={
+            item.cover_image
+              ? { uri: item.cover_image }
+              : require("@/assets/images/favicon.png")
+          }
+          style={{
+            width: "100%",
+            height: 128,
+            resizeMode: "cover",
+            borderTopLeftRadius: radii.lg,
+            borderTopRightRadius: radii.lg,
+          }}
+        />
 
-      <View className="p-4">
-        <Text className="text-white font-bold text-lg mb-2">{item.name}</Text>
-
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center">
-            <Ionicons name="people" size={16} color="#126C52" />
-            <Text className="text-gray-300 text-sm ml-2">
-              {item.members_count} membres
-            </Text>
-          </View>
-
-          <Pressable
-            className="bg-background px-4 py-2 rounded-lg"
-            onPress={() => handleFeatureAccess(item.id)}
+        <View style={{ padding: 16 }}>
+          <Text
+            style={{
+              ...typography.h3,
+              color: colors.text.primary,
+              marginBottom: 8,
+            }}
           >
-            <Text className="text-white font-semibold">Voir le groupe</Text>
-          </Pressable>
+            {item.name}
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="people"
+                size={16}
+                color={colors.primary.DEFAULT}
+              />
+              <Text
+                style={{
+                  ...typography.caption,
+                  color: colors.text.secondary,
+                  marginLeft: 8,
+                }}
+              >
+                {item.members_count} membres
+              </Text>
+            </View>
+
+            <GlassButton
+              title="Voir le groupe"
+              onPress={() => handleFeatureAccess(item.id)}
+              variant="secondary"
+              size="sm"
+            />
+          </View>
         </View>
-      </View>
+      </GlassCard>
     </Pressable>
   );
 
   return (
-    <View className="bg-background flex-1">
+    <WarmBackground style={{ flex: 1 }}>
       <View
         style={[styles.container, showPremiumModal && styles.blurContainer]}
       >
@@ -142,31 +178,58 @@ const RunningGroup = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
             ListEmptyComponent={() => (
-              <View className="flex-1 items-center justify-center px-6 py-10">
-                <View className="bg-background/30 p-8 rounded-full mb-6">
-                  <Ionicons name="fitness" size={60} color="#126C52" />
-                </View>
-                <Text className="text-white font-nunito text-2xl font-bold text-center mb-3">
-                  Aucun groupe trouvé
-                </Text>
-                <Text className="text-gray-400 text-base font-nunito text-center mb-8">
-                  Les groupes de course vous permettent de rencontrer d'autres
-                  coureurs et de participer à des événements ensemble.
-                </Text>
-                <Pressable
-                  className="bg-purple rounded-full px-6 py-3 flex-row items-center"
-                  onPress={() => router.push("/")}
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingHorizontal: 24,
+                  paddingVertical: 40,
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: colors.primary.subtle,
+                    padding: 32,
+                    borderRadius: 9999,
+                    marginBottom: 24,
+                  }}
                 >
                   <Ionicons
-                    name="people"
-                    size={20}
-                    color="white"
-                    style={{ marginRight: 8 }}
+                    name="fitness"
+                    size={60}
+                    color={colors.primary.DEFAULT}
                   />
-                  <Text className="text-white font-nunito font-semibold">
-                    Explorer les groupes
-                  </Text>
-                </Pressable>
+                </View>
+                <Text
+                  style={{
+                    ...typography.h2,
+                    color: colors.text.primary,
+                    textAlign: "center",
+                    marginBottom: 12,
+                  }}
+                >
+                  Aucun groupe trouve
+                </Text>
+                <Text
+                  style={{
+                    ...typography.body,
+                    color: colors.text.tertiary,
+                    textAlign: "center",
+                    marginBottom: 32,
+                  }}
+                >
+                  Les groupes de course vous permettent de rencontrer d'autres
+                  coureurs et de participer a des evenements ensemble.
+                </Text>
+                <GlassButton
+                  title="Explorer les groupes"
+                  onPress={() => router.push("/")}
+                  variant="primary"
+                  icon={
+                    <Ionicons name="people" size={20} color="#FFFFFF" />
+                  }
+                />
               </View>
             )}
           />
@@ -176,10 +239,10 @@ const RunningGroup = () => {
         onUpgrade={onUpgrade}
         visible={showPremiumModal}
         onClose={closeModal}
-        title="Fonctionnalité Premium"
-        description="Les groupes de course seront bientôt disponibles dans la version premium de l'application. Stay tuned !"
+        title="Fonctionnalite Premium"
+        description="Les groupes de course seront bientot disponibles dans la version premium de l'application. Stay tuned !"
       />
-    </View>
+    </WarmBackground>
   );
 };
 

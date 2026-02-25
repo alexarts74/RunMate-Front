@@ -7,8 +7,11 @@ import { eventService } from "@/service/api/event";
 import { Event } from "@/interface/Event";
 import { useAuth } from "@/context/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function OrganizerEventDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -16,16 +19,17 @@ export default function OrganizerEventDetailsScreen() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { colors, shadows, gradients } = useThemeColors();
 
   const fetchEventDetails = async () => {
     try {
-      console.log("🏢 [OrganizerEventDetails] Chargement de l'événement:", id);
+      console.log("[OrganizerEventDetails] Chargement de l'evenement:", id);
       const data = await eventService.getEventById(id as string);
-      console.log("🏢 [OrganizerEventDetails] Événement reçu:", data);
+      console.log("[OrganizerEventDetails] Evenement recu:", data);
       setEvent(data);
     } catch (error) {
-      console.error("🏢 [OrganizerEventDetails] Erreur:", error);
-      Alert.alert("Erreur", "Impossible de charger les détails de l'événement");
+      console.error("[OrganizerEventDetails] Erreur:", error);
+      Alert.alert("Erreur", "Impossible de charger les details de l'evenement");
     } finally {
       setLoading(false);
     }
@@ -56,29 +60,36 @@ export default function OrganizerEventDetailsScreen() {
     return <LoadingScreen />;
   }
 
-  // Vérifier que l'utilisateur est bien le créateur
+  // Verifier que l'utilisateur est bien le createur
   if (!event.is_creator) {
     return (
-      <View className="flex-1 bg-fond items-center justify-center px-6">
-        <Ionicons name="lock-closed" size={64} color={ACCENT} />
-        <Text className="text-gray-900 font-nunito-bold text-xl mt-4 text-center">
-          Accès restreint
-        </Text>
-        <Text className="text-gray-600 font-nunito-medium text-center mt-2">
-          Vous n'êtes pas le créateur de cet événement.
-        </Text>
-        <Pressable
-          onPress={() => router.back()}
-          className="bg-primary px-6 py-3 rounded-full mt-6"
-        >
-          <Text className="text-white font-nunito-bold">Retour</Text>
-        </Pressable>
-      </View>
+      <WarmBackground>
+        <View className="flex-1 items-center justify-center px-6">
+          <Ionicons name="lock-closed" size={64} color={colors.primary.DEFAULT} />
+          <Text
+            className="font-nunito-bold text-xl mt-4 text-center"
+            style={{ color: colors.text.primary }}
+          >
+            Acces restreint
+          </Text>
+          <Text
+            className="font-nunito-medium text-center mt-2"
+            style={{ color: colors.text.secondary }}
+          >
+            Vous n'etes pas le createur de cet evenement.
+          </Text>
+          <GlassButton
+            title="Retour"
+            onPress={() => router.back()}
+            style={{ marginTop: 24 }}
+          />
+        </View>
+      </WarmBackground>
     );
   }
 
   return (
-    <View className="flex-1 bg-fond">
+    <WarmBackground>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Image de couverture avec header */}
         <View className="relative h-64">
@@ -89,109 +100,111 @@ export default function OrganizerEventDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
-          <View className="absolute inset-0 bg-black/30" />
+          <LinearGradient
+            colors={gradients.imageOverlay as unknown as [string, string, ...string[]]}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          />
           <SafeAreaView className="absolute inset-0" edges={['top']} style={{ position: 'absolute' }}>
             <View className="flex-row items-center pt-2 pl-4 z-10">
               <Pressable
                 onPress={() => router.back()}
-                className="w-11 h-11 bg-white/90 rounded-full items-center justify-center"
+                className="w-11 h-11 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
-                  elevation: 3,
+                  backgroundColor: colors.glass.heavy,
+                  ...shadows.sm,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color={ACCENT} />
+                <Ionicons name="arrow-back" size={22} color={colors.primary.DEFAULT} />
               </Pressable>
             </View>
           </SafeAreaView>
         </View>
 
-        <View className="px-6 py-6 bg-fond">
+        <View className="px-6 py-6">
           {/* Titre */}
           <View className="mb-6">
             <View className="flex-row items-center mb-3">
-              <View className="bg-primary px-3 py-1 rounded-full">
-                <Text className="text-white font-nunito-bold text-xs">Votre événement</Text>
+              <View
+                className="px-3 py-1 rounded-full"
+                style={{ backgroundColor: colors.primary.DEFAULT }}
+              >
+                <Text className="text-white font-nunito-bold text-xs">Votre evenement</Text>
               </View>
             </View>
-            <Text className="text-gray-900 font-nunito-bold text-3xl mb-2">
+            <Text
+              className="font-nunito-bold text-3xl mb-2"
+              style={{ color: colors.text.primary }}
+            >
               {event.name}
             </Text>
           </View>
 
           {/* Statistiques */}
-          <View className="bg-white p-5 rounded-2xl mb-6"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
             <View className="flex-row items-center mb-4">
-              <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                <Ionicons name="stats-chart" size={20} color={ACCENT} />
+              <View
+                className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                style={{ backgroundColor: colors.primary.subtle }}
+              >
+                <Ionicons name="stats-chart" size={20} color={colors.primary.DEFAULT} />
               </View>
-              <Text className="text-gray-900 font-nunito-bold text-lg">
+              <Text className="font-nunito-bold text-lg" style={{ color: colors.text.primary }}>
                 Statistiques
               </Text>
             </View>
-            
+
             <View className="flex-row" style={{ gap: 12 }}>
-              <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+              <View
+                className="flex-1 p-4 rounded-xl"
+                style={{ backgroundColor: colors.glass.light }}
+              >
+                <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.secondary }}>
                   Participants
                 </Text>
-                <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                <Text className="font-nunito-extrabold text-2xl" style={{ color: colors.text.primary }}>
                   {event.participants_count || 0}
                 </Text>
                 {event.max_participants && (
-                  <Text className="text-gray-500 font-nunito-medium text-xs mt-1">
+                  <Text className="font-nunito-medium text-xs mt-1" style={{ color: colors.text.tertiary }}>
                     / {event.max_participants} max
                   </Text>
                 )}
               </View>
-              
-              <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+
+              <View
+                className="flex-1 p-4 rounded-xl"
+                style={{ backgroundColor: colors.glass.light }}
+              >
+                <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.secondary }}>
                   Places restantes
                 </Text>
-                <Text className="text-gray-900 font-nunito-extrabold text-2xl">
-                  {event.spots_left !== undefined ? event.spots_left : (event.max_participants ? event.max_participants - (event.participants_count || 0) : '∞')}
+                <Text className="font-nunito-extrabold text-2xl" style={{ color: colors.text.primary }}>
+                  {event.spots_left !== undefined ? event.spots_left : (event.max_participants ? event.max_participants - (event.participants_count || 0) : '...')}
                 </Text>
               </View>
             </View>
-          </View>
+          </GlassCard>
 
           {/* Informations principales */}
-          <View className="bg-white p-5 rounded-2xl mb-6"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
             <View className="space-y-4">
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="calendar" size={20} color={colors.primary.DEFAULT} />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-900 font-nunito-bold text-base">
+                  <Text className="font-nunito-bold text-base" style={{ color: colors.text.primary }}>
                     {formatDate(event.start_date as string)}
                   </Text>
                   <View className="flex-row items-center mt-1">
-                    <Text className="text-gray-600 font-nunito-medium text-sm">
+                    <Text className="font-nunito-medium text-sm" style={{ color: colors.text.secondary }}>
                       {formatTime(event.start_time)}
                     </Text>
-                    <Text className="text-gray-400 mx-2">-</Text>
-                    <Text className="text-gray-600 font-nunito-medium text-sm">
+                    <Text className="mx-2" style={{ color: colors.text.tertiary }}>-</Text>
+                    <Text className="font-nunito-medium text-sm" style={{ color: colors.text.secondary }}>
                       {formatTime(event.end_time)}
                     </Text>
                   </View>
@@ -199,53 +212,47 @@ export default function OrganizerEventDetailsScreen() {
               </View>
 
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="location" size={20} color="#525252" />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="location" size={20} color={colors.text.secondary} />
                 </View>
-                <Text className="text-gray-900 font-nunito-medium text-base flex-1">{event.location}</Text>
+                <Text className="font-nunito-medium text-base flex-1" style={{ color: colors.text.primary }}>
+                  {event.location}
+                </Text>
               </View>
 
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="trending-up" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="trending-up" size={20} color={colors.primary.DEFAULT} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-base">
+                <Text className="font-nunito-bold text-base" style={{ color: colors.text.primary }}>
                   {event.distance} km
                 </Text>
               </View>
             </View>
-          </View>
+          </GlassCard>
 
           {/* Description */}
           {event.description && (
-            <View className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-bold text-lg mb-3">
+            <GlassCard variant="light" style={{ marginBottom: 24 }}>
+              <Text className="font-nunito-bold text-lg mb-3" style={{ color: colors.text.primary }}>
                 Description
               </Text>
-              <Text className="text-gray-600 font-nunito-medium leading-6">{event.description}</Text>
-            </View>
+              <Text className="font-nunito-medium leading-6" style={{ color: colors.text.secondary }}>
+                {event.description}
+              </Text>
+            </GlassCard>
           )}
 
           {/* Participants */}
           {event.participants && event.participants.length > 0 && (
-            <View className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-bold text-lg mb-4">
+            <GlassCard variant="light" style={{ marginBottom: 24 }}>
+              <Text className="font-nunito-bold text-lg mb-4" style={{ color: colors.text.primary }}>
                 Participants ({event.participants_count})
               </Text>
               <View className="flex-row items-center flex-wrap">
@@ -260,76 +267,72 @@ export default function OrganizerEventDetailsScreen() {
                           participant.profile_image ||
                           "https://via.placeholder.com/40",
                       }}
-                      className="w-12 h-12 rounded-full border-2 border-tertiary"
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 2, borderColor: colors.glass.border }}
                     />
                     <Text
-                      className="text-gray-600 text-xs font-nunito-medium mt-1 text-center"
+                      className="text-xs font-nunito-medium mt-1 text-center"
                       numberOfLines={1}
-                      style={{ maxWidth: 60 }}
+                      style={{ maxWidth: 60, color: colors.text.secondary }}
                     >
                       {participant.name?.split(" ")[0]}
                     </Text>
                   </View>
                 ))}
               </View>
-            </View>
+            </GlassCard>
           )}
 
           {/* Actions */}
-          <View className="bg-white p-5 rounded-2xl mb-6"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
-            <Text className="text-gray-900 font-nunito-bold text-lg mb-4">
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
+            <Text className="font-nunito-bold text-lg mb-4" style={{ color: colors.text.primary }}>
               Actions
             </Text>
             <View className="flex-row" style={{ gap: 12 }}>
-              <Pressable
+              <GlassButton
+                title="Modifier"
+                variant="secondary"
+                size="sm"
+                icon={<Ionicons name="create-outline" size={18} color={colors.primary.DEFAULT} />}
                 onPress={() => {
-                  Alert.alert("Modifier", "Fonctionnalité de modification à venir");
+                  Alert.alert("Modifier", "Fonctionnalite de modification a venir");
                 }}
-                className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
-              >
-                <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
-                <Text className="text-primary font-nunito-bold text-sm">
-                  Modifier
-                </Text>
-              </Pressable>
-              
+                style={{ flex: 1 }}
+              />
+
               <Pressable
                 onPress={() => {
                   Alert.alert(
-                    "Supprimer l'événement",
-                    "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.",
+                    "Supprimer l'evenement",
+                    "Etes-vous sur de vouloir supprimer cet evenement ? Cette action est irreversible.",
                     [
                       { text: "Annuler", style: "cancel" },
                       {
                         text: "Supprimer",
                         style: "destructive",
                         onPress: () => {
-                          Alert.alert("Info", "Fonctionnalité de suppression à venir");
+                          Alert.alert("Info", "Fonctionnalite de suppression a venir");
                         },
                       },
                     ]
                   );
                 }}
-                className="flex-1 bg-white border-2 border-red-500 py-3 rounded-xl flex-row items-center justify-center"
+                className="flex-1 py-3 rounded-xl flex-row items-center justify-center"
+                style={{
+                  backgroundColor: colors.elevated,
+                  borderWidth: 2,
+                  borderColor: colors.error,
+                }}
               >
-                <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
-                <Text className="text-red-500 font-nunito-bold text-sm">
+                <Ionicons name="trash-outline" size={18} color={colors.error} style={{ marginRight: 6 }} />
+                <Text className="font-nunito-bold text-sm" style={{ color: colors.error }}>
                   Supprimer
                 </Text>
               </Pressable>
             </View>
-          </View>
+          </GlassCard>
         </View>
       </ScrollView>
-    </View>
+    </WarmBackground>
   );
 }
-

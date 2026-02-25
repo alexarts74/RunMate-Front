@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
+import { useThemeColors } from "@/constants/theme";
 
 const activityOptions = [
   { key: "etirements", value: "Étirements" },
@@ -16,6 +17,8 @@ type Props = {
 };
 
 export function PostRunActivitiesSelect({ value, onChange }: Props) {
+  const { colors } = useThemeColors();
+
   const toggleActivity = (activity: string) => {
     if (value.includes(activity)) {
       onChange(value.filter((a) => a !== activity));
@@ -26,7 +29,7 @@ export function PostRunActivitiesSelect({ value, onChange }: Props) {
 
   return (
     <View>
-      <Text className="text-white text-sm font-semibold pl-2 mb-2">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-2">
         Activités post-course
       </Text>
       <View className="flex-row flex-wrap gap-2">
@@ -34,16 +37,25 @@ export function PostRunActivitiesSelect({ value, onChange }: Props) {
           <Pressable
             key={activity.key}
             onPress={() => toggleActivity(activity.key)}
-            className={`py-2 px-4 rounded-full ${
-              value.includes(activity.key)
-                ? "bg-purple"
-                : "bg-[#1e2429] border border-[#2a3238]"
-            }`}
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 9999,
+              borderWidth: 1,
+              backgroundColor: value.includes(activity.key)
+                ? colors.primary.subtle
+                : colors.glass.light,
+              borderColor: value.includes(activity.key)
+                ? colors.primary.DEFAULT
+                : colors.glass.border,
+            }}
           >
             <Text
-              className={
-                value.includes(activity.key) ? "text-[#12171b]" : "text-white"
-              }
+              style={{
+                color: value.includes(activity.key)
+                  ? colors.primary.dark
+                  : colors.text.secondary,
+              }}
             >
               {activity.value}
             </Text>

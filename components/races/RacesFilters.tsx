@@ -11,8 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Race } from "@/interface/Race";
-
-const ACCENT = "#F97316";
+import { useThemeColors, palette } from "@/constants/theme";
 
 const availableDistances = [
   { label: "Toutes", value: null, icon: "🏃" },
@@ -57,6 +56,8 @@ export const RacesFilters = ({
   onClearFilters,
   activeFiltersCount,
 }: RacesFiltersProps) => {
+  const { colors, shadows } = useThemeColors();
+
   // Extraire les pays uniques des courses
   const availableCountries = useMemo(() => {
     const countries = new Set<string>();
@@ -95,40 +96,40 @@ export const RacesFilters = ({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View className="flex-1 bg-black/50">
+      <View className="flex-1" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
         <Pressable
           className="flex-1"
           onPress={onClose}
         />
         <View
-          className="bg-white rounded-t-3xl"
+          className="rounded-t-3xl"
           style={{
             position: "absolute",
             left: 0,
             right: 0,
             bottom: 0,
             maxHeight: Dimensions.get("window").height * 0.85,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: -4 },
-            shadowOpacity: 0.1,
-            shadowRadius: 16,
-            elevation: 16,
+            backgroundColor: colors.elevated,
+            ...shadows.lg,
           }}
         >
           <SafeAreaView edges={["bottom"]} className="flex-1">
             {/* Header */}
-            <View className="px-6 py-4 border-b border-gray-200">
+            <View className="px-6 py-4" style={{ borderBottomWidth: 1, borderBottomColor: colors.glass.border }}>
               <View className="flex-row items-center justify-between mb-2">
                 <View className="flex-row items-center">
-                  <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                    <Ionicons name="filter" size={20} color={ACCENT} />
+                  <View
+                    className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                    style={{ backgroundColor: palette.primary.subtle }}
+                  >
+                    <Ionicons name="filter" size={20} color={colors.primary.DEFAULT} />
                   </View>
                   <View>
-                    <Text className="text-gray-900 text-2xl font-nunito-extrabold">
+                    <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-extrabold">
                       Filtres
                     </Text>
                     {activeFiltersCount > 0 && (
-                      <Text className="text-primary text-sm font-nunito-medium">
+                      <Text style={{ color: colors.primary.DEFAULT }} className="text-sm font-nunito-medium">
                         {activeFiltersCount} filtre{activeFiltersCount > 1 ? "s" : ""} actif{activeFiltersCount > 1 ? "s" : ""}
                       </Text>
                     )}
@@ -136,9 +137,10 @@ export const RacesFilters = ({
                 </View>
                 <Pressable
                   onPress={onClose}
-                  className="w-10 h-10 rounded-full bg-tertiary items-center justify-center"
+                  className="w-10 h-10 rounded-full items-center justify-center"
+                  style={{ backgroundColor: colors.surface }}
                 >
-                  <Ionicons name="close" size={22} color={ACCENT} />
+                  <Ionicons name="close" size={22} color={colors.primary.DEFAULT} />
                 </Pressable>
               </View>
             </View>
@@ -151,21 +153,25 @@ export const RacesFilters = ({
               <View className="px-6 py-4">
                 {/* Recherche par localisation */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-base mb-3">
                     Rechercher par localisation
                   </Text>
-                  <View className="flex-row items-center bg-tertiary rounded-xl px-4 py-3">
-                    <Ionicons name="search" size={20} color={ACCENT} />
+                  <View
+                    className="flex-row items-center rounded-xl px-4 py-3"
+                    style={{ backgroundColor: colors.surface }}
+                  >
+                    <Ionicons name="search" size={20} color={colors.primary.DEFAULT} />
                     <TextInput
                       placeholder="Ex: Paris, Lyon..."
                       value={searchLocation}
                       onChangeText={setSearchLocation}
-                      className="flex-1 ml-3 text-gray-900 font-nunito-medium"
-                      placeholderTextColor="#9CA3AF"
+                      className="flex-1 ml-3 font-nunito-medium"
+                      style={{ color: colors.text.primary }}
+                      placeholderTextColor={colors.text.tertiary}
                     />
                     {searchLocation.length > 0 && (
                       <Pressable onPress={() => setSearchLocation("")}>
-                        <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+                        <Ionicons name="close-circle" size={20} color={colors.text.tertiary} />
                       </Pressable>
                     )}
                   </View>
@@ -173,60 +179,52 @@ export const RacesFilters = ({
 
                 {/* Filtre par date */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-base mb-3">
                     Date
                   </Text>
                   <View className="flex-row gap-3">
                     <Pressable
                       onPress={() => setShowFutureOnly(true)}
-                      className={`flex-1 px-4 py-3.5 rounded-xl flex-row items-center justify-center ${
-                        showFutureOnly ? "bg-primary" : "bg-tertiary"
-                      }`}
+                      className="flex-1 px-4 py-3.5 rounded-xl flex-row items-center justify-center"
                       style={{
-                        shadowColor: showFutureOnly ? ACCENT : "#000",
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.15,
-                        shadowRadius: 4,
-                        elevation: 2,
+                        backgroundColor: showFutureOnly ? colors.primary.DEFAULT : colors.surface,
+                        ...shadows.sm,
                       }}
                     >
                       <Ionicons
                         name="calendar"
                         size={18}
-                        color={showFutureOnly ? "white" : "#000"}
+                        color={showFutureOnly ? "white" : colors.text.primary}
                         style={{ marginRight: 8 }}
                       />
                       <Text
-                        className={`font-nunito-bold text-sm ${
-                          showFutureOnly ? "text-white" : "text-gray-700"
-                        }`}
+                        className="font-nunito-bold text-sm"
+                        style={{
+                          color: showFutureOnly ? "white" : colors.text.secondary,
+                        }}
                       >
                         À venir
                       </Text>
                     </Pressable>
                     <Pressable
                       onPress={() => setShowFutureOnly(false)}
-                      className={`flex-1 px-4 py-3.5 rounded-xl flex-row items-center justify-center ${
-                        !showFutureOnly ? "bg-primary" : "bg-tertiary"
-                      }`}
+                      className="flex-1 px-4 py-3.5 rounded-xl flex-row items-center justify-center"
                       style={{
-                        shadowColor: !showFutureOnly ? ACCENT : "#000",
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.15,
-                        shadowRadius: 4,
-                        elevation: 2,
+                        backgroundColor: !showFutureOnly ? colors.primary.DEFAULT : colors.surface,
+                        ...shadows.sm,
                       }}
                     >
                       <Ionicons
                         name="calendar-outline"
                         size={18}
-                        color={!showFutureOnly ? "white" : "#000"}
+                        color={!showFutureOnly ? "white" : colors.text.primary}
                         style={{ marginRight: 8 }}
                       />
                       <Text
-                        className={`font-nunito-bold text-sm ${
-                          !showFutureOnly ? "text-white" : "text-gray-700"
-                        }`}
+                        className="font-nunito-bold text-sm"
+                        style={{
+                          color: !showFutureOnly ? "white" : colors.text.secondary,
+                        }}
                       >
                         Toutes
                       </Text>
@@ -236,7 +234,7 @@ export const RacesFilters = ({
 
                 {/* Filtre par distance */}
                 <View className="mb-6">
-                  <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
+                  <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-base mb-3">
                     Distance
                   </Text>
                   <View className="flex-row flex-wrap" style={{ gap: 10 }}>
@@ -244,29 +242,22 @@ export const RacesFilters = ({
                       <Pressable
                         key={distance.value || "all"}
                         onPress={() => setSelectedDistance(distance.value)}
-                        className={`px-4 py-3 rounded-xl flex-row items-center ${
-                          selectedDistance === distance.value
-                            ? "bg-primary"
-                            : "bg-tertiary"
-                        }`}
+                        className="px-4 py-3 rounded-xl flex-row items-center"
                         style={{
-                          shadowColor:
-                            selectedDistance === distance.value
-                              ? ACCENT
-                              : "#000",
-                          shadowOffset: { width: 0, height: 2 },
-                          shadowOpacity: 0.15,
-                          shadowRadius: 4,
-                          elevation: 2,
+                          backgroundColor: selectedDistance === distance.value
+                            ? colors.primary.DEFAULT
+                            : colors.surface,
+                          ...shadows.sm,
                         }}
                       >
                         <Text className="text-base mr-2">{distance.icon}</Text>
                         <Text
-                          className={`font-nunito-bold text-sm ${
-                            selectedDistance === distance.value
-                              ? "text-white"
-                              : "text-gray-700"
-                          }`}
+                          className="font-nunito-bold text-sm"
+                          style={{
+                            color: selectedDistance === distance.value
+                              ? "white"
+                              : colors.text.secondary,
+                          }}
                         >
                           {distance.label}
                         </Text>
@@ -278,7 +269,7 @@ export const RacesFilters = ({
                 {/* Filtre par localisation/pays */}
                 {availableCountries.length > 0 && (
                   <View className="mb-6">
-                    <Text className="text-gray-900 font-nunito-extrabold text-base mb-3">
+                    <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-base mb-3">
                       Localisation
                     </Text>
                     <ScrollView
@@ -288,24 +279,21 @@ export const RacesFilters = ({
                     >
                       <Pressable
                         onPress={() => setSelectedCountry(null)}
-                        className={`px-4 py-3 rounded-xl ${
-                          selectedCountry === null ? "bg-primary" : "bg-tertiary"
-                        }`}
+                        className="px-4 py-3 rounded-xl"
                         style={{
-                          shadowColor:
-                            selectedCountry === null ? ACCENT : "#000",
-                          shadowOffset: { width: 0, height: 2 },
-                          shadowOpacity: 0.15,
-                          shadowRadius: 4,
-                          elevation: 2,
+                          backgroundColor: selectedCountry === null
+                            ? colors.primary.DEFAULT
+                            : colors.surface,
+                          ...shadows.sm,
                         }}
                       >
                         <Text
-                          className={`font-nunito-bold text-sm ${
-                            selectedCountry === null
-                              ? "text-white"
-                              : "text-gray-700"
-                          }`}
+                          className="font-nunito-bold text-sm"
+                          style={{
+                            color: selectedCountry === null
+                              ? "white"
+                              : colors.text.secondary,
+                          }}
                         >
                           Toutes
                         </Text>
@@ -314,26 +302,21 @@ export const RacesFilters = ({
                         <Pressable
                           key={country}
                           onPress={() => setSelectedCountry(country)}
-                          className={`px-4 py-3 rounded-xl ${
-                            selectedCountry === country
-                              ? "bg-primary"
-                              : "bg-tertiary"
-                          }`}
+                          className="px-4 py-3 rounded-xl"
                           style={{
-                            shadowColor:
-                              selectedCountry === country ? ACCENT : "#000",
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.15,
-                            shadowRadius: 4,
-                            elevation: 2,
+                            backgroundColor: selectedCountry === country
+                              ? colors.primary.DEFAULT
+                              : colors.surface,
+                            ...shadows.sm,
                           }}
                         >
                           <Text
-                            className={`font-nunito-bold text-sm ${
-                              selectedCountry === country
-                                ? "text-white"
-                                : "text-gray-700"
-                            }`}
+                            className="font-nunito-bold text-sm"
+                            style={{
+                              color: selectedCountry === country
+                                ? "white"
+                                : colors.text.secondary,
+                            }}
                           >
                             {country}
                           </Text>
@@ -346,34 +329,37 @@ export const RacesFilters = ({
             </ScrollView>
 
             {/* Footer avec boutons d'action */}
-            <View className="px-6 py-4 border-t border-gray-200 bg-white">
+            <View
+              className="px-6 py-4"
+              style={{
+                borderTopWidth: 1,
+                borderTopColor: colors.glass.border,
+                backgroundColor: colors.elevated,
+              }}
+            >
               <View className="flex-row gap-3">
                 {activeFiltersCount > 0 && (
                   <Pressable
                     onPress={handleClear}
-                    className="flex-1 bg-tertiary border border-primary py-4 rounded-xl"
+                    className="flex-1 py-4 rounded-xl"
                     style={{
-                      shadowColor: ACCENT,
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 4,
-                      elevation: 2,
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.primary.DEFAULT,
+                      ...shadows.sm,
                     }}
                   >
-                    <Text className="text-center text-primary font-nunito-bold">
+                    <Text style={{ color: colors.primary.DEFAULT }} className="text-center font-nunito-bold">
                       Effacer
                     </Text>
                   </Pressable>
                 )}
                 <Pressable
                   onPress={handleApply}
-                  className={`${activeFiltersCount > 0 ? "flex-1" : "flex-1"} bg-primary py-4 rounded-xl`}
+                  className="flex-1 py-4 rounded-xl"
                   style={{
-                    shadowColor: ACCENT,
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 8,
-                    elevation: 4,
+                    backgroundColor: colors.primary.DEFAULT,
+                    ...shadows.md,
                   }}
                 >
                   <Text className="text-center text-white font-nunito-bold">
@@ -388,4 +374,3 @@ export const RacesFilters = ({
     </Modal>
   );
 };
-

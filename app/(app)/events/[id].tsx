@@ -8,8 +8,10 @@ import { Event } from "@/interface/Event";
 import { useAuth } from "@/context/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
 import { LinearGradient } from "expo-linear-gradient";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -17,14 +19,15 @@ export default function EventDetailsScreen() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { colors, shadows, gradients } = useThemeColors();
 
   const fetchEventDetails = async () => {
     try {
       const data = await eventService.getEventById(id as string);
       setEvent(data);
     } catch (error) {
-      console.error("Erreur lors du chargement de l'événement:", error);
-      Alert.alert("Erreur", "Impossible de charger les détails de l'événement");
+      console.error("Erreur lors du chargement de l'evenement:", error);
+      Alert.alert("Erreur", "Impossible de charger les details de l'evenement");
     } finally {
       setLoading(false);
     }
@@ -38,10 +41,10 @@ export default function EventDetailsScreen() {
     try {
       if (event && event.is_participant) {
         await eventService.leaveEvent(id as string);
-        Alert.alert("Succès", "Vous avez quitté l'événement");
+        Alert.alert("Succes", "Vous avez quitte l'evenement");
       } else {
         await eventService.joinEvent(id as string);
-        Alert.alert("Succès", "Vous participez maintenant à cet événement !");
+        Alert.alert("Succes", "Vous participez maintenant a cet evenement !");
       }
       fetchEventDetails();
     } catch (error: any) {
@@ -74,15 +77,12 @@ export default function EventDetailsScreen() {
     const now = new Date();
     const event = new Date(eventDate);
 
-    // Réinitialiser les heures pour avoir un calcul précis des jours
     now.setHours(0, 0, 0, 0);
     event.setHours(0, 0, 0, 0);
 
-    // Calculer la différence en jours
     const differenceInTime = event.getTime() - now.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
-    // Pour les heures, utiliser la date originale
     const currentTime = new Date();
     const eventTime = new Date(eventDate);
     const differenceForTime = eventTime.getTime() - currentTime.getTime();
@@ -129,7 +129,7 @@ export default function EventDetailsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-fond">
+    <WarmBackground>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Image de couverture avec header */}
         <View className="relative h-64">
@@ -140,125 +140,139 @@ export default function EventDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
-          {/* Overlay gradient */}
-          <View className="absolute inset-0 bg-black/30" />
+          <LinearGradient
+            colors={gradients.imageOverlay as unknown as [string, string, ...string[]]}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          />
           <SafeAreaView className="absolute inset-0" edges={['top']} style={{ position: 'absolute' }}>
             <View className="flex-row items-center pt-2 pl-4 z-10">
               <Pressable
                 onPress={() => router.back()}
-                className="w-11 h-11 bg-white/90 rounded-full items-center justify-center"
+                className="w-11 h-11 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
-                  elevation: 3,
+                  backgroundColor: colors.glass.heavy,
+                  ...shadows.sm,
                 }}
               >
-                <Ionicons name="arrow-back" size={22} color={ACCENT} />
+                <Ionicons name="arrow-back" size={22} color={colors.primary.DEFAULT} />
               </Pressable>
             </View>
           </SafeAreaView>
         </View>
 
-        <View className="px-6 py-6 bg-fond">
+        <View className="px-6 py-6">
           {/* Titre et badges */}
           <View className="mb-6">
             <View className="flex-row items-center mb-3">
               {event.is_creator && (
-                <View className="bg-tertiary border border-primary px-3 py-1 rounded-full mr-2">
-                  <Text className="text-primary font-nunito-bold text-xs">Créateur</Text>
+                <View
+                  className="px-3 py-1 rounded-full mr-2"
+                  style={{
+                    backgroundColor: colors.primary.subtle,
+                    borderWidth: 1,
+                    borderColor: colors.primary.DEFAULT,
+                  }}
+                >
+                  <Text className="font-nunito-bold text-xs" style={{ color: colors.primary.DEFAULT }}>Createur</Text>
                 </View>
               )}
               {event.is_participant && !event.is_creator && (
-                <View className="bg-tertiary border border-secondary px-3 py-1 rounded-full mr-2">
-                  <Text className="text-secondary font-nunito-bold text-xs">Participant</Text>
+                <View
+                  className="px-3 py-1 rounded-full mr-2"
+                  style={{
+                    backgroundColor: colors.primary.subtle,
+                    borderWidth: 1,
+                    borderColor: colors.primary.light,
+                  }}
+                >
+                  <Text className="font-nunito-bold text-xs" style={{ color: colors.primary.DEFAULT }}>Participant</Text>
                 </View>
               )}
               {countdown.isExpired ? (
-                <View className="bg-red-100 border border-red-300 px-3 py-1 rounded-full">
-                  <Text className="text-red-600 font-nunito-bold text-xs">Terminé</Text>
+                <View
+                  className="px-3 py-1 rounded-full"
+                  style={{ backgroundColor: 'rgba(212,115,110,0.15)', borderWidth: 1, borderColor: colors.error }}
+                >
+                  <Text className="font-nunito-bold text-xs" style={{ color: colors.error }}>Termine</Text>
                 </View>
               ) : (
-                <View className="bg-tertiary border border-secondary px-3 py-1.5 rounded-full flex-row items-center">
-                  <Ionicons name="time-outline" size={14} color="#525252" style={{ marginRight: 4 }} />
-                  <Text className="text-secondary font-nunito-bold text-xs">
+                <View
+                  className="px-3 py-1.5 rounded-full flex-row items-center"
+                  style={{
+                    backgroundColor: colors.primary.subtle,
+                    borderWidth: 1,
+                    borderColor: colors.primary.light,
+                  }}
+                >
+                  <Ionicons name="time-outline" size={14} color={colors.text.secondary} style={{ marginRight: 4 }} />
+                  <Text className="font-nunito-bold text-xs" style={{ color: colors.text.secondary }}>
                     {countdown.days}j {countdown.hours}h
                   </Text>
                 </View>
               )}
             </View>
-            <Text className="text-gray-900 font-nunito-bold text-3xl mb-2">
+            <Text
+              className="font-nunito-bold text-3xl mb-2"
+              style={{ color: colors.text.primary }}
+            >
               {event.name}
             </Text>
           </View>
 
-          {/* Carte créateur */}
-          <View className="bg-white p-4 rounded-2xl mb-6 flex-row items-center"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
-            <Image
-              source={{
-                uri:
-                  event.creator.profile_image ||
-                  "https://via.placeholder.com/40",
-              }}
-              className="w-14 h-14 rounded-full border-2 border-primary"
-            />
-            <View className="ml-4 flex-1">
-              <Text className="text-gray-900 font-nunito-bold text-base">
-                {event.creator.name}
-              </Text>
-              <Text className="text-primary font-nunito-medium text-sm">Créateur</Text>
-            </View>
-            {user?.id !== event.creator.id && (
-              <Pressable
-                onPress={() => router.push(`/chat/${event.creator.id}`)}
-                className="bg-primary px-4 py-2.5 rounded-full"
-                style={{
-                  shadowColor: ACCENT,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 4,
-                  elevation: 3,
+          {/* Carte createur */}
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
+            <View className="flex-row items-center">
+              <Image
+                source={{
+                  uri:
+                    event.creator.profile_image ||
+                    "https://via.placeholder.com/40",
                 }}
-              >
-                <Text className="text-white font-nunito-bold text-sm">Message</Text>
-              </Pressable>
-            )}
-          </View>
+                className="w-14 h-14 rounded-full"
+                style={{ borderWidth: 2, borderColor: colors.primary.DEFAULT }}
+              />
+              <View className="ml-4 flex-1">
+                <Text
+                  className="font-nunito-bold text-base"
+                  style={{ color: colors.text.primary }}
+                >
+                  {event.creator.name}
+                </Text>
+                <Text className="font-nunito-medium text-sm" style={{ color: colors.primary.DEFAULT }}>Createur</Text>
+              </View>
+              {user?.id !== event.creator.id && (
+                <GlassButton
+                  title="Message"
+                  onPress={() => router.push(`/chat/${event.creator.id}`)}
+                  size="sm"
+                />
+              )}
+            </View>
+          </GlassCard>
 
           {/* Informations principales */}
-          <View className="bg-white p-5 rounded-2xl mb-6"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
-          >
+          <GlassCard variant="medium" style={{ marginBottom: 24 }}>
             <View className="space-y-4">
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="calendar" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="calendar" size={20} color={colors.primary.DEFAULT} />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-gray-900 font-nunito-bold text-base">
+                  <Text
+                    className="font-nunito-bold text-base"
+                    style={{ color: colors.text.primary }}
+                  >
                     {formatDate(event.start_date as string)}
                   </Text>
                   <View className="flex-row items-center mt-1">
-                    <Text className="text-gray-600 font-nunito-medium text-sm">
+                    <Text className="font-nunito-medium text-sm" style={{ color: colors.text.secondary }}>
                       {formatTime(event.start_time)}
                     </Text>
-                    <Text className="text-gray-400 mx-2">-</Text>
-                    <Text className="text-gray-600 font-nunito-medium text-sm">
+                    <Text className="mx-2" style={{ color: colors.text.tertiary }}>-</Text>
+                    <Text className="font-nunito-medium text-sm" style={{ color: colors.text.secondary }}>
                       {formatTime(event.end_time)}
                     </Text>
                   </View>
@@ -266,35 +280,55 @@ export default function EventDetailsScreen() {
               </View>
 
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="location" size={20} color="#525252" />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="location" size={20} color={colors.text.secondary} />
                 </View>
-                <Text className="text-gray-900 font-nunito-medium text-base flex-1">{event.location}</Text>
+                <Text
+                  className="font-nunito-medium text-base flex-1"
+                  style={{ color: colors.text.primary }}
+                >
+                  {event.location}
+                </Text>
               </View>
 
               <View className="flex-row items-center">
-                <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                  <Ionicons name="trending-up" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="trending-up" size={20} color={colors.primary.DEFAULT} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-base">
+                <Text
+                  className="font-nunito-bold text-base"
+                  style={{ color: colors.text.primary }}
+                >
                   {event.distance} km
                 </Text>
               </View>
 
               {event.participants_count !== undefined && (
                 <View className="flex-row items-center">
-                  <View className="w-10 h-10 rounded-xl bg-tertiary items-center justify-center mr-4">
-                    <Ionicons name="people" size={20} color="#525252" />
+                  <View
+                    className="w-10 h-10 rounded-xl items-center justify-center mr-4"
+                    style={{ backgroundColor: colors.primary.subtle }}
+                  >
+                    <Ionicons name="people" size={20} color={colors.text.secondary} />
                   </View>
                   <View className="flex-1 flex-row items-center">
-                    <Text className="text-gray-900 font-nunito-bold text-base mr-2">
+                    <Text
+                      className="font-nunito-bold text-base mr-2"
+                      style={{ color: colors.text.primary }}
+                    >
                       {event.participants_count}
                     </Text>
-                    <Text className="text-gray-600 font-nunito-medium text-sm">
+                    <Text className="font-nunito-medium text-sm" style={{ color: colors.text.secondary }}>
                       participant{event.participants_count > 1 ? 's' : ''}
                     </Text>
                     {event.max_participants && (
-                      <Text className="text-gray-400 text-sm ml-1">
+                      <Text className="text-sm ml-1" style={{ color: colors.text.tertiary }}>
                         / {event.max_participants}
                       </Text>
                     )}
@@ -302,53 +336,47 @@ export default function EventDetailsScreen() {
                 </View>
               )}
             </View>
-          </View>
+          </GlassCard>
 
           {/* Description */}
           {event.description && (
-            <View className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-bold text-lg mb-3">
+            <GlassCard variant="light" style={{ marginBottom: 24 }}>
+              <Text
+                className="font-nunito-bold text-lg mb-3"
+                style={{ color: colors.text.primary }}
+              >
                 Description
               </Text>
-              <Text className="text-gray-600 font-nunito-medium leading-6">{event.description}</Text>
-            </View>
+              <Text
+                className="font-nunito-medium leading-6"
+                style={{ color: colors.text.secondary }}
+              >
+                {event.description}
+              </Text>
+            </GlassCard>
           )}
 
           {/* Participants */}
           {event.participants && event.participants.length > 0 && (
-            <View className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
+            <GlassCard variant="light" style={{ marginBottom: 24 }}>
               <View className="flex-row items-center justify-between mb-4">
-                <Text className="text-gray-900 font-nunito-bold text-lg">
+                <Text
+                  className="font-nunito-bold text-lg"
+                  style={{ color: colors.text.primary }}
+                >
                   Participants ({event.participants_count})
                 </Text>
                 {event.is_creator && user?.user_type === "organizer" && (
                   <Pressable
                     onPress={() => {
-                      // TODO: Naviguer vers une page de gestion des participants
-                      Alert.alert("Gestion", "Fonctionnalité de gestion des participants à venir");
+                      Alert.alert("Gestion", "Fonctionnalite de gestion des participants a venir");
                     }}
                     className="flex-row items-center"
                   >
-                    <Text className="text-primary font-nunito-bold text-sm mr-1">
-                      Gérer
+                    <Text className="font-nunito-bold text-sm mr-1" style={{ color: colors.primary.DEFAULT }}>
+                      Gerer
                     </Text>
-                    <Ionicons name="settings-outline" size={16} color={ACCENT} />
+                    <Ionicons name="settings-outline" size={16} color={colors.primary.DEFAULT} />
                   </Pressable>
                 )}
               </View>
@@ -364,144 +392,162 @@ export default function EventDetailsScreen() {
                           participant.profile_image ||
                           "https://via.placeholder.com/40",
                       }}
-                      className="w-12 h-12 rounded-full border-2 border-tertiary"
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 2, borderColor: colors.glass.border }}
                     />
                     <Text
-                      className="text-gray-600 text-xs font-nunito-medium mt-1 text-center"
+                      className="text-xs font-nunito-medium mt-1 text-center"
                       numberOfLines={1}
-                      style={{ maxWidth: 60 }}
+                      style={{ maxWidth: 60, color: colors.text.secondary }}
                     >
                       {participant.name?.split(" ")[0]}
                     </Text>
                   </View>
                 ))}
                 {event.participants_count > 8 && (
-                  <View className="w-12 h-12 rounded-full bg-tertiary border-2 border-secondary items-center justify-center mr-3 mb-3">
-                    <Text className="text-secondary font-nunito-bold text-xs">
+                  <View
+                    className="w-12 h-12 rounded-full items-center justify-center mr-3 mb-3"
+                    style={{
+                      backgroundColor: colors.primary.subtle,
+                      borderWidth: 2,
+                      borderColor: colors.primary.light,
+                    }}
+                  >
+                    <Text className="font-nunito-bold text-xs" style={{ color: colors.primary.DEFAULT }}>
                       +{event.participants_count - 8}
                     </Text>
                   </View>
                 )}
               </View>
-            </View>
+            </GlassCard>
           )}
 
-          {/* Section Organisateur - Statistiques et Actions */}
+          {/* Section Organisateur */}
           {event.is_creator && user?.user_type === "organizer" && (
-            <View className="bg-white p-5 rounded-2xl mb-6"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
+            <GlassCard variant="medium" style={{ marginBottom: 24 }}>
               <View className="flex-row items-center mb-4">
-                <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                  <Ionicons name="stats-chart" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="stats-chart" size={20} color={colors.primary.DEFAULT} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-lg">
-                  Gestion de l'événement
+                <Text
+                  className="font-nunito-bold text-lg"
+                  style={{ color: colors.text.primary }}
+                >
+                  Gestion de l'evenement
                 </Text>
               </View>
-              
+
               <View className="flex-row" style={{ gap: 12 }}>
-                <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                <View
+                  className="flex-1 p-4 rounded-xl"
+                  style={{ backgroundColor: colors.glass.light }}
+                >
+                  <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.secondary }}>
                     Participants
                   </Text>
-                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                  <Text className="font-nunito-extrabold text-2xl" style={{ color: colors.text.primary }}>
                     {event.participants_count || 0}
                   </Text>
                   {event.max_participants && (
-                    <Text className="text-gray-500 font-nunito-medium text-xs mt-1">
+                    <Text className="font-nunito-medium text-xs mt-1" style={{ color: colors.text.tertiary }}>
                       / {event.max_participants} max
                     </Text>
                   )}
                 </View>
-                
-                <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+
+                <View
+                  className="flex-1 p-4 rounded-xl"
+                  style={{ backgroundColor: colors.glass.light }}
+                >
+                  <Text className="font-nunito-medium text-xs mb-1" style={{ color: colors.text.secondary }}>
                     Places restantes
                   </Text>
-                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
-                    {event.spots_left !== undefined ? event.spots_left : (event.max_participants ? event.max_participants - (event.participants_count || 0) : '∞')}
+                  <Text className="font-nunito-extrabold text-2xl" style={{ color: colors.text.primary }}>
+                    {event.spots_left !== undefined ? event.spots_left : (event.max_participants ? event.max_participants - (event.participants_count || 0) : '...')}
                   </Text>
                 </View>
               </View>
 
               <View className="mt-4 flex-row" style={{ gap: 12 }}>
-                <Pressable
+                <GlassButton
+                  title="Modifier"
+                  variant="secondary"
+                  size="sm"
+                  icon={<Ionicons name="create-outline" size={18} color={colors.primary.DEFAULT} />}
                   onPress={() => {
-                    Alert.alert("Modifier", "Fonctionnalité de modification à venir");
+                    Alert.alert("Modifier", "Fonctionnalite de modification a venir");
                   }}
-                  className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
-                >
-                  <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
-                  <Text className="text-primary font-nunito-bold text-sm">
-                    Modifier
-                  </Text>
-                </Pressable>
-                
+                  style={{ flex: 1 }}
+                />
+
                 <Pressable
                   onPress={() => {
                     Alert.alert(
-                      "Supprimer l'événement",
-                      "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.",
+                      "Supprimer l'evenement",
+                      "Etes-vous sur de vouloir supprimer cet evenement ? Cette action est irreversible.",
                       [
                         { text: "Annuler", style: "cancel" },
                         {
                           text: "Supprimer",
                           style: "destructive",
                           onPress: () => {
-                            Alert.alert("Info", "Fonctionnalité de suppression à venir");
+                            Alert.alert("Info", "Fonctionnalite de suppression a venir");
                           },
                         },
                       ]
                     );
                   }}
-                  className="flex-1 bg-white border-2 border-red-500 py-3 rounded-xl flex-row items-center justify-center"
+                  className="flex-1 py-3 rounded-xl flex-row items-center justify-center"
+                  style={{
+                    backgroundColor: colors.elevated,
+                    borderWidth: 2,
+                    borderColor: colors.error,
+                  }}
                 >
-                  <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
-                  <Text className="text-red-500 font-nunito-bold text-sm">
+                  <Ionicons name="trash-outline" size={18} color={colors.error} style={{ marginRight: 6 }} />
+                  <Text className="font-nunito-bold text-sm" style={{ color: colors.error }}>
                     Supprimer
                   </Text>
                 </Pressable>
               </View>
-            </View>
+            </GlassCard>
           )}
         </View>
       </ScrollView>
 
       {/* Footer avec bouton d'action */}
       {!(event.is_creator && user?.user_type === "organizer") && (
-        <View className="px-6 pb-6 pt-4 bg-fond border-t border-gray-200">
+        <View
+          className="px-6 pb-6 pt-4"
+          style={{
+            backgroundColor: colors.glass.heavy,
+            borderTopWidth: 1,
+            borderTopColor: colors.glass.border,
+          }}
+        >
           <Pressable
             onPress={handleEventAction}
-            className={`py-4 rounded-full flex-row items-center justify-center ${
-              event.is_participant ? "bg-red-500" : "bg-primary"
-            }`}
+            className="py-4 rounded-full flex-row items-center justify-center"
             style={{
-              shadowColor: event.is_participant ? "#EF4444" : ACCENT,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 4,
+              backgroundColor: event.is_participant ? colors.error : colors.primary.DEFAULT,
+              ...shadows.md,
             }}
           >
-            <Ionicons 
-              name={event.is_participant ? "exit-outline" : "checkmark-circle"} 
-              size={20} 
-              color="white" 
-              style={{ marginRight: 8 }} 
+            <Ionicons
+              name={event.is_participant ? "exit-outline" : "checkmark-circle"}
+              size={20}
+              color="white"
+              style={{ marginRight: 8 }}
             />
             <Text className="text-center text-white font-nunito-bold text-base">
-              {event.is_participant ? "Quitter l'événement" : "Participer"}
+              {event.is_participant ? "Quitter l'evenement" : "Participer"}
             </Text>
           </Pressable>
         </View>
       )}
-    </View>
+    </WarmBackground>
   );
 }

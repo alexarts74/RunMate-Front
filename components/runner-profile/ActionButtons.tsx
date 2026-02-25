@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Pressable, Text, ActivityIndicator } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { useThemeColors, spacing } from "@/constants/theme";
+import GlassButton from "@/components/ui/GlassButton";
 
 type Props = {
   loading: boolean;
@@ -8,32 +10,32 @@ type Props = {
 };
 
 export function ActionButtons({ loading, handleSubmit }: Props) {
-  return (
-    <View className="space-y-3 px-8 mb-4">
-      <Pressable
-        className={`bg-purple py-3 rounded-full items-center ${
-          loading ? "opacity-70" : ""
-        }`}
-        onPress={handleSubmit}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text className="text-sm font-semibold text-white">
-            Sauvegarder mon profil
-          </Text>
-        )}
-      </Pressable>
+  const { colors } = useThemeColors();
 
-      <Pressable
-        className="py-3 rounded-full items-center border border-purple"
+  return (
+    <View style={styles.container}>
+      <GlassButton
+        title="Sauvegarder mon profil"
+        onPress={handleSubmit}
+        variant="primary"
+        loading={loading}
+        disabled={loading}
+        size="sm"
+      />
+      <GlassButton
+        title="Passer cette etape"
         onPress={() => router.replace("/(tabs)/matches")}
-      >
-        <Text className="text-sm font-semibold text-purple">
-          Passer cette étape
-        </Text>
-      </Pressable>
+        variant="secondary"
+        size="sm"
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    gap: 12,
+    paddingHorizontal: spacing.xl,
+    marginBottom: spacing.md,
+  },
+});

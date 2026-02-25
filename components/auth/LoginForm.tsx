@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import {
   View,
-  TextInput,
   Text,
   Pressable,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -23,8 +21,10 @@ import { useMatches } from "@/context/MatchesContext";
 import { ParticlesBackground } from "@/components/animations/ParticlesBackground";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNotifications } from "@/context/NotificationContext";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassInput from "@/components/ui/GlassInput";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -32,11 +32,11 @@ export default function LoginForm() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const { errors, validateForm, clearErrors, setErrors } = useFormValidation();
   const { setMatches } = useMatches();
   const { login } = useAuth();
   const { registerForPushNotifications } = useNotifications();
+  const { colors, shadows } = useThemeColors();
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -56,15 +56,13 @@ export default function LoginForm() {
       await login(userData);
       const currentUser = await authService.getCurrentUser();
 
-      // Enregistrer les notifications après la connexion
       await registerForPushNotifications();
 
-      // Ne charger les matches que pour les runners
       if (userData.user?.user_type === "runner" || currentUser?.user_type === "runner") {
-      const matchesData = await matchesService.getMatches();
-      setMatches(matchesData);
+        const matchesData = await matchesService.getMatches();
+        setMatches(matchesData);
       }
-      
+
       router.replace("/(tabs)/matches");
     } catch (err) {
       console.error("Erreur connexion:", err);
@@ -80,152 +78,103 @@ export default function LoginForm() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1"
     >
-      <View className="flex-1 bg-fond px-6">
+      <WarmBackground>
         <ParticlesBackground />
-        <SafeAreaView edges={['top']} className="flex-1">
-          <ScrollView 
+        <SafeAreaView edges={["top"]} className="flex-1">
+          <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
+            className="px-6"
           >
             <View className="flex-row items-center mb-10 mt-8">
               <Pressable
                 onPress={() => router.replace("/")}
-                className="bg-white p-2.5 rounded-full active:opacity-80"
+                className="p-2.5 rounded-full active:opacity-80"
                 style={{
-                  shadowColor: ACCENT,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 4,
-                  elevation: 3,
+                  backgroundColor: colors.glass.light,
+                  ...shadows.sm,
                 }}
               >
-                <Ionicons name="arrow-back" size={20} color={ACCENT} />
+                <Ionicons
+                  name="arrow-back"
+                  size={20}
+                  color={colors.primary.DEFAULT}
+                />
               </Pressable>
               <View className="flex-1 items-center justify-center">
-                <Text className="text-3xl font-nunito-extrabold text-gray-900 text-center">
+                <Text
+                  className="text-3xl font-nunito-extrabold text-center"
+                  style={{ color: colors.text.primary }}
+                >
                   Content de te
                 </Text>
-                <Text className="text-3xl font-nunito-extrabold text-primary text-center">
-                  revoir ! 👋
+                <Text
+                  className="text-3xl font-nunito-extrabold text-center"
+                  style={{ color: colors.primary.DEFAULT }}
+                >
+                  revoir !
                 </Text>
               </View>
             </View>
 
             <View className="flex-1 justify-center">
-              <View className="space-y-5">
-                <View>
-                  <Text className="text-gray-900 text-sm font-nunito-bold pl-2 mb-2">
-                    Email*
-                  </Text>
-                  <View
-                    className={`flex-row items-center bg-white border-2 rounded-full p-4 ${
-                      focusedInput === "email"
-                        ? `border-primary ${errors.email ? "border-red-500" : ""}`
-                        : errors.email
-                        ? "border-red-500"
-                        : "border-gray-200"
-                    }`}
-                    style={{
-                      shadowColor: focusedInput === "email" && !errors.email ? ACCENT : "#000",
-                      shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: focusedInput === "email" && !errors.email ? 0.15 : 0.05,
-                      shadowRadius: 2,
-                      elevation: 1,
-                    }}
-                  >
-                    <Ionicons name="mail-outline" size={20} color={ACCENT} style={{ marginRight: 12 }} />
-                    <TextInput
-                      className="flex-1 text-gray-900 font-nunito-medium"
-                      placeholder="Email"
-                      placeholderTextColor="#9CA3AF"
-                      value={formData.email}
-                      onChangeText={(value) => handleChange("email", value)}
-                      onFocus={() => setFocusedInput("email")}
-                      onBlur={() => setFocusedInput(null)}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
+              <View style={{ gap: 20 }}>
+                <GlassInput
+                  label="Email*"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChangeText={(value) => handleChange("email", value)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  error={errors.email}
+                  icon={
+                    <Ionicons
+                      name="mail-outline"
+                      size={20}
+                      color={colors.primary.DEFAULT}
                     />
-                  </View>
-                  {errors.email && (
-                    <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
-                      {errors.email}
-                    </Text>
-                  )}
-                </View>
+                  }
+                />
 
-                <View>
-                  <Text className="text-gray-900 text-sm font-nunito-bold pl-2 mb-2">
-                    Mot de passe*
-                  </Text>
-                  <View
-                    className={`flex-row items-center bg-white border-2 rounded-full p-4 ${
-                      focusedInput === "password"
-                        ? `border-primary ${errors.password ? "border-red-500" : ""}`
-                        : errors.password
-                        ? "border-red-500"
-                        : "border-gray-200"
-                    }`}
-                    style={{
-                      shadowColor: focusedInput === "password" && !errors.password ? ACCENT : "#000",
-                      shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: focusedInput === "password" && !errors.password ? 0.15 : 0.05,
-                      shadowRadius: 2,
-                      elevation: 1,
-                    }}
-                  >
-                    <Ionicons name="lock-closed-outline" size={20} color={ACCENT} style={{ marginRight: 12 }} />
-                    <TextInput
-                      className="flex-1 text-gray-900 font-nunito-medium"
-                      placeholder="Mot de passe"
-                      placeholderTextColor="#9CA3AF"
-                      value={formData.password}
-                      onChangeText={(value) => handleChange("password", value)}
-                      onFocus={() => setFocusedInput("password")}
-                      onBlur={() => setFocusedInput(null)}
-                      secureTextEntry
+                <GlassInput
+                  label="Mot de passe*"
+                  placeholder="Mot de passe"
+                  value={formData.password}
+                  onChangeText={(value) => handleChange("password", value)}
+                  secureTextEntry
+                  error={errors.password}
+                  icon={
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color={colors.primary.DEFAULT}
                     />
-                  </View>
-                  {errors.password && (
-                    <Text className="text-red-500 mt-1.5 ml-4 font-nunito-medium text-sm">
-                      {errors.password}
-                    </Text>
-                  )}
-                </View>
+                  }
+                />
 
                 {errors.general && (
-                  <Text className="text-red-500 text-center mt-2 font-nunito-medium text-sm">
+                  <Text
+                    className="text-center font-nunito-medium text-sm"
+                    style={{ color: colors.error }}
+                  >
                     {errors.general}
                   </Text>
                 )}
               </View>
             </View>
 
-            <Pressable
-              className={`bg-primary py-4 rounded-full mb-8 ${
-                loading ? "opacity-70" : ""
-              }`}
-              onPress={handleLogin}
-              disabled={loading}
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 4,
-              }}
-            >
-              {loading ? (
-                <ActivityIndicator color="#ffffff" />
-              ) : (
-                <Text className="text-base font-nunito-bold text-white text-center">
-                  Se connecter
-                </Text>
-              )}
-            </Pressable>
+            <View className="mb-8">
+              <GlassButton
+                title="Se connecter"
+                onPress={handleLogin}
+                loading={loading}
+                size="lg"
+              />
+            </View>
           </ScrollView>
         </SafeAreaView>
-      </View>
+      </WarmBackground>
     </KeyboardAvoidingView>
   );
 }

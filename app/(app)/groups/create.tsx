@@ -5,18 +5,18 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { CreateGroupForm } from "@/components/group/CreateGroupForm";
 import { useAuth } from "@/context/AuthContext";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import { useThemeColors } from "@/constants/theme";
 
 export default function CreateGroupScreen() {
   const { user } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
-  // Vérifier si l'utilisateur est organisateur
   useEffect(() => {
     if (user?.user_type !== "organizer") {
       Alert.alert(
-        "Accès restreint",
-        "Seuls les organisateurs peuvent créer des groupes. Veuillez créer un compte organisateur pour accéder à cette fonctionnalité.",
+        "Acces restreint",
+        "Seuls les organisateurs peuvent creer des groupes. Veuillez creer un compte organisateur pour acceder a cette fonctionnalite.",
         [
           {
             text: "OK",
@@ -28,23 +28,23 @@ export default function CreateGroupScreen() {
   }, [user]);
 
   return (
-    <View className="flex-1 bg-fond">
-      <SafeAreaView className="bg-white" edges={['top']}>
+    <WarmBackground>
+      <SafeAreaView style={{ backgroundColor: colors.glass.heavy }} edges={['top']}>
         <View
-          className="flex-row items-center px-6 py-4 bg-white border-b border-gray-200"
+          className="flex-row items-center px-6 py-4"
           style={{
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.05,
-            shadowRadius: 4,
-            elevation: 2,
+            backgroundColor: colors.glass.heavy,
+            ...shadows.sm,
           }}
         >
           <Pressable onPress={() => router.back()} className="mr-4">
-            <Ionicons name="close" size={24} color={ACCENT} />
+            <Ionicons name="close" size={24} color={colors.primary.DEFAULT} />
           </Pressable>
-          <Text className="text-gray-900 text-xl font-nunito-extrabold flex-1">
-            Créer un groupe
+          <Text
+            className="text-xl font-nunito-extrabold flex-1"
+            style={{ color: colors.text.primary }}
+          >
+            Creer un groupe
           </Text>
         </View>
       </SafeAreaView>
@@ -54,10 +54,13 @@ export default function CreateGroupScreen() {
         className="flex-1"
       >
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="px-6 py-6 bg-fond">
+          <View className="px-6 py-6">
             {/* Description */}
-            <Text className="text-gray-600 font-nunito-medium text-base mb-6">
-              Créez votre groupe de running et commencez à courir ensemble !
+            <Text
+              className="font-nunito-medium text-base mb-6"
+              style={{ color: colors.text.secondary }}
+            >
+              Creez votre groupe de running et commencez a courir ensemble !
             </Text>
 
             {/* Formulaire */}
@@ -65,6 +68,6 @@ export default function CreateGroupScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </WarmBackground>
   );
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import { View, Text } from "react-native";
+import { useThemeColors } from "@/constants/theme";
+
 const objectiveOptions = [
   {
     key: "5km_sous_25min",
@@ -41,9 +43,11 @@ type Props = {
 };
 
 export function ObjectiveSelect({ handleChange }: Props) {
+  const { colors } = useThemeColors();
+
   return (
     <View>
-      <Text className="text-white text-sm font-semibold pl-2 mb-1">
+      <Text style={{ color: colors.text.primary }} className="text-sm font-semibold pl-2 mb-1">
         Objectif
       </Text>
 
@@ -57,20 +61,20 @@ export function ObjectiveSelect({ handleChange }: Props) {
         placeholder="Votre objectif"
         boxStyles={{
           borderWidth: 1,
-          borderColor: "#394047",
+          borderColor: colors.glass.border,
           borderRadius: 100,
           padding: 16,
           marginBottom: 2,
-          backgroundColor: "#12171b",
+          backgroundColor: colors.glass.light,
         }}
         dropdownStyles={{
           borderWidth: 1,
-          borderColor: "#394047",
+          borderColor: colors.glass.border,
           borderRadius: 8,
-          backgroundColor: "#12171b",
+          backgroundColor: colors.elevated,
         }}
-        inputStyles={{ color: "#fff" }}
-        dropdownTextStyles={{ color: "#fff" }}
+        inputStyles={{ color: colors.text.primary }}
+        dropdownTextStyles={{ color: colors.text.secondary }}
         search={false}
       />
     </View>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { View, Text, Image, Pressable, ScrollView, Linking } from "react-native";
+import { View, Text, Pressable, ScrollView, Linking, StyleSheet } from "react-native";
 import { organizerProfileService } from "@/service/api/organizerProfile";
 import { OrganizerProfile } from "@/interface/User";
-
-const ACCENT = "#F97316";
+import { useThemeColors, typography, radii, spacing } from "@/constants/theme";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import WarmBackground from "@/components/ui/WarmBackground";
+import PulseLoader from "@/components/ui/PulseLoader";
 
 type OrganizerProfileViewProps = {
   setIsEditing: (value: boolean) => void;
@@ -21,6 +24,7 @@ const organizationTypeLabels: { [key: string]: string } = {
 
 export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps) {
   const { user } = useAuth();
+  const { colors, shadows } = useThemeColors();
   const [organizerProfile, setOrganizerProfile] = useState<OrganizerProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -64,220 +68,286 @@ export function OrganizerProfileView({ setIsEditing }: OrganizerProfileViewProps
 
   if (loading) {
     return (
-      <View className="flex-1 bg-fond items-center justify-center">
-        <Text className="text-gray-600 font-nunito-medium">Chargement...</Text>
-      </View>
+      <WarmBackground style={styles.centeredContainer}>
+        <PulseLoader />
+        <Text style={[styles.loadingText, { color: colors.text.secondary }]}>
+          Chargement...
+        </Text>
+      </WarmBackground>
     );
   }
 
   if (!organizerProfile) {
     return (
-      <View className="flex-1 bg-fond items-center justify-center px-6">
-        <Ionicons name="business-outline" size={64} color="#9CA3AF" />
-        <Text className="text-gray-900 font-nunito-bold text-xl mt-4 text-center">
+      <WarmBackground style={styles.centeredContainer}>
+        <Ionicons name="business-outline" size={64} color={colors.text.tertiary} />
+        <Text style={[styles.emptyTitle, { color: colors.text.primary }]}>
           Aucun profil organisateur
         </Text>
-        <Text className="text-gray-600 font-nunito-medium text-sm mt-2 text-center">
-          Votre profil organisateur n'a pas encore été créé.
+        <Text style={[styles.emptySubtitle, { color: colors.text.secondary }]}>
+          Votre profil organisateur n'a pas encore ete cree.
         </Text>
-        <Pressable
+        <GlassButton
+          title="Creer mon profil"
           onPress={() => setIsEditing(true)}
-          className="bg-primary px-6 py-3 rounded-full mt-6"
-        >
-          <Text className="text-white font-nunito-bold">Créer mon profil</Text>
-        </Pressable>
-      </View>
+          variant="primary"
+          style={styles.createButton}
+        />
+      </WarmBackground>
     );
   }
 
+  const renderField = (label: string, value: string | undefined | null) => (
+    <View style={styles.fieldContainer}>
+      <Text style={[styles.label, { color: colors.text.secondary }]}>{label}</Text>
+      <GlassCard variant="light" style={styles.fieldCard}>
+        <Text style={[styles.fieldValue, { color: colors.text.primary }]}>
+          {value || "Non renseigne"}
+        </Text>
+      </GlassCard>
+    </View>
+  );
+
+  const renderPressableField = (
+    label: string,
+    value: string,
+    onPress: () => void,
+    iconName: string,
+  ) => (
+    <View style={styles.fieldContainer}>
+      <Text style={[styles.label, { color: colors.text.secondary }]}>{label}</Text>
+      <Pressable onPress={onPress}>
+        <GlassCard variant="light" style={styles.fieldCard}>
+          <View style={styles.pressableFieldContent}>
+            <Text
+              style={[styles.fieldValue, { color: colors.primary.DEFAULT, flex: 1 }]}
+              numberOfLines={1}
+            >
+              {value}
+            </Text>
+            <Ionicons name={iconName as any} size={20} color={colors.primary.DEFAULT} />
+          </View>
+        </GlassCard>
+      </Pressable>
+    </View>
+  );
+
   return (
-    <ScrollView
-      className="flex-1 bg-fond px-6 py-6 pt-6 pb-24"
-      contentContainerStyle={{ paddingBottom: 150 }}
-    >
-      <View className="flex-row justify-between items-center mb-6">
-        <Text className="text-2xl font-nunito-extrabold text-gray-900">Mon Organisation</Text>
-        <Pressable
-          onPress={() => setIsEditing(true)}
-          className="flex-row items-center px-3 py-3 rounded-full bg-tertiary"
-          style={{
-            shadowColor: ACCENT,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
-        >
-          <Ionicons name="pencil" size={20} color={ACCENT} />
-        </Pressable>
-      </View>
-
-      <View className="items-center mb-8">
-        <View className="w-32 h-32 rounded-full border-4 border-primary bg-primary/10 items-center justify-center">
-          <Ionicons name="business" size={64} color={ACCENT} />
-        </View>
-        <Text className="text-gray-900 font-nunito-extrabold text-xl mt-4 text-center">
-          {organizerProfile.organization_name}
-        </Text>
-        <Text className="text-gray-600 font-nunito-medium text-sm mt-1">
-          {organizationTypeLabels[organizerProfile.organization_type] || organizerProfile.organization_type}
-        </Text>
-      </View>
-
-      <View className="space-y-4">
-        {/* Description */}
-        {organizerProfile.description && (
-          <View>
-            <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-              Description
-            </Text>
-            <View
-              className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-medium">
-                {organizerProfile.description}
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {/* Site web */}
-        {organizerProfile.website && (
-          <View>
-            <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-              Site web
-            </Text>
-            <Pressable
-              onPress={() => handleOpenWebsite(organizerProfile.website!)}
-              className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.05,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-            >
-              <Text className="text-primary font-nunito-medium flex-1" numberOfLines={1}>
-                {organizerProfile.website}
-              </Text>
-              <Ionicons name="open-outline" size={20} color={ACCENT} />
-            </Pressable>
-          </View>
-        )}
-
-        {/* Email de contact */}
-        {organizerProfile.email && (
-          <View>
-            <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-              Email de contact
-            </Text>
-            <Pressable
-              onPress={() => handleEmail(organizerProfile.email!)}
-              className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.05,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-medium flex-1" numberOfLines={1}>
-                {organizerProfile.email}
-              </Text>
-              <Ionicons name="mail-outline" size={20} color={ACCENT} />
-            </Pressable>
-          </View>
-        )}
-
-        {/* Téléphone */}
-        {organizerProfile.phone && (
-          <View>
-            <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-              Téléphone
-            </Text>
-            <Pressable
-              onPress={() => handleCall(organizerProfile.phone!)}
-              className="w-full border border-gray-200 rounded-full p-4 bg-white flex-row items-center justify-between"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.05,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-            >
-              <Text className="text-gray-900 font-nunito-medium flex-1" numberOfLines={1}>
-                {organizerProfile.phone}
-              </Text>
-              <Ionicons name="call-outline" size={20} color={ACCENT} />
-            </Pressable>
-          </View>
-        )}
-
-        {/* Adresse */}
-        {(organizerProfile.address || organizerProfile.city) && (
-          <View>
-            <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-              Localisation
-            </Text>
-            <View
-              className="w-full border border-gray-200 rounded-2xl p-4 bg-white"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              {organizerProfile.address && (
-                <Text className="text-gray-900 font-nunito-medium mb-1">
-                  {organizerProfile.address}
-                </Text>
-              )}
-              <Text className="text-gray-900 font-nunito-medium">
-                {organizerProfile.postcode && `${organizerProfile.postcode} `}
-                {organizerProfile.city}
-                {organizerProfile.department && ` (${organizerProfile.department})`}
-              </Text>
-              {organizerProfile.country && (
-                <Text className="text-gray-600 font-nunito-medium text-sm mt-1">
-                  {organizerProfile.country}
-                </Text>
-              )}
-            </View>
-          </View>
-        )}
-
-        {/* Email du compte */}
-        <View>
-          <Text className="text-gray-700 text-sm font-nunito-bold pl-2 mb-2">
-            Email du compte
-          </Text>
-          <View
-            className="w-full border border-gray-200 rounded-full p-4 bg-white"
-            style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
+    <WarmBackground>
+      <ScrollView
+        style={styles.flex}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text.primary }]}>Mon Organisation</Text>
+          <Pressable
+            onPress={() => setIsEditing(true)}
+            style={[
+              styles.editButton,
+              shadows.sm,
+              { backgroundColor: colors.glass.light, borderColor: colors.glass.border },
+            ]}
           >
-            <Text className="text-gray-900 font-nunito-medium">{user?.email}</Text>
-          </View>
+            <Ionicons name="pencil" size={20} color={colors.primary.DEFAULT} />
+          </Pressable>
         </View>
-      </View>
-    </ScrollView>
+
+        <View style={styles.avatarSection}>
+          <View
+            style={[
+              styles.orgAvatar,
+              {
+                borderColor: colors.primary.light,
+                backgroundColor: colors.primary.subtle,
+              },
+            ]}
+          >
+            <Ionicons name="business" size={64} color={colors.primary.DEFAULT} />
+          </View>
+          <Text style={[styles.orgName, { color: colors.text.primary }]}>
+            {organizerProfile.organization_name}
+          </Text>
+          <Text style={[styles.orgType, { color: colors.text.secondary }]}>
+            {organizationTypeLabels[organizerProfile.organization_type] || organizerProfile.organization_type}
+          </Text>
+        </View>
+
+        <View style={styles.fieldsContainer}>
+          {/* Description */}
+          {organizerProfile.description && (
+            <View style={styles.fieldContainer}>
+              <Text style={[styles.label, { color: colors.text.secondary }]}>Description</Text>
+              <GlassCard variant="light">
+                <Text style={[styles.fieldValue, { color: colors.text.primary }]}>
+                  {organizerProfile.description}
+                </Text>
+              </GlassCard>
+            </View>
+          )}
+
+          {/* Site web */}
+          {organizerProfile.website && (
+            renderPressableField(
+              "Site web",
+              organizerProfile.website,
+              () => handleOpenWebsite(organizerProfile.website!),
+              "open-outline",
+            )
+          )}
+
+          {/* Email de contact */}
+          {organizerProfile.email && (
+            renderPressableField(
+              "Email de contact",
+              organizerProfile.email,
+              () => handleEmail(organizerProfile.email!),
+              "mail-outline",
+            )
+          )}
+
+          {/* Telephone */}
+          {organizerProfile.phone && (
+            renderPressableField(
+              "Telephone",
+              organizerProfile.phone,
+              () => handleCall(organizerProfile.phone!),
+              "call-outline",
+            )
+          )}
+
+          {/* Adresse */}
+          {(organizerProfile.address || organizerProfile.city) && (
+            <View style={styles.fieldContainer}>
+              <Text style={[styles.label, { color: colors.text.secondary }]}>Localisation</Text>
+              <GlassCard variant="light">
+                {organizerProfile.address && (
+                  <Text style={[styles.fieldValue, { color: colors.text.primary, marginBottom: 4 }]}>
+                    {organizerProfile.address}
+                  </Text>
+                )}
+                <Text style={[styles.fieldValue, { color: colors.text.primary }]}>
+                  {organizerProfile.postcode && `${organizerProfile.postcode} `}
+                  {organizerProfile.city}
+                  {organizerProfile.department && ` (${organizerProfile.department})`}
+                </Text>
+                {organizerProfile.country && (
+                  <Text style={[styles.fieldSubValue, { color: colors.text.secondary }]}>
+                    {organizerProfile.country}
+                  </Text>
+                )}
+              </GlassCard>
+            </View>
+          )}
+
+          {/* Email du compte */}
+          {renderField("Email du compte", user?.email)}
+        </View>
+      </ScrollView>
+    </WarmBackground>
   );
 }
 
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  centeredContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.lg,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: 150,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: spacing.lg,
+  },
+  title: {
+    fontFamily: typography.h1.fontFamily,
+    fontSize: typography.h1.fontSize,
+    lineHeight: typography.h1.lineHeight,
+  },
+  editButton: {
+    padding: 12,
+    borderRadius: radii.full,
+    borderWidth: 1,
+  },
+  avatarSection: {
+    alignItems: "center",
+    marginBottom: spacing.xl,
+  },
+  orgAvatar: {
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+    borderWidth: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  orgName: {
+    fontFamily: typography.h1.fontFamily,
+    fontSize: 20,
+    marginTop: spacing.md,
+    textAlign: "center",
+  },
+  orgType: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.caption.fontSize,
+    marginTop: 4,
+  },
+  fieldsContainer: {
+    gap: spacing.md,
+  },
+  fieldContainer: {
+    gap: 6,
+  },
+  label: {
+    fontFamily: typography.label.fontFamily,
+    fontSize: typography.label.fontSize,
+    paddingLeft: 4,
+  },
+  fieldCard: {
+    borderRadius: radii.full,
+  },
+  fieldValue: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.bodyMedium.fontSize,
+  },
+  fieldSubValue: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.caption.fontSize,
+    marginTop: 4,
+  },
+  pressableFieldContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  loadingText: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.body.fontSize,
+    marginTop: spacing.md,
+  },
+  emptyTitle: {
+    fontFamily: typography.h2.fontFamily,
+    fontSize: typography.h2.fontSize,
+    marginTop: spacing.md,
+    textAlign: "center",
+  },
+  emptySubtitle: {
+    fontFamily: typography.bodyMedium.fontFamily,
+    fontSize: typography.caption.fontSize,
+    marginTop: spacing.sm,
+    textAlign: "center",
+  },
+  createButton: {
+    marginTop: spacing.lg,
+  },
+});

@@ -15,16 +15,20 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { GroupInfo, JoinRequest } from "@/interface/Group";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function OrganizerGroupDetailsScreen() {
   const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
+  const { colors, shadows, gradients } = useThemeColors();
   const [group, setGroup] = useState<GroupInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Admin State
   const [pendingRequests, setPendingRequests] = useState<JoinRequest[]>([]);
   const [showRequests, setShowRequests] = useState(false);
@@ -88,36 +92,47 @@ export default function OrganizerGroupDetailsScreen() {
 
   if (!group) {
     return (
-      <View className="flex-1 bg-fond items-center justify-center">
-        <Text className="text-gray-900">Groupe non trouvé</Text>
-      </View>
+      <WarmBackground>
+        <View className="flex-1 items-center justify-center">
+          <Text className="font-nunito-medium" style={{ color: colors.text.primary }}>
+            Groupe non trouvé
+          </Text>
+        </View>
+      </WarmBackground>
     );
   }
 
   // Vérifier que l'utilisateur est bien admin
   if (!group.is_admin) {
     return (
-      <View className="flex-1 bg-fond items-center justify-center px-6">
-        <Ionicons name="lock-closed" size={64} color={ACCENT} />
-        <Text className="text-gray-900 font-nunito-bold text-xl mt-4 text-center">
-          Accès restreint
-        </Text>
-        <Text className="text-gray-600 font-nunito-medium text-center mt-2">
-          Vous n'êtes pas administrateur de ce groupe.
-        </Text>
-        <Pressable
-          onPress={() => router.back()}
-          className="bg-primary px-6 py-3 rounded-full mt-6"
-        >
-          <Text className="text-white font-nunito-bold">Retour</Text>
-        </Pressable>
-      </View>
+      <WarmBackground>
+        <View className="flex-1 items-center justify-center px-6">
+          <Ionicons name="lock-closed" size={64} color={colors.primary.DEFAULT} />
+          <Text
+            className="font-nunito-bold text-xl mt-4 text-center"
+            style={{ color: colors.text.primary }}
+          >
+            Accès restreint
+          </Text>
+          <Text
+            className="font-nunito-medium text-center mt-2"
+            style={{ color: colors.text.secondary }}
+          >
+            Vous n'êtes pas administrateur de ce groupe.
+          </Text>
+          <GlassButton
+            title="Retour"
+            onPress={() => router.back()}
+            style={{ marginTop: 24 }}
+          />
+        </View>
+      </WarmBackground>
     );
   }
 
   return (
-    <View className="flex-1 bg-fond">
-      <ScrollView 
+    <WarmBackground>
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
       >
@@ -132,25 +147,30 @@ export default function OrganizerGroupDetailsScreen() {
             className="w-full h-full"
             style={{ resizeMode: "cover" }}
           />
-          
-          <View 
-            className="absolute inset-0"
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            }}
+
+          <LinearGradient
+            colors={gradients.imageOverlay as unknown as [string, string, ...string[]]}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
           />
-          
+
           <Pressable
             onPress={() => router.back()}
-            className="absolute left-4 bg-white/90 p-3 rounded-full"
-            style={{ top: insets.top + 8 }}
+            className="absolute left-4 p-3 rounded-full"
+            style={{
+              top: insets.top + 8,
+              backgroundColor: colors.glass.heavy,
+              ...shadows.sm,
+            }}
           >
-            <Ionicons name="arrow-back" size={24} color={ACCENT} />
+            <Ionicons name="arrow-back" size={24} color={colors.primary.DEFAULT} />
           </Pressable>
 
           <View className="absolute bottom-0 left-0 right-0 p-6">
             <View className="flex-row items-center mb-2">
-              <View className="bg-primary px-3 py-1 rounded-full mr-2">
+              <View
+                className="px-3 py-1 rounded-full mr-2"
+                style={{ backgroundColor: colors.primary.DEFAULT }}
+              >
                 <Text className="text-white font-nunito-bold text-xs">Votre groupe</Text>
               </View>
             </View>
@@ -158,7 +178,10 @@ export default function OrganizerGroupDetailsScreen() {
               {group.name}
             </Text>
             <View className="flex-row items-center">
-              <View className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full flex-row items-center">
+              <View
+                className="px-3 py-1.5 rounded-full flex-row items-center"
+                style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+              >
                 <Ionicons name="people" size={16} color="white" />
                 <Text className="text-white font-nunito-medium text-sm ml-2">
                   {group.members_count} membres
@@ -171,57 +194,72 @@ export default function OrganizerGroupDetailsScreen() {
         <View className="px-4 pt-6">
           {/* Statistiques */}
           {user?.user_type === "organizer" && (
-            <View className="bg-white rounded-2xl p-5 mb-4"
-              style={{
-                shadowColor: ACCENT,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
+            <GlassCard variant="medium" style={{ marginBottom: 16 }}>
               <View className="flex-row items-center mb-4">
-                <View className="w-10 h-10 rounded-xl bg-primary/10 items-center justify-center mr-3">
-                  <Ionicons name="stats-chart" size={20} color={ACCENT} />
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="stats-chart" size={20} color={colors.primary.DEFAULT} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-lg">
+                <Text
+                  className="font-nunito-bold text-lg"
+                  style={{ color: colors.text.primary }}
+                >
                   Statistiques du groupe
                 </Text>
               </View>
-              
+
               <View className="flex-row" style={{ gap: 12 }}>
-                <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+                <View
+                  className="flex-1 p-4 rounded-xl"
+                  style={{ backgroundColor: colors.glass.light }}
+                >
+                  <Text
+                    className="font-nunito-medium text-xs mb-1"
+                    style={{ color: colors.text.secondary }}
+                  >
                     Membres
                   </Text>
-                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                  <Text
+                    className="font-nunito-extrabold text-2xl"
+                    style={{ color: colors.text.primary }}
+                  >
                     {group.members_count || 0}
                   </Text>
                 </View>
-                
-                <View className="flex-1 bg-tertiary p-4 rounded-xl">
-                  <Text className="text-gray-600 font-nunito-medium text-xs mb-1">
+
+                <View
+                  className="flex-1 p-4 rounded-xl"
+                  style={{ backgroundColor: colors.glass.light }}
+                >
+                  <Text
+                    className="font-nunito-medium text-xs mb-1"
+                    style={{ color: colors.text.secondary }}
+                  >
                     Demandes
                   </Text>
-                  <Text className="text-gray-900 font-nunito-extrabold text-2xl">
+                  <Text
+                    className="font-nunito-extrabold text-2xl"
+                    style={{ color: colors.text.primary }}
+                  >
                     {pendingRequests.length}
                   </Text>
                 </View>
               </View>
 
               <View className="mt-4 flex-row" style={{ gap: 12 }}>
-                <Pressable
+                <GlassButton
+                  title="Modifier"
+                  variant="secondary"
+                  size="sm"
+                  icon={<Ionicons name="create-outline" size={18} color={colors.primary.DEFAULT} />}
                   onPress={() => {
                     Alert.alert("Modifier", "Fonctionnalité de modification à venir");
                   }}
-                  className="flex-1 bg-white border-2 border-primary py-3 rounded-xl flex-row items-center justify-center"
-                >
-                  <Ionicons name="create-outline" size={18} color={ACCENT} style={{ marginRight: 6 }} />
-                  <Text className="text-primary font-nunito-bold text-sm">
-                    Modifier
-                  </Text>
-                </Pressable>
-                
+                  style={{ flex: 1 }}
+                />
+
                 <Pressable
                   onPress={() => {
                     Alert.alert(
@@ -239,63 +277,84 @@ export default function OrganizerGroupDetailsScreen() {
                       ]
                     );
                   }}
-                  className="flex-1 bg-white border-2 border-red-500 py-3 rounded-xl flex-row items-center justify-center"
+                  className="flex-1 py-3 rounded-xl flex-row items-center justify-center"
+                  style={{
+                    backgroundColor: colors.elevated,
+                    borderWidth: 2,
+                    borderColor: colors.error,
+                  }}
                 >
-                  <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
-                  <Text className="text-red-500 font-nunito-bold text-sm">
+                  <Ionicons name="trash-outline" size={18} color={colors.error} style={{ marginRight: 6 }} />
+                  <Text className="font-nunito-bold text-sm" style={{ color: colors.error }}>
                     Supprimer
                   </Text>
                 </Pressable>
               </View>
-            </View>
+            </GlassCard>
           )}
 
           {/* Description Card */}
           {group.description && (
-            <View className="bg-white rounded-2xl p-5 mb-4" style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
-            }}>
+            <GlassCard variant="light" style={{ marginBottom: 16 }}>
               <View className="flex-row items-center mb-3">
-                <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                  <Ionicons name="information-circle" size={20} color="#525252" />
+                <View
+                  className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="information-circle" size={20} color={colors.text.secondary} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-lg">
+                <Text
+                  className="font-nunito-bold text-lg"
+                  style={{ color: colors.text.primary }}
+                >
                   À propos
                 </Text>
               </View>
-              <Text className="text-gray-600 font-nunito leading-6">
+              <Text
+                className="font-nunito leading-6"
+                style={{ color: colors.text.secondary }}
+              >
                 {group.description}
               </Text>
-            </View>
+            </GlassCard>
           )}
 
           {/* Demandes d'adhésion */}
           <Pressable
             onPress={() => setShowRequests(!showRequests)}
-            className="bg-white rounded-2xl p-5 flex-row items-center justify-between mb-4"
             style={{
-              shadowColor: ACCENT,
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
+              backgroundColor: colors.glass.medium,
+              borderRadius: 16,
+              padding: 20,
+              marginBottom: 16,
+              borderWidth: 1,
+              borderColor: colors.glass.border,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              ...shadows.sm,
             }}
           >
             <View className="flex-row items-center flex-1">
-              <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
-                <Ionicons name="people-outline" size={20} color={ACCENT} />
+              <View
+                className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                style={{ backgroundColor: colors.primary.subtle }}
+              >
+                <Ionicons name="people-outline" size={20} color={colors.primary.DEFAULT} />
               </View>
-              <Text className="text-gray-900 font-nunito-bold text-base">
+              <Text
+                className="font-nunito-bold text-base"
+                style={{ color: colors.text.primary }}
+              >
                 Demandes d'adhésion
               </Text>
             </View>
             <View className="flex-row items-center">
               {pendingRequests.length > 0 && (
-                <View className="bg-red-500 px-2.5 py-1 rounded-full mr-3">
+                <View
+                  className="px-2.5 py-1 rounded-full mr-3"
+                  style={{ backgroundColor: colors.error }}
+                >
                   <Text className="text-white text-xs font-nunito-bold">
                     {pendingRequests.length}
                   </Text>
@@ -304,25 +363,25 @@ export default function OrganizerGroupDetailsScreen() {
               <Ionicons
                 name={showRequests ? "chevron-up" : "chevron-down"}
                 size={24}
-                color="#525252"
+                color={colors.text.secondary}
               />
             </View>
           </Pressable>
 
           {showRequests && (
-            <View className="mb-4 bg-white rounded-2xl overflow-hidden" style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 2,
-            }}>
+            <GlassCard variant="light" noPadding style={{ marginBottom: 16 }}>
               {pendingRequests.length === 0 ? (
                 <View className="p-8 items-center">
-                  <View className="bg-tertiary p-4 rounded-full mb-3">
-                    <Ionicons name="checkmark-circle" size={40} color="#525252" />
+                  <View
+                    className="p-4 rounded-full mb-3"
+                    style={{ backgroundColor: colors.glass.light }}
+                  >
+                    <Ionicons name="checkmark-circle" size={40} color={colors.text.secondary} />
                   </View>
-                  <Text className="text-gray-500 font-nunito text-center">
+                  <Text
+                    className="font-nunito text-center"
+                    style={{ color: colors.text.tertiary }}
+                  >
                     Aucune demande en attente
                   </Text>
                 </View>
@@ -330,9 +389,12 @@ export default function OrganizerGroupDetailsScreen() {
                 pendingRequests.map((req, index) => (
                   <View
                     key={req.id}
-                    className={`flex-row items-center p-4 ${
-                      index !== pendingRequests.length - 1 ? 'border-b border-gray-100' : ''
-                    }`}
+                    className="flex-row items-center p-4"
+                    style={
+                      index !== pendingRequests.length - 1
+                        ? { borderBottomWidth: 1, borderBottomColor: colors.glass.border }
+                        : undefined
+                    }
                   >
                     <Image
                       source={
@@ -341,15 +403,20 @@ export default function OrganizerGroupDetailsScreen() {
                           : require("@/assets/images/favicon.png")
                       }
                       className="w-12 h-12 rounded-full mr-3"
+                      style={{ borderWidth: 2, borderColor: colors.glass.border }}
                     />
                     <View className="flex-1">
-                      <Text className="text-gray-900 font-nunito-bold">
+                      <Text
+                        className="font-nunito-bold"
+                        style={{ color: colors.text.primary }}
+                      >
                         {req.user.first_name} {req.user.last_name}
                       </Text>
                       {req.message && (
                         <Text
-                          className="text-gray-500 font-nunito text-xs mt-0.5"
+                          className="font-nunito text-xs mt-0.5"
                           numberOfLines={1}
+                          style={{ color: colors.text.tertiary }}
                         >
                           {req.message}
                         </Text>
@@ -358,37 +425,39 @@ export default function OrganizerGroupDetailsScreen() {
                     <View className="flex-row ml-2">
                       <TouchableOpacity
                         onPress={() => handleDeclineRequest(req.id, req.user.id)}
-                        className="bg-red-50 p-2.5 rounded-full mr-2"
+                        className="p-2.5 rounded-full mr-2"
+                        style={{ backgroundColor: 'rgba(212,115,110,0.1)' }}
                       >
-                        <Ionicons name="close" size={20} color="#EF4444" />
+                        <Ionicons name="close" size={20} color={colors.error} />
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleAcceptRequest(req.id, req.user.id)}
-                        className="bg-green-50 p-2.5 rounded-full"
+                        className="p-2.5 rounded-full"
+                        style={{ backgroundColor: colors.primary.subtle }}
                       >
-                        <Ionicons name="checkmark" size={20} color="#10B981" />
+                        <Ionicons name="checkmark" size={20} color={colors.primary.DEFAULT} />
                       </TouchableOpacity>
                     </View>
                   </View>
                 ))
               )}
-            </View>
+            </GlassCard>
           )}
 
           {/* Membres */}
           {group.members && group.members.length > 0 && (
-            <View className="bg-white rounded-2xl p-5 mb-4" style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
-            }}>
+            <GlassCard variant="light" style={{ marginBottom: 16 }}>
               <View className="flex-row items-center mb-4">
-                <View className="w-10 h-10 rounded-full bg-tertiary items-center justify-center mr-3">
-                  <Ionicons name="people" size={20} color="#525252" />
+                <View
+                  className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                  style={{ backgroundColor: colors.primary.subtle }}
+                >
+                  <Ionicons name="people" size={20} color={colors.text.secondary} />
                 </View>
-                <Text className="text-gray-900 font-nunito-bold text-lg">
+                <Text
+                  className="font-nunito-bold text-lg"
+                  style={{ color: colors.text.primary }}
+                >
                   Membres ({group.members.length})
                 </Text>
               </View>
@@ -404,23 +473,23 @@ export default function OrganizerGroupDetailsScreen() {
                       className="w-16 h-16 rounded-full mb-2"
                       style={{
                         borderWidth: 2,
-                        borderColor: '#E9D5FF',
+                        borderColor: colors.primary.light,
                       }}
                     />
                     <Text
-                      className="text-gray-900 font-nunito text-center text-xs"
+                      className="font-nunito text-center text-xs"
                       numberOfLines={1}
+                      style={{ color: colors.text.primary }}
                     >
                       {member.first_name}
                     </Text>
                   </View>
                 ))}
               </View>
-            </View>
+            </GlassCard>
           )}
         </View>
       </ScrollView>
-    </View>
+    </WarmBackground>
   );
 }
-

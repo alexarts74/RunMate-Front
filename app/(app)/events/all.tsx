@@ -15,8 +15,9 @@ import { PremiumFeatureModal } from "@/components/common/PremiumFeatureModal";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
-const ACCENT = "#F97316";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 const distances = [
   { label: "Tous", value: 1000, id: "all" },
@@ -35,6 +36,7 @@ export default function AllEventsScreen() {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
+  const { colors, shadows } = useThemeColors();
 
   const handleFeatureAccess = () => {
     if (user?.user_type === "organizer") {
@@ -59,8 +61,8 @@ export default function AllEventsScreen() {
       const eventsData = response.map((item: any) => item.event || item);
       setEvents(eventsData);
     } catch (error) {
-      console.error("Erreur lors du chargement des événements:", error);
-      setError("Impossible de charger les événements. Veuillez réessayer.");
+      console.error("Erreur lors du chargement des evenements:", error);
+      setError("Impossible de charger les evenements. Veuillez reessayer.");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -84,7 +86,13 @@ export default function AllEventsScreen() {
   }, [user?.is_premium, user?.user_type]);
 
   const DistanceFilter = () => (
-    <View className="py-3 border-b border-neutral-100">
+    <View
+      style={{
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.glass.border,
+      }}
+    >
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -98,12 +106,17 @@ export default function AllEventsScreen() {
               loadEvents(item.value);
             }}
             className="px-4 py-2.5 rounded-xl"
-            style={{ backgroundColor: radius === item.value ? ACCENT : "#F5F5F5" }}
+            style={{
+              backgroundColor:
+                radius === item.value ? colors.primary.DEFAULT : colors.glass.light,
+            }}
           >
             <Text
-              className={`font-nunito-bold text-sm ${
-                radius === item.value ? "text-white" : "text-neutral-600"
-              }`}
+              className="font-nunito-bold text-sm"
+              style={{
+                color:
+                  radius === item.value ? colors.text.inverse : colors.text.secondary,
+              }}
             >
               {item.label}
             </Text>
@@ -121,14 +134,16 @@ export default function AllEventsScreen() {
     if (error) {
       return (
         <View className="flex-1 justify-center items-center p-6">
-          <Text className="text-red-500 text-center mb-4 font-nunito-medium">{error}</Text>
-          <Pressable
-            onPress={() => loadEvents()}
-            className="px-6 py-3 rounded-2xl"
-            style={{ backgroundColor: ACCENT }}
+          <Text
+            className="text-center mb-4 font-nunito-medium"
+            style={{ color: colors.error }}
           >
-            <Text className="text-white font-nunito-bold">Réessayer</Text>
-          </Pressable>
+            {error}
+          </Text>
+          <GlassButton
+            title="Reessayer"
+            onPress={() => loadEvents()}
+          />
         </View>
       );
     }
@@ -138,17 +153,23 @@ export default function AllEventsScreen() {
         <View className="flex-1 justify-center items-center p-6">
           <View
             className="w-20 h-20 rounded-full items-center justify-center mb-6"
-            style={{ backgroundColor: `${ACCENT}15` }}
+            style={{ backgroundColor: colors.primary.subtle }}
           >
-            <Ionicons name="calendar-outline" size={40} color={ACCENT} />
+            <Ionicons name="calendar-outline" size={40} color={colors.primary.DEFAULT} />
           </View>
-          <Text className="text-neutral-900 text-xl font-nunito-bold text-center mb-2">
-            Aucun événement
+          <Text
+            className="text-xl font-nunito-bold text-center mb-2"
+            style={{ color: colors.text.primary }}
+          >
+            Aucun evenement
           </Text>
-          <Text className="text-neutral-500 text-sm font-nunito-medium text-center">
+          <Text
+            className="text-sm font-nunito-medium text-center"
+            style={{ color: colors.text.secondary }}
+          >
             {radius === 1000
-              ? "Aucun événement disponible pour le moment."
-              : `Aucun événement dans un rayon de ${radius}km.`}
+              ? "Aucun evenement disponible pour le moment."
+              : `Aucun evenement dans un rayon de ${radius}km.`}
           </Text>
         </View>
       );
@@ -168,18 +189,22 @@ export default function AllEventsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <WarmBackground>
       <SafeAreaView edges={["top"]}>
         {/* Header */}
         <View className="px-6 py-4 flex-row items-center">
           <Pressable
             onPress={() => router.back()}
-            className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+            className="w-10 h-10 rounded-full items-center justify-center mr-3"
+            style={{ backgroundColor: colors.glass.light }}
           >
-            <Ionicons name="arrow-back" size={20} color="#525252" />
+            <Ionicons name="arrow-back" size={20} color={colors.text.secondary} />
           </Pressable>
-          <Text className="text-xl font-nunito-bold text-neutral-900">
-            Événements
+          <Text
+            className="text-xl font-nunito-bold"
+            style={{ color: colors.text.primary }}
+          >
+            Evenements
           </Text>
         </View>
       </SafeAreaView>
@@ -194,7 +219,7 @@ export default function AllEventsScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor={ACCENT}
+            tintColor={colors.primary.DEFAULT}
           />
         }
       >
@@ -211,9 +236,9 @@ export default function AllEventsScreen() {
           setShowPremiumModal(false);
           router.back();
         }}
-        title="Fonctionnalité Premium"
-        description="Cette fonctionnalité sera bientôt disponible dans la version premium."
+        title="Fonctionnalite Premium"
+        description="Cette fonctionnalite sera bientot disponible dans la version premium."
       />
-    </View>
+    </WarmBackground>
   );
 }

@@ -19,8 +19,11 @@ import { useAuth } from "@/context/AuthContext";
 import { Message } from "@/interface/Conversation";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { LinearGradient } from "expo-linear-gradient";
-
-const ACCENT = "#F97316";
+import { BlurView } from "expo-blur";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassAvatar from "@/components/ui/GlassAvatar";
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors, blur, radii, isAndroid } from "@/constants/theme";
 
 const ChatPage = () => {
   const { id } = useLocalSearchParams();
@@ -29,6 +32,7 @@ const ChatPage = () => {
   const { matches } = useMatches();
   const { user } = useAuth();
   const { decrementUnreadCount } = useUnreadMessages();
+  const { colors, gradients, shadows, isDark } = useThemeColors();
 
   const match = matches?.find((match) => match.user.id === Number(id));
 
@@ -61,7 +65,6 @@ const ChatPage = () => {
               directMessageService.markAsRead(msg.id.toString())
             )
           );
-          // Décrémenter le compteur global
           decrementUnreadCount(unreadMessages.length);
         }
       } catch (error) {
@@ -75,11 +78,7 @@ const ChatPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        const messageResponse = await directMessageService.sendMessage(
-          id.toString(),
-          newMessage
-        );
-        // On ne réenregistre pas le token à chaque message, il est déjà géré par le NotificationContext
+        await directMessageService.sendMessage(id.toString(), newMessage);
         setNewMessage("");
         loadMessages();
       } catch (error) {
@@ -88,79 +87,111 @@ const ChatPage = () => {
     }
   };
 
-  const renderMessage = ({ item }: { item: Message }) => (
-    <View
-      className={`mb-3 ${
-        item.sender_id === user?.id ? "items-end" : "items-start"
-      }`}
-      style={{ paddingHorizontal: 12 }}
-    >
+  const renderMessage = ({ item }: { item: Message }) => {
+    const isMine = item.sender_id === user?.id;
+
+    return (
       <View
-        className={`p-3 rounded-2xl max-w-[80%] ${
-          item.sender_id === user?.id
-            ? "bg-primary rounded-br-md"
-            : "bg-white rounded-bl-md border border-gray-200"
-        }`}
-        style={{
-          shadowColor: item.sender_id === user?.id ? ACCENT : "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
-        }}
+        className={`mb-3 ${isMine ? "items-end" : "items-start"}`}
+        style={{ paddingHorizontal: 12 }}
       >
-        <Text
-          className={`font-nunito-medium ${
-            item.sender_id === user?.id ? "text-white" : "text-gray-900"
-          }`}
-          style={{ fontSize: 15 }}
-        >
-          {item.content}
-        </Text>
-        <Text
-          className={`text-xs font-nunito mt-1 ${
-            item.sender_id === user?.id ? "text-white/70" : "text-gray-500"
-          }`}
-        >
-          {new Date(item.created_at).toLocaleTimeString("fr-FR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Text>
+        {isMine ? (
+          <LinearGradient
+            colors={gradients.primaryButton as unknown as [string, string, ...string[]]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              padding: 12,
+              borderRadius: radii.md,
+              borderBottomRightRadius: 4,
+              maxWidth: "80%",
+              ...shadows.sm,
+            }}
+          >
+            <Text className="text-white font-nunito-medium" style={{ fontSize: 15 }}>
+              {item.content}
+            </Text>
+            <Text className="text-white/70 text-xs font-nunito mt-1">
+              {new Date(item.created_at).toLocaleTimeString("fr-FR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+          </LinearGradient>
+        ) : (
+          <View style={{ maxWidth: "80%" }}>
+            <GlassCard variant="light" noPadding>
+              <View
+                style={{
+                  padding: 12,
+                  borderRadius: radii.md,
+                  borderBottomLeftRadius: 4,
+                }}
+              >
+                <Text
+                  className="font-nunito-medium"
+                  style={{ fontSize: 15, color: colors.text.primary }}
+                >
+                  {item.content}
+                </Text>
+                <Text
+                  className="text-xs font-nunito mt-1"
+                  style={{ color: colors.text.tertiary }}
+                >
+                  {new Date(item.created_at).toLocaleTimeString("fr-FR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Text>
+              </View>
+            </GlassCard>
+          </View>
+        )}
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
-    <View className="flex-1 bg-fond">
-      <SafeAreaView className="flex-1" edges={['top']} style={{ flex: 1 }}>
+    <WarmBackground>
+      <SafeAreaView className="flex-1" edges={["top"]} style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           className="flex-1"
         >
-          {/* Header */}
-          <View className="px-6 pt-2 pb-4 bg-fond border-b border-gray-200">
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center flex-1">
-                <Pressable onPress={() => router.back()} className="p-2 mr-3">
-                  <Ionicons name="arrow-back" size={24} color={ACCENT} />
-                </Pressable>
-                <Image
-                  source={
-                    match?.user.profile_image
-                      ? { uri: match.user.profile_image }
-                      : require("@/assets/images/react-logo.png")
-                  }
-                  className="w-10 h-10 rounded-full mr-3 border-2 border-primary"
+          {/* Glass Header */}
+          <View
+            style={{
+              paddingHorizontal: 24,
+              paddingTop: 8,
+              paddingBottom: 16,
+              backgroundColor: colors.glass.heavy,
+              ...shadows.sm,
+            }}
+          >
+            <View className="flex-row items-center">
+              <Pressable onPress={() => router.back()} className="p-2 mr-3">
+                <Ionicons
+                  name="arrow-back"
+                  size={24}
+                  color={colors.primary.DEFAULT}
                 />
-                <Text className="text-gray-900 font-nunito-bold text-lg flex-1">
-                  {match?.user.first_name} {match?.user.last_name}
-                </Text>
-              </View>
+              </Pressable>
+              <GlassAvatar
+                uri={match?.user.profile_image}
+                size={40}
+                showRing
+                style={{ marginRight: 12 }}
+              />
+              <Text
+                className="font-nunito-bold text-lg flex-1"
+                style={{ color: colors.text.primary }}
+              >
+                {match?.user.first_name} {match?.user.last_name}
+              </Text>
             </View>
           </View>
 
-          <View className="flex-1 bg-fond">
+          <View className="flex-1">
             <FlatList
               data={messages}
               renderItem={renderMessage}
@@ -169,29 +200,45 @@ const ChatPage = () => {
               showsVerticalScrollIndicator={false}
               inverted={false}
             />
-            
-            <View className="px-4 pb-4 pt-3 bg-fond flex-row items-center">
-              <View className="flex-1 bg-white rounded-full border border-gray-200 px-4 py-2 mr-3">
+
+            {/* Glass footer input */}
+            <View
+              style={{
+                paddingHorizontal: 16,
+                paddingBottom: 16,
+                paddingTop: 12,
+                backgroundColor: colors.glass.heavy,
+              }}
+              className="flex-row items-center"
+            >
+              <View
+                className="flex-1 mr-3"
+                style={{
+                  backgroundColor: colors.glass.light,
+                  borderRadius: radii.full,
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                }}
+              >
                 <TextInput
                   value={newMessage}
                   onChangeText={setNewMessage}
                   placeholder="Votre message..."
-                  placeholderTextColor="#9CA3AF"
-                  className="text-gray-900 font-nunito"
-                  style={{ fontSize: 15 }}
+                  placeholderTextColor={colors.text.tertiary}
+                  className="font-nunito"
+                  style={{ fontSize: 15, color: colors.text.primary }}
                   multiline
                   maxLength={500}
                 />
               </View>
               <Pressable
                 onPress={sendMessage}
-                className="bg-primary w-12 h-12 rounded-full items-center justify-center"
+                className="w-12 h-12 rounded-full items-center justify-center"
                 style={{
-                  shadowColor: ACCENT,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 4,
-                  elevation: 3,
+                  backgroundColor: colors.primary.DEFAULT,
+                  ...shadows.md,
                 }}
               >
                 <Ionicons name="send" size={20} color="#ffffff" />
@@ -200,7 +247,7 @@ const ChatPage = () => {
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </View>
+    </WarmBackground>
   );
 };
 

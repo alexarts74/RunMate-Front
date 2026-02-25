@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, Modal, Pressable } from "react-native";
+import GlassCard from "@/components/ui/GlassCard";
+import { useThemeColors } from "@/constants/theme";
 
 interface EventsSelectionModalProps {
   visible: boolean;
@@ -12,6 +14,8 @@ export const EventsSelectionModal = ({
   onClose,
   onSelectEventsType,
 }: EventsSelectionModalProps) => {
+  const { colors, shadows } = useThemeColors();
+
   return (
     <Modal
       animationType="fade"
@@ -19,31 +23,46 @@ export const EventsSelectionModal = ({
       visible={visible}
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-center items-center bg-black/50">
-        <View className="bg-[#1e2429] m-5 p-5 rounded-2xl w-[80%]">
-          <Text className="text-white font-nunito text-xl font-bold mb-6 text-center">
+      <View className="flex-1 justify-center items-center" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
+        <View
+          className="m-5 p-5 rounded-2xl w-[80%]"
+          style={{
+            backgroundColor: colors.elevated,
+            ...shadows.lg,
+          }}
+        >
+          <Text
+            style={{ color: colors.text.primary }}
+            className="font-nunito text-xl font-bold mb-6 text-center"
+          >
             Sélectionner les events
           </Text>
 
           <Pressable
             onPress={() => onSelectEventsType("my")}
-            className="py-4 mb-3 bg-background rounded-xl"
+            className="py-4 mb-3 rounded-xl"
+            style={{ backgroundColor: colors.glass.light, borderWidth: 1, borderColor: colors.glass.border }}
           >
-            <Text className="text-white font-nunito text-lg text-center">
+            <Text style={{ color: colors.text.primary }} className="font-nunito text-lg text-center">
               Mes Events
             </Text>
           </Pressable>
 
           <Pressable
             onPress={() => onSelectEventsType("all")}
-            className="py-4 mb-6 bg-background rounded-xl"
+            className="py-4 mb-6 rounded-xl"
+            style={{ backgroundColor: colors.glass.light, borderWidth: 1, borderColor: colors.glass.border }}
           >
-            <Text className="text-white font-nunito text-lg text-center">
+            <Text style={{ color: colors.text.primary }} className="font-nunito text-lg text-center">
               Tous les Events
             </Text>
           </Pressable>
 
-          <Pressable onPress={onClose} className="bg-purple py-4 rounded-xl">
+          <Pressable
+            onPress={onClose}
+            className="py-4 rounded-xl"
+            style={{ backgroundColor: colors.primary.DEFAULT }}
+          >
             <Text className="text-white font-nunito text-center font-bold">
               Fermer
             </Text>

@@ -5,12 +5,13 @@ import { MatchUser } from "@/interface/Matches";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
+import { useThemeColors, radii, typography, isAndroid } from "@/constants/theme";
 
 type MatchCardCompactProps = {
   match: MatchUser;
 };
 
-// Fonction utilitaire pour traiter en toute sécurité les tableaux et les chaînes JSON
+// Fonction utilitaire pour traiter en toute securite les tableaux et les chaines JSON
 const safelyFormatArray = (value: any, separator: string = ", "): string => {
   try {
     if (Array.isArray(value)) {
@@ -41,6 +42,8 @@ const safelyFormatArray = (value: any, separator: string = ", "): string => {
 };
 
 export function MatchCardCompact({ match }: MatchCardCompactProps) {
+  const { colors, shadows, isDark } = useThemeColors();
+
   const isChillRunner = match.user.runner_profile.running_type === "chill";
   const actualPace = match.user.runner_profile.actual_pace;
   const runningFrequency = match.user.runner_profile.running_frequency;
@@ -56,15 +59,11 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
   return (
     <Pressable
       onPress={() => router.push(`/runner/${match.user.id}`)}
-      className="relative overflow-hidden"
       style={{
         height: 280,
-        borderRadius: 24,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.2,
-        shadowRadius: 16,
-        elevation: 8,
+        borderRadius: radii.xl,
+        overflow: "hidden",
+        ...shadows.lg,
       }}
     >
       {/* Image de fond */}
@@ -74,88 +73,111 @@ export function MatchCardCompact({ match }: MatchCardCompactProps) {
             ? { uri: match.user.profile_image }
             : require("@/assets/images/react-logo.png")
         }
-        className="absolute w-full h-full"
-        style={{ resizeMode: "cover" }}
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          resizeMode: "cover",
+        }}
       />
 
-      {/* Gradient léger pour le texte en bas */}
+      {/* Gradient pour le texte en bas */}
       <LinearGradient
         colors={["transparent", "transparent", "rgba(0,0,0,0.3)"]}
-        className="absolute bottom-0 left-0 right-0 h-1/4"
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "25%",
+        }}
       />
 
       {/* Contenu de la carte */}
-      <View className="flex-1 justify-between p-4">
+      <View style={{ flex: 1, justifyContent: "space-between", padding: 16 }}>
         {/* Header - en haut */}
-        <View className="flex-row justify-between items-start">
-          {/* Nom et âge - en haut à gauche */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Nom et age - en haut a gauche */}
           <View>
-            <Text className="text-white text-2xl font-nunito-extrabold mb-1 drop-shadow-lg">
+            <Text
+              style={{
+                color: "#FFFFFF",
+                fontSize: 24,
+                fontFamily: "Nunito-ExtraBold",
+                marginBottom: 4,
+                textShadowColor: "rgba(0,0,0,0.3)",
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 4,
+              }}
+            >
               {match.user.first_name}
             </Text>
-            <Text className="text-white/90 text-lg font-nunito drop-shadow-lg">
+            <Text
+              style={{
+                color: "rgba(255,255,255,0.9)",
+                fontSize: 18,
+                fontFamily: "Nunito-Regular",
+                textShadowColor: "rgba(0,0,0,0.3)",
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 4,
+              }}
+            >
               {match.user.age} ans
             </Text>
           </View>
 
-          {/* Distance - en haut à droite */}
+          {/* Distance - en haut a droite */}
           {distanceKm && (
-            <BlurView
-              intensity={30}
-              tint="dark"
-              className="px-3 py-2 overflow-hidden"
-              style={{ borderRadius: 16 }}
-            >
-              <Text className="text-white text-xs font-nunito-semibold">
-                {distanceKm} km
-              </Text>
-            </BlurView>
+            isAndroid ? (
+              <View
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                  borderRadius: radii.md,
+                  backgroundColor: colors.primary.muted,
+                  overflow: "hidden",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: 12,
+                    fontFamily: "Nunito-SemiBold",
+                  }}
+                >
+                  {distanceKm} km
+                </Text>
+              </View>
+            ) : (
+              <BlurView
+                intensity={30}
+                tint={isDark ? "dark" : "light"}
+                style={{
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                  overflow: "hidden",
+                  borderRadius: radii.md,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: 12,
+                    fontFamily: "Nunito-SemiBold",
+                  }}
+                >
+                  {distanceKm} km
+                </Text>
+              </BlurView>
+            )
           )}
         </View>
-
-        {/* Infos en bas - toutes dans un seul conteneur avec flou */}
-        {/* <BlurView
-          intensity={70}
-          tint="dark"
-          className="px-4 py-3 overflow-hidden"
-          style={{ borderRadius: 20 }}
-        >
-          <View style={{ gap: 8 }}>
-            {/* Ville */}
-        {/* <View className="flex-row items-center">
-              <Ionicons name="location" size={14} color="#126C52" />
-              <Text className="text-white text-sm font-nunito ml-2">
-                {match.user.city}
-              </Text>
-            </View> */}
-
-        {/* Type de runner avec emoji */}
-        {/* <View className="flex-row items-center">
-              <Text className="text-sm font-nunito-semibold text-white">
-                {isChillRunner ? "🌿 Runner détente" : "⚡ Runner performance"}
-              </Text>
-            </View> */}
-
-        {/* Infos clés - max 1 pour la compacité */}
-        {/* {isChillRunner
-              ? runningFrequency && (
-                  <View className="flex-row items-center">
-                    <Ionicons name="time" size={14} color="#126C52" />
-                    <Text className="text-white text-sm font-nunito ml-2">
-                      {formatRunningFrequency()}
-                    </Text>
-                  </View>
-                )
-              : actualPace && (
-                  <View className="flex-row items-center">
-                    <Ionicons name="speedometer" size={14} color="#126C52" />
-                    <Text className="text-white text-sm font-nunito ml-2">
-                      {actualPace} min/km
-                    </Text>
-                  </View>
-                )} */}
-        {/* </View>
-        </BlurView> */}
       </View>
     </Pressable>
   );

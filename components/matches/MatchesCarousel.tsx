@@ -14,12 +14,15 @@ import { router, useFocusEffect } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MatchUser } from "@/interface/Matches";
 import LoadingScreen from "../LoadingScreen";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors, palette } from "@/constants/theme";
 
 export function MatchesCarousel() {
   const { matches, refreshMatches, isLoading } = useMatches();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const { colors, shadows } = useThemeColors();
 
   // Configuration du carrousel
   const { width: screenWidth } = Dimensions.get("window");
@@ -120,23 +123,28 @@ export function MatchesCarousel() {
   };
 
   return (
-    <View className="bg-background">
+    <View style={{ backgroundColor: colors.background }}>
       {/* Header */}
-      <View className="bg-background">
+      <View style={{ backgroundColor: colors.background }}>
         <View className="px-5 pt-6 pb-2">
           <View className="flex-row justify-between items-center">
             <View className="flex-row items-center">
-              <View className="w-1 h-6 bg-purple rounded-full mr-3" />
-              <Text className="text-2xl font-nunito-semibold text-white">
+              <View className="w-1 h-6 rounded-full mr-3" style={{ backgroundColor: colors.primary.DEFAULT }} />
+              <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-semibold">
                 Vos matches
               </Text>
             </View>
 
             <Pressable
               onPress={() => router.push("/runner/filters")}
-              className="bg-background p-2 rounded-xl flex-row items-center border border-gray-700"
+              className="p-2 rounded-xl flex-row items-center"
+              style={{
+                backgroundColor: colors.glass.light,
+                borderWidth: 1,
+                borderColor: colors.glass.border,
+              }}
             >
-              <Ionicons name="filter" size={20} color="#126C52" />
+              <Ionicons name="filter" size={20} color={colors.primary.DEFAULT} />
             </Pressable>
           </View>
         </View>
@@ -149,32 +157,23 @@ export function MatchesCarousel() {
           <LoadingScreen />
         ) : matches?.length === 0 || matches === undefined ? (
           <View className="items-center justify-center px-6 py-6">
-            <View className=" p-6 rounded-2xl mb-6 items-center">
+            <View className="p-6 rounded-2xl mb-6 items-center">
               <Ionicons
                 name="search"
                 size={60}
-                color="#126C52"
-                className="mb-4"
+                color={colors.primary.DEFAULT}
+                style={{ marginBottom: 16 }}
               />
-              <Text className="text-white text-center text-lg font-nunito mb-3">
+              <Text style={{ color: colors.text.primary }} className="text-center text-lg font-nunito mb-3">
                 Nous n'avons pas trouvé de coureurs correspondant à vos critères
                 actuels. Essayez d'élargir vos critères de recherche.
               </Text>
             </View>
-            <Pressable
+            <GlassButton
+              title="Élargir la recherche"
               onPress={removeDistanceFilter}
-              className="bg-purple rounded-full px-6 py-3 flex-row items-center"
-            >
-              <Ionicons
-                name="location"
-                size={18}
-                color="white"
-                style={{ marginRight: 8 }}
-              />
-              <Text className="text-white font-nunito font-semibold">
-                Élargir la recherche
-              </Text>
-            </Pressable>
+              icon={<Ionicons name="location" size={18} color="white" />}
+            />
           </View>
         ) : (
           <View className="relative">
@@ -185,29 +184,27 @@ export function MatchesCarousel() {
             >
               <Pressable
                 onPress={goToPrevious}
-                className="bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/20"
+                className="p-3 rounded-full"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 8,
-                  elevation: 5,
+                  backgroundColor: colors.glass.medium,
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  ...shadows.md,
                 }}
               >
-                <Ionicons name="chevron-back" size={28} color="white" />
+                <Ionicons name="chevron-back" size={28} color={colors.text.primary} />
               </Pressable>
               <Pressable
                 onPress={goToNext}
-                className="bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/20"
+                className="p-3 rounded-full"
                 style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 8,
-                  elevation: 5,
+                  backgroundColor: colors.glass.medium,
+                  borderWidth: 1,
+                  borderColor: colors.glass.border,
+                  ...shadows.md,
                 }}
               >
-                <Ionicons name="chevron-forward" size={28} color="white" />
+                <Ionicons name="chevron-forward" size={28} color={colors.text.primary} />
               </Pressable>
             </View>
 

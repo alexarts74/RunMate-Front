@@ -3,17 +3,19 @@ import { View, Text, Pressable, Animated, Dimensions, StyleSheet } from "react-n
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors, radii } from "@/constants/theme";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-
-const ACCENT = "#F97316";
 
 interface IntroScreenProps {
   onFinish?: () => void;
 }
 
 export function IntroScreen({ onFinish }: IntroScreenProps) {
-  // Animation values
+  const { colors, gradients, shadows } = useThemeColors();
+
   const titleScale = useRef(new Animated.Value(1)).current;
   const titlePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -23,14 +25,10 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   const buttonScale = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
-  // État pour contrôler si les boutons doivent être affichés
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
-    // Première phase: animations du SplashScreen
     startSplashAnimations();
-
-    // Après 2 secondes, déclencher l'apparition des boutons
     setTimeout(() => {
       setShowButtons(true);
       startButtonAnimations();
@@ -38,18 +36,14 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   }, []);
 
   const startSplashAnimations = () => {
-    // Animation du logo en boucle
     Animated.loop(
       Animated.sequence([
-        // Entrée depuis la gauche
         Animated.timing(imagePosition, {
           toValue: 0,
           duration: 1000,
           useNativeDriver: true,
         }),
-        // Pause de 2 secondes
         Animated.delay(2000),
-        // Sortie vers la droite
         Animated.timing(imagePosition, {
           toValue: screenWidth,
           duration: 1000,
@@ -58,7 +52,6 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
       ])
     ).start();
 
-    // Animations du titre et du contenu
     Animated.parallel([
       Animated.timing(titleScale, {
         toValue: 0.8,
@@ -89,7 +82,6 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   };
 
   const startButtonAnimations = () => {
-    // Animation des boutons
     Animated.parallel([
       Animated.timing(buttonScale, {
         toValue: 1,
@@ -105,36 +97,22 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
   };
 
   const handleLoginPress = () => {
-    // Uniquement naviguer, ne pas appeler onFinish
     router.push("/(auth)/login");
   };
 
   const handleSignupPress = () => {
-    // Uniquement naviguer, ne pas appeler onFinish
     router.push("/(auth)/signup");
   };
 
-  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
   return (
-    <View className="flex-1 bg-fond">
-      {/* Gradient de fond amélioré */}
+    <WarmBackground showCircles>
+      {/* Intro gradient overlay */}
       <LinearGradient
-        colors={[
-          "rgba(249, 115, 22, 0.2)",
-          "rgba(82, 82, 82, 0.1)",
-          "rgba(249, 115, 22, 0.05)",
-          "transparent",
-        ]}
+        colors={gradients.introGradient as unknown as [string, string, ...string[]]}
         style={StyleSheet.absoluteFill}
       />
-      
-      {/* Cercles décoratifs en arrière-plan */}
-      <View style={[styles.circleDecor, { top: 80, right: 32 }]} />
-      <View style={[styles.circleDecor, { top: 240, left: 16, width: 160, height: 160 }]} />
-      <View style={[styles.circleDecor, { bottom: 380, right: 48, width: 96, height: 96 }]} />
 
-      {/* Titre principal en haut */}
+      {/* Title */}
       <Animated.View
         className="absolute left-0 right-0 px-6"
         style={{
@@ -151,20 +129,23 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
           ],
         }}
       >
-        <Text 
-          className="text-7xl font-bold font-fredoka mb-6" 
+        <Text
+          className="text-7xl font-bold font-fredoka mb-6"
           style={styles.mainTitle}
         >
-          <Text className="text-primary">Run</Text>
-          <Text className="text-gray-900">Mate</Text>
+          <Text style={{ color: colors.primary.DEFAULT }}>Run</Text>
+          <Text style={{ color: colors.text.primary }}>Mate</Text>
         </Text>
-        
-        <Text className="text-2xl text-gray-800 text-center font-nunito-bold mb-3 px-4">
+
+        <Text
+          className="text-2xl text-center font-nunito-bold mb-3 px-4"
+          style={{ color: colors.text.primary }}
+        >
           Trouvez votre partenaire de course idéal
         </Text>
       </Animated.View>
 
-      {/* Animation Lottie centrée - Positionnée au milieu */}
+      {/* Lottie animation */}
       <Animated.View
         className="absolute left-0 right-0 items-center"
         style={{
@@ -183,7 +164,7 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
         </View>
       </Animated.View>
 
-      {/* Boutons améliorés */}
+      {/* Buttons */}
       {showButtons && (
         <Animated.View
           style={{
@@ -197,41 +178,29 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
             transform: [{ scale: buttonScale }],
           }}
         >
-          {/* Bouton principal - Connexion */}
-          <LinearGradient
-            colors={[ACCENT, "#FB923C"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={[styles.primaryButton, styles.buttonShadow]}
-          >
-            <AnimatedPressable
-              onPress={handleLoginPress}
-              style={styles.buttonInner}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text className="text-lg font-nunito-bold text-white mr-2">
-                  Se connecter
-                </Text>
-                <Text style={{ fontSize: 18, color: "white" }}>→</Text>
-              </View>
-            </AnimatedPressable>
-          </LinearGradient>
+          <GlassButton
+            title="Se connecter"
+            onPress={handleLoginPress}
+            variant="primary"
+            size="lg"
+            style={{ marginBottom: 16 }}
+          />
 
-          {/* Bouton secondaire - Inscription */}
-          <AnimatedPressable
+          <GlassButton
+            title="Créer un compte"
             onPress={handleSignupPress}
-            style={[styles.secondaryButton, styles.buttonShadowSecondary]}
-          >
-            <Text className="text-lg font-nunito-bold text-secondary">
-              Créer un compte
-            </Text>
-          </AnimatedPressable>
+            variant="secondary"
+            size="lg"
+          />
 
-          {/* Texte d'accès rapide */}
-          <Text className="text-sm text-gray-500 text-center font-nunito mt-4">
+          <Text
+            className="text-sm text-center font-nunito mt-4"
+            style={{ color: colors.text.secondary }}
+          >
             Déjà un compte ?{" "}
-            <Text 
-              className="text-primary font-nunito-bold"
+            <Text
+              className="font-nunito-bold"
+              style={{ color: colors.primary.DEFAULT }}
               onPress={handleLoginPress}
             >
               Se connecter
@@ -239,18 +208,11 @@ export function IntroScreen({ onFinish }: IntroScreenProps) {
           </Text>
         </Animated.View>
       )}
-    </View>
+    </WarmBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  circleDecor: {
-    position: "absolute",
-    width: 128,
-    height: 128,
-    borderRadius: 64,
-    backgroundColor: "rgba(249, 115, 22, 0.08)",
-  },
   mainTitle: {
     letterSpacing: -2,
     textShadowColor: "rgba(0, 0, 0, 0.1)",
@@ -261,55 +223,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
-  },
-  floatingBadge: {
-    position: "absolute",
-    top: -20,
-    right: -20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#525252",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 3,
-    borderColor: "white",
-    shadowColor: "#525252",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  primaryButton: {
-    borderRadius: 9999,
-    marginBottom: 16,
-    overflow: "hidden",
-  },
-  buttonShadow: {
-    shadowColor: ACCENT,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  secondaryButton: {
-    backgroundColor: "white",
-    paddingVertical: 20,
-    borderRadius: 9999,
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "rgba(82, 82, 82, 0.2)",
-  },
-  buttonShadowSecondary: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  buttonInner: {
-    paddingVertical: 20,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

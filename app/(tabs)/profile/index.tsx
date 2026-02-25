@@ -11,22 +11,25 @@ import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import NotificationSettings from "@/components/settings/NotificationSettings";
 import PrivacySettings from "@/components/settings/PrivacySettings";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import { useThemeColors } from "@/constants/theme";
 
 type TabType = "profile" | "runner" | "settings";
 type SettingsType = "main" | "notifications" | "privacy";
-
-const ACCENT = "#F97316";
 
 export default function ProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
   const [isEditing, setIsEditing] = useState(false);
   const [activeSettings, setActiveSettings] = useState<SettingsType>("main");
   const { logout, deleteAccount, user } = useAuth();
+  const { colors, shadows } = useThemeColors();
 
   const handleDeleteAccount = () => {
     Alert.alert(
       "Supprimer le compte",
-      "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+      "Etes-vous sur de vouloir supprimer votre compte ? Cette action est irreversible.",
       [
         { text: "Annuler", style: "cancel" },
         {
@@ -68,15 +71,22 @@ export default function ProfileScreen() {
         switch (activeSettings) {
           case "notifications":
             return (
-              <View className="flex-1 bg-white">
-                <View className="flex-row items-center px-6 py-4 border-b border-neutral-100">
+              <View className="flex-1">
+                <View
+                  className="flex-row items-center px-6 py-4"
+                  style={{ borderBottomWidth: 1, borderBottomColor: colors.glass.border }}
+                >
                   <Pressable
                     onPress={() => setActiveSettings("main")}
-                    className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+                    className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                    style={{ backgroundColor: colors.glass.light }}
                   >
-                    <Ionicons name="arrow-back" size={20} color="#525252" />
+                    <Ionicons name="arrow-back" size={20} color={colors.text.secondary} />
                   </Pressable>
-                  <Text className="text-xl font-nunito-bold text-neutral-900">
+                  <Text
+                    className="text-xl font-nunito-bold"
+                    style={{ color: colors.text.primary }}
+                  >
                     Notifications
                   </Text>
                 </View>
@@ -85,16 +95,23 @@ export default function ProfileScreen() {
             );
           case "privacy":
             return (
-              <View className="flex-1 bg-white">
-                <View className="flex-row items-center px-6 py-4 border-b border-neutral-100">
+              <View className="flex-1">
+                <View
+                  className="flex-row items-center px-6 py-4"
+                  style={{ borderBottomWidth: 1, borderBottomColor: colors.glass.border }}
+                >
                   <Pressable
                     onPress={() => setActiveSettings("main")}
-                    className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center mr-3"
+                    className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                    style={{ backgroundColor: colors.glass.light }}
                   >
-                    <Ionicons name="arrow-back" size={20} color="#525252" />
+                    <Ionicons name="arrow-back" size={20} color={colors.text.secondary} />
                   </Pressable>
-                  <Text className="text-xl font-nunito-bold text-neutral-900">
-                    Confidentialité
+                  <Text
+                    className="text-xl font-nunito-bold"
+                    style={{ color: colors.text.primary }}
+                  >
+                    Confidentialite
                   </Text>
                 </View>
                 <PrivacySettings />
@@ -102,81 +119,102 @@ export default function ProfileScreen() {
             );
           default:
             return (
-              <ScrollView className="flex-1 bg-white" showsVerticalScrollIndicator={false}>
+              <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                 <View className="px-6 py-6">
-                  <Text className="text-2xl font-nunito-bold text-neutral-900 mb-6">
-                    Paramètres
+                  <Text
+                    className="text-2xl font-nunito-bold mb-6"
+                    style={{ color: colors.text.primary }}
+                  >
+                    Parametres
                   </Text>
 
                   <View style={{ gap: 12 }}>
                     <Pressable
-                      className="flex-row items-center justify-between bg-neutral-100 p-4 rounded-2xl"
+                      className="flex-row items-center justify-between p-4 rounded-2xl"
+                      style={{ backgroundColor: colors.glass.light }}
                       onPress={() => setActiveSettings("notifications")}
                     >
                       <View className="flex-row items-center">
                         <View
                           className="w-11 h-11 rounded-xl items-center justify-center mr-3"
-                          style={{ backgroundColor: `${ACCENT}15` }}
+                          style={{ backgroundColor: colors.primary.subtle }}
                         >
-                          <Ionicons name="notifications-outline" size={22} color={ACCENT} />
+                          <Ionicons name="notifications-outline" size={22} color={colors.primary.DEFAULT} />
                         </View>
-                        <Text className="text-neutral-800 font-nunito-bold text-base">
+                        <Text
+                          className="font-nunito-bold text-base"
+                          style={{ color: colors.text.primary }}
+                        >
                           Notifications
                         </Text>
                       </View>
-                      <Ionicons name="chevron-forward" size={20} color="#A3A3A3" />
+                      <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
                     </Pressable>
 
                     <Pressable
-                      className="flex-row items-center justify-between bg-neutral-100 p-4 rounded-2xl"
+                      className="flex-row items-center justify-between p-4 rounded-2xl"
+                      style={{ backgroundColor: colors.glass.light }}
                       onPress={() => setActiveSettings("privacy")}
                     >
                       <View className="flex-row items-center">
                         <View
                           className="w-11 h-11 rounded-xl items-center justify-center mr-3"
-                          style={{ backgroundColor: `${ACCENT}15` }}
+                          style={{ backgroundColor: colors.primary.subtle }}
                         >
-                          <Ionicons name="lock-closed-outline" size={22} color={ACCENT} />
+                          <Ionicons name="lock-closed-outline" size={22} color={colors.primary.DEFAULT} />
                         </View>
-                        <Text className="text-neutral-800 font-nunito-bold text-base">
-                          Confidentialité
+                        <Text
+                          className="font-nunito-bold text-base"
+                          style={{ color: colors.text.primary }}
+                        >
+                          Confidentialite
                         </Text>
                       </View>
-                      <Ionicons name="chevron-forward" size={20} color="#A3A3A3" />
+                      <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
                     </Pressable>
 
-                    <Pressable className="flex-row items-center justify-between bg-neutral-100 p-4 rounded-2xl">
+                    <Pressable
+                      className="flex-row items-center justify-between p-4 rounded-2xl"
+                      style={{ backgroundColor: colors.glass.light }}
+                    >
                       <View className="flex-row items-center">
                         <View
                           className="w-11 h-11 rounded-xl items-center justify-center mr-3"
-                          style={{ backgroundColor: `${ACCENT}15` }}
+                          style={{ backgroundColor: colors.primary.subtle }}
                         >
-                          <Ionicons name="help-circle-outline" size={22} color={ACCENT} />
+                          <Ionicons name="help-circle-outline" size={22} color={colors.primary.DEFAULT} />
                         </View>
-                        <Text className="text-neutral-800 font-nunito-bold text-base">
+                        <Text
+                          className="font-nunito-bold text-base"
+                          style={{ color: colors.text.primary }}
+                        >
                           Aide
                         </Text>
                       </View>
-                      <Ionicons name="chevron-forward" size={20} color="#A3A3A3" />
+                      <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
                     </Pressable>
                   </View>
 
                   <View className="mt-8" style={{ gap: 12 }}>
-                    <Pressable
-                      className="py-4 rounded-2xl items-center"
-                      style={{ backgroundColor: ACCENT }}
+                    <GlassButton
+                      title="Se deconnecter"
                       onPress={logout}
-                    >
-                      <Text className="text-white font-nunito-bold text-base">
-                        Se déconnecter
-                      </Text>
-                    </Pressable>
+                      variant="primary"
+                    />
 
                     <Pressable
-                      className="bg-white border-2 border-red-500 py-4 rounded-2xl items-center"
+                      className="py-4 rounded-2xl items-center"
+                      style={{
+                        backgroundColor: colors.elevated,
+                        borderWidth: 2,
+                        borderColor: colors.error,
+                      }}
                       onPress={handleDeleteAccount}
                     >
-                      <Text className="text-red-500 font-nunito-bold text-base">
+                      <Text
+                        className="font-nunito-bold text-base"
+                        style={{ color: colors.error }}
+                      >
                         Supprimer le compte
                       </Text>
                     </Pressable>
@@ -189,10 +227,13 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <WarmBackground>
       <SafeAreaView className="flex-1" edges={["top"]}>
         {/* Tabs */}
-        <View className="flex-row px-6 py-4 border-b border-neutral-100" style={{ gap: 8 }}>
+        <View
+          className="flex-row px-6 py-4"
+          style={{ gap: 8, borderBottomWidth: 1, borderBottomColor: colors.glass.border }}
+        >
           <Pressable
             onPress={() => {
               setActiveTab("profile");
@@ -200,12 +241,17 @@ export default function ProfileScreen() {
               setActiveSettings("main");
             }}
             className="px-5 py-2.5 rounded-full"
-            style={{ backgroundColor: activeTab === "profile" ? ACCENT : "#F5F5F5" }}
+            style={{
+              backgroundColor:
+                activeTab === "profile" ? colors.primary.DEFAULT : colors.glass.light,
+            }}
           >
             <Text
-              className={`font-nunito-bold text-sm ${
-                activeTab === "profile" ? "text-white" : "text-neutral-600"
-              }`}
+              className="font-nunito-bold text-sm"
+              style={{
+                color:
+                  activeTab === "profile" ? colors.text.inverse : colors.text.secondary,
+              }}
             >
               {isOrganizer ? "Organisation" : "Profil"}
             </Text>
@@ -219,12 +265,17 @@ export default function ProfileScreen() {
                 setActiveSettings("main");
               }}
               className="px-5 py-2.5 rounded-full"
-              style={{ backgroundColor: activeTab === "runner" ? ACCENT : "#F5F5F5" }}
+              style={{
+                backgroundColor:
+                  activeTab === "runner" ? colors.primary.DEFAULT : colors.glass.light,
+              }}
             >
               <Text
-                className={`font-nunito-bold text-sm ${
-                  activeTab === "runner" ? "text-white" : "text-neutral-600"
-                }`}
+                className="font-nunito-bold text-sm"
+                style={{
+                  color:
+                    activeTab === "runner" ? colors.text.inverse : colors.text.secondary,
+                }}
               >
                 Runner
               </Text>
@@ -238,20 +289,25 @@ export default function ProfileScreen() {
               setActiveSettings("main");
             }}
             className="px-5 py-2.5 rounded-full"
-            style={{ backgroundColor: activeTab === "settings" ? ACCENT : "#F5F5F5" }}
+            style={{
+              backgroundColor:
+                activeTab === "settings" ? colors.primary.DEFAULT : colors.glass.light,
+            }}
           >
             <Text
-              className={`font-nunito-bold text-sm ${
-                activeTab === "settings" ? "text-white" : "text-neutral-600"
-              }`}
+              className="font-nunito-bold text-sm"
+              style={{
+                color:
+                  activeTab === "settings" ? colors.text.inverse : colors.text.secondary,
+              }}
             >
-              Réglages
+              Reglages
             </Text>
           </Pressable>
         </View>
 
         <View className="flex-1">{renderContent()}</View>
       </SafeAreaView>
-    </View>
+    </WarmBackground>
   );
 }

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Alert,
-  ActivityIndicator,
   ScrollView,
   Pressable,
   TextInput,
@@ -12,6 +11,12 @@ import { useStripe as useStripeContext } from "@/context/StripeContext";
 import { useStripe } from "@stripe/stripe-react-native";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import WarmBackground from "@/components/ui/WarmBackground";
+import GlassCard from "@/components/ui/GlassCard";
+import GlassButton from "@/components/ui/GlassButton";
+import GlassInput from "@/components/ui/GlassInput";
+import PulseLoader from "@/components/ui/PulseLoader";
+import { useThemeColors, palette } from "@/constants/theme";
 
 // Types d'abonnements disponibles
 const subscriptionPlans = [
@@ -66,6 +71,7 @@ export default function PaymentScreen() {
     expYear: "",
     cvc: "",
   });
+  const { colors, shadows } = useThemeColors();
 
   // Validation basique des champs de carte
   const isCardValid = () => {
@@ -176,176 +182,198 @@ export default function PaymentScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-background pt-16">
-      <View className="px-5">
-        <View className="flex-row items-center mb-6">
-          <Pressable
-            onPress={() => router.back()}
-            className="bg-[#1e2429] p-2 rounded-xl mr-3"
-          >
-            <Ionicons name="arrow-back" size={20} color="#fff" />
-          </Pressable>
-          <Text className="text-2xl font-nunito-semibold text-center text-white">
-            RunMate Premium
-          </Text>
-        </View>
-
-        <Text className="text-white mb-5 font-nunito">
-          Devenez Premium et accédez à toutes les fonctionnalités de RunMate
-        </Text>
-
-        {/* Plans d'abonnement - Affichage des deux options */}
-        <View className="space-y-4 mb-8">
-          {subscriptionPlans.map((plan, index) => (
+    <WarmBackground>
+      <ScrollView className="flex-1 pt-16">
+        <View className="px-5">
+          <View className="flex-row items-center mb-6">
             <Pressable
-              key={plan.id}
-              onPress={() => setSelectedPlan(plan)}
-              className={`p-4 rounded-xl border-2 ${
-                selectedPlan.id === plan.id
-                  ? "border-purple bg-purple/10"
-                  : "border-gray-700 bg-[#1a1f24]"
-              }`}
+              onPress={() => router.back()}
+              className="p-2 rounded-xl mr-3"
+              style={{ backgroundColor: colors.glass.light }}
             >
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="text-lg font-nunito-semibold text-white">
-                  {plan.name}
-                </Text>
-                <View className="flex-row items-center">
-                  <Text className="text-lg font-nunito-bold text-white">
-                    {plan.price}
+              <Ionicons name="arrow-back" size={20} color={colors.text.primary} />
+            </Pressable>
+            <Text style={{ color: colors.text.primary }} className="text-2xl font-nunito-semibold text-center">
+              RunMate Premium
+            </Text>
+          </View>
+
+          <Text style={{ color: colors.text.secondary }} className="mb-5 font-nunito">
+            Devenez Premium et accédez à toutes les fonctionnalités de RunMate
+          </Text>
+
+          {/* Plans d'abonnement - Affichage des deux options */}
+          <View style={{ gap: 16 }} className="mb-8">
+            {subscriptionPlans.map((plan, index) => (
+              <Pressable
+                key={plan.id}
+                onPress={() => setSelectedPlan(plan)}
+              >
+                <GlassCard
+                  variant={selectedPlan.id === plan.id ? "medium" : "light"}
+                  style={{
+                    borderWidth: 2,
+                    borderColor: selectedPlan.id === plan.id
+                      ? colors.primary.DEFAULT
+                      : colors.glass.border,
+                  }}
+                >
+                  <View className="flex-row justify-between items-center mb-2">
+                    <Text style={{ color: colors.text.primary }} className="text-lg font-nunito-semibold">
+                      {plan.name}
+                    </Text>
+                    <View className="flex-row items-center">
+                      <Text style={{ color: colors.text.primary }} className="text-lg font-nunito-bold">
+                        {plan.price}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <Text style={{ color: colors.text.secondary }} className="mb-3 font-nunito">
+                    {plan.description}
                   </Text>
-                </View>
+
+                  {plan.features.map((feature, featureIndex) => (
+                    <View key={featureIndex} className="flex-row items-center mb-1">
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={16}
+                        color={selectedPlan.id === plan.id ? colors.primary.DEFAULT : colors.text.tertiary}
+                      />
+                      <Text style={{ color: colors.text.primary }} className="ml-2 font-nunito">{feature}</Text>
+                    </View>
+                  ))}
+
+                  {index === 0 && (
+                    <View
+                      className="absolute -top-2 -right-2 px-2 py-1 rounded-md"
+                      style={{ backgroundColor: colors.primary.DEFAULT }}
+                    >
+                      <Text className="text-xs font-nunito-bold text-white">
+                        Populaire
+                      </Text>
+                    </View>
+                  )}
+
+                  {index === 1 && (
+                    <View
+                      className="absolute -top-2 -right-2 px-2 py-1 rounded-md"
+                      style={{ backgroundColor: colors.primary.dark }}
+                    >
+                      <Text className="text-xs font-nunito-bold text-white">
+                        Économisez 17%
+                      </Text>
+                    </View>
+                  )}
+                </GlassCard>
+              </Pressable>
+            ))}
+          </View>
+
+          {/* Zone de saisie de carte bancaire personnalisée */}
+          <Text style={{ color: colors.text.primary }} className="mb-4 font-nunito-semibold">
+            Informations de paiement
+          </Text>
+
+          <GlassCard style={{ marginBottom: 32 }}>
+            {/* Numéro de carte */}
+            <View className="mb-4">
+              <Text style={{ color: colors.text.primary }} className="mb-2 font-nunito">Numéro de carte</Text>
+              <TextInput
+                className="rounded-md p-2"
+                style={{
+                  backgroundColor: colors.surface,
+                  color: colors.text.primary,
+                }}
+                placeholder="4242 4242 4242 4242"
+                placeholderTextColor={colors.text.tertiary}
+                keyboardType="numeric"
+                maxLength={19}
+                value={cardDetails.number}
+                onChangeText={(text) =>
+                  updateCardField("number", formatCardNumber(text))
+                }
+              />
+            </View>
+
+            {/* Date d'expiration et CVC côte à côte */}
+            <View className="flex-row items-center">
+              <View className="flex-1 mr-2">
+                <Text style={{ color: colors.text.primary }} className="mb-2 font-nunito">Mois (MM)</Text>
+                <TextInput
+                  className="rounded-md p-2"
+                  style={{
+                    backgroundColor: colors.surface,
+                    color: colors.text.primary,
+                  }}
+                  placeholder="MM"
+                  placeholderTextColor={colors.text.tertiary}
+                  keyboardType="numeric"
+                  maxLength={2}
+                  value={cardDetails.expMonth}
+                  onChangeText={(text) => updateCardField("expMonth", text)}
+                />
               </View>
 
-              <Text className="text-gray-300 mb-3 font-nunito">
-                {plan.description}
-              </Text>
+              <View className="flex-1 mr-2">
+                <Text style={{ color: colors.text.primary }} className="mb-2 font-nunito">Année (AA)</Text>
+                <TextInput
+                  className="rounded-md p-2"
+                  style={{
+                    backgroundColor: colors.surface,
+                    color: colors.text.primary,
+                  }}
+                  placeholder="AA"
+                  placeholderTextColor={colors.text.tertiary}
+                  keyboardType="numeric"
+                  maxLength={2}
+                  value={cardDetails.expYear}
+                  onChangeText={(text) => updateCardField("expYear", text)}
+                />
+              </View>
 
-              {plan.features.map((feature, featureIndex) => (
-                <View key={featureIndex} className="flex-row items-center mb-1">
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={16}
-                    color={selectedPlan.id === plan.id ? "#126C52" : "#6B7280"}
-                  />
-                  <Text className="text-white ml-2 font-nunito">{feature}</Text>
-                </View>
-              ))}
-
-              {index === 0 && (
-                <View className="absolute -top-2 -right-2 bg-purple px-2 py-1 rounded-md">
-                  <Text className="text-xs font-nunito-bold text-white">
-                    Populaire
-                  </Text>
-                </View>
-              )}
-
-              {index === 1 && (
-                <View className="absolute -top-2 -right-2 bg-purple px-2 py-1 rounded-md">
-                  <Text className="text-xs font-nunito-bold text-white">
-                    Économisez 17%
-                  </Text>
-                </View>
-              )}
-            </Pressable>
-          ))}
-        </View>
-
-        {/* Zone de saisie de carte bancaire personnalisée */}
-        <Text className="text-white mb-4 font-nunito-semibold">
-          Informations de paiement
-        </Text>
-
-        <View className="bg-background rounded-xl p-4 mb-8">
-          {/* Numéro de carte */}
-          <View className="mb-4">
-            <Text className="text-white mb-2 font-nunito">Numéro de carte</Text>
-            <TextInput
-              className="bg-background text-white rounded-md p-2"
-              placeholder="4242 4242 4242 4242"
-              placeholderTextColor="#6B7280"
-              keyboardType="numeric"
-              maxLength={19}
-              value={cardDetails.number}
-              onChangeText={(text) =>
-                updateCardField("number", formatCardNumber(text))
-              }
-            />
-          </View>
-
-          {/* Date d'expiration et CVC côte à côte */}
-          <View className="flex-row items-center">
-            <View className="flex-1 mr-2">
-              <Text className="text-white mb-2 font-nunito">Mois (MM)</Text>
-              <TextInput
-                className="bg-background text-white rounded-md p-2"
-                placeholder="MM"
-                placeholderTextColor="#6B7280"
-                keyboardType="numeric"
-                maxLength={2}
-                value={cardDetails.expMonth}
-                onChangeText={(text) => updateCardField("expMonth", text)}
-              />
+              <View className="flex-1">
+                <Text style={{ color: colors.text.primary }} className="mb-2 font-nunito">CVC</Text>
+                <TextInput
+                  className="rounded-md p-2"
+                  style={{
+                    backgroundColor: colors.surface,
+                    color: colors.text.primary,
+                  }}
+                  placeholder="123"
+                  placeholderTextColor={colors.text.tertiary}
+                  keyboardType="numeric"
+                  maxLength={3}
+                  secureTextEntry={true}
+                  value={cardDetails.cvc}
+                  onChangeText={(text) => updateCardField("cvc", text)}
+                />
+              </View>
             </View>
+          </GlassCard>
 
-            <View className="flex-1 mr-2">
-              <Text className="text-white mb-2 font-nunito">Année (AA)</Text>
-              <TextInput
-                className="bg-background text-white rounded-md p-2"
-                placeholder="AA"
-                placeholderTextColor="#6B7280"
-                keyboardType="numeric"
-                maxLength={2}
-                value={cardDetails.expYear}
-                onChangeText={(text) => updateCardField("expYear", text)}
-              />
-            </View>
-
-            <View className="flex-1">
-              <Text className="text-white mb-2 font-nunito">CVC</Text>
-              <TextInput
-                className="bg-background text-white rounded-md p-2"
-                placeholder="123"
-                placeholderTextColor="#6B7280"
-                keyboardType="numeric"
-                maxLength={3}
-                secureTextEntry={true}
-                value={cardDetails.cvc}
-                onChangeText={(text) => updateCardField("cvc", text)}
-              />
-            </View>
-          </View>
-        </View>
-
-        {/* Instructions de test */}
-        <Text className="text-gray-400 text-xs mb-4 font-nunito">
-          Pour tester, utilisez le numéro 4242 4242 4242 4242, une date future
-          (01/25), et un code CVC quelconque (123).
-        </Text>
-
-        <Pressable
-          onPress={handlePayPress}
-          disabled={isProcessing || isLoading}
-          className={`bg-purple rounded-xl py-4 items-center ${
-            isProcessing || isLoading ? "opacity-70" : ""
-          }`}
-        >
-          {isProcessing || isLoading ? (
-            <ActivityIndicator color="#ffffff" />
-          ) : (
-            <Text className="text-white font-nunito-bold text-lg">
-              Payer {selectedPlan.price}
-            </Text>
-          )}
-        </Pressable>
-
-        <View className="flex-row items-center justify-center mt-4 mb-10">
-          <Ionicons name="lock-closed" size={14} color="#126C52" />
-          <Text className="text-gray-400 ml-1 font-nunito text-sm">
-            Paiement sécurisé via Stripe
+          {/* Instructions de test */}
+          <Text style={{ color: colors.text.tertiary }} className="text-xs mb-4 font-nunito">
+            Pour tester, utilisez le numéro 4242 4242 4242 4242, une date future
+            (01/25), et un code CVC quelconque (123).
           </Text>
+
+          <GlassButton
+            title={`Payer ${selectedPlan.price}`}
+            onPress={handlePayPress}
+            loading={isProcessing || isLoading}
+            disabled={isProcessing || isLoading}
+            size="lg"
+          />
+
+          <View className="flex-row items-center justify-center mt-4 mb-10">
+            <Ionicons name="lock-closed" size={14} color={colors.primary.DEFAULT} />
+            <Text style={{ color: colors.text.tertiary }} className="ml-1 font-nunito text-sm">
+              Paiement sécurisé via Stripe
+            </Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </WarmBackground>
   );
 }

@@ -10,10 +10,10 @@ export default {
     splash: {
       image: "./assets/images/splaash.png",
       resizeMode: "cover",
-      backgroundColor: "#14141b",
+      backgroundColor: "#F8FAF8",
     },
     scheme: "runmate",
-    userInterfaceStyle: "dark",
+    userInterfaceStyle: "automatic",
     newArchEnabled: true,
     notification: {
       icon: "./assets/images/splaash.png",
@@ -28,7 +28,7 @@ export default {
       splash: {
         image: "./assets/images/splaash.png",
         resizeMode: "cover",
-        backgroundColor: "#14141b",
+        backgroundColor: "#F8FAF8",
       },
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -37,12 +37,12 @@ export default {
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/splaash.png",
-        backgroundColor: "#14141b",
+        backgroundColor: "#F8FAF8",
       },
       splash: {
         image: "./assets/images/splaash.png",
         resizeMode: "cover",
-        backgroundColor: "#14141b",
+        backgroundColor: "#F8FAF8",
       },
     },
     web: {
@@ -52,7 +52,7 @@ export default {
       splash: {
         image: "./assets/images/splaash.png",
         resizeMode: "cover",
-        backgroundColor: "#14141b",
+        backgroundColor: "#F8FAF8",
       },
     },
     plugins: [
