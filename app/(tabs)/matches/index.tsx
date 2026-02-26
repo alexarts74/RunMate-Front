@@ -237,17 +237,19 @@ const HomepageScreen = () => {
             </Pressable>
           </View>
 
-          {/* Actions rapides — 3 colonnes horizontales */}
-          <View className="px-6 mb-6">
-            <View className="flex-row" style={{ gap: 10 }}>
-              {/* Groupes */}
-              <Pressable
-                onPress={() => router.push("/(app)/groups/all" as any)}
-                className="flex-1"
-              >
-                <GlassCard style={{ alignItems: "center", paddingVertical: 18 }} noPadding>
+          {/* Actions rapides — liste verticale */}
+          <View className="px-6 mb-6" style={{ gap: 10 }}>
+            {/* Groupes */}
+            <Pressable
+              onPress={() => router.push("/(app)/groups/all" as any)}
+            >
+              <GlassCard noPadding>
+                <View
+                  className="flex-row items-center"
+                  style={{ paddingVertical: 14, paddingHorizontal: 16 }}
+                >
                   <View
-                    className="w-12 h-12 rounded-2xl items-center justify-center mb-2.5"
+                    className="w-12 h-12 rounded-2xl items-center justify-center"
                     style={{ backgroundColor: colors.primary.subtle }}
                   >
                     <Ionicons
@@ -256,29 +258,40 @@ const HomepageScreen = () => {
                       color={colors.primary.DEFAULT}
                     />
                   </View>
-                  <Text
-                    className="font-nunito-bold text-sm"
-                    style={{ color: colors.text.primary }}
-                  >
-                    Groupes
-                  </Text>
-                  <Text
-                    className="font-nunito-medium text-[11px] mt-0.5"
-                    style={{ color: colors.text.tertiary }}
-                  >
-                    Communautés
-                  </Text>
-                </GlassCard>
-              </Pressable>
+                  <View className="flex-1 ml-4">
+                    <Text
+                      className="font-nunito-bold text-[15px]"
+                      style={{ color: colors.text.primary }}
+                    >
+                      Groupes
+                    </Text>
+                    <Text
+                      className="font-nunito-medium text-xs mt-0.5"
+                      style={{ color: colors.text.tertiary }}
+                    >
+                      Rejoins une communauté de coureurs
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={18}
+                    color={colors.text.tertiary}
+                  />
+                </View>
+              </GlassCard>
+            </Pressable>
 
-              {/* Événements */}
-              <Pressable
-                onPress={() => router.push("/(app)/events/all" as any)}
-                className="flex-1"
-              >
-                <GlassCard style={{ alignItems: "center", paddingVertical: 18 }} noPadding>
+            {/* Événements */}
+            <Pressable
+              onPress={() => router.push("/(app)/events/all" as any)}
+            >
+              <GlassCard noPadding>
+                <View
+                  className="flex-row items-center"
+                  style={{ paddingVertical: 14, paddingHorizontal: 16 }}
+                >
                   <View
-                    className="w-12 h-12 rounded-2xl items-center justify-center mb-2.5"
+                    className="w-12 h-12 rounded-2xl items-center justify-center"
                     style={{ backgroundColor: colors.primary.subtle }}
                   >
                     <Ionicons
@@ -287,29 +300,40 @@ const HomepageScreen = () => {
                       color={colors.primary.DEFAULT}
                     />
                   </View>
-                  <Text
-                    className="font-nunito-bold text-sm"
-                    style={{ color: colors.text.primary }}
-                  >
-                    Événements
-                  </Text>
-                  <Text
-                    className="font-nunito-medium text-[11px] mt-0.5"
-                    style={{ color: colors.text.tertiary }}
-                  >
-                    Sorties running
-                  </Text>
-                </GlassCard>
-              </Pressable>
+                  <View className="flex-1 ml-4">
+                    <Text
+                      className="font-nunito-bold text-[15px]"
+                      style={{ color: colors.text.primary }}
+                    >
+                      Événements
+                    </Text>
+                    <Text
+                      className="font-nunito-medium text-xs mt-0.5"
+                      style={{ color: colors.text.tertiary }}
+                    >
+                      Découvre les prochaines sorties running
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={18}
+                    color={colors.text.tertiary}
+                  />
+                </View>
+              </GlassCard>
+            </Pressable>
 
-              {/* Courses */}
-              <Pressable
-                onPress={() => router.push("/(app)/races/all" as any)}
-                className="flex-1"
-              >
-                <GlassCard style={{ alignItems: "center", paddingVertical: 18 }} noPadding>
+            {/* Courses */}
+            <Pressable
+              onPress={() => router.push("/(app)/races/all" as any)}
+            >
+              <GlassCard noPadding>
+                <View
+                  className="flex-row items-center"
+                  style={{ paddingVertical: 14, paddingHorizontal: 16 }}
+                >
                   <View
-                    className="w-12 h-12 rounded-2xl items-center justify-center mb-2.5"
+                    className="w-12 h-12 rounded-2xl items-center justify-center"
                     style={{ backgroundColor: colors.primary.subtle }}
                   >
                     <Ionicons
@@ -318,21 +342,28 @@ const HomepageScreen = () => {
                       color={colors.primary.DEFAULT}
                     />
                   </View>
-                  <Text
-                    className="font-nunito-bold text-sm"
-                    style={{ color: colors.text.primary }}
-                  >
-                    Courses
-                  </Text>
-                  <Text
-                    className="font-nunito-medium text-[11px] mt-0.5"
-                    style={{ color: colors.text.tertiary }}
-                  >
-                    Officielles
-                  </Text>
-                </GlassCard>
-              </Pressable>
-            </View>
+                  <View className="flex-1 ml-4">
+                    <Text
+                      className="font-nunito-bold text-[15px]"
+                      style={{ color: colors.text.primary }}
+                    >
+                      Courses officielles
+                    </Text>
+                    <Text
+                      className="font-nunito-medium text-xs mt-0.5"
+                      style={{ color: colors.text.tertiary }}
+                    >
+                      Trouve ta prochaine compétition
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={18}
+                    color={colors.text.tertiary}
+                  />
+                </View>
+              </GlassCard>
+            </Pressable>
           </View>
 
           {/* Section Partenaires recommandés */}

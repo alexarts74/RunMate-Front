@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   Pressable,
   ScrollView,
   Image,
-  Dimensions,
   StyleSheet,
+  RefreshControl,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  FadeInDown,
+  FadeInRight,
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 import { useAuth } from "@/context/AuthContext";
 import { useUnreadMessages } from "@/context/UnreadMessagesContext";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,7 +29,435 @@ import { Event } from "@/interface/Event";
 import { GroupInfo } from "@/interface/Group";
 import WarmBackground from "@/components/ui/WarmBackground";
 import GlassCard from "@/components/ui/GlassCard";
-import { useThemeColors, palette } from "@/constants/theme";
+import GlassAvatar from "@/components/ui/GlassAvatar";
+import SkeletonLoader from "@/components/ui/SkeletonLoader";
+import { useThemeColors, palette, radii } from "@/constants/theme";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Bonjour";
+  if (hour < 18) return "Bon après-midi";
+  return "Bonsoir";
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+  accent,
+  subtitle,
+  onPress,
+  delay = 0,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  value: number;
+  accent: string;
+  subtitle?: string;
+  onPress?: () => void;
+  delay?: number;
+}) {
+  const { colors, shadows } = useThemeColors();
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(delay).duration(500).springify()}
+      style={[{ flex: 1 }]}
+    >
+      <AnimatedPressable
+        onPress={onPress}
+        onPressIn={() => {
+          scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
+        }}
+        onPressOut={() => {
+          scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+        }}
+        style={animatedStyle}
+      >
+        <GlassCard style={{ minHeight: 110 }}>
+          <View
+            style={[
+              styles.statIconWrap,
+              { backgroundColor: accent + "18" },
+            ]}
+          >
+            <Ionicons name={icon} size={20} color={accent} />
+          </View>
+          <Text
+            style={[styles.statValue, { color: colors.text.primary }]}
+            numberOfLines={1}
+          >
+            {value}
+          </Text>
+          <Text
+            style={[styles.statLabel, { color: colors.text.secondary }]}
+            numberOfLines={1}
+          >
+            {label}
+          </Text>
+          {subtitle && (
+            <Text
+              style={[styles.statSubtitle, { color: accent }]}
+              numberOfLines={1}
+            >
+              {subtitle}
+            </Text>
+          )}
+        </GlassCard>
+      </AnimatedPressable>
+    </Animated.View>
+  );
+}
+
+function EventCard({
+  event,
+  index,
+  onPress,
+}: {
+  event: Event;
+  index: number;
+  onPress: () => void;
+}) {
+  const { colors, shadows } = useThemeColors();
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const formatDate = (dateString: string | Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "short",
+    });
+  };
+
+  const formatTime = (dateString: string | Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const isUpcoming = new Date(event.start_date) > new Date();
+  const spotsPercent = event.spots_left !== undefined && event.max_participants
+    ? Math.round(
+        ((event.max_participants - event.spots_left) / event.max_participants) *
+          100
+      )
+    : null;
+
+  return (
+    <Animated.View
+      entering={FadeInRight.delay(index * 80).duration(400).springify()}
+    >
+      <AnimatedPressable
+        onPress={onPress}
+        onPressIn={() => {
+          scale.value = withSpring(0.96, { damping: 15, stiffness: 300 });
+        }}
+        onPressOut={() => {
+          scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+        }}
+        style={[animatedStyle, styles.eventCardWrap]}
+      >
+        <GlassCard noPadding style={[shadows.md, { width: 260 }]}>
+          {/* Image */}
+          <View style={styles.eventImageWrap}>
+            {event.cover_image ? (
+              <Image
+                source={{ uri: event.cover_image }}
+                style={styles.eventImage}
+              />
+            ) : (
+              <LinearGradient
+                colors={[palette.primary.DEFAULT, palette.primary.dark]}
+                style={styles.eventImage}
+              >
+                <Ionicons name="calendar" size={32} color="rgba(255,255,255,0.5)" />
+              </LinearGradient>
+            )}
+            <LinearGradient
+              colors={["transparent", "rgba(0,0,0,0.5)"]}
+              style={styles.eventImageOverlay}
+            />
+            {/* Date badge */}
+            <View style={styles.dateBadge}>
+              <Text style={styles.dateBadgeText}>
+                {formatDate(event.start_date)}
+              </Text>
+            </View>
+            {/* Status badge */}
+            {isUpcoming && (
+              <View
+                style={[
+                  styles.statusBadge,
+                  { backgroundColor: palette.success + "E6" },
+                ]}
+              >
+                <Text style={styles.statusBadgeText}>A venir</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Content */}
+          <View style={styles.eventContent}>
+            <Text
+              style={[styles.eventTitle, { color: colors.text.primary }]}
+              numberOfLines={1}
+            >
+              {event.name}
+            </Text>
+
+            <View style={styles.eventMeta}>
+              <Ionicons
+                name="location-outline"
+                size={13}
+                color={colors.text.tertiary}
+              />
+              <Text
+                style={[styles.eventMetaText, { color: colors.text.secondary }]}
+                numberOfLines={1}
+              >
+                {event.location || "Lieu non défini"}
+              </Text>
+            </View>
+
+            {event.start_time && (
+              <View style={styles.eventMeta}>
+                <Ionicons
+                  name="time-outline"
+                  size={13}
+                  color={colors.text.tertiary}
+                />
+                <Text
+                  style={[
+                    styles.eventMetaText,
+                    { color: colors.text.secondary },
+                  ]}
+                >
+                  {event.start_time}
+                  {event.distance ? ` · ${event.distance} km` : ""}
+                </Text>
+              </View>
+            )}
+
+            {/* Participants bar */}
+            <View style={styles.participantsRow}>
+              <View style={styles.participantsInfo}>
+                <Ionicons
+                  name="people"
+                  size={13}
+                  color={colors.primary.DEFAULT}
+                />
+                <Text
+                  style={[
+                    styles.participantsText,
+                    { color: colors.text.secondary },
+                  ]}
+                >
+                  {event.participants_count || 0}
+                  {event.max_participants
+                    ? `/${event.max_participants}`
+                    : ""}
+                </Text>
+              </View>
+              {spotsPercent !== null && (
+                <View
+                  style={[
+                    styles.progressBarBg,
+                    { backgroundColor: colors.surface },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.progressBarFill,
+                      {
+                        width: `${Math.min(spotsPercent, 100)}%`,
+                        backgroundColor:
+                          spotsPercent > 80
+                            ? palette.warning
+                            : palette.primary.DEFAULT,
+                      },
+                    ]}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+        </GlassCard>
+      </AnimatedPressable>
+    </Animated.View>
+  );
+}
+
+function GroupCard({
+  group,
+  index,
+  onPress,
+}: {
+  group: GroupInfo;
+  index: number;
+  onPress: () => void;
+}) {
+  const { colors, shadows } = useThemeColors();
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const groupName = String(group.name || "");
+  const membersCount = Number(group.members_count) || 0;
+  const pendingCount = Number(group.pending_requests_count) || 0;
+  const coverImage =
+    group.cover_image ? String(group.cover_image) : null;
+
+  return (
+    <Animated.View
+      entering={FadeInRight.delay(index * 80).duration(400).springify()}
+    >
+      <AnimatedPressable
+        onPress={onPress}
+        onPressIn={() => {
+          scale.value = withSpring(0.96, { damping: 15, stiffness: 300 });
+        }}
+        onPressOut={() => {
+          scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+        }}
+        style={animatedStyle}
+      >
+        <GlassCard
+          noPadding
+          style={[shadows.md, { width: 200 }]}
+        >
+          {/* Image */}
+          <View style={styles.groupImageWrap}>
+            {coverImage ? (
+              <Image
+                source={{ uri: coverImage }}
+                style={styles.groupImage}
+              />
+            ) : (
+              <LinearGradient
+                colors={[colors.surface, colors.elevated]}
+                style={[styles.groupImage, styles.groupImagePlaceholder]}
+              >
+                <Ionicons
+                  name="people"
+                  size={28}
+                  color={colors.text.tertiary}
+                />
+              </LinearGradient>
+            )}
+            {pendingCount > 0 && (
+              <View style={styles.pendingBadge}>
+                <Ionicons name="notifications" size={10} color="#FFFFFF" />
+                <Text style={styles.pendingBadgeText}>{pendingCount}</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Content */}
+          <View style={styles.groupContent}>
+            <Text
+              style={[styles.groupTitle, { color: colors.text.primary }]}
+              numberOfLines={1}
+            >
+              {groupName}
+            </Text>
+            <View style={styles.groupMeta}>
+              <Ionicons
+                name="people-outline"
+                size={13}
+                color={colors.text.tertiary}
+              />
+              <Text
+                style={[
+                  styles.groupMetaText,
+                  { color: colors.text.secondary },
+                ]}
+              >
+                {membersCount} membre{membersCount > 1 ? "s" : ""}
+              </Text>
+            </View>
+          </View>
+        </GlassCard>
+      </AnimatedPressable>
+    </Animated.View>
+  );
+}
+
+function SectionHeader({
+  title,
+  actionLabel,
+  onAction,
+}: {
+  title: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}) {
+  const { colors } = useThemeColors();
+  return (
+    <View style={styles.sectionHeader}>
+      <Text style={[styles.sectionTitle, { color: colors.text.primary }]}>
+        {title}
+      </Text>
+      {actionLabel && onAction && (
+        <Pressable onPress={onAction} hitSlop={8}>
+          <Text
+            style={[styles.sectionAction, { color: colors.primary.DEFAULT }]}
+          >
+            {actionLabel}
+          </Text>
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+function DashboardSkeleton() {
+  const { colors } = useThemeColors();
+  return (
+    <View style={{ paddingHorizontal: 20 }}>
+      {/* Stats skeleton */}
+      <View style={{ flexDirection: "row", gap: 12, marginBottom: 24 }}>
+        <View style={{ flex: 1 }}>
+          <SkeletonLoader variant="card" height={110} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <SkeletonLoader variant="card" height={110} />
+        </View>
+      </View>
+      <View style={{ flexDirection: "row", gap: 12, marginBottom: 32 }}>
+        <View style={{ flex: 1 }}>
+          <SkeletonLoader variant="card" height={110} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <SkeletonLoader variant="card" height={110} />
+        </View>
+      </View>
+      {/* Actions skeleton */}
+      <SkeletonLoader width="40%" height={20} style={{ marginBottom: 16 }} />
+      <View style={{ flexDirection: "row", gap: 12, marginBottom: 32 }}>
+        <SkeletonLoader variant="card" height={80} style={{ flex: 1 }} />
+        <SkeletonLoader variant="card" height={80} style={{ flex: 1 }} />
+      </View>
+      {/* Events skeleton */}
+      <SkeletonLoader width="50%" height={20} style={{ marginBottom: 16 }} />
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <SkeletonLoader variant="card" height={200} style={{ width: 260 }} />
+        <SkeletonLoader variant="card" height={200} style={{ width: 260 }} />
+      </View>
+    </View>
+  );
+}
 
 export function OrganizerHomepage() {
   const { user } = useAuth();
@@ -29,7 +465,7 @@ export function OrganizerHomepage() {
   const { colors, shadows, gradients } = useThemeColors();
   const [myEvents, setMyEvents] = useState<Event[]>([]);
   const [myGroups, setMyGroups] = useState<GroupInfo[]>([]);
-  const [organizationName, setOrganizationName] = useState<string>("Votre organisation");
+  const [organizationName, setOrganizationName] = useState<string>("");
   const [stats, setStats] = useState({
     totalEvents: 0,
     totalGroups: 0,
@@ -37,61 +473,51 @@ export function OrganizerHomepage() {
     upcomingEvents: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Charger les données au montage initial
   useEffect(() => {
     loadData();
   }, []);
 
-  // Recharger les données quand l'écran revient au focus (après création d'un groupe/événement)
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       loadData();
     }, [])
   );
 
   const loadOrganizerProfile = async () => {
     try {
-      console.log("🏢 [OrganizerHomepage] Chargement du profil organisateur...");
       const profile = await organizerProfileService.getProfile();
-      console.log("🏢 [OrganizerHomepage] Profil organisateur reçu:", profile);
       if (profile?.organization_name) {
         setOrganizationName(profile.organization_name);
       }
     } catch (error) {
-      console.log("🏢 [OrganizerHomepage] Profil organisateur non trouvé ou erreur:", error);
-      // Le profil peut ne pas exister encore, ce n'est pas grave
+      // Profile may not exist yet
     }
   };
 
   const loadData = async () => {
     try {
-      setIsLoading(true);
+      if (!refreshing) setIsLoading(true);
 
-      // Charger le profil organisateur pour obtenir le nom
       await loadOrganizerProfile();
 
-      // Charger les événements créés
-      console.log("🏢 [OrganizerHomepage] Chargement des événements...");
       const eventsResponse = await eventService.getMyEvents();
-      console.log("🏢 [OrganizerHomepage] Réponse complète getMyEvents:", JSON.stringify(eventsResponse, null, 2));
       const createdEvents = eventsResponse.created || [];
-      console.log("🏢 [OrganizerHomepage] Événements créés:", createdEvents.length, createdEvents);
       setMyEvents(createdEvents);
 
-      // Charger les groupes
       const groupsData = await groupService.getGroups();
-
-      const myCreatedGroups = groupsData.filter((g: GroupInfo) => g.is_admin);
+      const myCreatedGroups = groupsData.filter(
+        (g: GroupInfo) => g.is_admin
+      );
       setMyGroups(myCreatedGroups);
 
-      // Calculer les statistiques
       const totalParticipants = createdEvents.reduce(
-        (sum, event) => sum + (event.participants_count || 0),
+        (sum: number, event: Event) => sum + (event.participants_count || 0),
         0
       );
       const upcomingEvents = createdEvents.filter(
-        (event) => new Date(event.start_date) > new Date()
+        (event: Event) => new Date(event.start_date) > new Date()
       ).length;
 
       setStats({
@@ -104,406 +530,742 @@ export function OrganizerHomepage() {
       console.error("Erreur lors du chargement des données:", error);
     } finally {
       setIsLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const formatDate = (dateString: string | Date) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    };
-    return date.toLocaleDateString("fr-FR", options);
-  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadData();
+  }, []);
 
   return (
     <WarmBackground>
-      <SafeAreaView className="flex-1" edges={['top']}>
+      <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          className="flex-1"
-          contentContainerStyle={{ paddingBottom: 20 }}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 32 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.primary.DEFAULT}
+            />
+          }
         >
-          {/* Header */}
-          <View className="px-6 pt-4 pb-6">
-            <View className="flex-row items-center justify-between">
-              <View className="flex-1 mr-4">
-                <View className="flex-row items-center mb-2">
-                  <Ionicons name="business" size={20} color={colors.primary.DEFAULT} style={{ marginRight: 8 }} />
-                  <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm">
-                    Bienvenue
-                  </Text>
-                </View>
-                <Text
-                  style={{ color: colors.text.primary }}
-                  className="font-nunito-extrabold text-2xl"
-                  numberOfLines={2}
-                >
-                  {organizationName}
-                </Text>
-              </View>
-
-              <View className="flex-row items-center" style={{ gap: 12 }}>
-                <Pressable
-                  onPress={() => router.push("/messages")}
-                  className="relative"
-                >
-                  <Ionicons name="notifications-outline" size={24} color={colors.primary.DEFAULT} />
-                  {unreadCount > 0 && (
-                    <View
-                      className="absolute -top-1 -right-1 rounded-full w-5 h-5 items-center justify-center border-2"
-                      style={{ backgroundColor: colors.primary.DEFAULT, borderColor: colors.background }}
-                    >
-                      <Text className="text-white font-nunito-bold text-xs">
-                        {unreadCount > 9 ? "9+" : unreadCount}
-                      </Text>
-                    </View>
-                  )}
-                </Pressable>
-
-                <Pressable
-                  onPress={() => router.push("/(tabs)/profile")}
-                  className="w-10 h-10 rounded-full overflow-hidden border-2"
-                  style={{ borderColor: colors.primary.DEFAULT }}
-                >
-                  <Image
-                    source={
-                      user?.profile_image
-                        ? { uri: user.profile_image }
-                        : require("@/assets/images/react-logo.png")
-                    }
-                    className="w-full h-full"
-                    style={{ resizeMode: "cover" }}
-                  />
-                </Pressable>
-              </View>
+          {/* ─── Header ─────────────────────────────── */}
+          <View style={styles.header}>
+            <View style={{ flex: 1, marginRight: 16 }}>
+              <Animated.Text
+                entering={FadeInDown.duration(500)}
+                style={[styles.greeting, { color: colors.text.tertiary }]}
+              >
+                {getGreeting()}
+              </Animated.Text>
+              <Animated.Text
+                entering={FadeInDown.delay(100).duration(500)}
+                style={[styles.orgName, { color: colors.text.primary }]}
+                numberOfLines={2}
+              >
+                {organizationName || "Votre organisation"}
+              </Animated.Text>
             </View>
-          </View>
 
-          {/* Statistiques */}
-          <View className="px-6 mb-6">
-            <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-xl mb-4">
-              Statistiques
-            </Text>
-            <View style={{ gap: 12 }}>
+            <View style={styles.headerActions}>
+              {/* Notifications */}
               <Pressable
-                onPress={() => router.push("/(app)/organizer/events/all")}
-                className="active:opacity-90"
+                onPress={() => router.push("/messages")}
+                style={[
+                  styles.headerIconBtn,
+                  {
+                    backgroundColor: colors.glass.light,
+                    borderColor: colors.glass.border,
+                  },
+                ]}
               >
-                <GlassCard>
-                  <View className="flex-row items-center">
-                    <View
-                      className="w-14 h-14 rounded-xl items-center justify-center mr-4"
-                      style={{ backgroundColor: palette.primary.subtle }}
-                    >
-                      <Ionicons name="calendar" size={28} color={colors.primary.DEFAULT} />
-                    </View>
-                    <View className="flex-1">
-                      <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm mb-1">
-                        Événements
-                      </Text>
-                      <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-3xl mb-1">
-                        {stats.totalEvents}
-                      </Text>
-                      {stats.upcomingEvents > 0 && (
-                        <Text style={{ color: colors.primary.DEFAULT }} className="font-nunito-medium text-xs">
-                          {stats.upcomingEvents} à venir
-                        </Text>
-                      )}
-                    </View>
-                    <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
-                  </View>
-                </GlassCard>
-              </Pressable>
-
-              <Pressable
-                onPress={() => router.push("/(app)/groups/all")}
-                className="active:opacity-90"
-              >
-                <GlassCard>
-                  <View className="flex-row items-center">
-                    <View
-                      className="w-14 h-14 rounded-xl items-center justify-center mr-4"
-                      style={{ backgroundColor: colors.surface }}
-                    >
-                      <Ionicons name="people" size={28} color={colors.text.secondary} />
-                    </View>
-                    <View className="flex-1">
-                      <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm mb-1">
-                        Groupes
-                      </Text>
-                      <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-3xl">
-                        {stats.totalGroups}
-                      </Text>
-                    </View>
-                    <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
-                  </View>
-                </GlassCard>
-              </Pressable>
-
-              <GlassCard>
-                <View className="flex-row items-center">
+                <Ionicons
+                  name="chatbubbles-outline"
+                  size={20}
+                  color={colors.text.primary}
+                />
+                {unreadCount > 0 && (
                   <View
-                    className="w-14 h-14 rounded-xl items-center justify-center mr-4"
-                    style={{ backgroundColor: 'rgba(124, 184, 138, 0.15)' }}
+                    style={[
+                      styles.badge,
+                      { backgroundColor: palette.error },
+                    ]}
                   >
-                    <Ionicons name="person-add" size={28} color={colors.success} />
-                  </View>
-                  <View className="flex-1">
-                    <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm mb-1">
-                      Participants
-                    </Text>
-                    <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-3xl">
-                      {stats.totalParticipants}
+                    <Text style={styles.badgeText}>
+                      {unreadCount > 9 ? "9+" : unreadCount}
                     </Text>
                   </View>
+                )}
+              </Pressable>
+
+              {/* Avatar */}
+              <Pressable onPress={() => router.push("/(tabs)/profile")}>
+                <GlassAvatar
+                  uri={user?.profile_image}
+                  size={40}
+                  showRing
+                />
+              </Pressable>
+            </View>
+          </View>
+
+          {isLoading ? (
+            <DashboardSkeleton />
+          ) : (
+            <>
+              {/* ─── Stats Grid ──────────────────────── */}
+              <View style={styles.statsSection}>
+                <View style={styles.statsRow}>
+                  <StatCard
+                    icon="calendar"
+                    label="Événements"
+                    value={stats.totalEvents}
+                    accent={palette.primary.DEFAULT}
+                    subtitle={
+                      stats.upcomingEvents > 0
+                        ? `${stats.upcomingEvents} à venir`
+                        : undefined
+                    }
+                    onPress={() =>
+                      router.push("/(app)/organizer/events/all")
+                    }
+                    delay={0}
+                  />
+                  <StatCard
+                    icon="people"
+                    label="Groupes"
+                    value={stats.totalGroups}
+                    accent={palette.info}
+                    onPress={() => router.push("/(app)/groups/all")}
+                    delay={80}
+                  />
                 </View>
-              </GlassCard>
-            </View>
-          </View>
-
-          {/* Actions rapides */}
-          <View className="px-6 mb-6">
-            <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-xl mb-4">
-              Actions rapides
-            </Text>
-            <View className="flex-row" style={{ gap: 12 }}>
-              {/* Carte Créer un événement */}
-              <Pressable
-                onPress={() => router.push("/(app)/events/create")}
-                className="flex-1"
-              >
-                <GlassCard>
-                  <View>
-                    <LinearGradient
-                      colors={gradients.primaryButton as unknown as [string, string, ...string[]]}
-                      className="w-12 h-12 rounded-xl items-center justify-center mb-4"
-                    >
-                      <Ionicons name="calendar-outline" size={24} color="#FFFFFF" />
-                    </LinearGradient>
-                    <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-lg mb-1">
-                      Créer un événement
-                    </Text>
-                    <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs">
-                      Organiser une course
-                    </Text>
-                  </View>
-                  <View className="flex-row justify-end mt-4">
-                    <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
-                  </View>
-                </GlassCard>
-              </Pressable>
-
-              {/* Carte Créer un groupe */}
-              <Pressable
-                onPress={() => router.push("/(app)/groups/create")}
-                className="flex-1"
-              >
-                <GlassCard>
-                  <View>
-                    <LinearGradient
-                      colors={[colors.text.secondary, colors.text.tertiary] as [string, string]}
-                      className="w-12 h-12 rounded-xl items-center justify-center mb-4"
-                    >
-                      <Ionicons name="people-outline" size={24} color="#FFFFFF" />
-                    </LinearGradient>
-                    <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-lg mb-1">
-                      Créer un groupe
-                    </Text>
-                    <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs">
-                      Nouveau groupe
-                    </Text>
-                  </View>
-                  <View className="flex-row justify-end mt-4">
-                    <Ionicons name="chevron-forward" size={20} color={colors.text.tertiary} />
-                  </View>
-                </GlassCard>
-              </Pressable>
-            </View>
-          </View>
-
-          {/* Événements récents */}
-          {myEvents.length > 0 && (
-            <View className="px-6 mb-6">
-              <View className="flex-row items-center justify-between mb-4">
-                <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-xl">
-                  Mes événements
-                </Text>
-                <Pressable onPress={() => router.push("/(app)/organizer/events/all")}>
-                  <Text style={{ color: colors.primary.DEFAULT }} className="font-nunito-bold text-sm">
-                    Voir tout
-                  </Text>
-                </Pressable>
+                <View style={styles.statsRow}>
+                  <StatCard
+                    icon="person"
+                    label="Participants"
+                    value={stats.totalParticipants}
+                    accent={palette.success}
+                    delay={160}
+                  />
+                  <StatCard
+                    icon="rocket"
+                    label="A venir"
+                    value={stats.upcomingEvents}
+                    accent={palette.warning}
+                    delay={240}
+                  />
+                </View>
               </View>
 
-              <View style={{ gap: 12 }}>
-                {myEvents.slice(0, 3).map((event, index) => (
+              {/* ─── Quick Actions ────────────────────── */}
+              <View style={styles.section}>
+                <SectionHeader title="Actions rapides" />
+                <Animated.View
+                  entering={FadeInDown.delay(300).duration(500).springify()}
+                  style={styles.actionsRow}
+                >
                   <Pressable
-                    key={event.id || `event-${index}`}
-                    onPress={() => router.push(`/(app)/organizer/events/${String(event.id)}`)}
+                    onPress={() => router.push("/(app)/events/create")}
+                    style={{ flex: 1 }}
                   >
-                    <GlassCard noPadding>
-                      <View className="flex-row">
-                        {event.cover_image && (
-                          <Image
-                            source={{ uri: event.cover_image }}
-                            className="w-24 h-24"
-                            style={{ resizeMode: "cover" }}
+                    <LinearGradient
+                      colors={
+                        gradients.primaryButton as unknown as [
+                          string,
+                          string,
+                          ...string[]
+                        ]
+                      }
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={[styles.actionCard, shadows.md]}
+                    >
+                      <View style={styles.actionIconWrap}>
+                        <Ionicons
+                          name="add-circle"
+                          size={24}
+                          color="#FFFFFF"
+                        />
+                      </View>
+                      <Text style={styles.actionTitle}>Nouvel événement</Text>
+                      <Text style={styles.actionSub}>Organiser une course</Text>
+                    </LinearGradient>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => router.push("/(app)/groups/create")}
+                    style={{ flex: 1 }}
+                  >
+                    <View
+                      style={[
+                        styles.actionCard,
+                        shadows.sm,
+                        {
+                          backgroundColor: colors.elevated,
+                          borderWidth: 1,
+                          borderColor: colors.glass.border,
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.actionIconWrap,
+                          {
+                            backgroundColor: palette.primary.subtle,
+                          },
+                        ]}
+                      >
+                        <Ionicons
+                          name="people-circle"
+                          size={24}
+                          color={palette.primary.DEFAULT}
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          styles.actionTitle,
+                          { color: colors.text.primary },
+                        ]}
+                      >
+                        Nouveau groupe
+                      </Text>
+                      <Text
+                        style={[
+                          styles.actionSub,
+                          { color: colors.text.tertiary },
+                        ]}
+                      >
+                        Créer une communauté
+                      </Text>
+                    </View>
+                  </Pressable>
+                </Animated.View>
+              </View>
+
+              {/* ─── Events ──────────────────────────── */}
+              {myEvents.length > 0 && (
+                <View style={styles.section}>
+                  <View style={{ paddingHorizontal: 20 }}>
+                    <SectionHeader
+                      title="Mes événements"
+                      actionLabel="Voir tout"
+                      onAction={() =>
+                        router.push("/(app)/organizer/events/all")
+                      }
+                    />
+                  </View>
+                  <FlatList
+                    data={myEvents.slice(0, 5)}
+                    keyExtractor={(item, index) => item.id ? String(item.id) : `event-${index}`}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 20,
+                      gap: 14,
+                    }}
+                    renderItem={({ item, index }) => (
+                      <EventCard
+                        event={item}
+                        index={index}
+                        onPress={() =>
+                          router.push(
+                            `/(app)/organizer/events/${String(item.id)}`
+                          )
+                        }
+                      />
+                    )}
+                  />
+                </View>
+              )}
+
+              {/* ─── Groups ──────────────────────────── */}
+              {myGroups.length > 0 && (
+                <View style={styles.section}>
+                  <View style={{ paddingHorizontal: 20 }}>
+                    <SectionHeader
+                      title="Mes groupes"
+                      actionLabel="Voir tout"
+                      onAction={() => router.push("/(app)/groups/all")}
+                    />
+                  </View>
+                  <FlatList
+                    data={myGroups.slice(0, 5)}
+                    keyExtractor={(item, index) => item.id ? String(item.id) : `group-${index}`}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 20,
+                      gap: 14,
+                    }}
+                    renderItem={({ item, index }) => (
+                      <GroupCard
+                        group={item}
+                        index={index}
+                        onPress={() =>
+                          router.push(
+                            `/(app)/organizer/groups/${String(item.id)}`
+                          )
+                        }
+                      />
+                    )}
+                  />
+                </View>
+              )}
+
+              {/* ─── Empty State ─────────────────────── */}
+              {myEvents.length === 0 && myGroups.length === 0 && (
+                <View style={styles.emptySection}>
+                  <Animated.View
+                    entering={FadeInDown.delay(400).duration(600).springify()}
+                  >
+                    <GlassCard variant="medium">
+                      <View style={styles.emptyContent}>
+                        <LinearGradient
+                          colors={
+                            gradients.primaryButton as unknown as [
+                              string,
+                              string,
+                              ...string[]
+                            ]
+                          }
+                          style={styles.emptyIconWrap}
+                        >
+                          <Ionicons
+                            name="rocket-outline"
+                            size={32}
+                            color="#FFFFFF"
                           />
-                        )}
-                        <View className="flex-1 p-4">
-                          <Text style={{ color: colors.text.primary }} className="font-nunito-bold text-base mb-1">
-                            {event.name}
-                          </Text>
-                          <View className="flex-row items-center mb-2" style={{ gap: 8 }}>
-                            <Ionicons name="calendar-outline" size={14} color={colors.text.tertiary} />
-                            <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs">
-                              {formatDate(event.start_date)}
-                            </Text>
-                            <Ionicons name="location-outline" size={14} color={colors.text.tertiary} style={{ marginLeft: 8 }} />
-                            <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs">
-                              {event.location}
-                            </Text>
-                          </View>
-                          <View className="flex-row items-center" style={{ gap: 12 }}>
-                            <View className="flex-row items-center">
-                              <Ionicons name="people-outline" size={14} color={colors.success} />
-                              <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs ml-1">
-                                {event.participants_count || 0} participants
+                        </LinearGradient>
+                        <Text
+                          style={[
+                            styles.emptyTitle,
+                            { color: colors.text.primary },
+                          ]}
+                        >
+                          Lancez votre communauté
+                        </Text>
+                        <Text
+                          style={[
+                            styles.emptyDesc,
+                            { color: colors.text.secondary },
+                          ]}
+                        >
+                          Créez votre premier événement ou groupe pour
+                          rassembler des coureurs autour de vous.
+                        </Text>
+
+                        <View style={styles.emptyCtas}>
+                          <Pressable
+                            onPress={() =>
+                              router.push("/(app)/events/create")
+                            }
+                            style={{ flex: 1 }}
+                          >
+                            <LinearGradient
+                              colors={
+                                gradients.primaryButton as unknown as [
+                                  string,
+                                  string,
+                                  ...string[]
+                                ]
+                              }
+                              style={styles.emptyBtn}
+                            >
+                              <Ionicons
+                                name="calendar-outline"
+                                size={18}
+                                color="#FFFFFF"
+                              />
+                              <Text style={styles.emptyBtnText}>
+                                Créer un événement
                               </Text>
-                            </View>
-                            {event.spots_left !== undefined && (
-                              <View className="flex-row items-center">
-                                <Ionicons name="time-outline" size={14} color={colors.warning} />
-                                <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs ml-1">
-                                  {event.spots_left} places restantes
-                                </Text>
-                              </View>
-                            )}
-                          </View>
+                            </LinearGradient>
+                          </Pressable>
+
+                          <Pressable
+                            onPress={() =>
+                              router.push("/(app)/groups/create")
+                            }
+                            style={[
+                              styles.emptyBtnSecondary,
+                              {
+                                borderColor: colors.primary.DEFAULT,
+                                flex: 1,
+                              },
+                            ]}
+                          >
+                            <Ionicons
+                              name="people-outline"
+                              size={18}
+                              color={colors.primary.DEFAULT}
+                            />
+                            <Text
+                              style={[
+                                styles.emptyBtnSecondaryText,
+                                { color: colors.primary.DEFAULT },
+                              ]}
+                            >
+                              Créer un groupe
+                            </Text>
+                          </Pressable>
                         </View>
                       </View>
                     </GlassCard>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-          )}
-
-          {/* Groupes récents */}
-          {myGroups.length > 0 && (
-            <View className="px-6 mb-6">
-              <View className="flex-row items-center justify-between mb-4">
-                <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-xl">
-                  Mes groupes
-                </Text>
-                <Pressable onPress={() => router.push("/(app)/groups/all")}>
-                  <Text style={{ color: colors.primary.DEFAULT }} className="font-nunito-bold text-sm">
-                    Voir tout
-                  </Text>
-                </Pressable>
-              </View>
-
-              <View style={{ gap: 12 }}>
-                {myGroups.slice(0, 3).map((group, index) => {
-                  // Sanitize group data to prevent string leakage
-                  const groupName = String(group.name || '');
-                  const groupDesc = group.description && typeof group.description === 'string'
-                    ? group.description.trim()
-                    : '';
-                  const membersCount = Number(group.members_count) || 0;
-                  const pendingCount = Number(group.pending_requests_count) || 0;
-                  const coverImage = group.cover_image ? String(group.cover_image) : null;
-                  const groupId = group.id;
-
-                  return (
-                    <Pressable
-                      key={groupId || `group-${index}`}
-                      onPress={() => router.push(`/(app)/organizer/groups/${String(groupId)}`)}
-                    >
-                      <GlassCard noPadding>
-                        <View className="flex-row">
-                          {coverImage && (
-                            <Image
-                              source={{ uri: coverImage }}
-                              className="w-24 h-24"
-                              style={{ resizeMode: "cover" }}
-                            />
-                          )}
-                          <View className="flex-1 p-4">
-                            <Text style={{ color: colors.text.primary }} className="font-nunito-bold text-base mb-1">
-                              {groupName}
-                            </Text>
-                            {groupDesc.length > 0 && (
-                              <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm mb-2" numberOfLines={2}>
-                                {groupDesc}
-                              </Text>
-                            )}
-                            <View className="flex-row items-center" style={{ gap: 12 }}>
-                              <View className="flex-row items-center">
-                                <Ionicons name="people-outline" size={14} color={colors.text.secondary} />
-                                <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-xs ml-1">
-                                  {membersCount} membres
-                                </Text>
-                              </View>
-                              {pendingCount > 0 && (
-                                <View
-                                  className="flex-row items-center px-2 py-1 rounded-full"
-                                  style={{ backgroundColor: 'rgba(229, 184, 103, 0.15)' }}
-                                >
-                                  <Ionicons name="notifications" size={12} color={colors.warning} />
-                                  <Text style={{ color: colors.warning }} className="font-nunito-bold text-xs ml-1">
-                                    {pendingCount} demande{pendingCount > 1 ? 's' : ''}
-                                  </Text>
-                                </View>
-                              )}
-                            </View>
-                          </View>
-                        </View>
-                      </GlassCard>
-                    </Pressable>
-                  );
-                })}
-              </View>
-            </View>
-          )}
-
-          {/* Message si aucun événement/groupe */}
-          {myEvents.length === 0 && myGroups.length === 0 && !isLoading && (
-            <View className="px-6 mb-6">
-              <GlassCard>
-                <View className="flex-row items-center mb-4">
-                  <View
-                    className="w-14 h-14 rounded-xl items-center justify-center mr-4"
-                    style={{ backgroundColor: palette.primary.subtle }}
-                  >
-                    <Ionicons name="rocket-outline" size={28} color={colors.primary.DEFAULT} />
-                  </View>
-                  <View className="flex-1">
-                    <Text style={{ color: colors.text.primary }} className="font-nunito-extrabold text-lg mb-1">
-                      Commencez votre aventure
-                    </Text>
-                    <Text style={{ color: colors.text.secondary }} className="font-nunito-medium text-sm">
-                      Créez votre premier événement ou groupe pour lancer votre communauté.
-                    </Text>
-                  </View>
+                  </Animated.View>
                 </View>
-                <Pressable
-                  onPress={() => router.push("/(app)/events/create")}
-                  className="mt-2 px-5 py-3 rounded-full flex-row items-center justify-center"
-                  style={{ backgroundColor: colors.primary.DEFAULT }}
-                >
-                  <Text className="text-white font-nunito-bold text-sm mr-2">
-                    Créer mon premier événement
-                  </Text>
-                  <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
-                </Pressable>
-              </GlassCard>
-            </View>
+              )}
+            </>
           )}
         </ScrollView>
       </SafeAreaView>
     </WarmBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  // Header
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 24,
+  },
+  greeting: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  orgName: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 24,
+    lineHeight: 30,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerIconBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontFamily: "Nunito-Bold",
+    fontSize: 10,
+  },
+
+  // Stats
+  statsSection: {
+    paddingHorizontal: 20,
+    marginBottom: 28,
+    gap: 12,
+  },
+  statsRow: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  statIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  statValue: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 28,
+    lineHeight: 32,
+  },
+  statLabel: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 13,
+    marginTop: 2,
+  },
+  statSubtitle: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 11,
+    marginTop: 4,
+  },
+
+  // Sections
+  section: {
+    marginBottom: 28,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    marginBottom: 14,
+  },
+  sectionTitle: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 19,
+  },
+  sectionAction: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 14,
+  },
+
+  // Actions
+  actionsRow: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  actionCard: {
+    borderRadius: radii.lg,
+    padding: 16,
+    minHeight: 120,
+    justifyContent: "space-between",
+  },
+  actionIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  actionTitle: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+  actionSub: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 12,
+    color: "rgba(255,255,255,0.7)",
+    marginTop: 2,
+  },
+
+  // Event cards
+  eventCardWrap: {
+    marginRight: 0,
+  },
+  eventImageWrap: {
+    height: 130,
+    position: "relative",
+  },
+  eventImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  eventImageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  dateBadge: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  dateBadgeText: {
+    color: "#FFFFFF",
+    fontFamily: "Nunito-Bold",
+    fontSize: 11,
+    textTransform: "uppercase",
+  },
+  statusBadge: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  statusBadgeText: {
+    color: "#FFFFFF",
+    fontFamily: "Nunito-Bold",
+    fontSize: 11,
+  },
+  eventContent: {
+    padding: 14,
+  },
+  eventTitle: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 15,
+    marginBottom: 6,
+  },
+  eventMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginBottom: 4,
+  },
+  eventMetaText: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 12,
+    flex: 1,
+  },
+  participantsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
+    gap: 10,
+  },
+  participantsInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  participantsText: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 12,
+  },
+  progressBarBg: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    borderRadius: 2,
+  },
+
+  // Group cards
+  groupImageWrap: {
+    height: 100,
+    position: "relative",
+  },
+  groupImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  groupImagePlaceholder: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pendingBadge: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    backgroundColor: "rgba(229, 184, 103, 0.9)",
+    borderRadius: 10,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+  },
+  pendingBadgeText: {
+    color: "#FFFFFF",
+    fontFamily: "Nunito-Bold",
+    fontSize: 10,
+  },
+  groupContent: {
+    padding: 12,
+  },
+  groupTitle: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  groupMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  groupMetaText: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 12,
+  },
+
+  // Empty state
+  emptySection: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  emptyContent: {
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  emptyIconWrap: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  emptyTitle: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 20,
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  emptyDesc: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 14,
+    textAlign: "center",
+    lineHeight: 20,
+    marginBottom: 24,
+    paddingHorizontal: 8,
+  },
+  emptyCtas: {
+    flexDirection: "row",
+    gap: 12,
+    width: "100%",
+  },
+  emptyBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    height: 46,
+    borderRadius: 9999,
+    paddingHorizontal: 16,
+  },
+  emptyBtnText: {
+    color: "#FFFFFF",
+    fontFamily: "Nunito-Bold",
+    fontSize: 13,
+  },
+  emptyBtnSecondary: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    height: 46,
+    borderRadius: 9999,
+    borderWidth: 1.5,
+    paddingHorizontal: 16,
+  },
+  emptyBtnSecondaryText: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 13,
+  },
+});
